@@ -1,14 +1,15 @@
 import stanza
 import pandas as pd
 import numpy as np
-from collections import Counter
+from collections import Counter, defaultdict
 import logging
 import gc 
 import torch
 import math
 from wordfreq import zipf_frequency
-from scipy.stats import entropy
+from scipy.stats import entropy, linregress
 from tqdm import tqdm
+import re
 
 # Mute Stanza noise
 logging.getLogger('stanza').setLevel(logging.WARNING)
@@ -87,11 +88,411 @@ class DeepProfiler:
         cv = std_gap / mean_gap
         # Burstiness Score (-1 to 1)
         return (cv - 1) / (cv + 1)
+    
+    def _levenshtein_distance(self, s1, s2):
+        """Calculate Levenshtein (edit) distance between two strings."""
+        if len(s1) < len(s2):
+            return self._levenshtein_distance(s2, s1)
+        if len(s2) == 0:
+            return len(s1)
+        
+        previous_row = range(len(s2) + 1)
+        for i, c1 in enumerate(s1):
+            current_row = [i + 1]
+            for j, c2 in enumerate(s2):
+                insertions = previous_row[j + 1] + 1
+                deletions = current_row[j] + 1
+                substitutions = previous_row[j] + (c1 != c2)
+                current_row.append(min(insertions, deletions, substitutions))
+            previous_row = current_row
+        
+        return previous_row[-1]
+    
+    # =========================================================================
+    # SUB-METHODS: Modular Measure Calculation
+    # =========================================================================
+    
+    def _calc_paragraph_measures(self, text, sentences):
+        """Calculate paragraph-level measures."""
+        stats = {}
+        
+        # Detect paragraphs by double newlines
+        paragraphs = re.split(r'\n\s*\n', text.strip())
+        paragraph_count = len([p for p in paragraphs if p.strip()])
+        
+        stats['Paragraph count'] = paragraph_count
+        if paragraph_count > 0:
+            stats['Sentence per paragraph'] = len(sentences) / paragraph_count
+        else:
+            stats['Sentence per paragraph'] = 0
+        
+        return stats
+    
+    def _calc_lexical_diversity(self, tokens, pos_map, doc_len):
+        """Calculate lexical diversity measures."""
+        stats = {}
+        
+        # Basic TTR already calculated in main method
+        type_count = len(set(tokens))
+        
+        # Hapax legomena (words appearing exactly once)
+        word_counts = Counter(tokens)
+        hapax_count = sum(1 for count in word_counts.values() if count == 1)
+        stats['Hapax legomena count'] = hapax_count
+        stats['Hapax legomena incidence'] = (hapax_count / doc_len * 1000) if doc_len > 0 else 0
+        
+        # Honoré's statistic
+        if type_count > 0 and hapax_count < type_count:
+            stats["Honoré's statistic"] = 100 * math.log10(doc_len) / (1 - (hapax_count / type_count)) if doc_len > 0 else 0
+        else:
+            stats["Honoré's statistic"] = 0
+        
+        # Moving average TTR (100-word window)
+        window_size = 100
+        if len(tokens) >= window_size:
+            ttrs = []
+            for i in range(len(tokens) - window_size + 1):
+                window = tokens[i:i + window_size]
+                ttrs.append(len(set(window)) / window_size)
+            stats['Moving average TTR'] = np.mean(ttrs) if ttrs else 0
+        else:
+            stats['Moving average TTR'] = 0
+        
+        # Per-PoS TTRs
+        pos_tags = ['ADJ', 'ADV', 'INTJ', 'VERB', 'NOUN', 'PROPN', 'ADP', 'AUX', 
+                    'CCONJ', 'SCONJ', 'DET', 'NUM', 'PART', 'PRON', 'PUNCT', 'SYM', 'X']
+        for tag in pos_tags:
+            positions = pos_map.get(tag, [])
+            if positions:
+                # Get tokens at these positions
+                pos_tokens = [tokens[i-1] for i in positions if i > 0]
+                if pos_tokens:
+                    stats[f'{tag} TTR'] = len(set(pos_tokens)) / len(pos_tokens)
+                else:
+                    stats[f'{tag} TTR'] = 0
+            else:
+                stats[f'{tag} TTR'] = 0
+        
+        return stats
+    
+    def _calc_word_lengths(self, doc, pos_map, tokens):
+        """Calculate word length measures (global and per-PoS)."""
+        stats = {}
+        
+        # Collect word lengths per PoS
+        pos_word_lengths = defaultdict(list)
+        
+        for sent in doc.sentences:
+            for word in sent.words:
+                word_len = len(word.text)
+                if word.upos:
+                    pos_word_lengths[word.upos].append(word_len)
+        
+        # Per-PoS average word lengths
+        pos_tags = ['ADJ', 'ADV', 'INTJ', 'VERB', 'NOUN', 'PROPN', 'ADP', 'AUX', 
+                    'CCONJ', 'SCONJ', 'DET', 'NUM', 'PART', 'PRON', 'PUNCT']
+        for tag in pos_tags:
+            lengths = pos_word_lengths.get(tag, [])
+            if lengths:
+                stats[f'{tag} word length'] = np.mean(lengths)
+            else:
+                stats[f'{tag} word length'] = 0
+        
+        # Sentence length (already calculated as Word count / Sentence count)
+        # Paragraph length calculated in paragraph measures
+        
+        return stats
+    
+    def _calc_zipf_variants(self, zipf_scores, tokens, lang_code, doc_len):
+        """Calculate Zipf frequency variants."""
+        stats = {}
+        
+        if not zipf_scores:
+            stats['Zipf curve steepness'] = 0
+            stats['Zipf goodness-of-fit'] = 0
+            stats['Average contextual diversity'] = 0
+            stats['Frequent word incidence'] = 0
+            stats['Infrequent word incidence'] = 0
+            stats['Unknown word count'] = 0
+            stats['Unknown word incidence'] = 0
+            return stats
+        
+        # Zipf curve steepness (slope of rank vs frequency)
+        word_counts = Counter(tokens)
+        sorted_counts = sorted(word_counts.values(), reverse=True)
+        if len(sorted_counts) > 1:
+            ranks = np.arange(1, len(sorted_counts) + 1)
+            log_ranks = np.log10(ranks)
+            log_freqs = np.log10(sorted_counts)
+            slope, intercept, r_value, p_value, std_err = linregress(log_ranks, log_freqs)
+            stats['Zipf curve steepness'] = abs(slope)
+            stats['Zipf goodness-of-fit'] = r_value ** 2
+        else:
+            stats['Zipf curve steepness'] = 0
+            stats['Zipf goodness-of-fit'] = 0
+        
+        # Average contextual diversity (approximated by Zipf score)
+        stats['Average contextual diversity'] = np.mean(zipf_scores)
+        
+        # Frequency incidence counts
+        freq_count = sum(1 for z in zipf_scores if z > 6.0)
+        infreq_count = sum(1 for z in zipf_scores if z < 4.0)
+        
+        stats['Frequent word incidence'] = (freq_count / doc_len * 1000) if doc_len > 0 else 0
+        stats['Infrequent word incidence'] = (infreq_count / doc_len * 1000) if doc_len > 0 else 0
+        
+        # Unknown words (Zipf < 1.0 or not found in wordfreq)
+        unknown_count = 0
+        for token in tokens:
+            z = zipf_frequency(token, lang_code)
+            if z < 1.0:
+                unknown_count += 1
+        
+        stats['Unknown word count'] = unknown_count
+        stats['Unknown word incidence'] = (unknown_count / doc_len * 1000) if doc_len > 0 else 0
+        
+        return stats
+    
+    def _calc_morphological_complexity(self, doc, pos_map):
+        """Calculate morphological complexity measures."""
+        stats = {}
+        
+        # Word-lemma Levenshtein distances
+        distances = []
+        lemmas_per_word = defaultdict(set)
+        
+        for sent in doc.sentences:
+            for word in sent.words:
+                if word.text and word.lemma and word.upos not in ['PUNCT', 'SYM', 'X']:
+                    dist = self._levenshtein_distance(word.text.lower(), word.lemma.lower())
+                    distances.append(dist)
+                    lemmas_per_word[word.lemma].add(word.text.lower())
+        
+        if distances:
+            stats['Word-lemma distance (avg)'] = np.mean(distances)
+            stats['Word-lemma distance (max)'] = np.max(distances)
+        else:
+            stats['Word-lemma distance (avg)'] = 0
+            stats['Word-lemma distance (max)'] = 0
+        
+        # Word-types per lemma (overall)
+        if lemmas_per_word:
+            types_per_lemma = [len(word_forms) for word_forms in lemmas_per_word.values()]
+            stats['Word-types per lemma'] = np.mean(types_per_lemma)
+        else:
+            stats['Word-types per lemma'] = 0
+        
+        # Word-types per lemma for specific PoS
+        for pos_filter, pos_tags in [('noun', {'NOUN'}), ('verb', {'VERB'}), 
+                                       ('lexical', {'ADJ', 'ADV', 'INTJ', 'NOUN', 'PROPN', 'VERB'}),
+                                       ('grammatical', {'ADP', 'AUX', 'CCONJ', 'DET', 'NUM', 'PART', 'PRON', 'SCONJ'})]:
+            lemma_map = defaultdict(set)
+            for sent in doc.sentences:
+                for word in sent.words:
+                    if word.upos in pos_tags and word.lemma:
+                        lemma_map[word.lemma].add(word.text.lower())
+            
+            if lemma_map:
+                types_per_lemma = [len(word_forms) for word_forms in lemma_map.values()]
+                stats[f'Word-types per lemma ({pos_filter})'] = np.mean(types_per_lemma)
+            else:
+                stats[f'Word-types per lemma ({pos_filter})'] = 0
+        
+        return stats
+    
+    def _calc_ratios(self, pos_map, feat_map):
+        """Calculate all 60+ comparative ratios."""
+        stats = {}
+        
+        def safe_ratio(numerator, denominator):
+            return numerator / denominator if denominator > 0 else 0
+        
+        def get_cnt(tags):
+            if isinstance(tags, str): tags = {tags}
+            return sum(len(pos_map.get(t, [])) for t in tags)
+        
+        # PoS-to-PoS ratios
+        adj_c = get_cnt('ADJ')
+        adv_c = get_cnt('ADV')
+        noun_c = get_cnt('NOUN')
+        propn_c = get_cnt('PROPN')
+        verb_c = get_cnt('VERB')
+        aux_c = get_cnt('AUX')
+        adp_c = get_cnt('ADP')
+        det_c = get_cnt('DET')
+        pron_c = get_cnt('PRON')
+        intj_c = get_cnt('INTJ')
+        cconj_c = get_cnt('CCONJ')
+        sconj_c = get_cnt('SCONJ')
+        conj_c = cconj_c + sconj_c
+        num_c = get_cnt('NUM')
+        part_c = get_cnt('PART')
+        
+        lex_c = get_cnt({'ADJ', 'ADV', 'INTJ', 'NOUN', 'PROPN', 'VERB'})
+        gram_c = get_cnt({'ADP', 'AUX', 'CCONJ', 'DET', 'NUM', 'PART', 'PRON', 'SCONJ'})
+        
+        # Adjective ratios
+        stats['Adverb-adjective ratio'] = safe_ratio(adv_c, adj_c)
+        stats['Determiner-adjective ratio'] = safe_ratio(det_c, adj_c)
+        
+        # Noun ratios
+        stats['Adjective-noun ratio'] = safe_ratio(adj_c, noun_c)
+        stats['Interjection-noun ratio'] = safe_ratio(intj_c, noun_c)
+        stats['Proper noun-noun ratio'] = safe_ratio(propn_c, noun_c)
+        stats['Verb-noun ratio'] = safe_ratio(verb_c, noun_c)
+        stats['Adposition-noun ratio'] = safe_ratio(adp_c, noun_c)
+        stats['Conjunction-noun ratio'] = safe_ratio(conj_c, noun_c)
+        stats['Determiner-noun ratio'] = safe_ratio(det_c, noun_c)
+        stats['Numeral-noun ratio'] = safe_ratio(num_c, noun_c)
+        stats['Pronoun-noun ratio'] = safe_ratio(pron_c, noun_c)
+        
+        # Verb ratios
+        stats['Adverb-verb ratio'] = safe_ratio(adv_c, verb_c)
+        stats['Interjection-verb ratio'] = safe_ratio(intj_c, verb_c)
+        stats['Adposition-verb ratio'] = safe_ratio(adp_c, verb_c)
+        stats['Conjunction-verb ratio'] = safe_ratio(conj_c, verb_c)
+        stats['Particle-verb ratio'] = safe_ratio(part_c, verb_c)
+        stats['Auxiliary-lexical verb ratio'] = safe_ratio(aux_c, verb_c)
+        
+        # Lexical item ratios
+        stats['Adjective-lexical item ratio'] = safe_ratio(adj_c, lex_c)
+        stats['Adverb-lexical item ratio'] = safe_ratio(adv_c, lex_c)
+        stats['Interjection-lexical item ratio'] = safe_ratio(intj_c, lex_c)
+        stats['Lexical verb-lexical item ratio'] = safe_ratio(verb_c, lex_c)
+        stats['Noun-lexical item ratio'] = safe_ratio(noun_c, lex_c)
+        stats['Proper noun-lexical item ratio'] = safe_ratio(propn_c, lex_c)
+        
+        # Conjunction ratios
+        stats['Sub-coordinating conjunction ratio'] = safe_ratio(sconj_c, cconj_c)
+        
+        # Determiner ratios
+        stats['Adposition-determiner ratio'] = safe_ratio(adp_c, det_c)
+        stats['Pronoun-determiner ratio'] = safe_ratio(pron_c, det_c)
+        stats['Proper noun-determiner ratio'] = safe_ratio(propn_c, det_c)
+        
+        # Pronoun ratios
+        stats['Proper noun-pronoun ratio'] = safe_ratio(propn_c, pron_c)
+        
+        # Grammatical item ratios
+        stats['Adposition-grammatical item ratio'] = safe_ratio(adp_c, gram_c)
+        stats['Auxiliary-grammatical item ratio'] = safe_ratio(aux_c, gram_c)
+        stats['Conjunction-grammatical item ratio'] = safe_ratio(conj_c, gram_c)
+        stats['Determiner-grammatical item ratio'] = safe_ratio(det_c, gram_c)
+        stats['Numeral-grammatical item ratio'] = safe_ratio(num_c, gram_c)
+        stats['Particle-grammatical item ratio'] = safe_ratio(part_c, gram_c)
+        stats['Pronoun-grammatical item ratio'] = safe_ratio(pron_c, gram_c)
+        
+        # Lexical-grammatical ratio
+        stats['Lexical-grammatical item ratio'] = safe_ratio(lex_c, gram_c)
+        
+        # Person pronoun ratios
+        pers_pron_c = len(feat_map.get('Personal pronoun', []))
+        first_c = len(feat_map.get('First person', []))
+        second_c = len(feat_map.get('Second person', []))
+        third_c = len(feat_map.get('Third person', []))
+        
+        stats['First person-personal pronoun ratio'] = safe_ratio(first_c, pers_pron_c)
+        stats['Second person-personal pronoun ratio'] = safe_ratio(second_c, pers_pron_c)
+        stats['Third person-personal pronoun ratio'] = safe_ratio(third_c, pers_pron_c)
+        stats['First-third person pronoun ratio'] = safe_ratio(first_c, third_c)
+        stats['First-second person pronoun ratio'] = safe_ratio(first_c, second_c)
+        stats['Second-third person pronoun ratio'] = safe_ratio(second_c, third_c)
+        
+        # Feature ratios
+        sing_c = len(feat_map.get('Singular', []))
+        plur_c = len(feat_map.get('Plural', []))
+        def_c = len(feat_map.get('Definite', []))
+        indef_c = len(feat_map.get('Indefinite', []))
+        inf_c = len(feat_map.get('Infinitive', []))
+        fin_c = len(feat_map.get('Finite', []))
+        vadj_c = len(feat_map.get('Verbal adjective', []))
+        pres_c = len(feat_map.get('Present', []))
+        past_c = len(feat_map.get('Past', []))
+        
+        stats['Plural-singular word ratio'] = safe_ratio(plur_c, sing_c)
+        stats['Definite-indefinite word ratio'] = safe_ratio(def_c, indef_c)
+        stats['Infinitive-finite verb ratio'] = safe_ratio(inf_c, fin_c)
+        stats['Verbal adjective-finite verb ratio'] = safe_ratio(vadj_c, fin_c)
+        stats['Verbal adjective-infinitive verb ratio'] = safe_ratio(vadj_c, inf_c)
+        stats['Present-past tense ratio'] = safe_ratio(pres_c, past_c)
+        
+        return stats
+    
+    def _calc_distributional_measures(self, pos_map, feat_map, zipf_scores, tokens, doc_len, lang_code):
+        """Calculate concentration, average position, and position SD for all categories."""
+        stats = {}
+        
+        def calc_concentration(positions, doc_len):
+            """Calculate concentration: < 0 = first half, > 0 = second half."""
+            if not positions or doc_len == 0:
+                return 0
+            midpoint = doc_len / 2
+            first_half = sum(1 for p in positions if p <= midpoint)
+            second_half = len(positions) - first_half
+            total = len(positions)
+            if total == 0:
+                return 0
+            return (second_half - first_half) / total
+        
+        def calc_avg_position(positions, doc_len):
+            """Calculate average normalized position (0 to 1)."""
+            if not positions or doc_len == 0:
+                return 0
+            return np.mean(positions) / doc_len
+        
+        def calc_position_sd(positions, doc_len):
+            """Calculate standard deviation of normalized positions."""
+            if not positions or doc_len == 0 or len(positions) < 2:
+                return 0
+            normalized = [p / doc_len for p in positions]
+            return np.std(normalized)
+        
+        # PoS-based distributional measures
+        for tag in pos_map:
+            positions = pos_map[tag]
+            stats[f'{tag} concentration'] = calc_concentration(positions, doc_len)
+            stats[f'{tag} average position'] = calc_avg_position(positions, doc_len)
+            stats[f'{tag} position SD'] = calc_position_sd(positions, doc_len)
+        
+        # Feature-based distributional measures
+        for feat in feat_map:
+            positions = feat_map[feat]
+            stats[f'{feat} concentration'] = calc_concentration(positions, doc_len)
+            stats[f'{feat} average position'] = calc_avg_position(positions, doc_len)
+            stats[f'{feat} position SD'] = calc_position_sd(positions, doc_len)
+        
+        # Frequency-based distributional measures
+        freq_positions = []
+        infreq_positions = []
+        unknown_positions = []
+        
+        for i, token in enumerate(tokens, 1):
+            z = zipf_frequency(token, lang_code)
+            if z > 6.0:
+                freq_positions.append(i)
+            elif z < 4.0:
+                infreq_positions.append(i)
+            if z < 1.0:
+                unknown_positions.append(i)
+        
+        stats['Frequent word concentration'] = calc_concentration(freq_positions, doc_len)
+        stats['Frequent word average position'] = calc_avg_position(freq_positions, doc_len)
+        stats['Frequent word position SD'] = calc_position_sd(freq_positions, doc_len)
+        
+        stats['Infrequent word concentration'] = calc_concentration(infreq_positions, doc_len)
+        stats['Infrequent word average position'] = calc_avg_position(infreq_positions, doc_len)
+        stats['Infrequent word position SD'] = calc_position_sd(infreq_positions, doc_len)
+        
+        stats['Unknown word concentration'] = calc_concentration(unknown_positions, doc_len)
+        stats['Unknown word average position'] = calc_avg_position(unknown_positions, doc_len)
+        stats['Unknown word position SD'] = calc_position_sd(unknown_positions, doc_len)
+        
+        return stats
 
     # =========================================================================
     # CORE: Measure Extraction
     # =========================================================================
-    def _extract_measures(self, doc, lang_code):
+    def _extract_measures(self, doc, lang_code, original_text=""):
         stats = {}
         
         # 1. PRE-CALCULATE LISTS FOR SPEED
@@ -113,9 +514,8 @@ class DeepProfiler:
                 total_chars += len(word.text)
                 word_lengths.append(len(word.text))
                 
-                # Store position (0.0 to 1.0) for distributional measures
-                # Approximate global position
-                global_pos = len(tokens) 
+                # Store position (1-indexed) for distributional measures
+                global_pos = len(tokens)
                 
                 # --- A. PoS Bucketing ---
                 if word.upos in pos_map:
@@ -144,7 +544,23 @@ class DeepProfiler:
         stats['Type count'] = len(set(tokens))
         stats['Type-token ratio'] = len(set(tokens)) / doc_len
         
-        # --- Group 2: PoS Counts & Incidence (Per 1000 words) ---
+        # Average word length
+        stats['Word length'] = np.mean(word_lengths) if word_lengths else 0
+        
+        # Average sentence length
+        stats['Sentence length'] = total_words / len(doc.sentences) if len(doc.sentences) > 0 else 0
+        
+        # --- Group 2: Paragraph Measures ---
+        para_stats = self._calc_paragraph_measures(original_text if original_text else "", doc.sentences)
+        stats.update(para_stats)
+        
+        # Average paragraph length
+        if para_stats['Paragraph count'] > 0:
+            stats['Paragraph length'] = total_words / para_stats['Paragraph count']
+        else:
+            stats['Paragraph length'] = 0
+        
+        # --- Group 3: PoS Counts & Incidence (Per 1000 words) ---
         # Helper to safely get count
         def get_cnt(tags):
             if isinstance(tags, str): tags = {tags}
@@ -155,7 +571,9 @@ class DeepProfiler:
             cnt = len(pos_map[tag])
             stats[f'{tag} count'] = cnt
             stats[f'{tag} incidence'] = (cnt / doc_len) * 1000
-            stats[f'{tag} type count'] = len(set(tokens[i-1] for i in pos_map[tag])) # Approx type count
+            # Type count for this PoS
+            pos_tokens = [tokens[i-1] for i in pos_map[tag] if i > 0 and i <= len(tokens)]
+            stats[f'{tag} type count'] = len(set(pos_tokens))
 
         # Combined Groups (Lingualyzer Specifics)
         for name, tag_set in self.TAG_GROUPS.items():
@@ -163,7 +581,7 @@ class DeepProfiler:
             stats[f'{name} count'] = cnt
             stats[f'{name} incidence'] = (cnt / doc_len) * 1000
 
-        # --- Group 3: Morphological Features ---
+        # --- Group 4: Morphological Features ---
         for feat, positions in feat_map.items():
             cnt = len(positions)
             stats[f'{feat} count'] = cnt
@@ -171,7 +589,15 @@ class DeepProfiler:
             # Burstiness
             stats[f'{feat} burstiness'] = self._calc_burstiness(positions, doc_len)
 
-        # --- Group 4: Complexity (Entropy & Zipf) ---
+        # --- Group 5: Lexical Diversity ---
+        lex_div_stats = self._calc_lexical_diversity(tokens, pos_map, doc_len)
+        stats.update(lex_div_stats)
+        
+        # --- Group 6: Word Lengths (Per-PoS) ---
+        word_len_stats = self._calc_word_lengths(doc, pos_map, tokens)
+        stats.update(word_len_stats)
+        
+        # --- Group 7: Complexity (Entropy & Zipf) ---
         if zipf_scores:
             stats['Lexical sophistication (Zipf)'] = np.mean(zipf_scores)
             stats['Frequent word count'] = sum(1 for z in zipf_scores if z > 6.0)
@@ -181,18 +607,28 @@ class DeepProfiler:
             stats['Frequent word count'] = 0
             stats['Infrequent word count'] = 0
 
+        # Zipf variants
+        zipf_var_stats = self._calc_zipf_variants(zipf_scores, tokens, lang_code, doc_len)
+        stats.update(zipf_var_stats)
+        
         # Word Entropy
         word_counts = Counter(tokens)
         probs = [freq / doc_len for freq in word_counts.values()]
         stats['Word entropy'] = entropy(probs, base=2)
 
-        # --- Group 5: Ratios (Sample of the many required) ---
-        # Example: Noun / Lexical Item
-        noun_c = get_cnt('NOUN')
-        lex_c = get_cnt(self.TAG_GROUPS['Lexical item'])
-        stats['Noun-lexical item ratio'] = noun_c / lex_c if lex_c > 0 else 0
+        # --- Group 8: Morphological Complexity ---
+        morph_stats = self._calc_morphological_complexity(doc, pos_map)
+        stats.update(morph_stats)
+        
+        # --- Group 9: Ratios (60+ comparative ratios) ---
+        ratio_stats = self._calc_ratios(pos_map, feat_map)
+        stats.update(ratio_stats)
 
-        # --- Group 6: Distributional (Sentence-to-Sentence) ---
+        # --- Group 10: Distributional Measures ---
+        dist_stats = self._calc_distributional_measures(pos_map, feat_map, zipf_scores, tokens, doc_len, lang_code)
+        stats.update(dist_stats)
+        
+        # --- Group 11: Distributional (Sentence-to-Sentence) ---
         # Measures overlap between adjacent sentences
         overlaps = []
         if len(doc.sentences) > 1:
@@ -240,8 +676,8 @@ class DeepProfiler:
                 in_docs = [stanza.Document([], text=t) for t in subset_txt]
                 out_docs = nlp(in_docs)
                 
-                # Extract & Aggregate
-                all_stats = [self._extract_measures(d, lang) for d in out_docs]
+                # Extract & Aggregate (pass original text for paragraph detection)
+                all_stats = [self._extract_measures(d, lang, subset_txt[i]) for i, d in enumerate(out_docs)]
                 df = pd.DataFrame(all_stats)
                 
                 # Calculate Means
