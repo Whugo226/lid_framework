@@ -44,12 +44,25 @@ class DeepProfiler:
         if not word.feats: return False
         features = word.feats.split('|')
         
-        # Mapping Lingualyzer definitions to UD v2 Tags
+        # Special compound checks for person pronouns (Lingualyzer requires PRON + PronType=Prs + Person=X)
+        if feat_name == 'First person':
+            return (word.upos == 'PRON' and 
+                    'PronType=Prs' in features and 
+                    'Person=1' in features)
+        elif feat_name == 'Second person':
+            return (word.upos == 'PRON' and 
+                    'PronType=Prs' in features and 
+                    'Person=2' in features)
+        elif feat_name == 'Third person':
+            return (word.upos == 'PRON' and 
+                    'PronType=Prs' in features and 
+                    'Person=3' in features)
+        elif feat_name == 'Personal pronoun':
+            return (word.upos == 'PRON' and 
+                    'PronType=Prs' in features)
+        
+        # Mapping Lingualyzer definitions to UD v2 Tags (simple single-feature checks)
         checks = {
-            'Personal pronoun': 'PronType=Prs',
-            'First person': 'Person=1',
-            'Second person': 'Person=2',
-            'Third person': 'Person=3',
             'Interrogative': 'PronType=Int',
             'Demonstrative': 'PronType=Dem',
             'Singular': 'Number=Sing',
@@ -160,7 +173,7 @@ class DeepProfiler:
         
         # Per-PoS TTRs
         pos_tags = ['ADJ', 'ADV', 'INTJ', 'VERB', 'NOUN', 'PROPN', 'ADP', 'AUX', 
-                    'CCONJ', 'SCONJ', 'DET', 'NUM', 'PART', 'PRON', 'PUNCT', 'SYM', 'X']
+                    'CCONJ', 'SCONJ', 'DET', 'NUM', 'PART', 'PRON']
         for tag in pos_tags:
             positions = pos_map.get(tag, [])
             if positions:
@@ -172,6 +185,40 @@ class DeepProfiler:
                     stats[f'{tag} TTR'] = 0
             else:
                 stats[f'{tag} TTR'] = 0
+        
+        # Combined group TTRs
+        # Lexical item TTR (open class: ADJ, ADV, INTJ, NOUN, PROPN, VERB)
+        lexical_tags = {'ADJ', 'ADV', 'INTJ', 'NOUN', 'PROPN', 'VERB'}
+        lexical_positions = []
+        for tag in lexical_tags:
+            lexical_positions.extend(pos_map.get(tag, []))
+        if lexical_positions:
+            lexical_tokens = [tokens[i-1] for i in lexical_positions if i > 0]
+            stats['Lexical item TTR'] = len(set(lexical_tokens)) / len(lexical_tokens) if lexical_tokens else 0
+        else:
+            stats['Lexical item TTR'] = 0
+        
+        # Grammatical item TTR (closed class: ADP, AUX, CCONJ, DET, NUM, PART, PRON, SCONJ)
+        grammatical_tags = {'ADP', 'AUX', 'CCONJ', 'DET', 'NUM', 'PART', 'PRON', 'SCONJ'}
+        grammatical_positions = []
+        for tag in grammatical_tags:
+            grammatical_positions.extend(pos_map.get(tag, []))
+        if grammatical_positions:
+            grammatical_tokens = [tokens[i-1] for i in grammatical_positions if i > 0]
+            stats['Grammatical item TTR'] = len(set(grammatical_tokens)) / len(grammatical_tokens) if grammatical_tokens else 0
+        else:
+            stats['Grammatical item TTR'] = 0
+        
+        # Verb_All TTR (VERB + AUX)
+        verb_all_tags = {'VERB', 'AUX'}
+        verb_all_positions = []
+        for tag in verb_all_tags:
+            verb_all_positions.extend(pos_map.get(tag, []))
+        if verb_all_positions:
+            verb_all_tokens = [tokens[i-1] for i in verb_all_positions if i > 0]
+            stats['Verb_All TTR'] = len(set(verb_all_tokens)) / len(verb_all_tokens) if verb_all_tokens else 0
+        else:
+            stats['Verb_All TTR'] = 0
         
         return stats
     
@@ -190,7 +237,7 @@ class DeepProfiler:
         
         # Per-PoS average word lengths
         pos_tags = ['ADJ', 'ADV', 'INTJ', 'VERB', 'NOUN', 'PROPN', 'ADP', 'AUX', 
-                    'CCONJ', 'SCONJ', 'DET', 'NUM', 'PART', 'PRON', 'PUNCT']
+                    'CCONJ', 'SCONJ', 'DET', 'NUM', 'PART', 'PRON']
         for tag in pos_tags:
             lengths = pos_word_lengths.get(tag, [])
             if lengths:
@@ -198,8 +245,25 @@ class DeepProfiler:
             else:
                 stats[f'{tag} word length'] = 0
         
-        # Sentence length (already calculated as Word count / Sentence count)
-        # Paragraph length calculated in paragraph measures
+        # Combined group word lengths (Lexical item, Grammatical item, Verb_All)
+        lexical_tags = {'ADJ', 'ADV', 'INTJ', 'NOUN', 'PROPN', 'VERB'}
+        grammatical_tags = {'ADP', 'AUX', 'CCONJ', 'DET', 'NUM', 'PART', 'PRON', 'SCONJ'}
+        verb_all_tags = {'VERB', 'AUX'}
+        
+        lexical_lengths = []
+        for tag in lexical_tags:
+            lexical_lengths.extend(pos_word_lengths.get(tag, []))
+        stats['Lexical item word length'] = np.mean(lexical_lengths) if lexical_lengths else 0
+        
+        grammatical_lengths = []
+        for tag in grammatical_tags:
+            grammatical_lengths.extend(pos_word_lengths.get(tag, []))
+        stats['Grammatical item word length'] = np.mean(grammatical_lengths) if grammatical_lengths else 0
+        
+        verb_all_lengths = []
+        for tag in verb_all_tags:
+            verb_all_lengths.extend(pos_word_lengths.get(tag, []))
+        stats['Verb_All word length'] = np.mean(verb_all_lengths) if verb_all_lengths else 0
         
         return stats
     
@@ -217,16 +281,35 @@ class DeepProfiler:
             stats['Unknown word incidence'] = 0
             return stats
         
-        # Zipf curve steepness (slope of rank vs frequency)
+        # Zipf curve steepness using MLE (Clauset et al., 2009)
+        # More accurate than log-log linear regression
         word_counts = Counter(tokens)
-        sorted_counts = sorted(word_counts.values(), reverse=True)
-        if len(sorted_counts) > 1:
-            ranks = np.arange(1, len(sorted_counts) + 1)
-            log_ranks = np.log10(ranks)
-            log_freqs = np.log10(sorted_counts)
-            slope, intercept, r_value, p_value, std_err = linregress(log_ranks, log_freqs)
-            stats['Zipf curve steepness'] = abs(slope)
-            stats['Zipf goodness-of-fit'] = r_value ** 2
+        frequencies = np.array(sorted(word_counts.values(), reverse=True))
+        if len(frequencies) > 1:
+            x_min = 1  # minimum frequency threshold
+            # Filter frequencies >= x_min
+            freq_above_min = frequencies[frequencies >= x_min]
+            n = len(freq_above_min)
+            if n > 1:
+                # MLE estimator for discrete power law: α = 1 + n / Σ ln(x_i / (x_min - 0.5))
+                alpha_mle = 1 + n / np.sum(np.log(freq_above_min / (x_min - 0.5)))
+                stats['Zipf curve steepness'] = alpha_mle
+                
+                # Goodness-of-fit: R² determination coefficient
+                # Compare observed frequencies to theoretical Zipf frequencies
+                ranks = np.arange(1, len(freq_above_min) + 1)
+                # Theoretical frequencies: f(r) = C / r^α, where C is fitted to match total
+                theoretical_freqs = 1 / (ranks ** alpha_mle)
+                # Scale theoretical to match observed total
+                theoretical_freqs = theoretical_freqs * (np.sum(freq_above_min) / np.sum(theoretical_freqs))
+                # Calculate R² = 1 - SS_res / SS_tot
+                ss_res = np.sum((freq_above_min - theoretical_freqs) ** 2)
+                ss_tot = np.sum((freq_above_min - np.mean(freq_above_min)) ** 2)
+                r_squared = 1 - (ss_res / ss_tot) if ss_tot > 0 else 0
+                stats['Zipf goodness-of-fit'] = max(0, r_squared)  # Clamp to [0, 1]
+            else:
+                stats['Zipf curve steepness'] = 0
+                stats['Zipf goodness-of-fit'] = 0
         else:
             stats['Zipf curve steepness'] = 0
             stats['Zipf goodness-of-fit'] = 0
@@ -241,11 +324,11 @@ class DeepProfiler:
         stats['Frequent word incidence'] = (freq_count / doc_len * 1000) if doc_len > 0 else 0
         stats['Infrequent word incidence'] = (infreq_count / doc_len * 1000) if doc_len > 0 else 0
         
-        # Unknown words (Zipf < 1.0 or not found in wordfreq)
+        # Unknown words (Zipf < 3.0 or not found in wordfreq)
         unknown_count = 0
         for token in tokens:
             z = zipf_frequency(token, lang_code)
-            if z < 1.0:
+            if z < 3.0:
                 unknown_count += 1
         
         stats['Unknown word count'] = unknown_count
@@ -259,6 +342,7 @@ class DeepProfiler:
         
         # Word-lemma Levenshtein distances
         distances = []
+        # Key by (lemma, PoS) tuple - lemmas with different PoS tags are differentiated
         lemmas_per_word = defaultdict(set)
         
         for sent in doc.sentences:
@@ -266,7 +350,8 @@ class DeepProfiler:
                 if word.text and word.lemma and word.upos not in ['PUNCT', 'SYM', 'X']:
                     dist = self._levenshtein_distance(word.text.lower(), word.lemma.lower())
                     distances.append(dist)
-                    lemmas_per_word[word.lemma].add(word.text.lower())
+                    # Differentiate lemmas by PoS tag (e.g., "run" as NOUN vs "run" as VERB)
+                    lemmas_per_word[(word.lemma, word.upos)].add(word.text.lower())
         
         if distances:
             stats['Word-lemma distance (avg)'] = np.mean(distances)
@@ -275,7 +360,7 @@ class DeepProfiler:
             stats['Word-lemma distance (avg)'] = 0
             stats['Word-lemma distance (max)'] = 0
         
-        # Word-types per lemma (overall)
+        # Word-types per lemma (overall) - differentiated by PoS
         if lemmas_per_word:
             types_per_lemma = [len(word_forms) for word_forms in lemmas_per_word.values()]
             stats['Word-types per lemma'] = np.mean(types_per_lemma)
@@ -334,6 +419,7 @@ class DeepProfiler:
         # Adjective ratios
         stats['Adverb-adjective ratio'] = safe_ratio(adv_c, adj_c)
         stats['Determiner-adjective ratio'] = safe_ratio(det_c, adj_c)
+        stats['Interjection-adjective ratio'] = safe_ratio(intj_c, adj_c)
         
         # Noun ratios
         stats['Adjective-noun ratio'] = safe_ratio(adj_c, noun_c)
@@ -498,7 +584,7 @@ class DeepProfiler:
         # 1. PRE-CALCULATE LISTS FOR SPEED
         # --------------------------------
         tokens = []
-        pos_map = {tag: [] for tag in ['ADJ','ADV','INTJ','VERB','NOUN','PROPN','ADP','AUX','CCONJ','SCONJ','DET','NUM','PART','PRON','PUNCT','SYM','X']}
+        pos_map = {tag: [] for tag in ['ADJ','ADV','INTJ','VERB','NOUN','PROPN','ADP','AUX','CCONJ','SCONJ','DET','NUM','PART','PRON', 'PUNCT']}
         feat_map = {k: [] for k in ['Personal pronoun','First person','Second person','Third person','Interrogative','Demonstrative','Singular','Plural','Indefinite','Definite','Finite','Infinitive','Verbal adjective','Past','Present','Passive']}
         
         zipf_scores = []
@@ -527,7 +613,7 @@ class DeepProfiler:
                         feat_map[feat_name].append(global_pos)
                 
                 # --- C. Zipf & Frequencies ---
-                if word.upos not in ['PUNCT', 'NUM', 'SYM']:
+                if word.upos not in ['PUNCT', 'NUM']:
                     z = zipf_frequency(word.text, lang_code)
                     if z >= 3.0: # Threshold: 1 per million
                         zipf_scores.append(z)
@@ -580,6 +666,12 @@ class DeepProfiler:
             cnt = get_cnt(tag_set)
             stats[f'{name} count'] = cnt
             stats[f'{name} incidence'] = (cnt / doc_len) * 1000
+            # Type count for combined group (distinct words with these PoS tags)
+            group_positions = []
+            for t in tag_set:
+                group_positions.extend(pos_map.get(t, []))
+            group_tokens = [tokens[i-1] for i in group_positions if i > 0 and i <= len(tokens)]
+            stats[f'{name} type count'] = len(set(group_tokens))
 
         # --- Group 4: Morphological Features ---
         for feat, positions in feat_map.items():
@@ -599,11 +691,11 @@ class DeepProfiler:
         
         # --- Group 7: Complexity (Entropy & Zipf) ---
         if zipf_scores:
-            stats['Lexical sophistication (Zipf)'] = np.mean(zipf_scores)
+            stats['Lexical sophistication (Zipf frequency)'] = np.mean(zipf_scores)
             stats['Frequent word count'] = sum(1 for z in zipf_scores if z > 6.0)
             stats['Infrequent word count'] = sum(1 for z in zipf_scores if z < 4.0)
         else:
-            stats['Lexical sophistication (Zipf)'] = 0
+            stats['Lexical sophistication (Zipf frequency)'] = 0
             stats['Frequent word count'] = 0
             stats['Infrequent word count'] = 0
 
@@ -615,6 +707,15 @@ class DeepProfiler:
         word_counts = Counter(tokens)
         probs = [freq / doc_len for freq in word_counts.values()]
         stats['Word entropy'] = entropy(probs, base=2)
+        
+        # Letter Entropy (Bentz et al., 2017)
+        letters = [c.lower() for c in ''.join(tokens) if c.isalpha()]
+        if letters:
+            letter_counts = Counter(letters)
+            letter_probs = [freq / len(letters) for freq in letter_counts.values()]
+            stats['Letter entropy'] = entropy(letter_probs, base=2)
+        else:
+            stats['Letter entropy'] = 0
 
         # --- Group 8: Morphological Complexity ---
         morph_stats = self._calc_morphological_complexity(doc, pos_map)
