@@ -103,7 +103,13 @@ class DeepProfiler:
         return (cv - 1) / (cv + 1)
     
     def _levenshtein_distance(self, s1, s2):
-        """Calculate Levenshtein (edit) distance between two strings."""
+        """Calculate Levenshtein (edit) distance between two strings or sequences."""
+        # Handle sequences (lists) by treating as strings
+        if isinstance(s1, list):
+            s1 = ' '.join(str(x) for x in s1)
+        if isinstance(s2, list):
+            s2 = ' '.join(str(x) for x in s2)
+        
         if len(s1) < len(s2):
             return self._levenshtein_distance(s2, s1)
         if len(s2) == 0:
@@ -120,6 +126,19 @@ class DeepProfiler:
             previous_row = current_row
         
         return previous_row[-1]
+    
+    def _get_sentence_centroid(self, words):
+        """Compute the centroid vector for a sentence by averaging FastText vectors of words."""
+        if self.fasttext_model is None:
+            return None
+        vectors = []
+        for word in words:
+            if word in self.fasttext_model:
+                vectors.append(self.fasttext_model[word])
+        if vectors:
+            return np.mean(vectors, axis=0)
+        else:
+            return None
     
     # =========================================================================
     # SUB-METHODS: Modular Measure Calculation
@@ -150,9 +169,34 @@ class DeepProfiler:
         
         # Hapax legomena (words appearing exactly once)
         word_counts = Counter(tokens)
-        hapax_count = sum(1 for count in word_counts.values() if count == 1)
+        hapax_words = {word for word, count in word_counts.items() if count == 1}
+        hapax_count = len(hapax_words)
         stats['Hapax legomena count'] = hapax_count
         stats['Hapax legomena incidence'] = (hapax_count / doc_len * 1000) if doc_len > 0 else 0
+        
+        # Hapax legomena distributional measures (positions of words occurring only once)
+        hapax_positions = [i + 1 for i, token in enumerate(tokens) if token in hapax_words]
+        stats['Hapax legomena burstiness'] = self._calc_burstiness(hapax_positions, doc_len)
+        
+        # Hapax legomena concentration: < 0 = first half, > 0 = second half
+        if hapax_positions and doc_len > 0:
+            midpoint = doc_len / 2
+            first_half = sum(1 for p in hapax_positions if p <= midpoint)
+            second_half = len(hapax_positions) - first_half
+            total = len(hapax_positions)
+            stats['Hapax legomena concentration'] = (second_half - first_half) / total if total > 0 else 0
+        else:
+            stats['Hapax legomena concentration'] = 0
+        
+        # Hapax legomena average position (normalized 0 to 1)
+        stats['Hapax legomena average position'] = np.mean(hapax_positions) / doc_len if hapax_positions and doc_len > 0 else 0
+        
+        # Hapax legomena position SD
+        if hapax_positions and doc_len > 0 and len(hapax_positions) >= 2:
+            normalized = [p / doc_len for p in hapax_positions]
+            stats['Hapax legomena position SD'] = np.std(normalized)
+        else:
+            stats['Hapax legomena position SD'] = 0
         
         # Honoré's statistic
         if type_count > 0 and hapax_count < type_count:
@@ -173,7 +217,7 @@ class DeepProfiler:
         
         # Per-PoS TTRs
         pos_tags = ['ADJ', 'ADV', 'INTJ', 'VERB', 'NOUN', 'PROPN', 'ADP', 'AUX', 
-                    'CCONJ', 'SCONJ', 'DET', 'NUM', 'PART', 'PRON']
+                 'DET', 'NUM', 'PART', 'PRON']
         for tag in pos_tags:
             positions = pos_map.get(tag, [])
             if positions:
@@ -219,6 +263,18 @@ class DeepProfiler:
             stats['Verb_All TTR'] = len(set(verb_all_tokens)) / len(verb_all_tokens) if verb_all_tokens else 0
         else:
             stats['Verb_All TTR'] = 0
+
+        # Conjunction type-token ratio (CCONJ + SCONJ)
+        conjunction_tags = {'CCONJ', 'SCONJ'}
+        conjunction_positions = []
+        for tag in conjunction_tags:
+            conjunction_positions.extend(pos_map.get(tag, []))
+        if conjunction_positions:
+            conjunction_tokens = [tokens[i-1] for i in conjunction_positions if i > 0]
+            distinct_conjunctions = set(conjunction_tokens)
+            stats['Conjunction TTR'] = len(distinct_conjunctions) / len(conjunction_tokens) if conjunction_tokens else 0
+        else:
+            stats['Conjunction TTR'] = 0
         
         return stats
     
@@ -237,7 +293,7 @@ class DeepProfiler:
         
         # Per-PoS average word lengths
         pos_tags = ['ADJ', 'ADV', 'INTJ', 'VERB', 'NOUN', 'PROPN', 'ADP', 'AUX', 
-                    'CCONJ', 'SCONJ', 'DET', 'NUM', 'PART', 'PRON']
+                     'DET', 'NUM', 'PART', 'PRON']
         for tag in pos_tags:
             lengths = pos_word_lengths.get(tag, [])
             if lengths:
@@ -249,6 +305,7 @@ class DeepProfiler:
         lexical_tags = {'ADJ', 'ADV', 'INTJ', 'NOUN', 'PROPN', 'VERB'}
         grammatical_tags = {'ADP', 'AUX', 'CCONJ', 'DET', 'NUM', 'PART', 'PRON', 'SCONJ'}
         verb_all_tags = {'VERB', 'AUX'}
+        conjunction_tags = {'CCONJ', 'SCONJ'}   
         
         lexical_lengths = []
         for tag in lexical_tags:
@@ -264,6 +321,11 @@ class DeepProfiler:
         for tag in verb_all_tags:
             verb_all_lengths.extend(pos_word_lengths.get(tag, []))
         stats['Verb_All word length'] = np.mean(verb_all_lengths) if verb_all_lengths else 0
+
+        conjunction_lengths = []
+        for tag in conjunction_tags:
+            conjunction_lengths.extend(pos_word_lengths.get(tag, []))
+        stats['Conjunction word length'] = np.mean(conjunction_lengths) if conjunction_lengths else 0
         
         return stats
     
@@ -533,12 +595,24 @@ class DeepProfiler:
             normalized = [p / doc_len for p in positions]
             return np.std(normalized)
         
-        # PoS-based distributional measures
-        for tag in pos_map:
-            positions = pos_map[tag]
+        # PoS-based distributional measures (restricted to specific tags)
+        pos_tags = ['ADJ', 'ADV', 'INTJ', 'VERB', 'NOUN', 'PROPN', 'ADP', 'AUX', 
+                    'DET', 'NUM', 'PART', 'PRON']
+        for tag in pos_tags:
+            positions = pos_map.get(tag, [])
             stats[f'{tag} concentration'] = calc_concentration(positions, doc_len)
             stats[f'{tag} average position'] = calc_avg_position(positions, doc_len)
             stats[f'{tag} position SD'] = calc_position_sd(positions, doc_len)
+
+        # Tag group distributional measures (using self.TAG_GROUPS)
+        for group_name, tag_set in self.TAG_GROUPS.items():
+            group_positions = []
+            for tag in tag_set:
+                group_positions.extend(pos_map.get(tag, []))
+            group_positions_sorted = sorted(group_positions)
+            stats[f'{group_name} concentration'] = calc_concentration(group_positions_sorted, doc_len)
+            stats[f'{group_name} average position'] = calc_avg_position(group_positions_sorted, doc_len)
+            stats[f'{group_name} position SD'] = calc_position_sd(group_positions_sorted, doc_len)
         
         # Feature-based distributional measures
         for feat in feat_map:
@@ -558,20 +632,23 @@ class DeepProfiler:
                 freq_positions.append(i)
             elif z < 4.0:
                 infreq_positions.append(i)
-            if z < 1.0:
+            if z < 3.0:
                 unknown_positions.append(i)
         
         stats['Frequent word concentration'] = calc_concentration(freq_positions, doc_len)
         stats['Frequent word average position'] = calc_avg_position(freq_positions, doc_len)
         stats['Frequent word position SD'] = calc_position_sd(freq_positions, doc_len)
+        stats['Frequent word burstiness'] = self._calc_burstiness(freq_positions, doc_len)
         
         stats['Infrequent word concentration'] = calc_concentration(infreq_positions, doc_len)
         stats['Infrequent word average position'] = calc_avg_position(infreq_positions, doc_len)
         stats['Infrequent word position SD'] = calc_position_sd(infreq_positions, doc_len)
+        stats['Infrequent word burstiness'] = self._calc_burstiness(infreq_positions, doc_len)
         
         stats['Unknown word concentration'] = calc_concentration(unknown_positions, doc_len)
         stats['Unknown word average position'] = calc_avg_position(unknown_positions, doc_len)
         stats['Unknown word position SD'] = calc_position_sd(unknown_positions, doc_len)
+        stats['Unknown word burstiness'] = self._calc_burstiness(unknown_positions, doc_len)
         
         return stats
 
@@ -660,6 +737,8 @@ class DeepProfiler:
             # Type count for this PoS
             pos_tokens = [tokens[i-1] for i in pos_map[tag] if i > 0 and i <= len(tokens)]
             stats[f'{tag} type count'] = len(set(pos_tokens))
+            # Burstiness for this PoS
+            stats[f'{tag} burstiness'] = self._calc_burstiness(pos_map[tag], doc_len)
 
         # Combined Groups (Lingualyzer Specifics)
         for name, tag_set in self.TAG_GROUPS.items():
@@ -670,8 +749,12 @@ class DeepProfiler:
             group_positions = []
             for t in tag_set:
                 group_positions.extend(pos_map.get(t, []))
+            group_positions_sorted = sorted(group_positions)
             group_tokens = [tokens[i-1] for i in group_positions if i > 0 and i <= len(tokens)]
             stats[f'{name} type count'] = len(set(group_tokens))
+            # Burstiness for combined group
+            stats[f'{name} burstiness'] = self._calc_burstiness(group_positions_sorted, doc_len)
+
 
         # --- Group 4: Morphological Features ---
         for feat, positions in feat_map.items():
@@ -732,18 +815,129 @@ class DeepProfiler:
         # --- Group 11: Distributional (Sentence-to-Sentence) ---
         # Measures overlap between adjacent sentences
         overlaps = []
+        overlap_counts = []
+        overlap_ratios = []
+        lemma_overlap_counts = []
+        lemma_overlap_ratios = []
+        pos_overlap_counts = []
+        pos_overlap_ratios = []
+        feature_overlap_counts = []
+        feature_overlap_ratios = []
+        levenshtein_word_distances = []
+        levenshtein_lemma_distances = []
+        levenshtein_pos_distances = []
+        levenshtein_char_distances = []
+        cosine_distances = []
         if len(doc.sentences) > 1:
             for i in range(len(doc.sentences) - 1):
                 s1 = set(w.text for w in doc.sentences[i].words)
                 s2 = set(w.text for w in doc.sentences[i+1].words)
+                l1 = set(w.lemma for w in doc.sentences[i].words if w.lemma)
+                l2 = set(w.lemma for w in doc.sentences[i+1].words if w.lemma)
+                p1 = set(w.upos for w in doc.sentences[i].words if w.upos)
+                p2 = set(w.upos for w in doc.sentences[i+1].words if w.upos)
+                f1 = set()
+                for w in doc.sentences[i].words:
+                    if w.feats:
+                        f1.update(w.feats.split('|'))
+                f2 = set()
+                for w in doc.sentences[i+1].words:
+                    if w.feats:
+                        f2.update(w.feats.split('|'))
                 if len(s1) > 0 and len(s2) > 0:
                     overlap = len(s1.intersection(s2)) / len(s1.union(s2)) # Jaccard approx
                     overlaps.append(overlap)
+                    overlap_count = len(s1.intersection(s2))  # Raw count of overlapping words
+                    overlap_counts.append(overlap_count)
+                    # Word overlap ratio: overlap_count / min words in shortest segment
+                    min_words = min(len(doc.sentences[i].words), len(doc.sentences[i+1].words))
+                    if min_words > 0:
+                        overlap_ratio = overlap_count / min_words
+                        overlap_ratios.append(overlap_ratio)
+                if len(l1) > 0 and len(l2) > 0:
+                    lemma_overlap_count = len(l1.intersection(l2))  # Raw count of overlapping lemmas
+                    lemma_overlap_counts.append(lemma_overlap_count)
+                    # Lemma overlap ratio: lemma_overlap_count / min words in shortest segment
+                    min_words = min(len(doc.sentences[i].words), len(doc.sentences[i+1].words))
+                    if min_words > 0:
+                        lemma_overlap_ratio = lemma_overlap_count / min_words
+                        lemma_overlap_ratios.append(lemma_overlap_ratio)
+                if len(p1) > 0 and len(p2) > 0:
+                    pos_overlap_count = len(p1.intersection(p2))  # Raw count of overlapping PoS tags
+                    pos_overlap_counts.append(pos_overlap_count)
+                    # PoS overlap ratio: pos_overlap_count / min words in shortest segment
+                    min_words = min(len(doc.sentences[i].words), len(doc.sentences[i+1].words))
+                    if min_words > 0:
+                        pos_overlap_ratio = pos_overlap_count / min_words
+                        pos_overlap_ratios.append(pos_overlap_ratio)
+                if len(f1) > 0 and len(f2) > 0:
+                    feature_overlap_count = len(f1.intersection(f2))  # Raw count of overlapping features
+                    feature_overlap_counts.append(feature_overlap_count)
+                    # Feature overlap ratio: feature_overlap_count / min words in shortest segment
+                    min_words = min(len(doc.sentences[i].words), len(doc.sentences[i+1].words))
+                    if min_words > 0:
+                        feature_overlap_ratio = feature_overlap_count / min_words
+                        feature_overlap_ratios.append(feature_overlap_ratio)
+                
+                # Levenshtein distances for sequences
+                w1 = [w.text for w in doc.sentences[i].words]
+                w2 = [w.text for w in doc.sentences[i+1].words]
+                if w1 and w2:
+                    word_dist = self._levenshtein_distance(w1, w2)
+                    max_len = max(len(w1), len(w2))
+                    if max_len > 0:
+                        normalized_word_dist = word_dist / max_len
+                        levenshtein_word_distances.append(normalized_word_dist)
+                
+                lem1 = [w.lemma for w in doc.sentences[i].words if w.lemma]
+                lem2 = [w.lemma for w in doc.sentences[i+1].words if w.lemma]
+                if lem1 and lem2:
+                    lemma_dist = self._levenshtein_distance(lem1, lem2)
+                    max_len = max(len(lem1), len(lem2))
+                    if max_len > 0:
+                        normalized_lemma_dist = lemma_dist / max_len
+                        levenshtein_lemma_distances.append(normalized_lemma_dist)
+                
+                pos_seq1 = [w.upos for w in doc.sentences[i].words if w.upos]
+                pos_seq2 = [w.upos for w in doc.sentences[i+1].words if w.upos]
+                if pos_seq1 and pos_seq2:
+                    pos_dist = self._levenshtein_distance(pos_seq1, pos_seq2)
+                    max_len = max(len(pos_seq1), len(pos_seq2))
+                    if max_len > 0:
+                        normalized_pos_dist = pos_dist / max_len
+                        levenshtein_pos_distances.append(normalized_pos_dist)
+                
+                # Levenshtein character distance for raw text segments (including punctuation)
+                text1 = doc.sentences[i].text
+                text2 = doc.sentences[i+1].text
+                if text1 and text2:
+                    char_dist = self._levenshtein_distance(text1, text2)
+                    max_len = max(len(text1), len(text2))
+                    if max_len > 0:
+                        normalized_char_dist = char_dist / max_len
+                        levenshtein_char_distances.append(normalized_char_dist)
+                
+                # Cosine distance using sentence centroids
+                centroid1 = self._get_sentence_centroid([w.text for w in doc.sentences[i].words])
+                centroid2 = self._get_sentence_centroid([w.text for w in doc.sentences[i+1].words])
+                if centroid1 is not None and centroid2 is not None and np.linalg.norm(centroid1) > 0 and np.linalg.norm(centroid2) > 0:
+                    cos_dist = cosine(centroid1, centroid2)
+                    cosine_distances.append(cos_dist)
         
-        stats['Sentence overlap (Avg)'] = np.mean(overlaps) if overlaps else 0
-        
-        # Placeholder for Cosine (Green AI)
-        stats['Cosine distance'] = 0.0
+        # stats['Sentence overlap (Avg)'] = np.mean(overlaps) if overlaps else 0
+        stats['Word overlap (Count)'] = np.sum(overlap_counts) if overlap_counts else 0
+        stats['Word overlap (Ratio)'] = np.mean(overlap_ratios) if overlap_ratios else 0
+        stats['Lemma overlap (Count)'] = np.sum(lemma_overlap_counts) if lemma_overlap_counts else 0
+        stats['Lemma overlap (Ratio)'] = np.mean(lemma_overlap_ratios) if lemma_overlap_ratios else 0
+        stats['PoS overlap (Count)'] = np.sum(pos_overlap_counts) if pos_overlap_counts else 0
+        stats['PoS overlap (Ratio)'] = np.mean(pos_overlap_ratios) if pos_overlap_ratios else 0
+        stats['Feature overlap (Count)'] = np.sum(feature_overlap_counts) if feature_overlap_counts else 0
+        stats['Feature overlap (Ratio)'] = np.mean(feature_overlap_ratios) if feature_overlap_ratios else 0
+        stats['Levenshtein word distance'] = np.mean(levenshtein_word_distances) if levenshtein_word_distances else 0
+        stats['Levenshtein lemma distance'] = np.mean(levenshtein_lemma_distances) if levenshtein_lemma_distances else 0
+        stats['Levenshtein PoS distance'] = np.mean(levenshtein_pos_distances) if levenshtein_pos_distances else 0
+        stats['Levenshtein character distance'] = np.mean(levenshtein_char_distances) if levenshtein_char_distances else 0
+        stats['Cosine distance'] = np.mean(cosine_distances) if cosine_distances else 0.0
 
         return stats
 
