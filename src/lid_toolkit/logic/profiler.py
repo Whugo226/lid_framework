@@ -10,6 +10,7 @@ from wordfreq import zipf_frequency
 from scipy.stats import entropy, linregress
 from tqdm import tqdm
 import re
+from scipy.spatial.distance import cosine
 
 # Mute Stanza noise
 logging.getLogger('stanza').setLevel(logging.WARNING)
@@ -18,6 +19,8 @@ class DeepProfiler:
     def __init__(self):
         print("⏳ Initializing DeepProfiler (Lingualyzer Implementation)...")
         self.use_gpu = torch.cuda.is_available()
+
+        self.fasttext_model = None  # Define it as None so checks don't crash
         
         # Define UD Tag Groups based on Lingualyzer definitions
         self.TAG_GROUPS = {
@@ -673,9 +676,10 @@ class DeepProfiler:
         for sent_idx, sentence in enumerate(doc.sentences):
             for word_idx, word in enumerate(sentence.words):
                 tokens.append(word.text)
-                total_words += 1
-                total_chars += len(word.text)
-                word_lengths.append(len(word.text))
+                if word.upos != 'PUNCT':
+                    total_words += 1
+                    total_chars += len(word.text)
+                    word_lengths.append(len(word.text))
                 
                 # Store position (1-indexed) for distributional measures
                 global_pos = len(tokens)
@@ -704,8 +708,11 @@ class DeepProfiler:
         stats['Word count'] = total_words
         stats['Letter count'] = total_chars
         stats['Sentence count'] = len(doc.sentences)
-        stats['Type count'] = len(set(tokens))
-        stats['Type-token ratio'] = len(set(tokens)) / doc_len
+        # Exclude punctuation tokens from type count
+        non_punct_tokens = [word.text for sent in doc.sentences for word in sent.words if word.upos != 'PUNCT']
+        lower_non_punct_tokens = [t.lower() for t in non_punct_tokens]  
+        stats['Type count'] = len(set(lower_non_punct_tokens))
+        stats['Type-token ratio'] = len(set(lower_non_punct_tokens)) / doc_len
         
         # Average word length
         stats['Word length'] = np.mean(word_lengths) if word_lengths else 0
