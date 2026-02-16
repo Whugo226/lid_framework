@@ -409,9 +409,15 @@ def test_profiler_measures_explicit(measure, sentence, value):
         expected = float(value)
         actual = float(result)
         diff = abs(actual - expected)
-        if diff >= TOLERANCE:
-            status = "FAIL"
-        assert diff < TOLERANCE, f"Mismatch for {measure} (mapped: {mapped_key}) on '{sentence}': got {actual}, expected {expected}"
+        # Integer count measures: require exact match
+        if measure.lower().endswith("count (doc)") or measure.lower().endswith("count"):
+            if int(expected) != int(actual):
+                status = "FAIL"
+            assert int(expected) == int(actual), f"Mismatch for {measure} (mapped: {mapped_key}) on '{sentence}': got {actual}, expected {expected}"
+        else:
+            if diff >= TOLERANCE:
+                status = "FAIL"
+            assert diff < TOLERANCE, f"Mismatch for {measure} (mapped: {mapped_key}) on '{sentence}': got {actual}, expected {expected}"
     except ValueError:
         expected = str(value)
         actual = str(result)
