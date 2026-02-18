@@ -21,35 +21,6 @@ class DeepProfiler:
         self.use_gpu = torch.cuda.is_available()
 
         self.fasttext_model = None  # Define it as None so checks don't crash
-
-    def load_fasttext_model(self, model_path: str | None = None, gensim_name: str | None = None):
-        """Load a word-embedding model into `self.fasttext_model`.
-
-        - Provide `model_path` to load a local KeyedVectors/fastText file (binary or text).
-        - Or provide `gensim_name` to download/load a model via `gensim.downloader` (e.g. "glove-wiki-gigaword-50").
-
-        This is optional but required for `Cosine distance` sentence-centroid calculations.
-        """
-        try:
-            from gensim.models import KeyedVectors
-        except Exception as e:
-            raise RuntimeError("Loading embeddings requires gensim; install with `pip install gensim`") from e
-
-        if model_path:
-            # auto-detect word2vec binary format by extension
-            binary = str(model_path).endswith('.bin')
-            self.fasttext_model = KeyedVectors.load_word2vec_format(model_path, binary=binary)
-            return self.fasttext_model
-
-        if gensim_name:
-            try:
-                import gensim.downloader as api
-                self.fasttext_model = api.load(gensim_name)
-                return self.fasttext_model
-            except Exception as e:
-                raise RuntimeError(f"Failed to download/load gensim model '{gensim_name}': {e}")
-
-        raise ValueError('Provide either model_path or gensim_name to load an embedding model.')
         
         # Define UD Tag Groups based on Lingualyzer definitions
         self.TAG_GROUPS = {

@@ -212,6 +212,11 @@ __marimo__/
 stanza_resources/
 saved_models/
 
+# Models & Heavy Binaries (Crucial for fastText)
+*.bin
+*.vec
+models/
+
 # Datasets & Big Files (Prevent committing test data)
 *.csv
 *.tsv
