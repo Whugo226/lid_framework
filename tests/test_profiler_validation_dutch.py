@@ -10,13 +10,13 @@ from lid_toolkit.logic.profiler import DeepProfiler
 
 
 
-CSV_PATH = os.path.join(os.path.dirname(__file__), 'data', 'lingualyzer_ground_truth_english.csv')
-RESULT_CSV_PATH = os.path.join(os.path.dirname(__file__), 'profiler_test_results_english.csv')
+CSV_PATH = os.path.join(os.path.dirname(__file__), 'data', 'lingualyzer_ground_truth_dutch.csv')
+RESULT_CSV_PATH = os.path.join(os.path.dirname(__file__), 'profiler_test_results_dutch.csv')
 TOLERANCE = 1e-2
 
 profiler = DeepProfiler()
 # Initialize stanza pipeline once for all tests
-nlp = stanza.Pipeline(lang='en', processors='tokenize,mwt,pos,lemma', verbose=False, use_gpu=profiler.use_gpu)
+nlp = stanza.Pipeline(lang='nl', processors='tokenize,mwt,pos,lemma', verbose=False, use_gpu=profiler.use_gpu)
 
 # Thread-safe list for results
 test_results = []

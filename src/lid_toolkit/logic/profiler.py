@@ -63,13 +63,14 @@ class DeepProfiler:
         elif feat_name == 'Personal pronoun':
             return (word.upos == 'PRON' and 
                     'PronType=Prs' in features)
-        
+        elif feat_name == 'Singular':
+            return (word.upos in ['NOUN', 'PROPN', 'PRON'] and 'Number=Sing' in features)
+        elif feat_name == 'Plural':
+            return (word.upos in ['NOUN', 'PROPN', 'PRON'] and 'Number=Plur' in features)
         # Mapping Lingualyzer definitions to UD v2 Tags (simple single-feature checks)
         checks = {
             'Interrogative': 'PronType=Int',
             'Demonstrative': 'PronType=Dem',
-            'Singular': 'Number=Sing',
-            'Plural': 'Number=Plur',
             'Indefinite': 'Definite=Ind',
             'Definite': 'Definite=Def',
             'Finite': 'VerbForm=Fin',
@@ -187,7 +188,7 @@ class DeepProfiler:
         
         return stats
     
-    def _calc_lexical_diversity(self, tokens, lower_non_punct_tokens, pos_map, doc_len):
+    def _calc_lexical_diversity(self, tokens, lower_non_punct_tokens, pos_map, pos_map_lower_non_punct, doc_len):
         """Calculate lexical diversity measures."""
         stats = {}
 
@@ -236,24 +237,40 @@ class DeepProfiler:
             stats["Honoré's statistic"] = 0
         
         # Moving average TTR (100-word window)
-        window_size = 100
-        if len(tokens) >= window_size:
+        # window_size = 100
+        # if len(tokens) >= window_size:
+        #     ttrs = []
+        #     for i in range(len(tokens) - window_size + 1):
+        #         window = tokens[i:i + window_size]
+        #         ttrs.append(len(set(window)) / window_size)
+        #     stats['Moving average TTR'] = np.mean(ttrs) if ttrs else 0
+        # else:
+        #     stats['Moving average TTR'] = 0
+
+        def moving_average_ttr(lower_non_punct_tokens, window_size=100):
+            if len(lower_non_punct_tokens) < window_size:
+                # Fallback: TTR for the whole text
+                return len(set(lower_non_punct_tokens)) / len(lower_non_punct_tokens) if lower_non_punct_tokens else 0
             ttrs = []
-            for i in range(len(tokens) - window_size + 1):
-                window = tokens[i:i + window_size]
+            for i in range(len(lower_non_punct_tokens) - window_size + 1):
+                window = lower_non_punct_tokens[i:i+window_size]
                 ttrs.append(len(set(window)) / window_size)
-            stats['Moving average TTR'] = np.mean(ttrs) if ttrs else 0
-        else:
-            stats['Moving average TTR'] = 0
-        
+            return sum(ttrs) / len(ttrs) if ttrs else 0
+
+        # ...existing code...
+
+        # At the end of _calc_lexical_diversity, after defining moving_average_ttr:
+        stats['Moving average TTR'] = moving_average_ttr(lower_non_punct_tokens, window_size=100)
+
+        # ...existing code...
         # Per-PoS TTRs
         pos_tags = ['ADJ', 'ADV', 'INTJ', 'VERB', 'NOUN', 'PROPN', 'ADP', 'AUX', 
                  'DET', 'NUM', 'PART', 'PRON']
         for tag in pos_tags:
-            positions = pos_map.get(tag, [])
+            positions = pos_map_lower_non_punct.get(tag, [])
             if positions:
                 # Get tokens at these positions
-                pos_tokens = [tokens[i-1] for i in positions if i > 0]
+                pos_tokens = [lower_non_punct_tokens[i-1] for i in positions if i > 0]
                 if pos_tokens:
                     stats[f'{tag} TTR'] = len(set(pos_tokens)) / len(pos_tokens)
                 else:
@@ -266,9 +283,9 @@ class DeepProfiler:
         lexical_tags = {'ADJ', 'ADV', 'INTJ', 'NOUN', 'PROPN', 'VERB'}
         lexical_positions = []
         for tag in lexical_tags:
-            lexical_positions.extend(pos_map.get(tag, []))
+            lexical_positions.extend(pos_map_lower_non_punct.get(tag, []))
         if lexical_positions:
-            lexical_tokens = [tokens[i-1] for i in lexical_positions if i > 0]
+            lexical_tokens = [lower_non_punct_tokens[i-1] for i in lexical_positions if i > 0]
             stats['Lexical item TTR'] = len(set(lexical_tokens)) / len(lexical_tokens) if lexical_tokens else 0
         else:
             stats['Lexical item TTR'] = 0
@@ -277,9 +294,9 @@ class DeepProfiler:
         grammatical_tags = {'ADP', 'AUX', 'CCONJ', 'DET', 'NUM', 'PART', 'PRON', 'SCONJ'}
         grammatical_positions = []
         for tag in grammatical_tags:
-            grammatical_positions.extend(pos_map.get(tag, []))
+            grammatical_positions.extend(pos_map_lower_non_punct.get(tag, []))
         if grammatical_positions:
-            grammatical_tokens = [tokens[i-1] for i in grammatical_positions if i > 0]
+            grammatical_tokens = [lower_non_punct_tokens[i-1] for i in grammatical_positions if i > 0]
             stats['Grammatical item TTR'] = len(set(grammatical_tokens)) / len(grammatical_tokens) if grammatical_tokens else 0
         else:
             stats['Grammatical item TTR'] = 0
@@ -288,9 +305,9 @@ class DeepProfiler:
         verb_all_tags = {'VERB', 'AUX'}
         verb_all_positions = []
         for tag in verb_all_tags:
-            verb_all_positions.extend(pos_map.get(tag, []))
+            verb_all_positions.extend(pos_map_lower_non_punct.get(tag, []))
         if verb_all_positions:
-            verb_all_tokens = [tokens[i-1] for i in verb_all_positions if i > 0]
+            verb_all_tokens = [lower_non_punct_tokens[i-1] for i in verb_all_positions if i > 0]
             stats['Verb_All TTR'] = len(set(verb_all_tokens)) / len(verb_all_tokens) if verb_all_tokens else 0
         else:
             stats['Verb_All TTR'] = 0
@@ -299,9 +316,9 @@ class DeepProfiler:
         conjunction_tags = {'CCONJ', 'SCONJ'}
         conjunction_positions = []
         for tag in conjunction_tags:
-            conjunction_positions.extend(pos_map.get(tag, []))
+            conjunction_positions.extend(pos_map_lower_non_punct.get(tag, []))
         if conjunction_positions:
-            conjunction_tokens = [tokens[i-1] for i in conjunction_positions if i > 0]
+            conjunction_tokens = [lower_non_punct_tokens[i-1] for i in conjunction_positions if i > 0]
             distinct_conjunctions = set(conjunction_tokens)
             stats['Conjunction TTR'] = len(distinct_conjunctions) / len(conjunction_tokens) if conjunction_tokens else 0
         else:
@@ -461,7 +478,7 @@ class DeepProfiler:
             stats['Word-types per lemma'] = 0
         
         # Word-types per lemma for specific PoS
-        for pos_filter, pos_tags in [('noun', {'NOUN'}), ('verb', {'VERB'}), 
+        for pos_filter, pos_tags in [('noun', {'NOUN'}), ('verb', {'VERB', 'AUX'}), 
                                        ('lexical', {'ADJ', 'ADV', 'INTJ', 'NOUN', 'PROPN', 'VERB'}),
                                        ('grammatical', {'ADP', 'AUX', 'CCONJ', 'DET', 'NUM', 'PART', 'PRON', 'SCONJ'})]:
             lemma_map = defaultdict(set)
@@ -832,7 +849,7 @@ class DeepProfiler:
             stats[f'{feat} burstiness'] = self._calc_burstiness(positions, doc_len)
 
         # --- Group 5: Lexical Diversity ---
-        lex_div_stats = self._calc_lexical_diversity(tokens, lower_non_punct_tokens, pos_map, doc_len)
+        lex_div_stats = self._calc_lexical_diversity(tokens, lower_non_punct_tokens, pos_map, pos_map_lower_non_punct, doc_len)
         stats.update(lex_div_stats)
         
         # --- Group 6: Word Lengths (Per-PoS) ---
@@ -854,12 +871,12 @@ class DeepProfiler:
         stats.update(zipf_var_stats)
         
         # Word Entropy
-        word_counts = Counter(tokens)
+        word_counts = Counter(lower_non_punct_tokens)
         probs = [freq / doc_len for freq in word_counts.values()]
         stats['Word entropy'] = entropy(probs, base=2)
         
         # Letter Entropy (Bentz et al., 2017)
-        letters = [c.lower() for c in ''.join(tokens) if c.isalpha()]
+        letters = [c.lower() for c in ''.join(lower_non_punct_tokens) if c.isalpha()]
         if letters:
             letter_counts = Counter(letters)
             letter_probs = [freq / len(letters) for freq in letter_counts.values()]
