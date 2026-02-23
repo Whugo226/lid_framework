@@ -235,17 +235,6 @@ class DeepProfiler:
             stats["Honoré's statistic"] = 100 * math.log10(doc_len) / (1 - (hapax_count / type_count)) if doc_len > 0 else 0
         else:
             stats["Honoré's statistic"] = 0
-        
-        # Moving average TTR (100-word window)
-        # window_size = 100
-        # if len(tokens) >= window_size:
-        #     ttrs = []
-        #     for i in range(len(tokens) - window_size + 1):
-        #         window = tokens[i:i + window_size]
-        #         ttrs.append(len(set(window)) / window_size)
-        #     stats['Moving average TTR'] = np.mean(ttrs) if ttrs else 0
-        # else:
-        #     stats['Moving average TTR'] = 0
 
         def moving_average_ttr(lower_non_punct_tokens, window_size=100):
             if len(lower_non_punct_tokens) < window_size:
@@ -326,56 +315,40 @@ class DeepProfiler:
         
         return stats
     
-    def _calc_word_lengths(self, doc, pos_map, tokens):
-        """Calculate word length measures (global and per-PoS)."""
+    def _calc_word_lengths(self, doc, pos_map_lower_non_punct, lower_non_punct_tokens):
+        
         stats = {}
-        
-        # Collect word lengths per PoS
-        pos_word_lengths = defaultdict(list)
-        
-        for sent in doc.sentences:
-            for word in sent.words:
-                word_len = len(word.text)
-                if word.upos:
-                    pos_word_lengths[word.upos].append(word_len)
-        
-        # Per-PoS average word lengths
+    
+        # Global average word length (lowercased, non-punct tokens)
+        if lower_non_punct_tokens:
+            stats['Word length (non-punct)'] = np.mean([len(t) for t in lower_non_punct_tokens])
+        else:
+            stats['Word length (non-punct)'] = 0
+    
+        # Per-PoS average word lengths (using positions in pos_map_lower_non_punct)
         pos_tags = ['ADJ', 'ADV', 'INTJ', 'VERB', 'NOUN', 'PROPN', 'ADP', 'AUX', 
-                     'DET', 'NUM', 'PART', 'PRON']
+                    'DET', 'NUM', 'PART', 'PRON']
         for tag in pos_tags:
-            lengths = pos_word_lengths.get(tag, [])
-            if lengths:
-                stats[f'{tag} word length'] = np.mean(lengths)
-            else:
-                stats[f'{tag} word length'] = 0
-        
-        # Combined group word lengths (Lexical item, Grammatical item, Verb_All)
-        lexical_tags = {'ADJ', 'ADV', 'INTJ', 'NOUN', 'PROPN', 'VERB'}
-        grammatical_tags = {'ADP', 'AUX', 'CCONJ', 'DET', 'NUM', 'PART', 'PRON', 'SCONJ'}
-        verb_all_tags = {'VERB', 'AUX'}
-        conjunction_tags = {'CCONJ', 'SCONJ'}   
-        
-        lexical_lengths = []
-        for tag in lexical_tags:
-            lexical_lengths.extend(pos_word_lengths.get(tag, []))
-        stats['Lexical item word length'] = np.mean(lexical_lengths) if lexical_lengths else 0
-        
-        grammatical_lengths = []
-        for tag in grammatical_tags:
-            grammatical_lengths.extend(pos_word_lengths.get(tag, []))
-        stats['Grammatical item word length'] = np.mean(grammatical_lengths) if grammatical_lengths else 0
-        
-        verb_all_lengths = []
-        for tag in verb_all_tags:
-            verb_all_lengths.extend(pos_word_lengths.get(tag, []))
-        stats['Verb_All word length'] = np.mean(verb_all_lengths) if verb_all_lengths else 0
-
-        conjunction_lengths = []
-        for tag in conjunction_tags:
-            conjunction_lengths.extend(pos_word_lengths.get(tag, []))
-        stats['Conjunction word length'] = np.mean(conjunction_lengths) if conjunction_lengths else 0
-        
+            positions = pos_map_lower_non_punct.get(tag, [])
+            lengths = [len(lower_non_punct_tokens[i-1]) for i in positions if 0 < i <= len(lower_non_punct_tokens)]
+            stats[f'{tag} word length'] = np.mean(lengths) if lengths else 0
+    
+        # Combined group word lengths
+        group_defs = {
+            'Lexical item': {'ADJ', 'ADV', 'INTJ', 'NOUN', 'PROPN', 'VERB'},
+            'Grammatical item': {'ADP', 'AUX', 'CCONJ', 'DET', 'NUM', 'PART', 'PRON', 'SCONJ'},
+            'Verb_All': {'VERB', 'AUX'},
+            'Conjunction': {'CCONJ', 'SCONJ'}
+        }
+        for group, tags in group_defs.items():
+            group_positions = []
+            for tag in tags:
+                group_positions.extend(pos_map_lower_non_punct.get(tag, []))
+            lengths = [len(lower_non_punct_tokens[i-1]) for i in group_positions if 0 < i <= len(lower_non_punct_tokens)]
+            stats[f'{group} word length'] = np.mean(lengths) if lengths else 0
+    
         return stats
+
     
     def _calc_zipf_variants(self, zipf_scores, tokens, lang_code, doc_len):
         """Calculate Zipf frequency variants."""
@@ -495,7 +468,7 @@ class DeepProfiler:
         
         return stats
     
-    def _calc_ratios(self, pos_map, feat_map):
+    def _calc_ratios(self, pos_map_lower_non_punct, feat_map_lower_non_punct):
         """Calculate all 60+ comparative ratios."""
         stats = {}
         
@@ -504,7 +477,7 @@ class DeepProfiler:
         
         def get_cnt(tags):
             if isinstance(tags, str): tags = {tags}
-            return sum(len(pos_map.get(t, [])) for t in tags)
+            return sum(len(pos_map_lower_non_punct.get(t, [])) for t in tags)
         
         # PoS-to-PoS ratios
         adj_c = get_cnt('ADJ')
@@ -582,10 +555,10 @@ class DeepProfiler:
         stats['Lexical-grammatical item ratio'] = safe_ratio(lex_c, gram_c)
         
         # Person pronoun ratios
-        pers_pron_c = len(feat_map.get('Personal pronoun', []))
-        first_c = len(feat_map.get('First person', []))
-        second_c = len(feat_map.get('Second person', []))
-        third_c = len(feat_map.get('Third person', []))
+        pers_pron_c = len(feat_map_lower_non_punct.get('Personal pronoun', []))
+        first_c = len(feat_map_lower_non_punct.get('First person', []))
+        second_c = len(feat_map_lower_non_punct.get('Second person', []))
+        third_c = len(feat_map_lower_non_punct.get('Third person', []))
         
         stats['First person-personal pronoun ratio'] = safe_ratio(first_c, pers_pron_c)
         stats['Second person-personal pronoun ratio'] = safe_ratio(second_c, pers_pron_c)
@@ -595,15 +568,15 @@ class DeepProfiler:
         stats['Second-third person pronoun ratio'] = safe_ratio(second_c, third_c)
         
         # Feature ratios
-        sing_c = len(feat_map.get('Singular', []))
-        plur_c = len(feat_map.get('Plural', []))
-        def_c = len(feat_map.get('Definite', []))
-        indef_c = len(feat_map.get('Indefinite', []))
-        inf_c = len(feat_map.get('Infinitive', []))
-        fin_c = len(feat_map.get('Finite', []))
-        vadj_c = len(feat_map.get('Verbal adjective', []))
-        pres_c = len(feat_map.get('Present', []))
-        past_c = len(feat_map.get('Past', []))
+        sing_c = len(feat_map_lower_non_punct.get('Singular', []))
+        plur_c = len(feat_map_lower_non_punct.get('Plural', []))
+        def_c = len(feat_map_lower_non_punct.get('Definite', []))
+        indef_c = len(feat_map_lower_non_punct.get('Indefinite', []))
+        inf_c = len(feat_map_lower_non_punct.get('Infinitive', []))
+        fin_c = len(feat_map_lower_non_punct.get('Finite', []))
+        vadj_c = len(feat_map_lower_non_punct.get('Verbal adjective', []))
+        pres_c = len(feat_map_lower_non_punct.get('Present', []))
+        past_c = len(feat_map_lower_non_punct.get('Past', []))
         
         stats['Plural-singular word ratio'] = safe_ratio(plur_c, sing_c)
         stats['Definite-indefinite word ratio'] = safe_ratio(def_c, indef_c)
@@ -798,7 +771,7 @@ class DeepProfiler:
         
         # Average paragraph length
         if para_stats['Paragraph count'] > 0:
-            stats['Paragraph length'] = total_words / para_stats['Paragraph count']
+            stats['Paragraph length'] = len(doc.sentences) / para_stats['Paragraph count']
         else:
             stats['Paragraph length'] = 0
         
@@ -806,7 +779,7 @@ class DeepProfiler:
         # Helper to safely get count
         def get_cnt(tags):
             if isinstance(tags, str): tags = {tags}
-            return sum(len(pos_map.get(t, [])) for t in tags)
+            return sum(len(pos_map_lower_non_punct.get(t, [])) for t in tags)
 
         # Standard Tags
         for tag in pos_map_lower_non_punct:
@@ -822,7 +795,7 @@ class DeepProfiler:
         # Punctuation measures (tracked separately in pos_map)
         punct_count = len(pos_map.get('PUNCT', []))
         stats['PUNCT count'] = punct_count
-        stats['PUNCT incidence'] = (punct_count / doc_len) * 1000 if doc_len > 0 else 0
+        stats['PUNCT incidence'] = (punct_count / len(tokens)) * 1000 if doc_len > 0 else 0
 
         # Combined Groups (Lingualyzer Specifics)
         for name, tag_set in self.TAG_GROUPS.items():
@@ -853,7 +826,7 @@ class DeepProfiler:
         stats.update(lex_div_stats)
         
         # --- Group 6: Word Lengths (Per-PoS) ---
-        word_len_stats = self._calc_word_lengths(doc, pos_map, tokens)
+        word_len_stats = self._calc_word_lengths(doc,  pos_map_lower_non_punct, lower_non_punct_tokens)
         stats.update(word_len_stats)
         
         # --- Group 7: Complexity (Entropy & Zipf) ---
@@ -889,7 +862,7 @@ class DeepProfiler:
         stats.update(morph_stats)
         
         # --- Group 9: Ratios (60+ comparative ratios) ---
-        ratio_stats = self._calc_ratios(pos_map, feat_map)
+        ratio_stats = self._calc_ratios(pos_map_lower_non_punct, feat_map_lower_non_punct)
         stats.update(ratio_stats)
 
         # --- Group 10: Distributional Measures ---

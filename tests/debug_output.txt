@@ -1,0 +1,1619 @@
+
+============================================================
+DEBUGGING: Grammatical item count (Doc)
+Sentence: I can't believe how fast time is passing by.
+Expected: 6, Actual: 5
+[DEBUG:Grammatical item count] 
+_calc_burstiness called
+[DEBUG:Grammatical item count] Step A: Input positions=[6], doc_len=10
+[DEBUG:Grammatical item count] Step B: Gaps=[6]
+[DEBUG:Grammatical item count] Step C: mean_gap=6.0, std_gap=0
+[DEBUG:Grammatical item count] Step B: Internal gaps=[5]
+[DEBUG:Grammatical item count] Step C: Internal gap std=0.0
+[DEBUG:Grammatical item count] 
+_calc_zipf_variants called
+[DEBUG:Grammatical item count] Step A: Input zipf_scores=[7.09, 4.67, 3.58, 5.51, 6.24, 5.13, 6.29, 7.07, 4.63, 6.66], tokens=['I', 'ca', "n't", 'believe', 'how', 'fast', 'time', 'is', 'passing', 'by', '.'], lang_code=en, doc_len=10
+[DEBUG:Grammatical item count] Step B: frequencies=[1 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Grammatical item count] Step B: freq_above_min=[1 1 1 1 1 1 1 1 1 1 1], n=11
+[DEBUG:Grammatical item count] Step C: logs=[0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=7.6246189861593985
+[DEBUG:Grammatical item count] Step D: Zipf curve steepness = 2.4426950408889634
+[DEBUG:Grammatical item count] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Grammatical item count] 
+_calc_ratios called
+[DEBUG:Grammatical item count] Step A: Input pos_map_lower_non_punct={'ADJ': [6], 'ADV': [5], 'INTJ': [], 'VERB': [4, 9], 'NOUN': [7], 'PROPN': [], 'ADP': [10], 'AUX': [2, 8], 'CCONJ': [], 'SCONJ': [], 'DET': [], 'NUM': [], 'PART': [3], 'PRON': [1]}
+[DEBUG:Grammatical item count] 
+_calc_distributional_measures called
+[DEBUG:Grammatical item count] Step A: Input tokens=['I', 'ca', "n't", 'believe', 'how', 'fast', 'time', 'is', 'passing', 'by', '.'], doc_len=10, lang_code=en
+[DEBUG:Grammatical item count] Step A: tokens=['i', 'ca', "n't", 'believe', 'how', 'fast', 'time', 'is', 'passing', 'by']
+[DEBUG:Grammatical item count] Step A: pos_map={'ADJ': [6], 'ADV': [5], 'INTJ': [], 'VERB': [4, 9], 'NOUN': [7], 'PROPN': [], 'ADP': [10], 'AUX': [2, 8], 'CCONJ': [], 'SCONJ': [], 'DET': [], 'NUM': [], 'PART': [3], 'PRON': [1]}
+[DEBUG:Grammatical item count] Step B: positions=[1, 2, 3, 8, 10]
+[DEBUG:Grammatical item count] Step B: raw_count=5
+[DEBUG:Grammatical item count] Step C: doc_len=10
+[DEBUG:Grammatical item count] Step C: type_count=5
+[DEBUG:Grammatical item count] Step C: incidence=500.0
+[DEBUG:Grammatical item count] Step D: final_count=5
+[DEBUG:Grammatical item count] Step D: incidence=500.0
+[DEBUG:Grammatical item count] Step D: type_count=5
+[DEBUG:Grammatical item count] Step D: burstiness=-0.07179676972449085
+
+[FOCUSED DEBUG] Grammatical item count: {'count': 5, 'incidence': 500.0, 'type_count': 5, 'burstiness': np.float64(-0.07179676972449085)}
+
+[RESULT] Grammatical item count: 5
+
+============================================================
+DEBUGGING: Grammatical item incidence (Doc)
+Sentence: I can't believe how fast time is passing by.
+Expected: 600, Actual: 500
+[DEBUG:Grammatical item incidence] 
+_calc_burstiness called
+[DEBUG:Grammatical item incidence] Step A: Input positions=[6], doc_len=10
+[DEBUG:Grammatical item incidence] Step B: Gaps=[6]
+[DEBUG:Grammatical item incidence] Step C: mean_gap=6.0, std_gap=0
+[DEBUG:Grammatical item incidence] Step B: Internal gaps=[5]
+[DEBUG:Grammatical item incidence] Step C: Internal gap std=0.0
+[DEBUG:Grammatical item incidence] 
+_calc_zipf_variants called
+[DEBUG:Grammatical item incidence] Step A: Input zipf_scores=[7.09, 4.67, 3.58, 5.51, 6.24, 5.13, 6.29, 7.07, 4.63, 6.66], tokens=['I', 'ca', "n't", 'believe', 'how', 'fast', 'time', 'is', 'passing', 'by', '.'], lang_code=en, doc_len=10
+[DEBUG:Grammatical item incidence] Step B: frequencies=[1 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Grammatical item incidence] Step B: freq_above_min=[1 1 1 1 1 1 1 1 1 1 1], n=11
+[DEBUG:Grammatical item incidence] Step C: logs=[0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=7.6246189861593985
+[DEBUG:Grammatical item incidence] Step D: Zipf curve steepness = 2.4426950408889634
+[DEBUG:Grammatical item incidence] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Grammatical item incidence] 
+_calc_ratios called
+[DEBUG:Grammatical item incidence] Step A: Input pos_map_lower_non_punct={'ADJ': [6], 'ADV': [5], 'INTJ': [], 'VERB': [4, 9], 'NOUN': [7], 'PROPN': [], 'ADP': [10], 'AUX': [2, 8], 'CCONJ': [], 'SCONJ': [], 'DET': [], 'NUM': [], 'PART': [3], 'PRON': [1]}
+[DEBUG:Grammatical item incidence] 
+_calc_distributional_measures called
+[DEBUG:Grammatical item incidence] Step A: Input tokens=['I', 'ca', "n't", 'believe', 'how', 'fast', 'time', 'is', 'passing', 'by', '.'], doc_len=10, lang_code=en
+
+[RESULT] Grammatical item incidence: 500.0
+
+[SKIP] No mapping for measure 'Pronoun type count (Doc)'
+
+============================================================
+DEBUGGING: Grammatical item type count (Doc)
+Sentence: In the morning, the birds will have been singing beautifully.
+Expected: 5, Actual: 6
+[DEBUG:Grammatical item type count] 
+_calc_burstiness called
+[DEBUG:Grammatical item type count] Step A: Input positions=[], doc_len=10
+[DEBUG:Grammatical item type count] Step B: Gaps=[10]
+[DEBUG:Grammatical item type count] Step C: mean_gap=10.0, std_gap=0
+[DEBUG:Grammatical item type count] Step B: Internal gaps=[2]
+[DEBUG:Grammatical item type count] Step C: Internal gap std=0.0
+[DEBUG:Grammatical item type count] 
+_calc_zipf_variants called
+[DEBUG:Grammatical item type count] Step A: Input zipf_scores=[7.27, 7.73, 5.33, 7.73, 4.6, 6.45, 6.71, 6.27, 4.59, 3.92], tokens=['In', 'the', 'morning', ',', 'the', 'birds', 'will', 'have', 'been', 'singing', 'beautifully', '.'], lang_code=en, doc_len=10
+[DEBUG:Grammatical item type count] Step B: frequencies=[2 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Grammatical item type count] Step B: freq_above_min=[2 1 1 1 1 1 1 1 1 1 1], n=11
+[DEBUG:Grammatical item type count] Step C: logs=[1.38629436 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=8.317766166719343
+[DEBUG:Grammatical item type count] Step D: Zipf curve steepness = 2.322470454148217
+[DEBUG:Grammatical item type count] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Grammatical item type count] 
+_calc_ratios called
+[DEBUG:Grammatical item type count] Step A: Input pos_map_lower_non_punct={'ADJ': [], 'ADV': [10], 'INTJ': [], 'VERB': [9], 'NOUN': [3, 5], 'PROPN': [], 'ADP': [1], 'AUX': [6, 7, 8], 'CCONJ': [], 'SCONJ': [], 'DET': [2, 4], 'NUM': [], 'PART': [], 'PRON': []}
+[DEBUG:Grammatical item type count] 
+_calc_distributional_measures called
+[DEBUG:Grammatical item type count] Step A: Input tokens=['In', 'the', 'morning', ',', 'the', 'birds', 'will', 'have', 'been', 'singing', 'beautifully', '.'], doc_len=10, lang_code=en
+[DEBUG:Grammatical item type count] Step A: tokens=['in', 'the', 'morning', 'the', 'birds', 'will', 'have', 'been', 'singing', 'beautifully']
+[DEBUG:Grammatical item type count] Step A: positions=[]
+[DEBUG:Grammatical item type count] Step B: raw_count=0
+[DEBUG:Grammatical item type count] Step B: positions=[]
+[DEBUG:Grammatical item type count] Step C: doc_len=10
+[DEBUG:Grammatical item type count] Step C: type_count=0
+[DEBUG:Grammatical item type count] Step C: incidence=0.0
+[DEBUG:Grammatical item type count] Step D: final_count=0
+[DEBUG:Grammatical item type count] Step D: incidence=0.0
+[DEBUG:Grammatical item type count] Step D: type_count=0
+[DEBUG:Grammatical item type count] Step D: burstiness=0.0
+
+[FOCUSED DEBUG] Grammatical item type count: {'count': 0, 'incidence': 0.0, 'type_count': 0, 'burstiness': 0.0}
+
+[RESULT] Grammatical item type count: 6
+
+============================================================
+DEBUGGING: Zipf steepness of curve (Doc)
+Sentence: The cat sat on the mat. The dog sat on the mat. The cat and the dog sat on the mat together. The mat was very comfortable.
+Expected: 0.8947157, Actual: 1.71666371
+[DEBUG:Zipf curve steepness] 
+_calc_burstiness called
+[DEBUG:Zipf curve steepness] Step A: Input positions=[27], doc_len=27
+[DEBUG:Zipf curve steepness] Step B: Gaps=[27]
+[DEBUG:Zipf curve steepness] Step C: mean_gap=27.0, std_gap=0
+[DEBUG:Zipf curve steepness] Step B: Internal gaps=[4]
+[DEBUG:Zipf curve steepness] Step C: Internal gap std=0.0
+[DEBUG:Zipf curve steepness] 
+_calc_zipf_variants called
+[DEBUG:Zipf curve steepness] Step A: Input zipf_scores=[7.73, 4.78, 4.64, 6.91, 7.73, 3.84, 7.73, 5.1, 4.64, 6.91, 7.73, 3.84, 7.73, 4.78, 7.41, 7.73, 5.1, 4.64, 6.91, 7.73, 3.84, 5.46, 7.73, 3.84, 6.82, 6.0, 4.66], tokens=['The', 'cat', 'sat', 'on', 'the', 'mat', '.', 'The', 'dog', 'sat', 'on', 'the', 'mat', '.', 'The', 'cat', 'and', 'the', 'dog', 'sat', 'on', 'the', 'mat', 'together', '.', 'The', 'mat', 'was', 'very', 'comfortable', '.'], lang_code=en, doc_len=27
+[DEBUG:Zipf curve steepness] Step B: frequencies=[4 4 4 4 3 3 2 2 1 1 1 1 1]
+[DEBUG:Zipf curve steepness] Step B: freq_above_min=[4 4 4 4 3 3 2 2 1 1 1 1 1], n=13
+[DEBUG:Zipf curve steepness] Step C: logs=[2.07944154 2.07944154 2.07944154 2.07944154 1.79175947 1.79175947
+ 1.38629436 1.38629436 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718], sum_logs=18.139609730214953
+[DEBUG:Zipf curve steepness] Step D: Zipf curve steepness = 1.7166637096026405
+[DEBUG:Zipf curve steepness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Zipf curve steepness] 
+_calc_ratios called
+[DEBUG:Zipf curve steepness] Step A: Input pos_map_lower_non_punct={'ADJ': [27], 'ADV': [22, 26], 'INTJ': [], 'VERB': [3, 9, 18], 'NOUN': [2, 6, 8, 12, 14, 17, 21, 24], 'PROPN': [], 'ADP': [4, 10, 19], 'AUX': [25], 'CCONJ': [15], 'SCONJ': [], 'DET': [1, 5, 7, 11, 13, 16, 20, 23], 'NUM': [], 'PART': [], 'PRON': []}
+[DEBUG:Zipf curve steepness] 
+_calc_distributional_measures called
+[DEBUG:Zipf curve steepness] Step A: Input tokens=['The', 'cat', 'sat', 'on', 'the', 'mat', '.', 'The', 'dog', 'sat', 'on', 'the', 'mat', '.', 'The', 'cat', 'and', 'the', 'dog', 'sat', 'on', 'the', 'mat', 'together', '.', 'The', 'mat', 'was', 'very', 'comfortable', '.'], doc_len=27, lang_code=en
+[DEBUG:Zipf curve steepness] Step A: Input zipf_scores=[], tokens=[], lang_code=en, doc_len=27
+[DEBUG:Zipf curve steepness] Step B: frequencies=[]
+
+[FOCUSED DEBUG] Zipf curve steepness: {'Zipf curve steepness': 0, 'Zipf goodness-of-fit': 0, 'Average contextual diversity': 0, 'Frequent word incidence': 0, 'Infrequent word incidence': 0, 'Unknown word count': 0, 'Unknown word incidence': 0}
+
+[RESULT] Zipf curve steepness: 1.7166637096026405
+
+============================================================
+DEBUGGING: Zipf goodness of fit (Doc)
+Sentence: The cat sat on the mat. The dog sat on the mat. The cat and the dog sat on the mat together. The mat was very comfortable.
+Expected: 0.9784839, Actual: 0
+[DEBUG:Zipf goodness-of-fit] 
+_calc_burstiness called
+[DEBUG:Zipf goodness-of-fit] Step A: Input positions=[27], doc_len=27
+[DEBUG:Zipf goodness-of-fit] Step B: Gaps=[27]
+[DEBUG:Zipf goodness-of-fit] Step C: mean_gap=27.0, std_gap=0
+[DEBUG:Zipf goodness-of-fit] Step B: Internal gaps=[4]
+[DEBUG:Zipf goodness-of-fit] Step C: Internal gap std=0.0
+[DEBUG:Zipf goodness-of-fit] 
+_calc_zipf_variants called
+[DEBUG:Zipf goodness-of-fit] Step A: Input zipf_scores=[7.73, 4.78, 4.64, 6.91, 7.73, 3.84, 7.73, 5.1, 4.64, 6.91, 7.73, 3.84, 7.73, 4.78, 7.41, 7.73, 5.1, 4.64, 6.91, 7.73, 3.84, 5.46, 7.73, 3.84, 6.82, 6.0, 4.66], tokens=['The', 'cat', 'sat', 'on', 'the', 'mat', '.', 'The', 'dog', 'sat', 'on', 'the', 'mat', '.', 'The', 'cat', 'and', 'the', 'dog', 'sat', 'on', 'the', 'mat', 'together', '.', 'The', 'mat', 'was', 'very', 'comfortable', '.'], lang_code=en, doc_len=27
+[DEBUG:Zipf goodness-of-fit] Step B: frequencies=[4 4 4 4 3 3 2 2 1 1 1 1 1]
+[DEBUG:Zipf goodness-of-fit] Step B: freq_above_min=[4 4 4 4 3 3 2 2 1 1 1 1 1], n=13
+[DEBUG:Zipf goodness-of-fit] Step C: logs=[2.07944154 2.07944154 2.07944154 2.07944154 1.79175947 1.79175947
+ 1.38629436 1.38629436 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718], sum_logs=18.139609730214953
+[DEBUG:Zipf goodness-of-fit] Step D: Zipf curve steepness = 1.7166637096026405
+[DEBUG:Zipf goodness-of-fit] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Zipf goodness-of-fit] 
+_calc_ratios called
+[DEBUG:Zipf goodness-of-fit] Step A: Input pos_map_lower_non_punct={'ADJ': [27], 'ADV': [22, 26], 'INTJ': [], 'VERB': [3, 9, 18], 'NOUN': [2, 6, 8, 12, 14, 17, 21, 24], 'PROPN': [], 'ADP': [4, 10, 19], 'AUX': [25], 'CCONJ': [15], 'SCONJ': [], 'DET': [1, 5, 7, 11, 13, 16, 20, 23], 'NUM': [], 'PART': [], 'PRON': []}
+[DEBUG:Zipf goodness-of-fit] 
+_calc_distributional_measures called
+[DEBUG:Zipf goodness-of-fit] Step A: Input tokens=['The', 'cat', 'sat', 'on', 'the', 'mat', '.', 'The', 'dog', 'sat', 'on', 'the', 'mat', '.', 'The', 'cat', 'and', 'the', 'dog', 'sat', 'on', 'the', 'mat', 'together', '.', 'The', 'mat', 'was', 'very', 'comfortable', '.'], doc_len=27, lang_code=en
+[DEBUG:Zipf goodness-of-fit] Step A: Input zipf_scores=[], tokens=[], lang_code=en, doc_len=27
+[DEBUG:Zipf goodness-of-fit] Step B: frequencies=[]
+
+[FOCUSED DEBUG] Zipf goodness-of-fit: {'Zipf curve steepness': 0, 'Zipf goodness-of-fit': 0, 'Average contextual diversity': 0, 'Frequent word incidence': 0, 'Infrequent word incidence': 0, 'Unknown word count': 0, 'Unknown word incidence': 0}
+
+[RESULT] Zipf goodness-of-fit: 0
+
+============================================================
+DEBUGGING: Zipf frequency (Doc)
+Sentence: The glabrous creature crawls nimbly through the underbrush.
+Expected: 3.3749, Actual: 6.3725
+[DEBUG:Lexical sophistication (Zipf frequency)] 
+_calc_burstiness called
+[DEBUG:Lexical sophistication (Zipf frequency)] Step A: Input positions=[2], doc_len=8
+[DEBUG:Lexical sophistication (Zipf frequency)] Step B: Gaps=[2]
+[DEBUG:Lexical sophistication (Zipf frequency)] Step C: mean_gap=2.0, std_gap=0
+[DEBUG:Lexical sophistication (Zipf frequency)] Step B: Internal gaps=[5]
+[DEBUG:Lexical sophistication (Zipf frequency)] Step C: Internal gap std=0.0
+[DEBUG:Lexical sophistication (Zipf frequency)] 
+_calc_zipf_variants called
+[DEBUG:Lexical sophistication (Zipf frequency)] Step A: Input zipf_scores=[7.73, 4.16, 5.87, 7.73], tokens=['The', 'glabrous', 'creature', 'crawls', 'nimbly', 'through', 'the', 'underbrush', '.'], lang_code=en, doc_len=8
+[DEBUG:Lexical sophistication (Zipf frequency)] Step B: frequencies=[1 1 1 1 1 1 1 1 1]
+[DEBUG:Lexical sophistication (Zipf frequency)] Step B: freq_above_min=[1 1 1 1 1 1 1 1 1], n=9
+[DEBUG:Lexical sophistication (Zipf frequency)] Step C: logs=[0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718], sum_logs=6.238324625039508
+[DEBUG:Lexical sophistication (Zipf frequency)] Step D: Zipf curve steepness = 2.4426950408889634
+[DEBUG:Lexical sophistication (Zipf frequency)] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Lexical sophistication (Zipf frequency)] 
+_calc_ratios called
+[DEBUG:Lexical sophistication (Zipf frequency)] Step A: Input pos_map_lower_non_punct={'ADJ': [2], 'ADV': [5], 'INTJ': [], 'VERB': [4], 'NOUN': [3, 8], 'PROPN': [], 'ADP': [6], 'AUX': [], 'CCONJ': [], 'SCONJ': [], 'DET': [1, 7], 'NUM': [], 'PART': [], 'PRON': []}
+[DEBUG:Lexical sophistication (Zipf frequency)] 
+_calc_distributional_measures called
+[DEBUG:Lexical sophistication (Zipf frequency)] Step A: Input tokens=['The', 'glabrous', 'creature', 'crawls', 'nimbly', 'through', 'the', 'underbrush', '.'], doc_len=8, lang_code=en
+[DEBUG:Lexical sophistication (Zipf frequency)] Step A: Input zipf_scores=[], tokens=[], lang_code=en, doc_len=8
+[DEBUG:Lexical sophistication (Zipf frequency)] Step B: frequencies=[]
+
+[FOCUSED DEBUG] Lexical sophistication (Zipf frequency): {'Zipf curve steepness': 0, 'Zipf goodness-of-fit': 0, 'Average contextual diversity': 0, 'Frequent word incidence': 0, 'Infrequent word incidence': 0, 'Unknown word count': 0, 'Unknown word incidence': 0}
+
+[RESULT] Lexical sophistication (Zipf frequency): 6.3725000000000005
+
+============================================================
+DEBUGGING: Average contextual diversity (Doc)
+Sentence: People from different cultures laughed together.
+Expected: 3.4825, Actual: 5.395
+[DEBUG:Average contextual diversity] 
+_calc_burstiness called
+[DEBUG:Average contextual diversity] Step A: Input positions=[3], doc_len=6
+[DEBUG:Average contextual diversity] Step B: Gaps=[3]
+[DEBUG:Average contextual diversity] Step C: mean_gap=3.0, std_gap=0
+[DEBUG:Average contextual diversity] Step B: Internal gaps=[3]
+[DEBUG:Average contextual diversity] Step C: Internal gap std=0.0
+[DEBUG:Average contextual diversity] 
+_calc_zipf_variants called
+[DEBUG:Average contextual diversity] Step A: Input zipf_scores=[6.25, 6.63, 5.59, 4.2, 4.24, 5.46], tokens=['People', 'from', 'different', 'cultures', 'laughed', 'together', '.'], lang_code=en, doc_len=6
+[DEBUG:Average contextual diversity] Step B: frequencies=[1 1 1 1 1 1 1]
+[DEBUG:Average contextual diversity] Step B: freq_above_min=[1 1 1 1 1 1 1], n=7
+[DEBUG:Average contextual diversity] Step C: logs=[0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718], sum_logs=4.852030263919617
+[DEBUG:Average contextual diversity] Step D: Zipf curve steepness = 2.4426950408889634
+[DEBUG:Average contextual diversity] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Average contextual diversity] 
+_calc_ratios called
+[DEBUG:Average contextual diversity] Step A: Input pos_map_lower_non_punct={'ADJ': [3], 'ADV': [6], 'INTJ': [], 'VERB': [5], 'NOUN': [1, 4], 'PROPN': [], 'ADP': [2], 'AUX': [], 'CCONJ': [], 'SCONJ': [], 'DET': [], 'NUM': [], 'PART': [], 'PRON': []}
+[DEBUG:Average contextual diversity] 
+_calc_distributional_measures called
+[DEBUG:Average contextual diversity] Step A: Input tokens=['People', 'from', 'different', 'cultures', 'laughed', 'together', '.'], doc_len=6, lang_code=en
+[DEBUG:Average contextual diversity] Step A: Input zipf_scores=[], tokens=[], lang_code=en, doc_len=6
+[DEBUG:Average contextual diversity] Step B: frequencies=[]
+
+[FOCUSED DEBUG] Average contextual diversity: {'Zipf curve steepness': 0, 'Zipf goodness-of-fit': 0, 'Average contextual diversity': 0, 'Frequent word incidence': 0, 'Infrequent word incidence': 0, 'Unknown word count': 0, 'Unknown word incidence': 0}
+
+[RESULT] Average contextual diversity: 5.395
+
+============================================================
+DEBUGGING: Infrequent word count (Doc)
+Sentence: The crepuscular raptor alighted upon the wooden fence post.
+Expected: 3, Actual: 1
+[DEBUG:Infrequent word count] 
+_calc_burstiness called
+[DEBUG:Infrequent word count] Step A: Input positions=[2, 7], doc_len=9
+[DEBUG:Infrequent word count] Step B: Internal gaps=[5]
+[DEBUG:Infrequent word count] Step C: Internal gap std=0.0
+[DEBUG:Infrequent word count] Step B: Gaps=[4]
+[DEBUG:Infrequent word count] Step C: mean_gap=4.0, std_gap=0
+[DEBUG:Infrequent word count] 
+_calc_zipf_variants called
+[DEBUG:Infrequent word count] Step A: Input zipf_scores=[7.73, 3.15, 5.12, 7.73, 4.33, 4.21, 5.43], tokens=['The', 'crepuscular', 'raptor', 'alighted', 'upon', 'the', 'wooden', 'fence', 'post', '.'], lang_code=en, doc_len=9
+[DEBUG:Infrequent word count] Step B: frequencies=[1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Infrequent word count] Step B: freq_above_min=[1 1 1 1 1 1 1 1 1 1], n=10
+[DEBUG:Infrequent word count] Step C: logs=[0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=6.931471805599453
+[DEBUG:Infrequent word count] Step D: Zipf curve steepness = 2.4426950408889634
+[DEBUG:Infrequent word count] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Infrequent word count] 
+_calc_ratios called
+[DEBUG:Infrequent word count] Step A: Input pos_map_lower_non_punct={'ADJ': [2, 7], 'ADV': [], 'INTJ': [], 'VERB': [4], 'NOUN': [3, 8, 9], 'PROPN': [], 'ADP': [5], 'AUX': [], 'CCONJ': [], 'SCONJ': [], 'DET': [1, 6], 'NUM': [], 'PART': [], 'PRON': []}
+[DEBUG:Infrequent word count] 
+_calc_distributional_measures called
+[DEBUG:Infrequent word count] Step A: Input tokens=['The', 'crepuscular', 'raptor', 'alighted', 'upon', 'the', 'wooden', 'fence', 'post', '.'], doc_len=9, lang_code=en
+[DEBUG:Infrequent word count] Step A: tokens=['the', 'crepuscular', 'raptor', 'alighted', 'upon', 'the', 'wooden', 'fence', 'post']
+[DEBUG:Infrequent word count] Step A: positions=[]
+[DEBUG:Infrequent word count] Step B: raw_count=0
+[DEBUG:Infrequent word count] Step B: positions=[]
+[DEBUG:Infrequent word count] Step C: doc_len=9
+[DEBUG:Infrequent word count] Step C: type_count=0
+[DEBUG:Infrequent word count] Step C: incidence=0.0
+[DEBUG:Infrequent word count] Step D: final_count=0
+[DEBUG:Infrequent word count] Step D: incidence=0.0
+[DEBUG:Infrequent word count] Step D: type_count=0
+[DEBUG:Infrequent word count] Step D: burstiness=0.0
+
+[FOCUSED DEBUG] Infrequent word count: {'count': 0, 'incidence': 0.0, 'type_count': 0, 'burstiness': 0.0}
+
+[RESULT] Infrequent word count: 1
+
+============================================================
+DEBUGGING: Unknown word count (Doc)
+Sentence: The glabrous creature crawls nimbly through the underbrush.
+Expected: 3, Actual: 5
+[DEBUG:Unknown word count] 
+_calc_burstiness called
+[DEBUG:Unknown word count] Step A: Input positions=[2], doc_len=8
+[DEBUG:Unknown word count] Step B: Gaps=[2]
+[DEBUG:Unknown word count] Step C: mean_gap=2.0, std_gap=0
+[DEBUG:Unknown word count] Step B: Internal gaps=[5]
+[DEBUG:Unknown word count] Step C: Internal gap std=0.0
+[DEBUG:Unknown word count] 
+_calc_zipf_variants called
+[DEBUG:Unknown word count] Step A: Input zipf_scores=[7.73, 4.16, 5.87, 7.73], tokens=['The', 'glabrous', 'creature', 'crawls', 'nimbly', 'through', 'the', 'underbrush', '.'], lang_code=en, doc_len=8
+[DEBUG:Unknown word count] Step B: frequencies=[1 1 1 1 1 1 1 1 1]
+[DEBUG:Unknown word count] Step B: freq_above_min=[1 1 1 1 1 1 1 1 1], n=9
+[DEBUG:Unknown word count] Step C: logs=[0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718], sum_logs=6.238324625039508
+[DEBUG:Unknown word count] Step D: Zipf curve steepness = 2.4426950408889634
+[DEBUG:Unknown word count] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Unknown word count] 
+_calc_ratios called
+[DEBUG:Unknown word count] Step A: Input pos_map_lower_non_punct={'ADJ': [2], 'ADV': [5], 'INTJ': [], 'VERB': [4], 'NOUN': [3, 8], 'PROPN': [], 'ADP': [6], 'AUX': [], 'CCONJ': [], 'SCONJ': [], 'DET': [1, 7], 'NUM': [], 'PART': [], 'PRON': []}
+[DEBUG:Unknown word count] 
+_calc_distributional_measures called
+[DEBUG:Unknown word count] Step A: Input tokens=['The', 'glabrous', 'creature', 'crawls', 'nimbly', 'through', 'the', 'underbrush', '.'], doc_len=8, lang_code=en
+[DEBUG:Unknown word count] Step A: tokens=['the', 'glabrous', 'creature', 'crawls', 'nimbly', 'through', 'the', 'underbrush']
+[DEBUG:Unknown word count] Step A: positions=[]
+[DEBUG:Unknown word count] Step B: raw_count=0
+[DEBUG:Unknown word count] Step B: positions=[]
+[DEBUG:Unknown word count] Step C: doc_len=8
+[DEBUG:Unknown word count] Step C: type_count=0
+[DEBUG:Unknown word count] Step C: incidence=0.0
+[DEBUG:Unknown word count] Step D: final_count=0
+[DEBUG:Unknown word count] Step D: incidence=0.0
+[DEBUG:Unknown word count] Step D: type_count=0
+[DEBUG:Unknown word count] Step D: burstiness=0.0
+
+[FOCUSED DEBUG] Unknown word count: {'count': 0, 'incidence': 0.0, 'type_count': 0, 'burstiness': 0.0}
+
+[RESULT] Unknown word count: 5
+
+============================================================
+DEBUGGING: Infrequent word incidence (Doc)
+Sentence: The crepuscular raptor alighted upon the wooden fence post.
+Expected: 333.3333333, Actual: 111.1111111
+[DEBUG:Infrequent word incidence] 
+_calc_burstiness called
+[DEBUG:Infrequent word incidence] Step A: Input positions=[2, 7], doc_len=9
+[DEBUG:Infrequent word incidence] Step B: Internal gaps=[5]
+[DEBUG:Infrequent word incidence] Step C: Internal gap std=0.0
+[DEBUG:Infrequent word incidence] Step B: Gaps=[4]
+[DEBUG:Infrequent word incidence] Step C: mean_gap=4.0, std_gap=0
+[DEBUG:Infrequent word incidence] 
+_calc_zipf_variants called
+[DEBUG:Infrequent word incidence] Step A: Input zipf_scores=[7.73, 3.15, 5.12, 7.73, 4.33, 4.21, 5.43], tokens=['The', 'crepuscular', 'raptor', 'alighted', 'upon', 'the', 'wooden', 'fence', 'post', '.'], lang_code=en, doc_len=9
+[DEBUG:Infrequent word incidence] Step B: frequencies=[1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Infrequent word incidence] Step B: freq_above_min=[1 1 1 1 1 1 1 1 1 1], n=10
+[DEBUG:Infrequent word incidence] Step C: logs=[0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=6.931471805599453
+[DEBUG:Infrequent word incidence] Step D: Zipf curve steepness = 2.4426950408889634
+[DEBUG:Infrequent word incidence] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Infrequent word incidence] 
+_calc_ratios called
+[DEBUG:Infrequent word incidence] Step A: Input pos_map_lower_non_punct={'ADJ': [2, 7], 'ADV': [], 'INTJ': [], 'VERB': [4], 'NOUN': [3, 8, 9], 'PROPN': [], 'ADP': [5], 'AUX': [], 'CCONJ': [], 'SCONJ': [], 'DET': [1, 6], 'NUM': [], 'PART': [], 'PRON': []}
+[DEBUG:Infrequent word incidence] 
+_calc_distributional_measures called
+[DEBUG:Infrequent word incidence] Step A: Input tokens=['The', 'crepuscular', 'raptor', 'alighted', 'upon', 'the', 'wooden', 'fence', 'post', '.'], doc_len=9, lang_code=en
+
+[RESULT] Infrequent word incidence: 111.1111111111111
+
+============================================================
+DEBUGGING: Unknown word incidence (Doc)
+Sentence: The glabrous creature crawls nimbly through the underbrush.
+Expected: 375, Actual: 625
+[DEBUG:Unknown word incidence] 
+_calc_burstiness called
+[DEBUG:Unknown word incidence] Step A: Input positions=[2], doc_len=8
+[DEBUG:Unknown word incidence] Step B: Gaps=[2]
+[DEBUG:Unknown word incidence] Step C: mean_gap=2.0, std_gap=0
+[DEBUG:Unknown word incidence] Step B: Internal gaps=[5]
+[DEBUG:Unknown word incidence] Step C: Internal gap std=0.0
+[DEBUG:Unknown word incidence] 
+_calc_zipf_variants called
+[DEBUG:Unknown word incidence] Step A: Input zipf_scores=[7.73, 4.16, 5.87, 7.73], tokens=['The', 'glabrous', 'creature', 'crawls', 'nimbly', 'through', 'the', 'underbrush', '.'], lang_code=en, doc_len=8
+[DEBUG:Unknown word incidence] Step B: frequencies=[1 1 1 1 1 1 1 1 1]
+[DEBUG:Unknown word incidence] Step B: freq_above_min=[1 1 1 1 1 1 1 1 1], n=9
+[DEBUG:Unknown word incidence] Step C: logs=[0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718], sum_logs=6.238324625039508
+[DEBUG:Unknown word incidence] Step D: Zipf curve steepness = 2.4426950408889634
+[DEBUG:Unknown word incidence] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Unknown word incidence] 
+_calc_ratios called
+[DEBUG:Unknown word incidence] Step A: Input pos_map_lower_non_punct={'ADJ': [2], 'ADV': [5], 'INTJ': [], 'VERB': [4], 'NOUN': [3, 8], 'PROPN': [], 'ADP': [6], 'AUX': [], 'CCONJ': [], 'SCONJ': [], 'DET': [1, 7], 'NUM': [], 'PART': [], 'PRON': []}
+[DEBUG:Unknown word incidence] 
+_calc_distributional_measures called
+[DEBUG:Unknown word incidence] Step A: Input tokens=['The', 'glabrous', 'creature', 'crawls', 'nimbly', 'through', 'the', 'underbrush', '.'], doc_len=8, lang_code=en
+
+[RESULT] Unknown word incidence: 625.0
+
+============================================================
+DEBUGGING: Grammatical item length (Doc)
+Sentence: I cannot believe how fast time is passing by.
+Expected: 2.8, Actual: 2.2
+[DEBUG:Grammatical item word length] 
+_calc_burstiness called
+[DEBUG:Grammatical item word length] Step A: Input positions=[6], doc_len=10
+[DEBUG:Grammatical item word length] Step B: Gaps=[6]
+[DEBUG:Grammatical item word length] Step C: mean_gap=6.0, std_gap=0
+[DEBUG:Grammatical item word length] Step B: Internal gaps=[5]
+[DEBUG:Grammatical item word length] Step C: Internal gap std=0.0
+[DEBUG:Grammatical item word length] 
+_calc_zipf_variants called
+[DEBUG:Grammatical item word length] Step A: Input zipf_scores=[7.09, 6.46, 6.69, 5.51, 6.24, 5.13, 6.29, 7.07, 4.63, 6.66], tokens=['I', 'can', 'not', 'believe', 'how', 'fast', 'time', 'is', 'passing', 'by', '.'], lang_code=en, doc_len=10
+[DEBUG:Grammatical item word length] Step B: frequencies=[1 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Grammatical item word length] Step B: freq_above_min=[1 1 1 1 1 1 1 1 1 1 1], n=11
+[DEBUG:Grammatical item word length] Step C: logs=[0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=7.6246189861593985
+[DEBUG:Grammatical item word length] Step D: Zipf curve steepness = 2.4426950408889634
+[DEBUG:Grammatical item word length] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Grammatical item word length] 
+_calc_ratios called
+[DEBUG:Grammatical item word length] Step A: Input pos_map_lower_non_punct={'ADJ': [6], 'ADV': [5], 'INTJ': [], 'VERB': [4, 9], 'NOUN': [7], 'PROPN': [], 'ADP': [10], 'AUX': [2, 8], 'CCONJ': [], 'SCONJ': [], 'DET': [], 'NUM': [], 'PART': [3], 'PRON': [1]}
+[DEBUG:Grammatical item word length] 
+_calc_distributional_measures called
+[DEBUG:Grammatical item word length] Step A: Input tokens=['I', 'can', 'not', 'believe', 'how', 'fast', 'time', 'is', 'passing', 'by', '.'], doc_len=10, lang_code=en
+
+[RESULT] Grammatical item word length: 2.2
+
+============================================================
+DEBUGGING: Noun-lexical item ratio (Doc)
+Sentence: He was still sleeping deeply when the birds started chirping outside.
+Expected: 0.142857143, Actual: 0.125
+[DEBUG:Noun-lexical item ratio] 
+_calc_burstiness called
+[DEBUG:Noun-lexical item ratio] Step A: Input positions=[], doc_len=11
+[DEBUG:Noun-lexical item ratio] Step B: Internal gaps=[2 1 5]
+[DEBUG:Noun-lexical item ratio] Step C: Internal gap std=1.699673171197595
+[DEBUG:Noun-lexical item ratio] Step B: Gaps=[3, np.int64(2), np.int64(1), np.int64(5)]
+[DEBUG:Noun-lexical item ratio] Step C: mean_gap=2.75, std_gap=1.707825127659933
+[DEBUG:Noun-lexical item ratio] 
+_calc_zipf_variants called
+[DEBUG:Noun-lexical item ratio] Step A: Input zipf_scores=[6.69, 6.82, 5.92, 4.56, 4.44, 6.37, 7.73, 4.6, 5.39, 5.25], tokens=['He', 'was', 'still', 'sleeping', 'deeply', 'when', 'the', 'birds', 'started', 'chirping', 'outside', '.'], lang_code=en, doc_len=11
+[DEBUG:Noun-lexical item ratio] Step B: frequencies=[1 1 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Noun-lexical item ratio] Step B: freq_above_min=[1 1 1 1 1 1 1 1 1 1 1 1], n=12
+[DEBUG:Noun-lexical item ratio] Step C: logs=[0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=8.317766166719343
+[DEBUG:Noun-lexical item ratio] Step D: Zipf curve steepness = 2.442695040888964
+[DEBUG:Noun-lexical item ratio] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Noun-lexical item ratio] 
+_calc_ratios called
+[DEBUG:Noun-lexical item ratio] Step A: Input pos_map_lower_non_punct={'ADJ': [], 'ADV': [3, 5, 6, 11], 'INTJ': [], 'VERB': [4, 9, 10], 'NOUN': [8], 'PROPN': [], 'ADP': [], 'AUX': [2], 'CCONJ': [], 'SCONJ': [], 'DET': [7], 'NUM': [], 'PART': [], 'PRON': [1]}
+[DEBUG:Noun-lexical item ratio] 
+_calc_distributional_measures called
+[DEBUG:Noun-lexical item ratio] Step A: Input tokens=['He', 'was', 'still', 'sleeping', 'deeply', 'when', 'the', 'birds', 'started', 'chirping', 'outside', '.'], doc_len=11, lang_code=en
+[DEBUG:Noun-lexical item ratio] Step A: numerator=NOUN, denominator=LEXICAL ITEM
+[DEBUG:Noun-lexical item ratio] Step B: numerator_count=1, denominator_count=0
+[DEBUG:Noun-lexical item ratio] Step C: ratio=0
+
+[FOCUSED DEBUG] Noun-lexical item ratio: {'numerator': 1, 'denominator': 0, 'ratio': 0}
+
+[RESULT] Noun-lexical item ratio: 0.125
+
+============================================================
+DEBUGGING: Sub-coordinating conjunction ratio (Doc)
+Sentence: Although I like both apples and bananas, I prefer lemons and oranges.
+Expected: 0.5, Actual: 0.333333333
+[DEBUG:Sub-coordinating conjunction ratio] 
+_calc_burstiness called
+[DEBUG:Sub-coordinating conjunction ratio] Step A: Input positions=[], doc_len=12
+[DEBUG:Sub-coordinating conjunction ratio] Step B: Internal gaps=[6]
+[DEBUG:Sub-coordinating conjunction ratio] Step C: Internal gap std=0.0
+[DEBUG:Sub-coordinating conjunction ratio] Step B: Gaps=[5, np.int64(2), np.int64(3), np.int64(2)]
+[DEBUG:Sub-coordinating conjunction ratio] Step C: mean_gap=3.0, std_gap=1.4142135623730951
+[DEBUG:Sub-coordinating conjunction ratio] 
+_calc_zipf_variants called
+[DEBUG:Sub-coordinating conjunction ratio] Step A: Input zipf_scores=[5.3, 7.09, 6.41, 5.79, 3.96, 7.41, 3.7, 7.09, 4.57, 3.29, 7.41, 3.52], tokens=['Although', 'I', 'like', 'both', 'apples', 'and', 'bananas', ',', 'I', 'prefer', 'lemons', 'and', 'oranges', '.'], lang_code=en, doc_len=12
+[DEBUG:Sub-coordinating conjunction ratio] Step B: frequencies=[2 2 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Sub-coordinating conjunction ratio] Step B: freq_above_min=[2 2 1 1 1 1 1 1 1 1 1 1], n=12
+[DEBUG:Sub-coordinating conjunction ratio] Step C: logs=[1.38629436 1.38629436 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=9.704060527839234
+[DEBUG:Sub-coordinating conjunction ratio] Step D: Zipf curve steepness = 2.2365957493333974
+[DEBUG:Sub-coordinating conjunction ratio] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Sub-coordinating conjunction ratio] 
+_calc_ratios called
+[DEBUG:Sub-coordinating conjunction ratio] Step A: Input pos_map_lower_non_punct={'ADJ': [], 'ADV': [], 'INTJ': [], 'VERB': [3, 9], 'NOUN': [5, 7, 10, 12], 'PROPN': [], 'ADP': [], 'AUX': [], 'CCONJ': [4, 6, 11], 'SCONJ': [1], 'DET': [], 'NUM': [], 'PART': [], 'PRON': [2, 8]}
+[DEBUG:Sub-coordinating conjunction ratio] 
+_calc_distributional_measures called
+[DEBUG:Sub-coordinating conjunction ratio] Step A: Input tokens=['Although', 'I', 'like', 'both', 'apples', 'and', 'bananas', ',', 'I', 'prefer', 'lemons', 'and', 'oranges', '.'], doc_len=12, lang_code=en
+[DEBUG:Sub-coordinating conjunction ratio] Step A: numerator=SUB, denominator=COORDINATING CONJUNCTION
+[DEBUG:Sub-coordinating conjunction ratio] Step B: numerator_count=0, denominator_count=0
+[DEBUG:Sub-coordinating conjunction ratio] Step C: ratio=0
+
+[FOCUSED DEBUG] Sub-coordinating conjunction ratio: {'numerator': 0, 'denominator': 0, 'ratio': 0}
+
+[RESULT] Sub-coordinating conjunction ratio: 0.3333333333333333
+
+============================================================
+DEBUGGING: Hapax legomena burstiness (Doc)
+Sentence: The fluffy dog chased the frisbee, wagging its fluffy tail.
+Expected: -0.482567997, Actual: -0.34237382
+[DEBUG:Hapax legomena burstiness] 
+_calc_burstiness called
+[DEBUG:Hapax legomena burstiness] Step A: Input positions=[2, 9], doc_len=10
+[DEBUG:Hapax legomena burstiness] Step B: Internal gaps=[7]
+[DEBUG:Hapax legomena burstiness] Step C: Internal gap std=0.0
+[DEBUG:Hapax legomena burstiness] Step B: Gaps=[3, np.int64(3), np.int64(4)]
+[DEBUG:Hapax legomena burstiness] Step C: mean_gap=3.3333333333333335, std_gap=0.5773502691896258
+[DEBUG:Hapax legomena burstiness] 
+_calc_zipf_variants called
+[DEBUG:Hapax legomena burstiness] Step A: Input zipf_scores=[7.73, 3.59, 5.1, 3.74, 7.73, 6.14, 3.59, 4.34], tokens=['The', 'fluffy', 'dog', 'chased', 'the', 'frisbee', ',', 'wagging', 'its', 'fluffy', 'tail', '.'], lang_code=en, doc_len=10
+[DEBUG:Hapax legomena burstiness] Step B: frequencies=[2 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Hapax legomena burstiness] Step B: freq_above_min=[2 1 1 1 1 1 1 1 1 1 1], n=11
+[DEBUG:Hapax legomena burstiness] Step C: logs=[1.38629436 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=8.317766166719343
+[DEBUG:Hapax legomena burstiness] Step D: Zipf curve steepness = 2.322470454148217
+[DEBUG:Hapax legomena burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Hapax legomena burstiness] 
+_calc_ratios called
+[DEBUG:Hapax legomena burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [2, 9], 'ADV': [], 'INTJ': [], 'VERB': [4, 7], 'NOUN': [3, 6, 10], 'PROPN': [], 'ADP': [], 'AUX': [], 'CCONJ': [], 'SCONJ': [], 'DET': [1, 5], 'NUM': [], 'PART': [], 'PRON': [8]}
+[DEBUG:Hapax legomena burstiness] 
+_calc_distributional_measures called
+[DEBUG:Hapax legomena burstiness] Step A: Input tokens=['The', 'fluffy', 'dog', 'chased', 'the', 'frisbee', ',', 'wagging', 'its', 'fluffy', 'tail', '.'], doc_len=10, lang_code=en
+[DEBUG:Hapax legomena burstiness] Step A: positions=[]
+[DEBUG:Hapax legomena burstiness] Step A: doc_len=10
+[DEBUG:Hapax legomena burstiness] Step D: Final Output = 0.0 (no positions)
+
+[FOCUSED DEBUG] Hapax legomena burstiness: burstiness=0.0
+
+[RESULT] Hapax legomena burstiness: -0.34237381958780105
+
+[SKIP] No mapping for measure 'Interjection burstiness (Doc)'
+
+============================================================
+DEBUGGING: Lexical verb burstiness (Doc)
+Sentence: He writes, speaks, and sings in four different languages.
+Expected: -0.333333333, Actual: -0.485431451
+[DEBUG:VERB burstiness] 
+_calc_burstiness called
+[DEBUG:VERB burstiness] Step A: Input positions=[8], doc_len=9
+[DEBUG:VERB burstiness] Step B: Gaps=[8]
+[DEBUG:VERB burstiness] Step C: mean_gap=8.0, std_gap=0
+[DEBUG:VERB burstiness] Step B: Internal gaps=[1 2]
+[DEBUG:VERB burstiness] Step C: Internal gap std=0.5
+[DEBUG:VERB burstiness] 
+_calc_zipf_variants called
+[DEBUG:VERB burstiness] Step A: Input zipf_scores=[6.69, 4.36, 4.43, 7.41, 3.89, 7.27, 5.53, 5.59, 4.42], tokens=['He', 'writes', ',', 'speaks', ',', 'and', 'sings', 'in', 'four', 'different', 'languages', '.'], lang_code=en, doc_len=9
+[DEBUG:VERB burstiness] Step B: frequencies=[2 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:VERB burstiness] Step B: freq_above_min=[2 1 1 1 1 1 1 1 1 1 1], n=11
+[DEBUG:VERB burstiness] Step C: logs=[1.38629436 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=8.317766166719343
+[DEBUG:VERB burstiness] Step D: Zipf curve steepness = 2.322470454148217
+[DEBUG:VERB burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:VERB burstiness] 
+_calc_ratios called
+[DEBUG:VERB burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [8], 'ADV': [], 'INTJ': [], 'VERB': [2, 3, 5], 'NOUN': [9], 'PROPN': [], 'ADP': [6], 'AUX': [], 'CCONJ': [4], 'SCONJ': [], 'DET': [], 'NUM': [7], 'PART': [], 'PRON': [1]}
+[DEBUG:VERB burstiness] 
+_calc_distributional_measures called
+[DEBUG:VERB burstiness] Step A: Input tokens=['He', 'writes', ',', 'speaks', ',', 'and', 'sings', 'in', 'four', 'different', 'languages', '.'], doc_len=9, lang_code=en
+[DEBUG:VERB burstiness] Step A: positions=[2, 3, 5]
+[DEBUG:VERB burstiness] Step A: doc_len=9
+[DEBUG:VERB burstiness] Step B: internal_gaps=[1 2]
+[DEBUG:VERB burstiness] Step C: internal_std=0.5
+[DEBUG:VERB burstiness] Step B: gaps=[2, np.int64(1), np.int64(2)]
+[DEBUG:VERB burstiness] Step C: mean_gap=1.6666666666666667, std_gap=0.5773502691896257
+[DEBUG:VERB burstiness] Step D: Final Output = -0.4854314511050559
+
+[FOCUSED DEBUG] VERB burstiness: burstiness=-0.4854314511050559
+
+[RESULT] VERB burstiness: -0.4854314511050559
+
+============================================================
+DEBUGGING: Noun burstiness (Doc)
+Sentence: The red balloon, yellow umbrella, and green grass sparkled.
+Expected: -0.6, Actual: -0.644052247
+[DEBUG:NOUN burstiness] 
+_calc_burstiness called
+[DEBUG:NOUN burstiness] Step A: Input positions=[2, 4, 7], doc_len=9
+[DEBUG:NOUN burstiness] Step B: Internal gaps=[2 3]
+[DEBUG:NOUN burstiness] Step C: Internal gap std=0.5
+[DEBUG:NOUN burstiness] Step B: Gaps=[2, np.int64(2), np.int64(3)]
+[DEBUG:NOUN burstiness] Step C: mean_gap=2.3333333333333335, std_gap=0.5773502691896258
+[DEBUG:NOUN burstiness] 
+_calc_zipf_variants called
+[DEBUG:NOUN burstiness] Step A: Input zipf_scores=[7.73, 5.32, 3.9, 4.69, 3.89, 7.41, 5.13, 4.38], tokens=['The', 'red', 'balloon', ',', 'yellow', 'umbrella', ',', 'and', 'green', 'grass', 'sparkled', '.'], lang_code=en, doc_len=9
+[DEBUG:NOUN burstiness] Step B: frequencies=[2 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:NOUN burstiness] Step B: freq_above_min=[2 1 1 1 1 1 1 1 1 1 1], n=11
+[DEBUG:NOUN burstiness] Step C: logs=[1.38629436 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=8.317766166719343
+[DEBUG:NOUN burstiness] Step D: Zipf curve steepness = 2.322470454148217
+[DEBUG:NOUN burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:NOUN burstiness] 
+_calc_ratios called
+[DEBUG:NOUN burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [2, 4, 7], 'ADV': [], 'INTJ': [], 'VERB': [9], 'NOUN': [3, 5, 8], 'PROPN': [], 'ADP': [], 'AUX': [], 'CCONJ': [6], 'SCONJ': [], 'DET': [1], 'NUM': [], 'PART': [], 'PRON': []}
+[DEBUG:NOUN burstiness] 
+_calc_distributional_measures called
+[DEBUG:NOUN burstiness] Step A: Input tokens=['The', 'red', 'balloon', ',', 'yellow', 'umbrella', ',', 'and', 'green', 'grass', 'sparkled', '.'], doc_len=9, lang_code=en
+[DEBUG:NOUN burstiness] Step A: positions=[3, 5, 8]
+[DEBUG:NOUN burstiness] Step A: doc_len=9
+[DEBUG:NOUN burstiness] Step B: internal_gaps=[2 3]
+[DEBUG:NOUN burstiness] Step C: internal_std=0.5
+[DEBUG:NOUN burstiness] Step B: gaps=[3, np.int64(2), np.int64(3)]
+[DEBUG:NOUN burstiness] Step C: mean_gap=2.6666666666666665, std_gap=0.5773502691896258
+[DEBUG:NOUN burstiness] Step D: Final Output = -0.6440522471950485
+
+[FOCUSED DEBUG] NOUN burstiness: burstiness=-0.6440522471950485
+
+[RESULT] NOUN burstiness: -0.6440522471950485
+
+============================================================
+DEBUGGING: Proper noun burstiness (Doc)
+Sentence: John, Mary, and Samantha went to the park together.
+Expected: -0.333333333, Actual: -0.395661041
+[DEBUG:PROPN burstiness] 
+_calc_burstiness called
+[DEBUG:PROPN burstiness] Step A: Input positions=[], doc_len=9
+[DEBUG:PROPN burstiness] Step B: Gaps=[9]
+[DEBUG:PROPN burstiness] Step C: mean_gap=9.0, std_gap=0
+[DEBUG:PROPN burstiness] Step B: Internal gaps=[1 2]
+[DEBUG:PROPN burstiness] Step C: Internal gap std=0.5
+[DEBUG:PROPN burstiness] 
+_calc_zipf_variants called
+[DEBUG:PROPN burstiness] Step A: Input zipf_scores=[5.38, 4.78, 7.41, 3.75, 5.5, 7.43, 7.73, 5.16, 5.46], tokens=['John', ',', 'Mary', ',', 'and', 'Samantha', 'went', 'to', 'the', 'park', 'together', '.'], lang_code=en, doc_len=9
+[DEBUG:PROPN burstiness] Step B: frequencies=[2 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:PROPN burstiness] Step B: freq_above_min=[2 1 1 1 1 1 1 1 1 1 1], n=11
+[DEBUG:PROPN burstiness] Step C: logs=[1.38629436 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=8.317766166719343
+[DEBUG:PROPN burstiness] Step D: Zipf curve steepness = 2.322470454148217
+[DEBUG:PROPN burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:PROPN burstiness] 
+_calc_ratios called
+[DEBUG:PROPN burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [], 'ADV': [9], 'INTJ': [], 'VERB': [5], 'NOUN': [8], 'PROPN': [1, 2, 4], 'ADP': [6], 'AUX': [], 'CCONJ': [3], 'SCONJ': [], 'DET': [7], 'NUM': [], 'PART': [], 'PRON': []}
+[DEBUG:PROPN burstiness] 
+_calc_distributional_measures called
+[DEBUG:PROPN burstiness] Step A: Input tokens=['John', ',', 'Mary', ',', 'and', 'Samantha', 'went', 'to', 'the', 'park', 'together', '.'], doc_len=9, lang_code=en
+[DEBUG:PROPN burstiness] Step A: positions=[1, 2, 4]
+[DEBUG:PROPN burstiness] Step A: doc_len=9
+[DEBUG:PROPN burstiness] Step B: internal_gaps=[1 2]
+[DEBUG:PROPN burstiness] Step C: internal_std=0.5
+[DEBUG:PROPN burstiness] Step B: gaps=[1, np.int64(1), np.int64(2)]
+[DEBUG:PROPN burstiness] Step C: mean_gap=1.3333333333333333, std_gap=0.5773502691896257
+[DEBUG:PROPN burstiness] Step D: Final Output = -0.39566104149607556
+
+[FOCUSED DEBUG] PROPN burstiness: burstiness=-0.39566104149607556
+
+[RESULT] PROPN burstiness: -0.39566104149607556
+
+============================================================
+DEBUGGING: Lexical item burstiness (Doc)
+Sentence: The teacher graded, circled, and corrected their mistakes on the paper.
+Expected: -0.396768886, Actual: -0.4178331
+[DEBUG:Lexical item burstiness] 
+_calc_burstiness called
+[DEBUG:Lexical item burstiness] Step A: Input positions=[], doc_len=11
+[DEBUG:Lexical item burstiness] Step B: Internal gaps=[1 2]
+[DEBUG:Lexical item burstiness] Step C: Internal gap std=0.5
+[DEBUG:Lexical item burstiness] Step B: Gaps=[3, np.int64(1), np.int64(2)]
+[DEBUG:Lexical item burstiness] Step C: mean_gap=2.0, std_gap=1.0
+[DEBUG:Lexical item burstiness] 
+_calc_zipf_variants called
+[DEBUG:Lexical item burstiness] Step A: Input zipf_scores=[7.73, 4.88, 3.45, 3.17, 7.41, 3.95, 6.33, 4.45, 6.91, 7.73, 5.07], tokens=['The', 'teacher', 'graded', ',', 'circled', ',', 'and', 'corrected', 'their', 'mistakes', 'on', 'the', 'paper', '.'], lang_code=en, doc_len=11
+[DEBUG:Lexical item burstiness] Step B: frequencies=[2 1 1 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Lexical item burstiness] Step B: freq_above_min=[2 1 1 1 1 1 1 1 1 1 1 1 1], n=13
+[DEBUG:Lexical item burstiness] Step C: logs=[1.38629436 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718], sum_logs=9.704060527839234
+[DEBUG:Lexical item burstiness] Step D: Zipf curve steepness = 2.33964539511118
+[DEBUG:Lexical item burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Lexical item burstiness] 
+_calc_ratios called
+[DEBUG:Lexical item burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [], 'ADV': [], 'INTJ': [], 'VERB': [3, 4, 6], 'NOUN': [2, 8, 11], 'PROPN': [], 'ADP': [9], 'AUX': [], 'CCONJ': [5], 'SCONJ': [], 'DET': [1, 10], 'NUM': [], 'PART': [], 'PRON': [7]}
+[DEBUG:Lexical item burstiness] 
+_calc_distributional_measures called
+[DEBUG:Lexical item burstiness] Step A: Input tokens=['The', 'teacher', 'graded', ',', 'circled', ',', 'and', 'corrected', 'their', 'mistakes', 'on', 'the', 'paper', '.'], doc_len=11, lang_code=en
+[DEBUG:Lexical item burstiness] Step A: positions=[]
+[DEBUG:Lexical item burstiness] Step A: doc_len=11
+[DEBUG:Lexical item burstiness] Step D: Final Output = 0.0 (no positions)
+
+[FOCUSED DEBUG] Lexical item burstiness: burstiness=0.0
+
+[RESULT] Lexical item burstiness: -0.41783309982506256
+
+============================================================
+DEBUGGING: Adposition burstiness (Doc)
+Sentence: The book is on the table and the cat is under the couch near the plant.
+Expected: -0.2, Actual: -0.383057682
+[DEBUG:ADP burstiness] 
+_calc_burstiness called
+[DEBUG:ADP burstiness] Step A: Input positions=[], doc_len=16
+[DEBUG:ADP burstiness] Step B: Internal gaps=[4 3 4 3]
+[DEBUG:ADP burstiness] Step C: Internal gap std=0.5
+[DEBUG:ADP burstiness] Step B: Gaps=[2, np.int64(4), np.int64(3), np.int64(4), np.int64(3)]
+[DEBUG:ADP burstiness] Step C: mean_gap=3.2, std_gap=0.8366600265340756
+[DEBUG:ADP burstiness] 
+_calc_zipf_variants called
+[DEBUG:ADP burstiness] Step A: Input zipf_scores=[7.73, 5.43, 7.07, 6.91, 7.73, 5.05, 7.41, 7.73, 4.78, 7.07, 5.73, 7.73, 4.17, 5.29, 7.73, 4.89], tokens=['The', 'book', 'is', 'on', 'the', 'table', 'and', 'the', 'cat', 'is', 'under', 'the', 'couch', 'near', 'the', 'plant', '.'], lang_code=en, doc_len=16
+[DEBUG:ADP burstiness] Step B: frequencies=[4 2 1 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:ADP burstiness] Step B: freq_above_min=[4 2 1 1 1 1 1 1 1 1 1 1 1], n=13
+[DEBUG:ADP burstiness] Step C: logs=[2.07944154 1.38629436 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718], sum_logs=11.090354888959125
+[DEBUG:ADP burstiness] Step D: Zipf curve steepness = 2.172189720722283
+[DEBUG:ADP burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:ADP burstiness] 
+_calc_ratios called
+[DEBUG:ADP burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [], 'ADV': [], 'INTJ': [], 'VERB': [], 'NOUN': [2, 6, 9, 13, 16], 'PROPN': [], 'ADP': [4, 11, 14], 'AUX': [3, 10], 'CCONJ': [7], 'SCONJ': [], 'DET': [1, 5, 8, 12, 15], 'NUM': [], 'PART': [], 'PRON': []}
+[DEBUG:ADP burstiness] 
+_calc_distributional_measures called
+[DEBUG:ADP burstiness] Step A: Input tokens=['The', 'book', 'is', 'on', 'the', 'table', 'and', 'the', 'cat', 'is', 'under', 'the', 'couch', 'near', 'the', 'plant', '.'], doc_len=16, lang_code=en
+[DEBUG:ADP burstiness] Step A: positions=[4, 11, 14]
+[DEBUG:ADP burstiness] Step A: doc_len=16
+[DEBUG:ADP burstiness] Step B: internal_gaps=[7 3]
+[DEBUG:ADP burstiness] Step C: internal_std=2.0
+[DEBUG:ADP burstiness] Step B: gaps=[4, np.int64(7), np.int64(3)]
+[DEBUG:ADP burstiness] Step C: mean_gap=4.666666666666667, std_gap=2.0816659994661326
+[DEBUG:ADP burstiness] Step D: Final Output = -0.3830576818142985
+
+[FOCUSED DEBUG] ADP burstiness: burstiness=-0.3830576818142985
+
+[RESULT] ADP burstiness: -0.3830576818142985
+
+============================================================
+DEBUGGING: Conjunction burstiness (Doc)
+Sentence: While I was outside, it started raining. But luckily, it stopped soon and I did not get very wet.
+Expected: -0.666666667, Actual: -0.173012516
+[DEBUG:Conjunction burstiness] 
+_calc_burstiness called
+[DEBUG:Conjunction burstiness] Step A: Input positions=[19], doc_len=19
+[DEBUG:Conjunction burstiness] Step B: Gaps=[19]
+[DEBUG:Conjunction burstiness] Step C: mean_gap=19.0, std_gap=0
+[DEBUG:Conjunction burstiness] Step B: Internal gaps=[5 3 6]
+[DEBUG:Conjunction burstiness] Step C: Internal gap std=1.247219128924647
+[DEBUG:Conjunction burstiness] 
+_calc_zipf_variants called
+[DEBUG:Conjunction burstiness] Step A: Input zipf_scores=[5.86, 7.09, 6.82, 5.25, 6.95, 5.39, 3.72, 6.63, 3.92, 6.95, 4.84, 5.32, 7.41, 7.09, 5.96, 6.69, 6.28, 6.0, 4.54], tokens=['While', 'I', 'was', 'outside', ',', 'it', 'started', 'raining', '.', 'But', 'luckily', ',', 'it', 'stopped', 'soon', 'and', 'I', 'did', 'not', 'get', 'very', 'wet', '.'], lang_code=en, doc_len=19
+[DEBUG:Conjunction burstiness] Step B: frequencies=[2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Conjunction burstiness] Step B: freq_above_min=[2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1], n=19
+[DEBUG:Conjunction burstiness] Step C: logs=[1.38629436 1.38629436 1.38629436 1.38629436 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718], sum_logs=15.94238515287874
+[DEBUG:Conjunction burstiness] Step D: Zipf curve steepness = 2.1917915555169696
+[DEBUG:Conjunction burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Conjunction burstiness] 
+_calc_ratios called
+[DEBUG:Conjunction burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [19], 'ADV': [4, 9, 12, 18], 'INTJ': [], 'VERB': [6, 7, 11, 17], 'NOUN': [], 'PROPN': [], 'ADP': [], 'AUX': [3, 15], 'CCONJ': [8, 13], 'SCONJ': [1], 'DET': [], 'NUM': [], 'PART': [16], 'PRON': [2, 5, 10, 14]}
+[DEBUG:Conjunction burstiness] 
+_calc_distributional_measures called
+[DEBUG:Conjunction burstiness] Step A: Input tokens=['While', 'I', 'was', 'outside', ',', 'it', 'started', 'raining', '.', 'But', 'luckily', ',', 'it', 'stopped', 'soon', 'and', 'I', 'did', 'not', 'get', 'very', 'wet', '.'], doc_len=19, lang_code=en
+[DEBUG:Conjunction burstiness] Step A: positions=[]
+[DEBUG:Conjunction burstiness] Step A: doc_len=19
+[DEBUG:Conjunction burstiness] Step D: Final Output = 0.0 (no positions)
+
+[FOCUSED DEBUG] Conjunction burstiness: burstiness=0.0
+
+[RESULT] Conjunction burstiness: -0.17301251602701542
+
+============================================================
+DEBUGGING: Determiner burstiness (Doc)
+Sentence: Some of the students passed the difficult exam yesterday
+Expected: -0.6, Actual: -0.333333333
+[DEBUG:DET burstiness] 
+_calc_burstiness called
+[DEBUG:DET burstiness] Step A: Input positions=[7], doc_len=9
+[DEBUG:DET burstiness] Step B: Gaps=[7]
+[DEBUG:DET burstiness] Step C: mean_gap=7.0, std_gap=0
+[DEBUG:DET burstiness] Step B: Internal gaps=[4 1]
+[DEBUG:DET burstiness] Step C: Internal gap std=1.5
+[DEBUG:DET burstiness] 
+_calc_zipf_variants called
+[DEBUG:DET burstiness] Step A: Input zipf_scores=[6.2, 7.4, 7.73, 5.25, 4.92, 7.73, 5.07, 4.26, 4.91], tokens=['Some', 'of', 'the', 'students', 'passed', 'the', 'difficult', 'exam', 'yesterday'], lang_code=en, doc_len=9
+[DEBUG:DET burstiness] Step B: frequencies=[2 1 1 1 1 1 1 1]
+[DEBUG:DET burstiness] Step B: freq_above_min=[2 1 1 1 1 1 1 1], n=8
+[DEBUG:DET burstiness] Step C: logs=[1.38629436 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718], sum_logs=6.238324625039507
+[DEBUG:DET burstiness] Step D: Zipf curve steepness = 2.282395591901301
+[DEBUG:DET burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:DET burstiness] 
+_calc_ratios called
+[DEBUG:DET burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [7], 'ADV': [], 'INTJ': [], 'VERB': [5], 'NOUN': [4, 8, 9], 'PROPN': [], 'ADP': [2], 'AUX': [], 'CCONJ': [], 'SCONJ': [], 'DET': [1, 3, 6], 'NUM': [], 'PART': [], 'PRON': []}
+[DEBUG:DET burstiness] 
+_calc_distributional_measures called
+[DEBUG:DET burstiness] Step A: Input tokens=['Some', 'of', 'the', 'students', 'passed', 'the', 'difficult', 'exam', 'yesterday'], doc_len=9, lang_code=en
+[DEBUG:DET burstiness] Step A: positions=[1, 3, 6]
+[DEBUG:DET burstiness] Step A: doc_len=9
+[DEBUG:DET burstiness] Step B: internal_gaps=[2 3]
+[DEBUG:DET burstiness] Step C: internal_std=0.5
+[DEBUG:DET burstiness] Step B: gaps=[1, np.int64(2), np.int64(3)]
+[DEBUG:DET burstiness] Step C: mean_gap=2.0, std_gap=1.0
+[DEBUG:DET burstiness] Step D: Final Output = -0.3333333333333333
+
+[FOCUSED DEBUG] DET burstiness: burstiness=-0.3333333333333333
+
+[RESULT] DET burstiness: -0.3333333333333333
+
+============================================================
+DEBUGGING: Numeral burstiness (Doc)
+Sentence: She has two dogs, three cats, and four birds as pets.
+Expected: -0.6, Actual: -0.644052247
+[DEBUG:NUM burstiness] 
+_calc_burstiness called
+[DEBUG:NUM burstiness] Step A: Input positions=[], doc_len=11
+[DEBUG:NUM burstiness] Step B: Gaps=[2]
+[DEBUG:NUM burstiness] Step C: mean_gap=2.0, std_gap=0
+[DEBUG:NUM burstiness] Step B: Internal gaps=[2 3 2]
+[DEBUG:NUM burstiness] Step C: Internal gap std=0.4714045207910317
+[DEBUG:NUM burstiness] 
+_calc_zipf_variants called
+[DEBUG:NUM burstiness] Step A: Input zipf_scores=[6.26, 6.37, 6.1, 4.77, 5.78, 4.46, 7.41, 5.53, 4.6, 6.77, 4.08], tokens=['She', 'has', 'two', 'dogs', ',', 'three', 'cats', ',', 'and', 'four', 'birds', 'as', 'pets', '.'], lang_code=en, doc_len=11
+[DEBUG:NUM burstiness] Step B: frequencies=[2 1 1 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:NUM burstiness] Step B: freq_above_min=[2 1 1 1 1 1 1 1 1 1 1 1 1], n=13
+[DEBUG:NUM burstiness] Step C: logs=[1.38629436 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718], sum_logs=9.704060527839234
+[DEBUG:NUM burstiness] Step D: Zipf curve steepness = 2.33964539511118
+[DEBUG:NUM burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:NUM burstiness] 
+_calc_ratios called
+[DEBUG:NUM burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [], 'ADV': [], 'INTJ': [], 'VERB': [2], 'NOUN': [4, 6, 9, 11], 'PROPN': [], 'ADP': [10], 'AUX': [], 'CCONJ': [7], 'SCONJ': [], 'DET': [], 'NUM': [3, 5, 8], 'PART': [], 'PRON': [1]}
+[DEBUG:NUM burstiness] 
+_calc_distributional_measures called
+[DEBUG:NUM burstiness] Step A: Input tokens=['She', 'has', 'two', 'dogs', ',', 'three', 'cats', ',', 'and', 'four', 'birds', 'as', 'pets', '.'], doc_len=11, lang_code=en
+[DEBUG:NUM burstiness] Step A: positions=[3, 5, 8]
+[DEBUG:NUM burstiness] Step A: doc_len=11
+[DEBUG:NUM burstiness] Step B: internal_gaps=[2 3]
+[DEBUG:NUM burstiness] Step C: internal_std=0.5
+[DEBUG:NUM burstiness] Step B: gaps=[3, np.int64(2), np.int64(3)]
+[DEBUG:NUM burstiness] Step C: mean_gap=2.6666666666666665, std_gap=0.5773502691896258
+[DEBUG:NUM burstiness] Step D: Final Output = -0.6440522471950485
+
+[FOCUSED DEBUG] NUM burstiness: burstiness=-0.6440522471950485
+
+[RESULT] NUM burstiness: -0.6440522471950485
+
+============================================================
+DEBUGGING: Particle burstiness (Doc)
+Sentence: I need to study, to exercise, and to relax.
+Expected: -0.6, Actual: -0.644052247
+[DEBUG:PART burstiness] 
+_calc_burstiness called
+[DEBUG:PART burstiness] Step A: Input positions=[], doc_len=9
+[DEBUG:PART burstiness] Step B: Internal gaps=[2 2 3]
+[DEBUG:PART burstiness] Step C: Internal gap std=0.4714045207910317
+[DEBUG:PART burstiness] Step B: Gaps=[2, np.int64(2), np.int64(2), np.int64(3)]
+[DEBUG:PART burstiness] Step C: mean_gap=2.25, std_gap=0.5
+[DEBUG:PART burstiness] 
+_calc_zipf_variants called
+[DEBUG:PART burstiness] Step A: Input zipf_scores=[7.09, 5.97, 7.43, 5.26, 7.43, 4.68, 7.41, 7.43, 4.29], tokens=['I', 'need', 'to', 'study', ',', 'to', 'exercise', ',', 'and', 'to', 'relax', '.'], lang_code=en, doc_len=9
+[DEBUG:PART burstiness] Step B: frequencies=[3 2 1 1 1 1 1 1 1]
+[DEBUG:PART burstiness] Step B: freq_above_min=[3 2 1 1 1 1 1 1 1], n=9
+[DEBUG:PART burstiness] Step C: logs=[1.79175947 1.38629436 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718], sum_logs=8.030084094267563
+[DEBUG:PART burstiness] Step D: Zipf curve steepness = 2.120785273771271
+[DEBUG:PART burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:PART burstiness] 
+_calc_ratios called
+[DEBUG:PART burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [], 'ADV': [], 'INTJ': [], 'VERB': [2, 4, 6, 9], 'NOUN': [], 'PROPN': [], 'ADP': [], 'AUX': [], 'CCONJ': [7], 'SCONJ': [], 'DET': [], 'NUM': [], 'PART': [3, 5, 8], 'PRON': [1]}
+[DEBUG:PART burstiness] 
+_calc_distributional_measures called
+[DEBUG:PART burstiness] Step A: Input tokens=['I', 'need', 'to', 'study', ',', 'to', 'exercise', ',', 'and', 'to', 'relax', '.'], doc_len=9, lang_code=en
+[DEBUG:PART burstiness] Step A: positions=[3, 5, 8]
+[DEBUG:PART burstiness] Step A: doc_len=9
+[DEBUG:PART burstiness] Step B: internal_gaps=[2 3]
+[DEBUG:PART burstiness] Step C: internal_std=0.5
+[DEBUG:PART burstiness] Step B: gaps=[3, np.int64(2), np.int64(3)]
+[DEBUG:PART burstiness] Step C: mean_gap=2.6666666666666665, std_gap=0.5773502691896258
+[DEBUG:PART burstiness] Step D: Final Output = -0.6440522471950485
+
+[FOCUSED DEBUG] PART burstiness: burstiness=-0.6440522471950485
+
+[RESULT] PART burstiness: -0.6440522471950485
+
+============================================================
+DEBUGGING: Pronoun burstiness (Doc)
+Sentence: She gave him the book, but he didn't read it.
+Expected: -0.527864045, Actual: -0.294117647
+[DEBUG:PRON burstiness] 
+_calc_burstiness called
+[DEBUG:PRON burstiness] Step A: Input positions=[], doc_len=11
+[DEBUG:PRON burstiness] Step B: Internal gaps=[8]
+[DEBUG:PRON burstiness] Step C: Internal gap std=0.0
+[DEBUG:PRON burstiness] Step B: Gaps=[5]
+[DEBUG:PRON burstiness] Step C: mean_gap=5.0, std_gap=0
+[DEBUG:PRON burstiness] 
+_calc_zipf_variants called
+[DEBUG:PRON burstiness] Step A: Input zipf_scores=[6.26, 5.25, 6.11, 7.73, 5.43, 6.63, 6.69, 5.96, 3.58, 5.54, 6.95], tokens=['She', 'gave', 'him', 'the', 'book', ',', 'but', 'he', 'did', "n't", 'read', 'it', '.'], lang_code=en, doc_len=11
+[DEBUG:PRON burstiness] Step B: frequencies=[1 1 1 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:PRON burstiness] Step B: freq_above_min=[1 1 1 1 1 1 1 1 1 1 1 1 1], n=13
+[DEBUG:PRON burstiness] Step C: logs=[0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718], sum_logs=9.010913347279288
+[DEBUG:PRON burstiness] Step D: Zipf curve steepness = 2.442695040888964
+[DEBUG:PRON burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:PRON burstiness] 
+_calc_ratios called
+[DEBUG:PRON burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [], 'ADV': [], 'INTJ': [], 'VERB': [2, 10], 'NOUN': [5], 'PROPN': [], 'ADP': [], 'AUX': [8], 'CCONJ': [6], 'SCONJ': [], 'DET': [4], 'NUM': [], 'PART': [9], 'PRON': [1, 3, 7, 11]}
+[DEBUG:PRON burstiness] 
+_calc_distributional_measures called
+[DEBUG:PRON burstiness] Step A: Input tokens=['She', 'gave', 'him', 'the', 'book', ',', 'but', 'he', 'did', "n't", 'read', 'it', '.'], doc_len=11, lang_code=en
+[DEBUG:PRON burstiness] Step A: positions=[1, 3, 7, 11]
+[DEBUG:PRON burstiness] Step A: doc_len=11
+[DEBUG:PRON burstiness] Step B: internal_gaps=[2 4 4]
+[DEBUG:PRON burstiness] Step C: internal_std=0.9428090415820634
+[DEBUG:PRON burstiness] Step B: gaps=[1, np.int64(2), np.int64(4), np.int64(4)]
+[DEBUG:PRON burstiness] Step C: mean_gap=2.75, std_gap=1.5
+[DEBUG:PRON burstiness] Step D: Final Output = -0.29411764705882354
+
+[FOCUSED DEBUG] PRON burstiness: burstiness=-0.29411764705882354
+
+[RESULT] PRON burstiness: -0.29411764705882354
+
+============================================================
+DEBUGGING: Grammatical item burstiness (Doc)
+Sentence: I can't believe how fast time is passing by.
+Expected: -0.396768886, Actual: -0.07179677
+[DEBUG:Grammatical item burstiness] 
+_calc_burstiness called
+[DEBUG:Grammatical item burstiness] Step A: Input positions=[6], doc_len=10
+[DEBUG:Grammatical item burstiness] Step B: Gaps=[6]
+[DEBUG:Grammatical item burstiness] Step C: mean_gap=6.0, std_gap=0
+[DEBUG:Grammatical item burstiness] Step B: Internal gaps=[5]
+[DEBUG:Grammatical item burstiness] Step C: Internal gap std=0.0
+[DEBUG:Grammatical item burstiness] 
+_calc_zipf_variants called
+[DEBUG:Grammatical item burstiness] Step A: Input zipf_scores=[7.09, 4.67, 3.58, 5.51, 6.24, 5.13, 6.29, 7.07, 4.63, 6.66], tokens=['I', 'ca', "n't", 'believe', 'how', 'fast', 'time', 'is', 'passing', 'by', '.'], lang_code=en, doc_len=10
+[DEBUG:Grammatical item burstiness] Step B: frequencies=[1 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Grammatical item burstiness] Step B: freq_above_min=[1 1 1 1 1 1 1 1 1 1 1], n=11
+[DEBUG:Grammatical item burstiness] Step C: logs=[0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=7.6246189861593985
+[DEBUG:Grammatical item burstiness] Step D: Zipf curve steepness = 2.4426950408889634
+[DEBUG:Grammatical item burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Grammatical item burstiness] 
+_calc_ratios called
+[DEBUG:Grammatical item burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [6], 'ADV': [5], 'INTJ': [], 'VERB': [4, 9], 'NOUN': [7], 'PROPN': [], 'ADP': [10], 'AUX': [2, 8], 'CCONJ': [], 'SCONJ': [], 'DET': [], 'NUM': [], 'PART': [3], 'PRON': [1]}
+[DEBUG:Grammatical item burstiness] 
+_calc_distributional_measures called
+[DEBUG:Grammatical item burstiness] Step A: Input tokens=['I', 'ca', "n't", 'believe', 'how', 'fast', 'time', 'is', 'passing', 'by', '.'], doc_len=10, lang_code=en
+[DEBUG:Grammatical item burstiness] Step A: positions=[]
+[DEBUG:Grammatical item burstiness] Step A: doc_len=10
+[DEBUG:Grammatical item burstiness] Step D: Final Output = 0.0 (no positions)
+
+[FOCUSED DEBUG] Grammatical item burstiness: burstiness=0.0
+
+[RESULT] Grammatical item burstiness: -0.07179676972449085
+
+============================================================
+DEBUGGING: Verb burstiness (Doc)
+Sentence: She is surely enjoying the party as she is dancing a lot.
+Expected: 0.007033856, Actual: -0.181460296
+[DEBUG:Verb_All burstiness] 
+_calc_burstiness called
+[DEBUG:Verb_All burstiness] Step A: Input positions=[], doc_len=12
+[DEBUG:Verb_All burstiness] Step B: Gaps=[3]
+[DEBUG:Verb_All burstiness] Step C: mean_gap=3.0, std_gap=0
+[DEBUG:Verb_All burstiness] Step B: Internal gaps=[6]
+[DEBUG:Verb_All burstiness] Step C: Internal gap std=0.0
+[DEBUG:Verb_All burstiness] 
+_calc_zipf_variants called
+[DEBUG:Verb_All burstiness] Step A: Input zipf_scores=[6.26, 7.07, 4.55, 4.42, 7.73, 5.49, 6.77, 6.26, 7.07, 4.5, 7.36, 5.61], tokens=['She', 'is', 'surely', 'enjoying', 'the', 'party', 'as', 'she', 'is', 'dancing', 'a', 'lot', '.'], lang_code=en, doc_len=12
+[DEBUG:Verb_All burstiness] Step B: frequencies=[2 1 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Verb_All burstiness] Step B: freq_above_min=[2 1 1 1 1 1 1 1 1 1 1 1], n=12
+[DEBUG:Verb_All burstiness] Step C: logs=[1.38629436 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=9.010913347279288
+[DEBUG:Verb_All burstiness] Step D: Zipf curve steepness = 2.33171849928212
+[DEBUG:Verb_All burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Verb_All burstiness] 
+_calc_ratios called
+[DEBUG:Verb_All burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [], 'ADV': [3], 'INTJ': [], 'VERB': [4, 10], 'NOUN': [6, 12], 'PROPN': [], 'ADP': [], 'AUX': [2, 9], 'CCONJ': [], 'SCONJ': [7], 'DET': [5, 11], 'NUM': [], 'PART': [], 'PRON': [1, 8]}
+[DEBUG:Verb_All burstiness] 
+_calc_distributional_measures called
+[DEBUG:Verb_All burstiness] Step A: Input tokens=['She', 'is', 'surely', 'enjoying', 'the', 'party', 'as', 'she', 'is', 'dancing', 'a', 'lot', '.'], doc_len=12, lang_code=en
+[DEBUG:Verb_All burstiness] Step A: positions=[]
+[DEBUG:Verb_All burstiness] Step A: doc_len=12
+[DEBUG:Verb_All burstiness] Step D: Final Output = 0.0 (no positions)
+
+[FOCUSED DEBUG] Verb_All burstiness: burstiness=0.0
+
+[RESULT] Verb_All burstiness: -0.18146029604788108
+
+============================================================
+DEBUGGING: Personal pronoun burstiness (Doc)
+Sentence: John told me he loves her more than himself.
+Expected: -0.331885771, Actual: -0.402993692
+[DEBUG:Personal pronoun burstiness] 
+_calc_burstiness called
+[DEBUG:Personal pronoun burstiness] Step A: Input positions=[7], doc_len=9
+[DEBUG:Personal pronoun burstiness] Step B: Gaps=[7]
+[DEBUG:Personal pronoun burstiness] Step C: mean_gap=7.0, std_gap=0
+[DEBUG:Personal pronoun burstiness] Step B: Internal gaps=[3]
+[DEBUG:Personal pronoun burstiness] Step C: Internal gap std=0.0
+[DEBUG:Personal pronoun burstiness] 
+_calc_zipf_variants called
+[DEBUG:Personal pronoun burstiness] Step A: Input zipf_scores=[5.38, 5.54, 6.48, 6.69, 4.66, 6.3, 6.36, 6.13, 5.25], tokens=['John', 'told', 'me', 'he', 'loves', 'her', 'more', 'than', 'himself', '.'], lang_code=en, doc_len=9
+[DEBUG:Personal pronoun burstiness] Step B: frequencies=[1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Personal pronoun burstiness] Step B: freq_above_min=[1 1 1 1 1 1 1 1 1 1], n=10
+[DEBUG:Personal pronoun burstiness] Step C: logs=[0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=6.931471805599453
+[DEBUG:Personal pronoun burstiness] Step D: Zipf curve steepness = 2.4426950408889634
+[DEBUG:Personal pronoun burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Personal pronoun burstiness] 
+_calc_ratios called
+[DEBUG:Personal pronoun burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [7], 'ADV': [], 'INTJ': [], 'VERB': [2, 5], 'NOUN': [], 'PROPN': [1], 'ADP': [8], 'AUX': [], 'CCONJ': [], 'SCONJ': [], 'DET': [], 'NUM': [], 'PART': [], 'PRON': [3, 4, 6, 9]}
+[DEBUG:Personal pronoun burstiness] 
+_calc_distributional_measures called
+[DEBUG:Personal pronoun burstiness] Step A: Input tokens=['John', 'told', 'me', 'he', 'loves', 'her', 'more', 'than', 'himself', '.'], doc_len=9, lang_code=en
+[DEBUG:Personal pronoun burstiness] Step A: positions=[]
+[DEBUG:Personal pronoun burstiness] Step A: doc_len=9
+[DEBUG:Personal pronoun burstiness] Step D: Final Output = 0.0 (no positions)
+
+[FOCUSED DEBUG] Personal pronoun burstiness: burstiness=0.0
+
+[RESULT] Personal pronoun burstiness: -0.4029936920835726
+
+============================================================
+DEBUGGING: First person pronoun burstiness (Doc)
+Sentence: I will bring my own food with me, you can bring yours.
+Expected: -0.714285714, Actual: -0.271599741
+[DEBUG:First person burstiness] 
+_calc_burstiness called
+[DEBUG:First person burstiness] Step A: Input positions=[5], doc_len=12
+[DEBUG:First person burstiness] Step B: Gaps=[5]
+[DEBUG:First person burstiness] Step C: mean_gap=5.0, std_gap=0
+[DEBUG:First person burstiness] Step B: Internal gaps=[8]
+[DEBUG:First person burstiness] Step C: Internal gap std=0.0
+[DEBUG:First person burstiness] 
+_calc_zipf_variants called
+[DEBUG:First person burstiness] Step A: Input zipf_scores=[7.09, 6.45, 5.27, 6.57, 5.74, 5.4, 6.85, 6.48, 6.98, 6.46, 5.27, 4.75], tokens=['I', 'will', 'bring', 'my', 'own', 'food', 'with', 'me', ',', 'you', 'can', 'bring', 'yours', '.'], lang_code=en, doc_len=12
+[DEBUG:First person burstiness] Step B: frequencies=[2 1 1 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:First person burstiness] Step B: freq_above_min=[2 1 1 1 1 1 1 1 1 1 1 1 1], n=13
+[DEBUG:First person burstiness] Step C: logs=[1.38629436 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718], sum_logs=9.704060527839234
+[DEBUG:First person burstiness] Step D: Zipf curve steepness = 2.33964539511118
+[DEBUG:First person burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:First person burstiness] 
+_calc_ratios called
+[DEBUG:First person burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [5], 'ADV': [], 'INTJ': [], 'VERB': [3, 11], 'NOUN': [6], 'PROPN': [], 'ADP': [7], 'AUX': [2, 10], 'CCONJ': [], 'SCONJ': [], 'DET': [], 'NUM': [], 'PART': [], 'PRON': [1, 4, 8, 9, 12]}
+[DEBUG:First person burstiness] 
+_calc_distributional_measures called
+[DEBUG:First person burstiness] Step A: Input tokens=['I', 'will', 'bring', 'my', 'own', 'food', 'with', 'me', ',', 'you', 'can', 'bring', 'yours', '.'], doc_len=12, lang_code=en
+[DEBUG:First person burstiness] Step A: positions=[]
+[DEBUG:First person burstiness] Step A: doc_len=12
+[DEBUG:First person burstiness] Step D: Final Output = 0.0 (no positions)
+
+[FOCUSED DEBUG] First person burstiness: burstiness=0.0
+
+[RESULT] First person burstiness: -0.2715997414117805
+
+============================================================
+DEBUGGING: Second person pronoun burstiness (Doc)
+Sentence: You should give yourself a break sometimes, you know?
+Expected: -0.714285714, Actual: -0.271599741
+[DEBUG:Second person burstiness] 
+_calc_burstiness called
+[DEBUG:Second person burstiness] Step A: Input positions=[], doc_len=9
+[DEBUG:Second person burstiness] Step B: Gaps=[7]
+[DEBUG:Second person burstiness] Step C: mean_gap=7.0, std_gap=0
+[DEBUG:Second person burstiness] Step B: Internal gaps=[6]
+[DEBUG:Second person burstiness] Step C: Internal gap std=0.0
+[DEBUG:Second person burstiness] 
+_calc_zipf_variants called
+[DEBUG:Second person burstiness] Step A: Input zipf_scores=[6.98, 5.99, 5.71, 5.31, 7.36, 5.18, 5.28, 6.98, 6.1], tokens=['You', 'should', 'give', 'yourself', 'a', 'break', 'sometimes', ',', 'you', 'know', '?'], lang_code=en, doc_len=9
+[DEBUG:Second person burstiness] Step B: frequencies=[1 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Second person burstiness] Step B: freq_above_min=[1 1 1 1 1 1 1 1 1 1 1], n=11
+[DEBUG:Second person burstiness] Step C: logs=[0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=7.6246189861593985
+[DEBUG:Second person burstiness] Step D: Zipf curve steepness = 2.4426950408889634
+[DEBUG:Second person burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Second person burstiness] 
+_calc_ratios called
+[DEBUG:Second person burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [], 'ADV': [7], 'INTJ': [], 'VERB': [3, 9], 'NOUN': [6], 'PROPN': [], 'ADP': [], 'AUX': [2], 'CCONJ': [], 'SCONJ': [], 'DET': [5], 'NUM': [], 'PART': [], 'PRON': [1, 4, 8]}
+[DEBUG:Second person burstiness] 
+_calc_distributional_measures called
+[DEBUG:Second person burstiness] Step A: Input tokens=['You', 'should', 'give', 'yourself', 'a', 'break', 'sometimes', ',', 'you', 'know', '?'], doc_len=9, lang_code=en
+[DEBUG:Second person burstiness] Step A: positions=[]
+[DEBUG:Second person burstiness] Step A: doc_len=9
+[DEBUG:Second person burstiness] Step D: Final Output = 0.0 (no positions)
+
+[FOCUSED DEBUG] Second person burstiness: burstiness=0.0
+
+[RESULT] Second person burstiness: -0.2715997414117805
+
+============================================================
+DEBUGGING: Third person pronoun burstiness (Doc)
+Sentence: They saw him at the park and waved hello. He waved back.
+Expected: 0.111111111, Actual: -0.018140683
+[DEBUG:Third person burstiness] 
+_calc_burstiness called
+[DEBUG:Third person burstiness] Step A: Input positions=[], doc_len=12
+[DEBUG:Third person burstiness] Step B: Gaps=[12]
+[DEBUG:Third person burstiness] Step C: mean_gap=12.0, std_gap=0
+[DEBUG:Third person burstiness] Step B: Internal gaps=[6 3]
+[DEBUG:Third person burstiness] Step C: Internal gap std=1.5
+[DEBUG:Third person burstiness] 
+_calc_zipf_variants called
+[DEBUG:Third person burstiness] Step A: Input zipf_scores=[6.5, 5.34, 6.11, 6.7, 7.73, 5.16, 7.41, 3.54, 4.72, 6.69, 3.54, 6.04], tokens=['They', 'saw', 'him', 'at', 'the', 'park', 'and', 'waved', 'hello', '.', 'He', 'waved', 'back', '.'], lang_code=en, doc_len=12
+[DEBUG:Third person burstiness] Step B: frequencies=[2 2 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Third person burstiness] Step B: freq_above_min=[2 2 1 1 1 1 1 1 1 1 1 1], n=12
+[DEBUG:Third person burstiness] Step C: logs=[1.38629436 1.38629436 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=9.704060527839234
+[DEBUG:Third person burstiness] Step D: Zipf curve steepness = 2.2365957493333974
+[DEBUG:Third person burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Third person burstiness] 
+_calc_ratios called
+[DEBUG:Third person burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [], 'ADV': [12], 'INTJ': [9], 'VERB': [2, 8, 11], 'NOUN': [6], 'PROPN': [], 'ADP': [4], 'AUX': [], 'CCONJ': [7], 'SCONJ': [], 'DET': [5], 'NUM': [], 'PART': [], 'PRON': [1, 3, 10]}
+[DEBUG:Third person burstiness] 
+_calc_distributional_measures called
+[DEBUG:Third person burstiness] Step A: Input tokens=['They', 'saw', 'him', 'at', 'the', 'park', 'and', 'waved', 'hello', '.', 'He', 'waved', 'back', '.'], doc_len=12, lang_code=en
+[DEBUG:Third person burstiness] Step A: positions=[]
+[DEBUG:Third person burstiness] Step A: doc_len=12
+[DEBUG:Third person burstiness] Step D: Final Output = 0.0 (no positions)
+
+[FOCUSED DEBUG] Third person burstiness: burstiness=0.0
+
+[RESULT] Third person burstiness: -0.018140682877271525
+
+============================================================
+DEBUGGING: Demonstrative burstiness (Doc)
+Sentence: These are the best apples those farmers had. But that one is rotten though.
+Expected: -0.777777778, Actual: -0.231148197
+[DEBUG:Demonstrative burstiness] 
+_calc_burstiness called
+[DEBUG:Demonstrative burstiness] Step A: Input positions=[4, 13], doc_len=14
+[DEBUG:Demonstrative burstiness] Step B: Internal gaps=[9]
+[DEBUG:Demonstrative burstiness] Step C: Internal gap std=0.0
+[DEBUG:Demonstrative burstiness] Step B: Gaps=[14]
+[DEBUG:Demonstrative burstiness] Step C: mean_gap=14.0, std_gap=0
+[DEBUG:Demonstrative burstiness] 
+_calc_zipf_variants called
+[DEBUG:Demonstrative burstiness] Step A: Input zipf_scores=[6.04, 6.74, 7.73, 5.84, 3.96, 5.9, 4.43, 6.33, 6.63, 7.01, 6.47, 7.07, 3.81, 5.5], tokens=['These', 'are', 'the', 'best', 'apples', 'those', 'farmers', 'had', '.', 'But', 'that', 'one', 'is', 'rotten', 'though', '.'], lang_code=en, doc_len=14
+[DEBUG:Demonstrative burstiness] Step B: frequencies=[2 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Demonstrative burstiness] Step B: freq_above_min=[2 1 1 1 1 1 1 1 1 1 1 1 1 1 1], n=15
+[DEBUG:Demonstrative burstiness] Step C: logs=[1.38629436 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718], sum_logs=11.090354888959125
+[DEBUG:Demonstrative burstiness] Step D: Zipf curve steepness = 2.352526600833403
+[DEBUG:Demonstrative burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Demonstrative burstiness] 
+_calc_ratios called
+[DEBUG:Demonstrative burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [4, 13], 'ADV': [14], 'INTJ': [], 'VERB': [8], 'NOUN': [5, 7, 11], 'PROPN': [], 'ADP': [], 'AUX': [2, 12], 'CCONJ': [9], 'SCONJ': [], 'DET': [3, 6, 10], 'NUM': [], 'PART': [], 'PRON': [1]}
+[DEBUG:Demonstrative burstiness] 
+_calc_distributional_measures called
+[DEBUG:Demonstrative burstiness] Step A: Input tokens=['These', 'are', 'the', 'best', 'apples', 'those', 'farmers', 'had', '.', 'But', 'that', 'one', 'is', 'rotten', 'though', '.'], doc_len=14, lang_code=en
+[DEBUG:Demonstrative burstiness] Step A: positions=[]
+[DEBUG:Demonstrative burstiness] Step A: doc_len=14
+[DEBUG:Demonstrative burstiness] Step D: Final Output = 0.0 (no positions)
+
+[FOCUSED DEBUG] Demonstrative burstiness: burstiness=0.0
+
+[RESULT] Demonstrative burstiness: -0.23114819724642674
+
+[SKIP] No mapping for measure 'Plural word burstiness (Doc)'
+
+============================================================
+DEBUGGING: Indefinite word burstiness (Doc)
+Sentence: At a certain moment, an apple fell from a tree on the ground.
+Expected: -0.714285714, Actual: -0.5
+[DEBUG:Indefinite burstiness] 
+_calc_burstiness called
+[DEBUG:Indefinite burstiness] Step A: Input positions=[3], doc_len=13
+[DEBUG:Indefinite burstiness] Step B: Gaps=[3]
+[DEBUG:Indefinite burstiness] Step C: mean_gap=3.0, std_gap=0
+[DEBUG:Indefinite burstiness] Step B: Internal gaps=[2 4 3]
+[DEBUG:Indefinite burstiness] Step C: Internal gap std=0.816496580927726
+[DEBUG:Indefinite burstiness] 
+_calc_zipf_variants called
+[DEBUG:Indefinite burstiness] Step A: Input zipf_scores=[6.7, 7.36, 5.16, 5.24, 6.53, 4.76, 4.85, 6.63, 7.36, 4.85, 6.91, 7.73, 5.15], tokens=['At', 'a', 'certain', 'moment', ',', 'an', 'apple', 'fell', 'from', 'a', 'tree', 'on', 'the', 'ground', '.'], lang_code=en, doc_len=13
+[DEBUG:Indefinite burstiness] Step B: frequencies=[2 1 1 1 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Indefinite burstiness] Step B: freq_above_min=[2 1 1 1 1 1 1 1 1 1 1 1 1 1], n=14
+[DEBUG:Indefinite burstiness] Step C: logs=[1.38629436 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718], sum_logs=10.39720770839918
+[DEBUG:Indefinite burstiness] Step D: Zipf curve steepness = 2.346515371496366
+[DEBUG:Indefinite burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Indefinite burstiness] 
+_calc_ratios called
+[DEBUG:Indefinite burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [3], 'ADV': [], 'INTJ': [], 'VERB': [7], 'NOUN': [4, 6, 10, 13], 'PROPN': [], 'ADP': [1, 8, 11], 'AUX': [], 'CCONJ': [], 'SCONJ': [], 'DET': [2, 5, 9, 12], 'NUM': [], 'PART': [], 'PRON': []}
+[DEBUG:Indefinite burstiness] 
+_calc_distributional_measures called
+[DEBUG:Indefinite burstiness] Step A: Input tokens=['At', 'a', 'certain', 'moment', ',', 'an', 'apple', 'fell', 'from', 'a', 'tree', 'on', 'the', 'ground', '.'], doc_len=13, lang_code=en
+[DEBUG:Indefinite burstiness] Step A: positions=[]
+[DEBUG:Indefinite burstiness] Step A: doc_len=13
+[DEBUG:Indefinite burstiness] Step D: Final Output = 0.0 (no positions)
+
+[FOCUSED DEBUG] Indefinite burstiness: burstiness=0.0
+
+[RESULT] Indefinite burstiness: -0.5000000000000001
+
+============================================================
+DEBUGGING: Definite word burstiness (Doc)
+Sentence: The dog barked at the mailman delivering the package.
+Expected: -0.714285714, Actual: -0.271599741
+[DEBUG:Definite burstiness] 
+_calc_burstiness called
+[DEBUG:Definite burstiness] Step A: Input positions=[], doc_len=9
+[DEBUG:Definite burstiness] Step B: Internal gaps=[4]
+[DEBUG:Definite burstiness] Step C: Internal gap std=0.0
+[DEBUG:Definite burstiness] Step B: Gaps=[2, np.int64(4), np.int64(3)]
+[DEBUG:Definite burstiness] Step C: mean_gap=3.0, std_gap=1.0
+[DEBUG:Definite burstiness] 
+_calc_zipf_variants called
+[DEBUG:Definite burstiness] Step A: Input zipf_scores=[7.73, 5.1, 6.7, 7.73, 4.09, 7.73, 4.46], tokens=['The', 'dog', 'barked', 'at', 'the', 'mailman', 'delivering', 'the', 'package', '.'], lang_code=en, doc_len=9
+[DEBUG:Definite burstiness] Step B: frequencies=[2 1 1 1 1 1 1 1 1]
+[DEBUG:Definite burstiness] Step B: freq_above_min=[2 1 1 1 1 1 1 1 1], n=9
+[DEBUG:Definite burstiness] Step C: logs=[1.38629436 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718], sum_logs=6.931471805599452
+[DEBUG:Definite burstiness] Step D: Zipf curve steepness = 2.2984255368000674
+[DEBUG:Definite burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Definite burstiness] 
+_calc_ratios called
+[DEBUG:Definite burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [], 'ADV': [], 'INTJ': [], 'VERB': [3, 7], 'NOUN': [2, 6, 9], 'PROPN': [], 'ADP': [4], 'AUX': [], 'CCONJ': [], 'SCONJ': [], 'DET': [1, 5, 8], 'NUM': [], 'PART': [], 'PRON': []}
+[DEBUG:Definite burstiness] 
+_calc_distributional_measures called
+[DEBUG:Definite burstiness] Step A: Input tokens=['The', 'dog', 'barked', 'at', 'the', 'mailman', 'delivering', 'the', 'package', '.'], doc_len=9, lang_code=en
+[DEBUG:Definite burstiness] Step A: positions=[]
+[DEBUG:Definite burstiness] Step A: doc_len=9
+[DEBUG:Definite burstiness] Step D: Final Output = 0.0 (no positions)
+
+[FOCUSED DEBUG] Definite burstiness: burstiness=0.0
+
+[RESULT] Definite burstiness: -0.2715997414117804
+
+============================================================
+DEBUGGING: Infinitive verb burstiness (Doc)
+Sentence: I need to study, to exercise, and to relax.
+Expected: -0.6, Actual: -0.5
+[DEBUG:Infinitive burstiness] 
+_calc_burstiness called
+[DEBUG:Infinitive burstiness] Step A: Input positions=[], doc_len=9
+[DEBUG:Infinitive burstiness] Step B: Internal gaps=[2 2 3]
+[DEBUG:Infinitive burstiness] Step C: Internal gap std=0.4714045207910317
+[DEBUG:Infinitive burstiness] Step B: Gaps=[2, np.int64(2), np.int64(2), np.int64(3)]
+[DEBUG:Infinitive burstiness] Step C: mean_gap=2.25, std_gap=0.5
+[DEBUG:Infinitive burstiness] 
+_calc_zipf_variants called
+[DEBUG:Infinitive burstiness] Step A: Input zipf_scores=[7.09, 5.97, 7.43, 5.26, 7.43, 4.68, 7.41, 7.43, 4.29], tokens=['I', 'need', 'to', 'study', ',', 'to', 'exercise', ',', 'and', 'to', 'relax', '.'], lang_code=en, doc_len=9
+[DEBUG:Infinitive burstiness] Step B: frequencies=[3 2 1 1 1 1 1 1 1]
+[DEBUG:Infinitive burstiness] Step B: freq_above_min=[3 2 1 1 1 1 1 1 1], n=9
+[DEBUG:Infinitive burstiness] Step C: logs=[1.79175947 1.38629436 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718], sum_logs=8.030084094267563
+[DEBUG:Infinitive burstiness] Step D: Zipf curve steepness = 2.120785273771271
+[DEBUG:Infinitive burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Infinitive burstiness] 
+_calc_ratios called
+[DEBUG:Infinitive burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [], 'ADV': [], 'INTJ': [], 'VERB': [2, 4, 6, 9], 'NOUN': [], 'PROPN': [], 'ADP': [], 'AUX': [], 'CCONJ': [7], 'SCONJ': [], 'DET': [], 'NUM': [], 'PART': [3, 5, 8], 'PRON': [1]}
+[DEBUG:Infinitive burstiness] 
+_calc_distributional_measures called
+[DEBUG:Infinitive burstiness] Step A: Input tokens=['I', 'need', 'to', 'study', ',', 'to', 'exercise', ',', 'and', 'to', 'relax', '.'], doc_len=9, lang_code=en
+[DEBUG:Infinitive burstiness] Step A: positions=[]
+[DEBUG:Infinitive burstiness] Step A: doc_len=9
+[DEBUG:Infinitive burstiness] Step D: Final Output = 0.0 (no positions)
+
+[FOCUSED DEBUG] Infinitive burstiness: burstiness=0.0
+
+[RESULT] Infinitive burstiness: -0.5000000000000001
+
+============================================================
+DEBUGGING: Verbal adjective burstiness (Doc)
+Sentence: She is always singing, dancing, and playing music.
+Expected: -0.333333333, Actual: -0.208712153
+[DEBUG:Verbal adjective burstiness] 
+_calc_burstiness called
+[DEBUG:Verbal adjective burstiness] Step A: Input positions=[], doc_len=8
+[DEBUG:Verbal adjective burstiness] Step B: Gaps=[3]
+[DEBUG:Verbal adjective burstiness] Step C: mean_gap=3.0, std_gap=0
+[DEBUG:Verbal adjective burstiness] Step B: Internal gaps=[1 2]
+[DEBUG:Verbal adjective burstiness] Step C: Internal gap std=0.5
+[DEBUG:Verbal adjective burstiness] 
+_calc_zipf_variants called
+[DEBUG:Verbal adjective burstiness] Step A: Input zipf_scores=[6.26, 7.07, 5.76, 4.59, 4.5, 7.41, 5.37, 5.52], tokens=['She', 'is', 'always', 'singing', ',', 'dancing', ',', 'and', 'playing', 'music', '.'], lang_code=en, doc_len=8
+[DEBUG:Verbal adjective burstiness] Step B: frequencies=[2 1 1 1 1 1 1 1 1 1]
+[DEBUG:Verbal adjective burstiness] Step B: freq_above_min=[2 1 1 1 1 1 1 1 1 1], n=10
+[DEBUG:Verbal adjective burstiness] Step C: logs=[1.38629436 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=7.624618986159398
+[DEBUG:Verbal adjective burstiness] Step D: Zipf curve steepness = 2.311540946262694
+[DEBUG:Verbal adjective burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Verbal adjective burstiness] 
+_calc_ratios called
+[DEBUG:Verbal adjective burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [], 'ADV': [3], 'INTJ': [], 'VERB': [4, 5, 7], 'NOUN': [8], 'PROPN': [], 'ADP': [], 'AUX': [2], 'CCONJ': [6], 'SCONJ': [], 'DET': [], 'NUM': [], 'PART': [], 'PRON': [1]}
+[DEBUG:Verbal adjective burstiness] 
+_calc_distributional_measures called
+[DEBUG:Verbal adjective burstiness] Step A: Input tokens=['She', 'is', 'always', 'singing', ',', 'dancing', ',', 'and', 'playing', 'music', '.'], doc_len=8, lang_code=en
+[DEBUG:Verbal adjective burstiness] Step A: positions=[]
+[DEBUG:Verbal adjective burstiness] Step A: doc_len=8
+[DEBUG:Verbal adjective burstiness] Step D: Final Output = 0.0 (no positions)
+
+[FOCUSED DEBUG] Verbal adjective burstiness: burstiness=0.0
+
+[RESULT] Verbal adjective burstiness: -0.20871215252208003
+
+============================================================
+DEBUGGING: Past tense burstiness (Doc)
+Sentence: She walked, talked, and laughed all night long.
+Expected: -0.333333333, Actual: -0.485431451
+[DEBUG:Past burstiness] 
+_calc_burstiness called
+[DEBUG:Past burstiness] Step A: Input positions=[], doc_len=8
+[DEBUG:Past burstiness] Step B: Gaps=[8]
+[DEBUG:Past burstiness] Step C: mean_gap=8.0, std_gap=0
+[DEBUG:Past burstiness] Step B: Internal gaps=[1 2]
+[DEBUG:Past burstiness] Step C: Internal gap std=0.5
+[DEBUG:Past burstiness] 
+_calc_zipf_variants called
+[DEBUG:Past burstiness] Step A: Input zipf_scores=[6.26, 4.67, 4.62, 7.41, 4.24, 6.52, 5.61, 5.81], tokens=['She', 'walked', ',', 'talked', ',', 'and', 'laughed', 'all', 'night', 'long', '.'], lang_code=en, doc_len=8
+[DEBUG:Past burstiness] Step B: frequencies=[2 1 1 1 1 1 1 1 1 1]
+[DEBUG:Past burstiness] Step B: freq_above_min=[2 1 1 1 1 1 1 1 1 1], n=10
+[DEBUG:Past burstiness] Step C: logs=[1.38629436 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=7.624618986159398
+[DEBUG:Past burstiness] Step D: Zipf curve steepness = 2.311540946262694
+[DEBUG:Past burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Past burstiness] 
+_calc_ratios called
+[DEBUG:Past burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [], 'ADV': [8], 'INTJ': [], 'VERB': [2, 3, 5], 'NOUN': [7], 'PROPN': [], 'ADP': [], 'AUX': [], 'CCONJ': [4], 'SCONJ': [], 'DET': [6], 'NUM': [], 'PART': [], 'PRON': [1]}
+[DEBUG:Past burstiness] 
+_calc_distributional_measures called
+[DEBUG:Past burstiness] Step A: Input tokens=['She', 'walked', ',', 'talked', ',', 'and', 'laughed', 'all', 'night', 'long', '.'], doc_len=8, lang_code=en
+[DEBUG:Past burstiness] Step A: positions=[]
+[DEBUG:Past burstiness] Step A: doc_len=8
+[DEBUG:Past burstiness] Step D: Final Output = 0.0 (no positions)
+
+[FOCUSED DEBUG] Past burstiness: burstiness=0.0
+
+[RESULT] Past burstiness: -0.4854314511050559
+
+============================================================
+DEBUGGING: Present tense burstiness (Doc)
+Sentence: I write, eat, and sleep every day without fail.
+Expected: -0.333333333, Actual: -0.485431451
+[DEBUG:Present burstiness] 
+_calc_burstiness called
+[DEBUG:Present burstiness] Step A: Input positions=[], doc_len=9
+[DEBUG:Present burstiness] Step B: Internal gaps=[1 2]
+[DEBUG:Present burstiness] Step C: Internal gap std=0.5
+[DEBUG:Present burstiness] Step B: Gaps=[2, np.int64(1), np.int64(2)]
+[DEBUG:Present burstiness] Step C: mean_gap=1.6666666666666667, std_gap=0.5773502691896257
+[DEBUG:Present burstiness] 
+_calc_zipf_variants called
+[DEBUG:Present burstiness] Step A: Input zipf_scores=[7.09, 5.03, 5.13, 7.41, 5.05, 5.79, 5.95, 5.69, 4.61], tokens=['I', 'write', ',', 'eat', ',', 'and', 'sleep', 'every', 'day', 'without', 'fail', '.'], lang_code=en, doc_len=9
+[DEBUG:Present burstiness] Step B: frequencies=[2 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Present burstiness] Step B: freq_above_min=[2 1 1 1 1 1 1 1 1 1 1], n=11
+[DEBUG:Present burstiness] Step C: logs=[1.38629436 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=8.317766166719343
+[DEBUG:Present burstiness] Step D: Zipf curve steepness = 2.322470454148217
+[DEBUG:Present burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Present burstiness] 
+_calc_ratios called
+[DEBUG:Present burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [], 'ADV': [], 'INTJ': [], 'VERB': [2, 3, 5], 'NOUN': [7, 9], 'PROPN': [], 'ADP': [8], 'AUX': [], 'CCONJ': [4], 'SCONJ': [], 'DET': [6], 'NUM': [], 'PART': [], 'PRON': [1]}
+[DEBUG:Present burstiness] 
+_calc_distributional_measures called
+[DEBUG:Present burstiness] Step A: Input tokens=['I', 'write', ',', 'eat', ',', 'and', 'sleep', 'every', 'day', 'without', 'fail', '.'], doc_len=9, lang_code=en
+[DEBUG:Present burstiness] Step A: positions=[]
+[DEBUG:Present burstiness] Step A: doc_len=9
+[DEBUG:Present burstiness] Step D: Final Output = 0.0 (no positions)
+
+[FOCUSED DEBUG] Present burstiness: burstiness=0.0
+
+[RESULT] Present burstiness: -0.4854314511050559
+
+============================================================
+DEBUGGING: Passive voice burstiness (Doc)
+Sentence: The book was written by the famous author. It was later adapted into a successful movie. Both the movie and book were awarded several prizes.
+Expected: -0.684210526, Actual: -0.371674467
+[DEBUG:Passive burstiness] 
+_calc_burstiness called
+[DEBUG:Passive burstiness] Step A: Input positions=[7, 15, 24], doc_len=25
+[DEBUG:Passive burstiness] Step B: Internal gaps=[8 9]
+[DEBUG:Passive burstiness] Step C: Internal gap std=0.5
+[DEBUG:Passive burstiness] Step B: Gaps=[7, np.int64(8), np.int64(9)]
+[DEBUG:Passive burstiness] Step C: mean_gap=8.0, std_gap=1.0
+[DEBUG:Passive burstiness] 
+_calc_zipf_variants called
+[DEBUG:Passive burstiness] Step A: Input zipf_scores=[7.73, 5.43, 6.82, 5.09, 6.66, 7.73, 4.84, 4.95, 6.95, 6.82, 5.49, 4.17, 6.11, 7.36, 4.94, 5.16, 5.79, 7.73, 5.16, 7.41, 5.43, 6.34, 4.35, 5.39, 4.01], tokens=['The', 'book', 'was', 'written', 'by', 'the', 'famous', 'author', '.', 'It', 'was', 'later', 'adapted', 'into', 'a', 'successful', 'movie', '.', 'Both', 'the', 'movie', 'and', 'book', 'were', 'awarded', 'several', 'prizes', '.'], lang_code=en, doc_len=25
+[DEBUG:Passive burstiness] Step B: frequencies=[3 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Passive burstiness] Step B: freq_above_min=[3 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1], n=22
+[DEBUG:Passive burstiness] Step C: logs=[1.79175947 1.38629436 1.38629436 1.38629436 1.38629436 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=19.12043898322668
+[DEBUG:Passive burstiness] Step D: Zipf curve steepness = 2.150601197979785
+[DEBUG:Passive burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Passive burstiness] 
+_calc_ratios called
+[DEBUG:Passive burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [7, 15, 24], 'ADV': [11], 'INTJ': [], 'VERB': [4, 12, 23], 'NOUN': [2, 8, 16, 19, 21, 25], 'PROPN': [], 'ADP': [5, 13], 'AUX': [3, 10, 22], 'CCONJ': [17, 20], 'SCONJ': [], 'DET': [1, 6, 14, 18], 'NUM': [], 'PART': [], 'PRON': [9]}
+[DEBUG:Passive burstiness] 
+_calc_distributional_measures called
+[DEBUG:Passive burstiness] Step A: Input tokens=['The', 'book', 'was', 'written', 'by', 'the', 'famous', 'author', '.', 'It', 'was', 'later', 'adapted', 'into', 'a', 'successful', 'movie', '.', 'Both', 'the', 'movie', 'and', 'book', 'were', 'awarded', 'several', 'prizes', '.'], doc_len=25, lang_code=en
+[DEBUG:Passive burstiness] Step A: positions=[]
+[DEBUG:Passive burstiness] Step A: doc_len=25
+[DEBUG:Passive burstiness] Step D: Final Output = 0.0 (no positions)
+
+[FOCUSED DEBUG] Passive burstiness: burstiness=0.0
+
+[RESULT] Passive burstiness: -0.3716744673894115
+
+[SKIP] No mapping for measure 'Frequent word burstiness (Doc)'
+
+============================================================
+DEBUGGING: Unknown word burstiness (Doc)
+Sentence: The glabrous creature crawls nimbly through the underbrush.
+Expected: -1, Actual: -0.420204103
+[DEBUG:Unknown word burstiness] 
+_calc_burstiness called
+[DEBUG:Unknown word burstiness] Step A: Input positions=[2], doc_len=8
+[DEBUG:Unknown word burstiness] Step B: Gaps=[2]
+[DEBUG:Unknown word burstiness] Step C: mean_gap=2.0, std_gap=0
+[DEBUG:Unknown word burstiness] Step B: Internal gaps=[5]
+[DEBUG:Unknown word burstiness] Step C: Internal gap std=0.0
+[DEBUG:Unknown word burstiness] 
+_calc_zipf_variants called
+[DEBUG:Unknown word burstiness] Step A: Input zipf_scores=[7.73, 4.16, 5.87, 7.73], tokens=['The', 'glabrous', 'creature', 'crawls', 'nimbly', 'through', 'the', 'underbrush', '.'], lang_code=en, doc_len=8
+[DEBUG:Unknown word burstiness] Step B: frequencies=[1 1 1 1 1 1 1 1 1]
+[DEBUG:Unknown word burstiness] Step B: freq_above_min=[1 1 1 1 1 1 1 1 1], n=9
+[DEBUG:Unknown word burstiness] Step C: logs=[0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718], sum_logs=6.238324625039508
+[DEBUG:Unknown word burstiness] Step D: Zipf curve steepness = 2.4426950408889634
+[DEBUG:Unknown word burstiness] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Unknown word burstiness] 
+_calc_ratios called
+[DEBUG:Unknown word burstiness] Step A: Input pos_map_lower_non_punct={'ADJ': [2], 'ADV': [5], 'INTJ': [], 'VERB': [4], 'NOUN': [3, 8], 'PROPN': [], 'ADP': [6], 'AUX': [], 'CCONJ': [], 'SCONJ': [], 'DET': [1, 7], 'NUM': [], 'PART': [], 'PRON': []}
+[DEBUG:Unknown word burstiness] 
+_calc_distributional_measures called
+[DEBUG:Unknown word burstiness] Step A: Input tokens=['The', 'glabrous', 'creature', 'crawls', 'nimbly', 'through', 'the', 'underbrush', '.'], doc_len=8, lang_code=en
+[DEBUG:Unknown word burstiness] Step A: positions=[]
+[DEBUG:Unknown word burstiness] Step A: doc_len=8
+[DEBUG:Unknown word burstiness] Step D: Final Output = 0.0 (no positions)
+
+[FOCUSED DEBUG] Unknown word burstiness: burstiness=0.0
+
+[RESULT] Unknown word burstiness: -0.4202041028867287
+
+[SKIP] No mapping for measure 'Lexical verb concentration (Doc)'
+
+[SKIP] No mapping for measure 'Noun concentration (Doc)'
+
+[SKIP] No mapping for measure 'Lexical item concentration (Doc)'
+
+[SKIP] No mapping for measure 'Particle concentration (Doc)'
+
+============================================================
+DEBUGGING: Grammatical item concentration (Doc)
+Sentence: I can't believe how fast time is passing by.
+Expected: -0.333333333, Actual: -0.2
+[DEBUG:Grammatical item concentration] 
+_calc_burstiness called
+[DEBUG:Grammatical item concentration] Step A: Input positions=[6], doc_len=10
+[DEBUG:Grammatical item concentration] Step B: Gaps=[6]
+[DEBUG:Grammatical item concentration] Step C: mean_gap=6.0, std_gap=0
+[DEBUG:Grammatical item concentration] Step B: Internal gaps=[5]
+[DEBUG:Grammatical item concentration] Step C: Internal gap std=0.0
+[DEBUG:Grammatical item concentration] 
+_calc_zipf_variants called
+[DEBUG:Grammatical item concentration] Step A: Input zipf_scores=[7.09, 4.67, 3.58, 5.51, 6.24, 5.13, 6.29, 7.07, 4.63, 6.66], tokens=['I', 'ca', "n't", 'believe', 'how', 'fast', 'time', 'is', 'passing', 'by', '.'], lang_code=en, doc_len=10
+[DEBUG:Grammatical item concentration] Step B: frequencies=[1 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Grammatical item concentration] Step B: freq_above_min=[1 1 1 1 1 1 1 1 1 1 1], n=11
+[DEBUG:Grammatical item concentration] Step C: logs=[0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=7.6246189861593985
+[DEBUG:Grammatical item concentration] Step D: Zipf curve steepness = 2.4426950408889634
+[DEBUG:Grammatical item concentration] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Grammatical item concentration] 
+_calc_ratios called
+[DEBUG:Grammatical item concentration] Step A: Input pos_map_lower_non_punct={'ADJ': [6], 'ADV': [5], 'INTJ': [], 'VERB': [4, 9], 'NOUN': [7], 'PROPN': [], 'ADP': [10], 'AUX': [2, 8], 'CCONJ': [], 'SCONJ': [], 'DET': [], 'NUM': [], 'PART': [3], 'PRON': [1]}
+[DEBUG:Grammatical item concentration] 
+_calc_distributional_measures called
+[DEBUG:Grammatical item concentration] Step A: Input tokens=['I', 'ca', "n't", 'believe', 'how', 'fast', 'time', 'is', 'passing', 'by', '.'], doc_len=10, lang_code=en
+[DEBUG:Grammatical item concentration] Step A: positions=[]
+[DEBUG:Grammatical item concentration] Step A: doc_len=10
+[DEBUG:Grammatical item concentration] Step B: first_half=0
+[DEBUG:Grammatical item concentration] Step B: second_half=0
+[DEBUG:Grammatical item concentration] Step B: total=0
+[DEBUG:Grammatical item concentration] Step B: midpoint=5.0
+[DEBUG:Grammatical item concentration] Step C: concentration=0
+[DEBUG:Grammatical item concentration] Step C: avg_pos=0
+[DEBUG:Grammatical item concentration] Step C: pos_sd=0.0
+[DEBUG:Grammatical item concentration] Step D: concentration=0
+[DEBUG:Grammatical item concentration] Step D: avg_pos=0
+[DEBUG:Grammatical item concentration] Step D: pos_sd=0.0
+
+[FOCUSED DEBUG] Grammatical item concentration: {'concentration': 0, 'avg_pos': 0, 'pos_sd': 0.0}
+
+[RESULT] Grammatical item concentration: -0.2
+
+[SKIP] No mapping for measure 'Definite word concentration (Doc)'
+
+[SKIP] No mapping for measure 'Present tense concentration (Doc)'
+
+[SKIP] No mapping for measure 'Unknown word concentration (Doc)'
+
+[SKIP] No mapping for measure 'Unknown word avg position (Doc)'
+
+============================================================
+DEBUGGING: Grammatical item position SD (Doc)
+Sentence: I can't believe how fast time is passing by.
+Expected: 0.393883273, Actual: 0.440258061
+[DEBUG:Grammatical item position SD] 
+_calc_burstiness called
+[DEBUG:Grammatical item position SD] Step A: Input positions=[6], doc_len=10
+[DEBUG:Grammatical item position SD] Step B: Gaps=[6]
+[DEBUG:Grammatical item position SD] Step C: mean_gap=6.0, std_gap=0
+[DEBUG:Grammatical item position SD] Step B: Internal gaps=[5]
+[DEBUG:Grammatical item position SD] Step C: Internal gap std=0.0
+[DEBUG:Grammatical item position SD] 
+_calc_zipf_variants called
+[DEBUG:Grammatical item position SD] Step A: Input zipf_scores=[7.09, 4.67, 3.58, 5.51, 6.24, 5.13, 6.29, 7.07, 4.63, 6.66], tokens=['I', 'ca', "n't", 'believe', 'how', 'fast', 'time', 'is', 'passing', 'by', '.'], lang_code=en, doc_len=10
+[DEBUG:Grammatical item position SD] Step B: frequencies=[1 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Grammatical item position SD] Step B: freq_above_min=[1 1 1 1 1 1 1 1 1 1 1], n=11
+[DEBUG:Grammatical item position SD] Step C: logs=[0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=7.6246189861593985
+[DEBUG:Grammatical item position SD] Step D: Zipf curve steepness = 2.4426950408889634
+[DEBUG:Grammatical item position SD] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Grammatical item position SD] 
+_calc_ratios called
+[DEBUG:Grammatical item position SD] Step A: Input pos_map_lower_non_punct={'ADJ': [6], 'ADV': [5], 'INTJ': [], 'VERB': [4, 9], 'NOUN': [7], 'PROPN': [], 'ADP': [10], 'AUX': [2, 8], 'CCONJ': [], 'SCONJ': [], 'DET': [], 'NUM': [], 'PART': [3], 'PRON': [1]}
+[DEBUG:Grammatical item position SD] 
+_calc_distributional_measures called
+[DEBUG:Grammatical item position SD] Step A: Input tokens=['I', 'ca', "n't", 'believe', 'how', 'fast', 'time', 'is', 'passing', 'by', '.'], doc_len=10, lang_code=en
+[DEBUG:Grammatical item position SD] Step A: positions=[]
+[DEBUG:Grammatical item position SD] Step A: doc_len=10
+[DEBUG:Grammatical item position SD] Step B: first_half=0
+[DEBUG:Grammatical item position SD] Step B: second_half=0
+[DEBUG:Grammatical item position SD] Step B: total=0
+[DEBUG:Grammatical item position SD] Step B: midpoint=5.0
+[DEBUG:Grammatical item position SD] Step C: concentration=0
+[DEBUG:Grammatical item position SD] Step C: avg_pos=0
+[DEBUG:Grammatical item position SD] Step C: pos_sd=0.0
+[DEBUG:Grammatical item position SD] Step D: concentration=0
+[DEBUG:Grammatical item position SD] Step D: avg_pos=0
+[DEBUG:Grammatical item position SD] Step D: pos_sd=0.0
+
+[FOCUSED DEBUG] Grammatical item position SD: {'concentration': 0, 'avg_pos': 0, 'pos_sd': 0.0}
+
+[RESULT] Grammatical item position SD: 0.4402580612479767
+
+[SKIP] No mapping for measure 'Unknown word position SD (Doc)'
+
+============================================================
+DEBUGGING: Feature overlap count (Sent-Sent Avg)
+Sentence: She woke up early and went for a morning run. The fresh air invigorated her and gave her energy for the day ahead.
+Expected: 16, Actual: 18
+[DEBUG:Feature overlap (Count)] 
+_calc_burstiness called
+[DEBUG:Feature overlap (Count)] Step A: Input positions=[12], doc_len=23
+[DEBUG:Feature overlap (Count)] Step B: Gaps=[12]
+[DEBUG:Feature overlap (Count)] Step C: mean_gap=12.0, std_gap=0
+[DEBUG:Feature overlap (Count)] Step B: Internal gaps=[19]
+[DEBUG:Feature overlap (Count)] Step C: Internal gap std=0.0
+[DEBUG:Feature overlap (Count)] 
+_calc_zipf_variants called
+[DEBUG:Feature overlap (Count)] Step A: Input zipf_scores=[6.26, 4.22, 6.39, 5.43, 7.41, 5.5, 7.01, 7.36, 5.33, 5.49, 7.73, 4.83, 5.37, 6.3, 7.41, 5.25, 6.3, 5.23, 7.01, 7.73, 5.95, 5.01], tokens=['She', 'woke', 'up', 'early', 'and', 'went', 'for', 'a', 'morning', 'run', '.', 'The', 'fresh', 'air', 'invigorated', 'her', 'and', 'gave', 'her', 'energy', 'for', 'the', 'day', 'ahead', '.'], lang_code=en, doc_len=23
+[DEBUG:Feature overlap (Count)] Step B: frequencies=[2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Feature overlap (Count)] Step B: freq_above_min=[2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1], n=21
+[DEBUG:Feature overlap (Count)] Step C: logs=[1.38629436 1.38629436 1.38629436 1.38629436 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718], sum_logs=17.32867951399863
+[DEBUG:Feature overlap (Count)] Step D: Zipf curve steepness = 2.2118638343467296
+[DEBUG:Feature overlap (Count)] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Feature overlap (Count)] 
+_calc_ratios called
+[DEBUG:Feature overlap (Count)] Step A: Input pos_map_lower_non_punct={'ADJ': [12], 'ADV': [4, 23], 'INTJ': [], 'VERB': [2, 6, 14, 17], 'NOUN': [9, 10, 13, 19, 22], 'PROPN': [], 'ADP': [3, 7, 20], 'AUX': [], 'CCONJ': [5, 16], 'SCONJ': [], 'DET': [8, 11, 21], 'NUM': [], 'PART': [], 'PRON': [1, 15, 18]}
+[DEBUG:Feature overlap (Count)] 
+_calc_distributional_measures called
+[DEBUG:Feature overlap (Count)] Step A: Input tokens=['She', 'woke', 'up', 'early', 'and', 'went', 'for', 'a', 'morning', 'run', '.', 'The', 'fresh', 'air', 'invigorated', 'her', 'and', 'gave', 'her', 'energy', 'for', 'the', 'day', 'ahead', '.'], doc_len=23, lang_code=en
+
+[RESULT] Feature overlap (Count): 18
+
+============================================================
+DEBUGGING: Feature overlap ratio (Sent-Sent Avg)
+Sentence: She woke up early and went for a morning run. The fresh air invigorated her and gave her energy for the day ahead.
+Expected: 0.888888889, Actual: 0.9
+[DEBUG:Feature overlap (Ratio)] 
+_calc_burstiness called
+[DEBUG:Feature overlap (Ratio)] Step A: Input positions=[12], doc_len=23
+[DEBUG:Feature overlap (Ratio)] Step B: Gaps=[12]
+[DEBUG:Feature overlap (Ratio)] Step C: mean_gap=12.0, std_gap=0
+[DEBUG:Feature overlap (Ratio)] Step B: Internal gaps=[19]
+[DEBUG:Feature overlap (Ratio)] Step C: Internal gap std=0.0
+[DEBUG:Feature overlap (Ratio)] 
+_calc_zipf_variants called
+[DEBUG:Feature overlap (Ratio)] Step A: Input zipf_scores=[6.26, 4.22, 6.39, 5.43, 7.41, 5.5, 7.01, 7.36, 5.33, 5.49, 7.73, 4.83, 5.37, 6.3, 7.41, 5.25, 6.3, 5.23, 7.01, 7.73, 5.95, 5.01], tokens=['She', 'woke', 'up', 'early', 'and', 'went', 'for', 'a', 'morning', 'run', '.', 'The', 'fresh', 'air', 'invigorated', 'her', 'and', 'gave', 'her', 'energy', 'for', 'the', 'day', 'ahead', '.'], lang_code=en, doc_len=23
+[DEBUG:Feature overlap (Ratio)] Step B: frequencies=[2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+[DEBUG:Feature overlap (Ratio)] Step B: freq_above_min=[2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1], n=21
+[DEBUG:Feature overlap (Ratio)] Step C: logs=[1.38629436 1.38629436 1.38629436 1.38629436 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718
+ 0.69314718 0.69314718 0.69314718], sum_logs=17.32867951399863
+[DEBUG:Feature overlap (Ratio)] Step D: Zipf curve steepness = 2.2118638343467296
+[DEBUG:Feature overlap (Ratio)] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Feature overlap (Ratio)] 
+_calc_ratios called
+[DEBUG:Feature overlap (Ratio)] Step A: Input pos_map_lower_non_punct={'ADJ': [12], 'ADV': [4, 23], 'INTJ': [], 'VERB': [2, 6, 14, 17], 'NOUN': [9, 10, 13, 19, 22], 'PROPN': [], 'ADP': [3, 7, 20], 'AUX': [], 'CCONJ': [5, 16], 'SCONJ': [], 'DET': [8, 11, 21], 'NUM': [], 'PART': [], 'PRON': [1, 15, 18]}
+[DEBUG:Feature overlap (Ratio)] 
+_calc_distributional_measures called
+[DEBUG:Feature overlap (Ratio)] Step A: Input tokens=['She', 'woke', 'up', 'early', 'and', 'went', 'for', 'a', 'morning', 'run', '.', 'The', 'fresh', 'air', 'invigorated', 'her', 'and', 'gave', 'her', 'energy', 'for', 'the', 'day', 'ahead', '.'], doc_len=23, lang_code=en
+[DEBUG:Feature overlap (Ratio)] Cannot parse ratio name: Feature overlap (Ratio)
+
+[FOCUSED DEBUG] Feature overlap (Ratio): None
+
+[RESULT] Feature overlap (Ratio): 0.9
+
+============================================================
+DEBUGGING: Cosine dist. (Sent-Sent Avg)
+Sentence: I love to eat pizza on Fridays after work. I adore having pizza on Fridays after work.
+Expected: 0.8796, Actual: 0
+[DEBUG:Cosine distance] 
+_calc_burstiness called
+[DEBUG:Cosine distance] Step A: Input positions=[], doc_len=17
+[DEBUG:Cosine distance] Step B: Internal gaps=[2 7 1]
+[DEBUG:Cosine distance] Step C: Internal gap std=2.6246692913372702
+[DEBUG:Cosine distance] Step B: Gaps=[2, np.int64(2), np.int64(7), np.int64(1)]
+[DEBUG:Cosine distance] Step C: mean_gap=3.0, std_gap=2.70801280154532
+[DEBUG:Cosine distance] 
+_calc_zipf_variants called
+[DEBUG:Cosine distance] Step A: Input zipf_scores=[7.09, 5.82, 7.43, 5.13, 4.43, 6.91, 3.44, 6.11, 5.96, 7.09, 3.7, 5.59, 4.43, 6.91, 3.44, 6.11, 5.96], tokens=['I', 'love', 'to', 'eat', 'pizza', 'on', 'Fridays', 'after', 'work', '.', 'I', 'adore', 'having', 'pizza', 'on', 'Fridays', 'after', 'work', '.'], lang_code=en, doc_len=17
+[DEBUG:Cosine distance] Step B: frequencies=[2 2 2 2 2 2 2 1 1 1 1 1]
+[DEBUG:Cosine distance] Step B: freq_above_min=[2 2 2 2 2 2 2 1 1 1 1 1], n=12
+[DEBUG:Cosine distance] Step C: logs=[1.38629436 1.38629436 1.38629436 1.38629436 1.38629436 1.38629436
+ 1.38629436 0.69314718 0.69314718 0.69314718 0.69314718 0.69314718], sum_logs=13.16979643063896
+[DEBUG:Cosine distance] Step D: Zipf curve steepness = 1.9111758152982927
+[DEBUG:Cosine distance] Step D: Zipf goodness-of-fit = 0
+[DEBUG:Cosine distance] 
+_calc_ratios called
+[DEBUG:Cosine distance] Step A: Input pos_map_lower_non_punct={'ADJ': [], 'ADV': [], 'INTJ': [], 'VERB': [2, 4, 11, 12], 'NOUN': [5, 9, 13, 17], 'PROPN': [7, 15], 'ADP': [6, 8, 14, 16], 'AUX': [], 'CCONJ': [], 'SCONJ': [], 'DET': [], 'NUM': [], 'PART': [3], 'PRON': [1, 10]}
+[DEBUG:Cosine distance] 
+_calc_distributional_measures called
+[DEBUG:Cosine distance] Step A: Input tokens=['I', 'love', 'to', 'eat', 'pizza', 'on', 'Fridays', 'after', 'work', '.', 'I', 'adore', 'having', 'pizza', 'on', 'Fridays', 'after', 'work', '.'], doc_len=17, lang_code=en
+
+[RESULT] Cosine distance: 0.0
