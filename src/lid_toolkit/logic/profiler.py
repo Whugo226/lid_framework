@@ -86,39 +86,48 @@ class DeepProfiler:
 
     def _calc_burstiness(self, positions, doc_len):
         """
-        Calculates burstiness with a hybrid heuristic to match inconsistent Ground Truths.
+        Calculates burstiness using the finite-size corrected measure A_n(r) 
+        from Kim and Jo (2016).
         """
+        n = len(positions)
+        
         # 1. Edge Case: Need at least 1 item
-        if not positions: 
+        if n == 0: 
             return 0.0
             
         # 2. Check for "Perfect Internal Regularity" (The Adjective Case)
-        # Calculate gaps ONLY between the items
-        if len(positions) >= 2:
-            internal_gaps = np.diff(positions)
-            # If standard deviation is 0, gaps are identical (e.g. [1, 1] or [2, 2])
-            # Return -1.0 immediately to match the "Adjective" test case
-            if np.std(internal_gaps) == 0:
-                return -1.0
+        # if n >= 2:
+        #     internal_gaps = np.diff(positions)
+        #     if np.std(internal_gaps) == 0:
+        #         return -1.0
 
-        # 3. Standard Calculation (The Adverb/Finite Verb Case)
-        # Use the "Start Gap" logic we established earlier
-        gaps = [positions[0]] + list(np.diff(positions))
+        # 3. Standard Calculation
+        gaps = list(np.diff(positions))
         
-        if len(gaps) == 0: return 0.0
+        if len(gaps) == 0: 
+            return 0.0
         
+        # Use standard Sample SD (ddof=1) and True Mean
+        std_gap = np.std(gaps, ddof=1)
         mean_gap = np.mean(gaps)
-        # Use Sample SD (ddof=1)
-        if len(gaps) < 2:
-            std_gap = 0
-        else:
-            std_gap = np.std(gaps, ddof=1)
         
-        if mean_gap == 0: return 0.0
+        if mean_gap == 0: 
+            return 0.0
+            
+        r = std_gap / mean_gap
         
-        # 4. Final Calculation
-        cv = std_gap / mean_gap 
-        return (cv - 1) / (cv + 1)
+        # 4. Kim and Jo (2016) Finite-Size Correction A_n(r)
+        sqrt_n_plus_1 = np.sqrt(n + 1)
+        sqrt_n_minus_1 = np.sqrt(n - 1)
+        
+        numerator = (sqrt_n_plus_1 * r) - sqrt_n_minus_1
+        denominator = ((sqrt_n_plus_1 - 2) * r) + sqrt_n_minus_1
+        
+        return numerator / denominator
+    
+        # # 4. Final Calculation
+        # cv = std_gap / mean_gap 
+        # return (cv - 1) / (cv + 1)
     
     def _levenshtein_distance(self, s1, s2):
         """Calculate Levenshtein (edit) distance between two strings or sequences."""
@@ -188,7 +197,7 @@ class DeepProfiler:
         
         return stats
     
-    def _calc_lexical_diversity(self, tokens, lower_non_punct_tokens, pos_map, pos_map_lower_non_punct, doc_len):
+    def _calc_lexical_diversity(self, lower_non_punct_tokens, pos_map, pos_map_lower_non_punct, doc_len):
         """Calculate lexical diversity measures."""
         stats = {}
 
@@ -350,7 +359,7 @@ class DeepProfiler:
         return stats
 
     
-    def _calc_zipf_variants(self, zipf_scores, tokens, lang_code, doc_len):
+    def _calc_zipf_variants(self, zipf_scores, lower_non_punct_tokens, lang_code, doc_len):
         """Calculate Zipf frequency variants."""
         stats = {}
         
@@ -366,7 +375,7 @@ class DeepProfiler:
         
         # Zipf curve steepness using MLE (Clauset et al., 2009)
         # More accurate than log-log linear regression
-        word_counts = Counter(tokens)
+        word_counts = Counter(lower_non_punct_tokens)
         frequencies = np.array(sorted(word_counts.values(), reverse=True))
         if len(frequencies) > 1:
             x_min = 1  # minimum frequency threshold
@@ -409,17 +418,17 @@ class DeepProfiler:
         
         # Unknown words (Zipf < 3.0 or not found in wordfreq)
         unknown_count = 0
-        for token in tokens:
+        for token in lower_non_punct_tokens:
             z = zipf_frequency(token, lang_code)
             if z < 3.0:
                 unknown_count += 1
         
         stats['Unknown word count'] = unknown_count
         stats['Unknown word incidence'] = (unknown_count / doc_len * 1000) if doc_len > 0 else 0
-        
+            
         return stats
     
-    def _calc_morphological_complexity(self, doc, pos_map):
+    def _calc_morphological_complexity(self, doc):
         """Calculate morphological complexity measures."""
         stats = {}
         
@@ -787,7 +796,7 @@ class DeepProfiler:
             stats[f'{tag} count'] = cnt
             stats[f'{tag} incidence'] = (cnt / doc_len) * 1000
             # Type count for this PoS
-            pos_tokens = [tokens[i-1] for i in pos_map_lower_non_punct[tag] if i > 0 and i <= len(tokens)]
+            pos_tokens = [lower_non_punct_tokens[i-1] for i in pos_map_lower_non_punct[tag] if i > 0 and i <= len(lower_non_punct_tokens)]
             stats[f'{tag} type count'] = len(set(pos_tokens))
             # Burstiness for this PoS
             stats[f'{tag} burstiness'] = self._calc_burstiness(pos_map_lower_non_punct[tag], doc_len)
@@ -807,7 +816,7 @@ class DeepProfiler:
             for t in tag_set:
                 group_positions.extend(pos_map_lower_non_punct.get(t, []))
             group_positions_sorted = sorted(group_positions)
-            group_tokens = [tokens[i-1] for i in group_positions if i > 0 and i <= len(tokens)]
+            group_tokens = [lower_non_punct_tokens[i-1] for i in group_positions if i > 0 and i <= len(lower_non_punct_tokens)]
             stats[f'{name} type count'] = len(set(group_tokens))
             # Burstiness for combined group
             stats[f'{name} burstiness'] = self._calc_burstiness(group_positions_sorted, doc_len)
@@ -822,7 +831,7 @@ class DeepProfiler:
             stats[f'{feat} burstiness'] = self._calc_burstiness(positions, doc_len)
 
         # --- Group 5: Lexical Diversity ---
-        lex_div_stats = self._calc_lexical_diversity(tokens, lower_non_punct_tokens, pos_map, pos_map_lower_non_punct, doc_len)
+        lex_div_stats = self._calc_lexical_diversity(lower_non_punct_tokens, pos_map, pos_map_lower_non_punct, doc_len)
         stats.update(lex_div_stats)
         
         # --- Group 6: Word Lengths (Per-PoS) ---
@@ -858,7 +867,7 @@ class DeepProfiler:
             stats['Letter entropy'] = 0
 
         # --- Group 8: Morphological Complexity ---
-        morph_stats = self._calc_morphological_complexity(doc, pos_map)
+        morph_stats = self._calc_morphological_complexity(doc)
         stats.update(morph_stats)
         
         # --- Group 9: Ratios (60+ comparative ratios) ---
