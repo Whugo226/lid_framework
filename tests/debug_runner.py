@@ -12,6 +12,7 @@ CSV_PATH = os.path.join(os.path.dirname(__file__), 'profiler_test_results_englis
 MEASURE_MAP = {
     # Only include mappings for measures that can fail (see test_profiler_validation.py)
     'Hapax legomena burstiness (Doc)': 'Hapax legomena burstiness',
+    'Pronoun type count (Doc)': 'PRON type count',
     'Lexical verb burstiness (Doc)': 'VERB burstiness',
     'Noun burstiness (Doc)': 'NOUN burstiness',
     'Proper noun burstiness (Doc)': 'PROPN burstiness',

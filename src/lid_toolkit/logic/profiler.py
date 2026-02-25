@@ -11,6 +11,8 @@ from scipy.stats import entropy, linregress
 from tqdm import tqdm
 import re
 from scipy.spatial.distance import cosine
+from scipy.optimize import root_scalar
+from scipy.stats import pearsonr
 
 # Mute Stanza noise
 logging.getLogger('stanza').setLevel(logging.WARNING)
@@ -96,10 +98,10 @@ class DeepProfiler:
             return 0.0
             
         # 2. Check for "Perfect Internal Regularity" (The Adjective Case)
-        # if n >= 2:
-        #     internal_gaps = np.diff(positions)
-        #     if np.std(internal_gaps) == 0:
-        #         return -1.0
+        if n >= 2:
+            internal_gaps = np.diff(positions)
+            if np.std(internal_gaps) == 0:
+                return -1.0
 
         # 3. Standard Calculation
         gaps = list(np.diff(positions))
@@ -216,12 +218,21 @@ class DeepProfiler:
         stats['Hapax legomena burstiness'] = self._calc_burstiness(hapax_positions, doc_len)
 
         # Hapax legomena concentration: < 0 = first half, > 0 = second half
+        # Hapax legomena concentration: < 0 = first half, > 0 = second half
         if hapax_positions and doc_len > 0:
-            midpoint = doc_len / 2
-            first_half = sum(1 for p in hapax_positions if p <= midpoint)
-            second_half = len(hapax_positions) - first_half
-            total = len(hapax_positions)
-            stats['Hapax legomena concentration'] = (second_half - first_half) / total if total > 0 else 0
+            if doc_len % 2 == 0:
+                # Standard split for even-length sentences
+                midpoint = doc_len / 2.0
+                first_half = sum(1 for p in hapax_positions if p <= midpoint)
+                second_half = sum(1 for p in hapax_positions if p > midpoint)
+            else:
+                # Human-pivot split for odd-length sentences
+                pivot = (doc_len + 1) / 2.0
+                first_half = sum(1 for p in hapax_positions if p < pivot)
+                second_half = sum(1 for p in hapax_positions if p > pivot)
+            
+            total_valid_items = first_half + second_half
+            stats['Hapax legomena concentration'] = (second_half - first_half) / total_valid_items if total_valid_items > 0 else 0
         else:
             stats['Hapax legomena concentration'] = 0
 
@@ -373,38 +384,84 @@ class DeepProfiler:
             stats['Unknown word incidence'] = 0
             return stats
         
-        # Zipf curve steepness using MLE (Clauset et al., 2009)
-        # More accurate than log-log linear regression
+        # # Zipf curve steepness using MLE (Clauset et al., 2009)
+        # # More accurate than log-log linear regression
+        # word_counts = Counter(lower_non_punct_tokens)
+        # frequencies = np.array(sorted(word_counts.values(), reverse=True))
+        # if len(frequencies) > 1:
+        #     x_min = 1  # minimum frequency threshold
+        #     # Filter frequencies >= x_min
+        #     freq_above_min = frequencies[frequencies >= x_min]
+        #     n = len(freq_above_min)
+        #     if n > 1:
+        #         # MLE estimator for discrete power law: α = 1 + n / Σ ln(x_i / (x_min - 0.5))
+        #         alpha_mle = 1 + n / np.sum(np.log(freq_above_min / (x_min - 0.5)))
+        #         stats['Zipf curve steepness'] = alpha_mle
+                
+        #         # Goodness-of-fit: R² determination coefficient
+        #         # Compare observed frequencies to theoretical Zipf frequencies
+        #         ranks = np.arange(1, len(freq_above_min) + 1)
+        #         # Theoretical frequencies: f(r) = C / r^α, where C is fitted to match total
+        #         theoretical_freqs = 1 / (ranks ** alpha_mle)
+        #         # Scale theoretical to match observed total
+        #         theoretical_freqs = theoretical_freqs * (np.sum(freq_above_min) / np.sum(theoretical_freqs))
+        #         # Calculate R² = 1 - SS_res / SS_tot
+        #         ss_res = np.sum((freq_above_min - theoretical_freqs) ** 2)
+        #         ss_tot = np.sum((freq_above_min - np.mean(freq_above_min)) ** 2)
+        #         r_squared = 1 - (ss_res / ss_tot) if ss_tot > 0 else 0
+        #         stats['Zipf goodness-of-fit'] = max(0, r_squared)  # Clamp to [0, 1]
+        #     else:
+        #         stats['Zipf curve steepness'] = 0
+        #         stats['Zipf goodness-of-fit'] = 0
+        # else:
+        #     stats['Zipf curve steepness'] = 0
+        #     stats['Zipf goodness-of-fit'] = 0
+
+        # Zipf curve steepness using discrete MLE on the rank-frequency distribution
         word_counts = Counter(lower_non_punct_tokens)
         frequencies = np.array(sorted(word_counts.values(), reverse=True))
+        
         if len(frequencies) > 1:
             x_min = 1  # minimum frequency threshold
-            # Filter frequencies >= x_min
             freq_above_min = frequencies[frequencies >= x_min]
             n = len(freq_above_min)
+            
             if n > 1:
-                # MLE estimator for discrete power law: α = 1 + n / Σ ln(x_i / (x_min - 0.5))
-                alpha_mle = 1 + n / np.sum(np.log(freq_above_min / (x_min - 0.5)))
-                stats['Zipf curve steepness'] = alpha_mle
+                ranks = np.arange(1, n + 1)
+                N = np.sum(freq_above_min)
                 
-                # Goodness-of-fit: R² determination coefficient
-                # Compare observed frequencies to theoretical Zipf frequencies
-                ranks = np.arange(1, len(freq_above_min) + 1)
-                # Theoretical frequencies: f(r) = C / r^α, where C is fitted to match total
-                theoretical_freqs = 1 / (ranks ** alpha_mle)
-                # Scale theoretical to match observed total
-                theoretical_freqs = theoretical_freqs * (np.sum(freq_above_min) / np.sum(theoretical_freqs))
-                # Calculate R² = 1 - SS_res / SS_tot
-                ss_res = np.sum((freq_above_min - theoretical_freqs) ** 2)
-                ss_tot = np.sum((freq_above_min - np.mean(freq_above_min)) ** 2)
-                r_squared = 1 - (ss_res / ss_tot) if ss_tot > 0 else 0
-                stats['Zipf goodness-of-fit'] = max(0, r_squared)  # Clamp to [0, 1]
+                # Empirical expected value of ln(rank)
+                emp_mean_log_r = np.sum(freq_above_min * np.log(ranks)) / N
+                
+                # Objective function: Theoretical expected value must equal Empirical
+                def mle_objective(s):
+                    weights = ranks ** -s
+                    theo_mean_log_r = np.sum(weights * np.log(ranks)) / np.sum(weights)
+                    return theo_mean_log_r - emp_mean_log_r
+                
+                try:
+                    # Find the steepness (s) that satisfies the discrete MLE objective
+                    res = root_scalar(mle_objective, bracket=[0.0, 10.0])
+                    s_mle = res.root
+                except ValueError:
+                    # Fallback if extremely flat/skewed 
+                    s_mle = 1.0 
+                
+                stats['Zipf curve steepness'] = abs(s_mle)
+                
+                # Goodness-of-fit: Squared Pearson correlation between actual and predicted
+                weights = ranks ** -s_mle
+                theo_freqs = N * weights / np.sum(weights)
+                r_val, _ = pearsonr(freq_above_min, theo_freqs)
+                
+                # Clamp to [0, 1] just in case of floating point anomalies
+                stats['Zipf goodness-of-fit'] = max(0.0, min(1.0, r_val ** 2))
             else:
                 stats['Zipf curve steepness'] = 0
                 stats['Zipf goodness-of-fit'] = 0
         else:
             stats['Zipf curve steepness'] = 0
-            stats['Zipf goodness-of-fit'] = 0
+            stats['Zipf goodness-of-fit'] = 0    
         
         # Average contextual diversity (approximated by Zipf score)
         stats['Average contextual diversity'] = np.mean(zipf_scores)
@@ -601,16 +658,29 @@ class DeepProfiler:
         stats = {}
         
         def calc_concentration(positions, doc_len):
-            """Calculate concentration: < 0 = first half, > 0 = second half."""
+            """Calculate concentration using human-pivot logic for odd-length sequences."""
             if not positions or doc_len == 0:
                 return 0
-            midpoint = doc_len / 2
-            first_half = sum(1 for p in positions if p <= midpoint)
-            second_half = len(positions) - first_half
-            total = len(positions)
-            if total == 0:
+                
+            if doc_len % 2 == 0:
+                # Standard split for even-length sentences
+                midpoint = doc_len / 2.0
+                first_half = sum(1 for p in positions if p <= midpoint)
+                second_half = sum(1 for p in positions if p > midpoint)
+            else:
+                # Human-pivot split for odd-length sentences
+                pivot = (doc_len + 1) / 2.0
+                first_half = sum(1 for p in positions if p < pivot)
+                second_half = sum(1 for p in positions if p > pivot)
+                # Note: any position exactly equal to the pivot is ignored.
+
+            # We must only divide by the items that successfully made it into a bucket
+            total_valid_items = first_half + second_half
+            
+            if total_valid_items == 0:
                 return 0
-            return (second_half - first_half) / total
+                
+            return (second_half - first_half) / total_valid_items
         
         def calc_avg_position(positions, doc_len):
             """Calculate average normalized position (0 to 1)."""
@@ -725,7 +795,6 @@ class DeepProfiler:
         
         zipf_scores = []
         word_lengths = []
-        
         total_words = 0
         total_chars = 0
         
@@ -736,24 +805,22 @@ class DeepProfiler:
                     total_words += 1
                     total_chars += len(word.text)
                     word_lengths.append(len(word.text))
-                
                 # Store position (1-indexed) for distributional measures
                 global_pos = len(tokens)
-                
                 # --- A. PoS Bucketing ---
                 if word.upos in pos_map:
                     pos_map[word.upos].append(global_pos)
-                    
                 # --- B. Feature Bucketing ---
                 for feat_name in feat_map.keys():
                     if self._check_feature(word, feat_name):
                         feat_map[feat_name].append(global_pos)
-                
-                # --- C. Zipf & Frequencies ---
-                if word.upos not in ['PUNCT', 'SYM', 'X']:
-                    z = zipf_frequency(word.text, lang_code)
-                    if z >= 3.0: # Threshold: 1 per million
-                        zipf_scores.append(z)
+        
+        # --- C. Zipf & Frequencies ---
+        # Compute Zipf scores using lower_non_punct_tokens (already lowercased, non-punct)
+        for token in lower_non_punct_tokens:
+            z = zipf_frequency(token, lang_code)
+            if z >= 3.0: # Threshold: 1 per million
+                zipf_scores.append(z)
 
         doc_len = total_words if total_words > 0 else 1
 
