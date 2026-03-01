@@ -379,7 +379,7 @@ MEASURE_MAP = {
 
 def get_profiler_stats(sentence):
     doc = nlp(sentence)
-    return profiler._extract_measures(doc, 'en', sentence)
+    return profiler._extract_measures(doc, 'nl', sentence)
 
 def load_ground_truth():
     with open(CSV_PATH, encoding='utf-8-sig') as f:

@@ -199,7 +199,7 @@ class DeepProfiler:
         
         return stats
     
-    def _calc_lexical_diversity(self, lower_non_punct_tokens, pos_map, pos_map_lower_non_punct, doc_len):
+    def _calc_lexical_diversity(self, lower_non_punct_tokens, pos_map_lower_non_punct, doc_len):
         """Calculate lexical diversity measures."""
         stats = {}
 
@@ -653,7 +653,7 @@ class DeepProfiler:
         
         return stats
     
-    def _calc_distributional_measures(self, pos_map_lower_non_punct, feat_map_lower_non_punct, pos_map, feat_map, zipf_scores, tokens, doc_len, lang_code, lower_non_punct_tokens):
+    def _calc_distributional_measures(self, pos_map_lower_non_punct, feat_map_lower_non_punct, doc_len, lang_code, lower_non_punct_tokens):
         """Calculate concentration, average position, and position SD for all categories."""
         stats = {}
         
@@ -762,31 +762,36 @@ class DeepProfiler:
         
         # 1. PRE-CALCULATE LISTS FOR SPEED
         # --------------------------------
+        # 1. Initialize all lists and dictionaries
         tokens = []
+        lower_non_punct_tokens = []
+        lower_non_punct_tags = []
+        
+        # Standard maps (includes punctuation)
         pos_map = {tag: [] for tag in ['ADJ','ADV','INTJ','VERB','NOUN','PROPN','ADP','AUX','CCONJ','SCONJ','DET','NUM','PART','PRON', 'PUNCT']}
         feat_map = {k: [] for k in ['Personal pronoun','First person','Second person','Third person','Interrogative','Demonstrative','Singular','Plural','Indefinite','Definite','Finite','Infinitive','Verbal adjective','Past','Present','Passive']}
 
-        # New: pos_map based on lowercased, non-punct tokens
+        # Lowercased, non-punct maps
         pos_map_lower_non_punct = {tag: [] for tag in ['ADJ','ADV','INTJ','VERB','NOUN','PROPN','ADP','AUX','CCONJ','SCONJ','DET','NUM','PART','PRON']}
+        feat_map_lower_non_punct = {k: [] for k in ['Personal pronoun','First person','Second person','Third person','Interrogative','Demonstrative','Singular','Plural','Indefinite','Definite','Finite','Infinitive','Verbal adjective','Past','Present','Passive']}
+
+        # New: pos_map based on lowercased, non-punct tokens
         lower_non_punct_tokens = []
         lower_non_punct_tags = []
-        for sent in doc.sentences:
-            for word in sent.words:
-                if word.upos not in ('PUNCT', 'SYM', 'X'):
-                    lower_non_punct_tokens.append(word.text.lower())
-                    lower_non_punct_tags.append(word.upos)
+        
+        for word in doc.iter_words():
+            if word.upos not in ('PUNCT', 'SYM', 'X'):
+                lower_non_punct_tokens.append(word.text.lower())
+                lower_non_punct_tags.append(word.upos)
         # Assign positions (1-based) for each tag
         for idx, (token, tag) in enumerate(zip(lower_non_punct_tokens, lower_non_punct_tags), 1):
             if tag in pos_map_lower_non_punct:
                 pos_map_lower_non_punct[tag].append(idx)
 
-        # New: feat_map based on lowercased, non-punct tokens
-        feat_map_lower_non_punct = {k: [] for k in ['Personal pronoun','First person','Second person','Third person','Interrogative','Demonstrative','Singular','Plural','Indefinite','Definite','Finite','Infinitive','Verbal adjective','Past','Present','Passive']}
         # Assign feature positions (1-based) for filtered tokens
         for idx, (token, tag) in enumerate(zip(lower_non_punct_tokens, lower_non_punct_tags), 1):
             # Find the corresponding word in doc.sentences
-            for sent in doc.sentences:
-                for word in sent.words:
+               for word in doc.iter_words():
                     if word.text.lower() == token and word.upos == tag:
                         for feat_name in feat_map_lower_non_punct.keys():
                             if self._check_feature(word, feat_name):
@@ -798,23 +803,23 @@ class DeepProfiler:
         total_words = 0
         total_chars = 0
         
-        for sent_idx, sentence in enumerate(doc.sentences):
-            for word_idx, word in enumerate(sentence.words):
-                tokens.append(word.text)
-                if word.upos not in ('PUNCT', 'SYM', 'X'):
-                    total_words += 1
-                    total_chars += len(word.text)
-                    word_lengths.append(len(word.text))
-                # Store position (1-indexed) for distributional measures
-                global_pos = len(tokens)
-                # --- A. PoS Bucketing ---
-                if word.upos in pos_map:
-                    pos_map[word.upos].append(global_pos)
-                # --- B. Feature Bucketing ---
-                for feat_name in feat_map.keys():
-                    if self._check_feature(word, feat_name):
-                        feat_map[feat_name].append(global_pos)
         
+        for word in doc.iter_words():
+            tokens.append(word.text)
+            if word.upos not in ('PUNCT', 'SYM', 'X'):
+                total_words += 1
+                total_chars += len(word.text)
+                word_lengths.append(len(word.text))
+            # Store position (1-indexed) for distributional measures
+            global_pos = len(tokens)
+            # --- A. PoS Bucketing ---
+            if word.upos in pos_map:
+                pos_map[word.upos].append(global_pos)
+            # --- B. Feature Bucketing ---
+            for feat_name in feat_map.keys():
+                if self._check_feature(word, feat_name):
+                    feat_map[feat_name].append(global_pos)
+    
         # --- C. Zipf & Frequencies ---
         # Compute Zipf scores using lower_non_punct_tokens (already lowercased, non-punct)
         for token in lower_non_punct_tokens:
@@ -898,7 +903,7 @@ class DeepProfiler:
             stats[f'{feat} burstiness'] = self._calc_burstiness(positions, doc_len)
 
         # --- Group 5: Lexical Diversity ---
-        lex_div_stats = self._calc_lexical_diversity(lower_non_punct_tokens, pos_map, pos_map_lower_non_punct, doc_len)
+        lex_div_stats = self._calc_lexical_diversity(lower_non_punct_tokens, pos_map_lower_non_punct, doc_len)
         stats.update(lex_div_stats)
         
         # --- Group 6: Word Lengths (Per-PoS) ---
@@ -916,7 +921,7 @@ class DeepProfiler:
             stats['Infrequent word count'] = 0
 
         # Zipf variants
-        zipf_var_stats = self._calc_zipf_variants(zipf_scores, tokens, lang_code, doc_len)
+        zipf_var_stats = self._calc_zipf_variants(zipf_scores, lower_non_punct_tokens, lang_code, doc_len)
         stats.update(zipf_var_stats)
         
         # Word Entropy
@@ -942,7 +947,7 @@ class DeepProfiler:
         stats.update(ratio_stats)
 
         # --- Group 10: Distributional Measures ---
-        dist_stats = self._calc_distributional_measures(pos_map_lower_non_punct,feat_map_lower_non_punct, pos_map, feat_map, zipf_scores, tokens, doc_len, lang_code, lower_non_punct_tokens)
+        dist_stats = self._calc_distributional_measures(pos_map_lower_non_punct,feat_map_lower_non_punct, doc_len, lang_code, lower_non_punct_tokens)
         stats.update(dist_stats)
         
         # --- Group 11: Distributional (Sentence-to-Sentence) ---
