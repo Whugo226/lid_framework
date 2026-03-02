@@ -13,6 +13,10 @@ import re
 from scipy.spatial.distance import cosine
 from scipy.optimize import root_scalar
 from scipy.stats import pearsonr
+from huggingface_hub import hf_hub_download
+import compress_fasttext
+from pathlib import Path
+
 
 # Mute Stanza noise
 logging.getLogger('stanza').setLevel(logging.WARNING)
@@ -40,6 +44,32 @@ class DeepProfiler:
         except Exception as e:
             print(f"❌ Error loading LID: {e}")
             raise
+
+
+
+    def _load_fasttext_model(self, lang_code: str):
+        """
+        Dynamically downloads and loads the correct compressed FastText model 
+        from Hugging Face based on the target language code.
+        """
+        filename = f"fasttext-{lang_code}-mini.bin"
+        cache_dir = Path("./fasttext_cache")
+        repo_id = "werner1hugo/compressed-fasttext-models"
+        
+        try:
+            # 1. Download the file (or retrieve from local cache if it exists)
+            model_path = hf_hub_download(
+                repo_id=repo_id,
+                filename=filename,
+                cache_dir=cache_dir
+            )
+            
+            # 2. Load the model into the class instance
+            self.fasttext_model = compress_fasttext.CompressedFastTextKeyedVectors.load(str(model_path))
+        except Exception as e:
+            # If the download fails (e.g., no internet, or language doesn't exist in your repo)
+            print(f"Warning: Could not load FastText model for '{lang_code}'. Error: {e}")
+            self.fasttext_model = None
 
     # =========================================================================
     # HELPER: Feature Extraction Logic
@@ -758,14 +788,76 @@ class DeepProfiler:
     # CORE: Measure Extraction
     # =========================================================================
     def _extract_measures(self, doc, lang_code, original_text=""):
+        # stats = {}
+        
+        # # 1. PRE-CALCULATE LISTS FOR SPEED
+        # # --------------------------------
+        # # 1. Initialize all lists and dictionaries
+        # tokens = []
+        # lower_non_punct_tokens = []
+        # lower_non_punct_tags = []
+        
+        # # Standard maps (includes punctuation)
+        # pos_map = {tag: [] for tag in ['ADJ','ADV','INTJ','VERB','NOUN','PROPN','ADP','AUX','CCONJ','SCONJ','DET','NUM','PART','PRON', 'PUNCT']}
+        # feat_map = {k: [] for k in ['Personal pronoun','First person','Second person','Third person','Interrogative','Demonstrative','Singular','Plural','Indefinite','Definite','Finite','Infinitive','Verbal adjective','Past','Present','Passive']}
+
+        # # Lowercased, non-punct maps
+        # pos_map_lower_non_punct = {tag: [] for tag in ['ADJ','ADV','INTJ','VERB','NOUN','PROPN','ADP','AUX','CCONJ','SCONJ','DET','NUM','PART','PRON']}
+        # feat_map_lower_non_punct = {k: [] for k in ['Personal pronoun','First person','Second person','Third person','Interrogative','Demonstrative','Singular','Plural','Indefinite','Definite','Finite','Infinitive','Verbal adjective','Past','Present','Passive']}
+
+        # # New: pos_map based on lowercased, non-punct tokens
+
+        
+        # for word in doc.iter_words():
+        #     if word.upos not in ('PUNCT', 'SYM', 'X'):
+        #         lower_non_punct_tokens.append(word.text.lower())
+        #         lower_non_punct_tags.append(word.upos)
+        # # Assign positions (1-based) for each tag
+        # for idx, (token, tag) in enumerate(zip(lower_non_punct_tokens, lower_non_punct_tags), 1):
+        #     if tag in pos_map_lower_non_punct:
+        #         pos_map_lower_non_punct[tag].append(idx)
+
+        # # Assign feature positions (1-based) for filtered tokens
+        # for idx, (token, tag) in enumerate(zip(lower_non_punct_tokens, lower_non_punct_tags), 1):
+        #     # Find the corresponding word in doc.sentences
+        #        for word in doc.iter_words():
+        #             if word.text.lower() == token and word.upos == tag:
+        #                 for feat_name in feat_map_lower_non_punct.keys():
+        #                     if self._check_feature(word, feat_name):
+        #                         feat_map_lower_non_punct[feat_name].append(idx)
+        #                 break
+        
+        # zipf_scores = []
+        # word_lengths = []
+        # total_words = 0
+        # total_chars = 0
+        
+        
+        # for word in doc.iter_words():
+        #     tokens.append(word.text)
+        #     if word.upos not in ('PUNCT', 'SYM', 'X'):
+        #         total_words += 1
+        #         total_chars += len(word.text)
+        #         word_lengths.append(len(word.text))
+        #     # Store position (1-indexed) for distributional measures
+        #     global_pos = len(tokens)
+        #     # --- A. PoS Bucketing ---
+        #     if word.upos in pos_map:
+        #         pos_map[word.upos].append(global_pos)
+        #     # --- B. Feature Bucketing ---
+        #     for feat_name in feat_map.keys():
+        #         if self._check_feature(word, feat_name):
+        #             feat_map[feat_name].append(global_pos)
+
         stats = {}
         
+        if self.fasttext_model is None or self.current_fasttext_lang != lang_code:
+            print(f"Loading FastText model for language: {lang_code}...")
+            self._load_fasttext_model(lang_code)
+            self.current_fasttext_lang = lang_code  # Update the tracker
+
         # 1. PRE-CALCULATE LISTS FOR SPEED
         # --------------------------------
-        # 1. Initialize all lists and dictionaries
-        tokens = []
-        lower_non_punct_tokens = []
-        lower_non_punct_tags = []
         
         # Standard maps (includes punctuation)
         pos_map = {tag: [] for tag in ['ADJ','ADV','INTJ','VERB','NOUN','PROPN','ADP','AUX','CCONJ','SCONJ','DET','NUM','PART','PRON', 'PUNCT']}
@@ -775,50 +867,57 @@ class DeepProfiler:
         pos_map_lower_non_punct = {tag: [] for tag in ['ADJ','ADV','INTJ','VERB','NOUN','PROPN','ADP','AUX','CCONJ','SCONJ','DET','NUM','PART','PRON']}
         feat_map_lower_non_punct = {k: [] for k in ['Personal pronoun','First person','Second person','Third person','Interrogative','Demonstrative','Singular','Plural','Indefinite','Definite','Finite','Infinitive','Verbal adjective','Past','Present','Passive']}
 
-        # New: pos_map based on lowercased, non-punct tokens
+        # Metrics Trackers
+        tokens = []
         lower_non_punct_tokens = []
         lower_non_punct_tags = []
-        
-        for word in doc.iter_words():
-            if word.upos not in ('PUNCT', 'SYM', 'X'):
-                lower_non_punct_tokens.append(word.text.lower())
-                lower_non_punct_tags.append(word.upos)
-        # Assign positions (1-based) for each tag
-        for idx, (token, tag) in enumerate(zip(lower_non_punct_tokens, lower_non_punct_tags), 1):
-            if tag in pos_map_lower_non_punct:
-                pos_map_lower_non_punct[tag].append(idx)
-
-        # Assign feature positions (1-based) for filtered tokens
-        for idx, (token, tag) in enumerate(zip(lower_non_punct_tokens, lower_non_punct_tags), 1):
-            # Find the corresponding word in doc.sentences
-               for word in doc.iter_words():
-                    if word.text.lower() == token and word.upos == tag:
-                        for feat_name in feat_map_lower_non_punct.keys():
-                            if self._check_feature(word, feat_name):
-                                feat_map_lower_non_punct[feat_name].append(idx)
-                        break
-        
         zipf_scores = []
         word_lengths = []
         total_words = 0
         total_chars = 0
         
+        global_pos = 0      # Tracks 1-based index including punctuation
+        non_punct_pos = 0   # Tracks 1-based index excluding punctuation
         
+        # SINGLE UNIFIED PASS OVER THE DOCUMENT
         for word in doc.iter_words():
+            # debug: print each word with its POS tag
+            # print(f"{word.text} -> {word.upos}")
+
+            # --- A. Global Tracking (Includes everything) ---
+            global_pos += 1
             tokens.append(word.text)
-            if word.upos not in ('PUNCT', 'SYM', 'X'):
-                total_words += 1
-                total_chars += len(word.text)
-                word_lengths.append(len(word.text))
-            # Store position (1-indexed) for distributional measures
-            global_pos = len(tokens)
-            # --- A. PoS Bucketing ---
+            
             if word.upos in pos_map:
                 pos_map[word.upos].append(global_pos)
-            # --- B. Feature Bucketing ---
+            
             for feat_name in feat_map.keys():
                 if self._check_feature(word, feat_name):
                     feat_map[feat_name].append(global_pos)
+
+            # --- B. Non-Punctuation Tracking ---
+            if word.upos not in ('PUNCT', 'SYM', 'X'):
+                non_punct_pos += 1
+                total_words += 1
+                total_chars += len(word.text)
+                word_lengths.append(len(word.text))
+                
+                lower_non_punct_tokens.append(word.text.lower())
+                lower_non_punct_tags.append(word.upos)
+                
+                # Map POS for lower_non_punct
+                if word.upos in pos_map_lower_non_punct:
+                    pos_map_lower_non_punct[word.upos].append(non_punct_pos)
+                    
+                # Map Features for lower_non_punct
+                for feat_name in feat_map_lower_non_punct.keys():
+                    if self._check_feature(word, feat_name):
+                        feat_map_lower_non_punct[feat_name].append(non_punct_pos)
+
+
+
+
+
     
         # --- C. Zipf & Frequencies ---
         # Compute Zipf scores using lower_non_punct_tokens (already lowercased, non-punct)
