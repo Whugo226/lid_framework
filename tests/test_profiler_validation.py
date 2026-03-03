@@ -1,7 +1,7 @@
 import sys
 import csv
 import os
-
+import sklearn
 import pytest
 import stanza
 import threading

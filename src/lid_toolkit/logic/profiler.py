@@ -16,6 +16,8 @@ from scipy.stats import pearsonr
 from huggingface_hub import hf_hub_download
 import compress_fasttext
 from pathlib import Path
+import functools
+import editdistance
 
 
 # Mute Stanza noise
@@ -26,8 +28,12 @@ class DeepProfiler:
         print("⏳ Initializing DeepProfiler (Lingualyzer Implementation)...")
         self.use_gpu = torch.cuda.is_available()
 
-        self.fasttext_model = None  # Define it as None so checks don't crash
-        
+        self.fasttext_model = None
+        # cache for per‑language pipelines and other hot results
+        self._nlp_cache: dict[str, stanza.Pipeline] = {}
+        self._centroid_cache: dict[tuple, np.ndarray] = {}
+        # wrap wordfreq.zipf_frequency with lru cache
+        self._zipf_cache = functools.lru_cache(maxsize=None)(zipf_frequency)
         # Define UD Tag Groups based on Lingualyzer definitions
         self.TAG_GROUPS = {
             'Lexical item': {'ADJ', 'ADV', 'INTJ', 'NOUN', 'PROPN', 'VERB'},
@@ -36,16 +42,47 @@ class DeepProfiler:
             'Conjunction': {'CCONJ', 'SCONJ'}
         }
         
-        # Load Stanza LID
-        print("   Loading Stanza LID...")
-        try:
-            stanza.download(lang="multilingual", processors="langid", verbose=False)
-            self.lid_pipeline = stanza.Pipeline(lang="multilingual", processors="langid", verbose=False, use_gpu=self.use_gpu)
-        except Exception as e:
-            print(f"❌ Error loading LID: {e}")
-            raise
+        # # Load Stanza LID
+        # print("   Loading Stanza LID...")
+        # try:
+        #     stanza.download(lang="multilingual", processors="langid", verbose=False)
+        #     self.lid_pipeline = stanza.Pipeline(lang="multilingual", processors="langid", verbose=False, use_gpu=self.use_gpu)
+        # except Exception as e:
+        #     print(f"❌ Error loading LID: {e}")
+        #     raise
+        
+        # single multilingual LID pipeline with max batching
+        self.lid_pipeline = stanza.Pipeline(
+            lang="multilingual",
+            processors="langid",
+            tokenize_batch_size=4096,
+            pos_batch_size=4096,
+            batch_size=4096,
+            use_gpu=self.use_gpu,
+            verbose=False,
+        )
 
-
+    def _make_pipeline(self, lang: str) -> stanza.Pipeline:
+        """Return a tokenize/mwt/pos/lemma pipeline for [lang](http://_vscodecontentref_/8); cache it."""
+        if lang not in self._nlp_cache:
+            try:
+                # Attempt to load with MWT (crucial for Romance/Germanic languages)
+                stanza.download(lang, processors="tokenize,mwt,pos,lemma", verbose=False)
+                procs = "tokenize,mwt,pos,lemma"
+            except Exception:
+                # Fallback for languages without MWT support (like Afrikaans)
+                stanza.download(lang, processors="tokenize,pos,lemma", verbose=False)
+                procs = "tokenize,pos,lemma"
+            self._nlp_cache[lang] = stanza.Pipeline(
+                lang=lang,
+                processors=procs,
+                tokenize_batch_size=64,
+                pos_batch_size=64,
+                batch_size=64,
+                use_gpu=True,
+                verbose=False,
+            )
+        return self._nlp_cache[lang]
 
     def _load_fasttext_model(self, lang_code: str):
         """
@@ -74,127 +111,153 @@ class DeepProfiler:
     # =========================================================================
     # HELPER: Feature Extraction Logic
     # =========================================================================
-    def _check_feature(self, word, feat_name):
-        """Checks if a Stanza word has a specific morphological feature."""
-        if not word.feats: return False
-        features = word.feats.split('|')
+    def _check_feature_optimized(self, word_upos, parsed_feats, feat_name):
+        """O(1) lookup using pre-parsed feature sets."""
+        if not parsed_feats: return False
         
-        # Special compound checks for person pronouns (Lingualyzer requires PRON + PronType=Prs + Person=X)
+        # Special compound checks
         if feat_name == 'First person':
-            return (word.upos == 'PRON' and 
-                    'PronType=Prs' in features and 
-                    'Person=1' in features)
+            return (word_upos == 'PRON' and 'PronType=Prs' in parsed_feats and 'Person=1' in parsed_feats)
         elif feat_name == 'Second person':
-            return (word.upos == 'PRON' and 
-                    'PronType=Prs' in features and 
-                    'Person=2' in features)
+            return (word_upos == 'PRON' and 'PronType=Prs' in parsed_feats and 'Person=2' in parsed_feats)
         elif feat_name == 'Third person':
-            return (word.upos == 'PRON' and 
-                    'PronType=Prs' in features and 
-                    'Person=3' in features)
+            return (word_upos == 'PRON' and 'PronType=Prs' in parsed_feats and 'Person=3' in parsed_feats)
         elif feat_name == 'Personal pronoun':
-            return (word.upos == 'PRON' and 
-                    'PronType=Prs' in features)
+            return (word_upos == 'PRON' and 'PronType=Prs' in parsed_feats)
         elif feat_name == 'Singular':
-            return (word.upos in ['NOUN', 'PROPN', 'PRON'] and 'Number=Sing' in features)
+            return (word_upos in ('NOUN', 'PROPN', 'PRON') and 'Number=Sing' in parsed_feats)
         elif feat_name == 'Plural':
-            return (word.upos in ['NOUN', 'PROPN', 'PRON'] and 'Number=Plur' in features)
-        # Mapping Lingualyzer definitions to UD v2 Tags (simple single-feature checks)
+            return (word_upos in ('NOUN', 'PROPN', 'PRON') and 'Number=Plur' in parsed_feats)
+        
+        # Standard checks
         checks = {
-            'Interrogative': 'PronType=Int',
-            'Demonstrative': 'PronType=Dem',
-            'Indefinite': 'Definite=Ind',
-            'Definite': 'Definite=Def',
-            'Finite': 'VerbForm=Fin',
-            'Infinitive': 'VerbForm=Inf',
-            'Verbal adjective': 'VerbForm=Part', # Participles often treated as verbal adjectives
-            'Past': 'Tense=Past',
-            'Present': 'Tense=Pres',
-            'Passive': 'Voice=Pass'
+            'Interrogative': 'PronType=Int', 'Demonstrative': 'PronType=Dem',
+            'Indefinite': 'Definite=Ind', 'Definite': 'Definite=Def',
+            'Finite': 'VerbForm=Fin', 'Infinitive': 'VerbForm=Inf',
+            'Verbal adjective': 'VerbForm=Part', 'Past': 'Tense=Past',
+            'Present': 'Tense=Pres', 'Passive': 'Voice=Pass'
         }
-        
         target = checks.get(feat_name)
-        return target in features if target else False
-
+        return target in parsed_feats if target else False
+    
+    # …existing code…
     def _calc_burstiness(self, positions, doc_len):
-        """
-        Calculates burstiness using the finite-size corrected measure A_n(r) 
-        from Kim and Jo (2016).
-        """
-        n = len(positions)
-        
-        # 1. Edge Case: Need at least 1 item
-        if n == 0: 
+        """Finite‑size corrected burstiness (Kim & Jo 2016) – vectorised."""
+        arr = np.asarray(positions, dtype=np.int32)
+        n = arr.size
+        if n == 0:
             return 0.0
-            
-        # 2. Check for "Perfect Internal Regularity" (The Adjective Case)
-        if n >= 2:
-            internal_gaps = np.diff(positions)
-            if np.std(internal_gaps) == 0:
-                return -1.0
 
-        # 3. Standard Calculation
-        gaps = list(np.diff(positions))
-        
-        if len(gaps) == 0: 
+        if n >= 2:
+            gaps = np.diff(arr)
+            if np.std(gaps) == 0:
+                return -1.0          # perfect regularity
+
+        gaps = np.diff(arr)
+        if gaps.size == 0:
             return 0.0
-        
-        # Use standard Sample SD (ddof=1) and True Mean
+
         std_gap = np.std(gaps, ddof=1)
         mean_gap = np.mean(gaps)
-        
-        if mean_gap == 0: 
+        if mean_gap == 0:
             return 0.0
-            
+
         r = std_gap / mean_gap
+        sqrt_np1 = np.sqrt(n + 1)
+        sqrt_nm1 = np.sqrt(n - 1)
+        num = (sqrt_np1 * r) - sqrt_nm1
+        den = ((sqrt_np1 - 2) * r) + sqrt_nm1
+        return num / den
+
+
+
+    # def _calc_burstiness(self, positions, doc_len):
+    #     """
+    #     Calculates burstiness using the finite-size corrected measure A_n(r) 
+    #     from Kim and Jo (2016).
+    #     """
+    #     n = len(positions)
         
-        # 4. Kim and Jo (2016) Finite-Size Correction A_n(r)
-        sqrt_n_plus_1 = np.sqrt(n + 1)
-        sqrt_n_minus_1 = np.sqrt(n - 1)
+    #     # 1. Edge Case: Need at least 1 item
+    #     if n == 0: 
+    #         return 0.0
+            
+    #     # 2. Check for "Perfect Internal Regularity" (The Adjective Case)
+    #     if n >= 2:
+    #         internal_gaps = np.diff(positions)
+    #         if np.std(internal_gaps) == 0:
+    #             return -1.0
+
+    #     # 3. Standard Calculation
+    #     gaps = list(np.diff(positions))
         
-        numerator = (sqrt_n_plus_1 * r) - sqrt_n_minus_1
-        denominator = ((sqrt_n_plus_1 - 2) * r) + sqrt_n_minus_1
+    #     if len(gaps) == 0: 
+    #         return 0.0
         
-        return numerator / denominator
+    #     # Use standard Sample SD (ddof=1) and True Mean
+    #     std_gap = np.std(gaps, ddof=1)
+    #     mean_gap = np.mean(gaps)
+        
+    #     if mean_gap == 0: 
+    #         return 0.0
+            
+    #     r = std_gap / mean_gap
+        
+    #     # 4. Kim and Jo (2016) Finite-Size Correction A_n(r)
+    #     sqrt_n_plus_1 = np.sqrt(n + 1)
+    #     sqrt_n_minus_1 = np.sqrt(n - 1)
+        
+    #     numerator = (sqrt_n_plus_1 * r) - sqrt_n_minus_1
+    #     denominator = ((sqrt_n_plus_1 - 2) * r) + sqrt_n_minus_1
+        
+    #     return numerator / denominator
     
-        # # 4. Final Calculation
-        # cv = std_gap / mean_gap 
-        # return (cv - 1) / (cv + 1)
+    #     # # 4. Final Calculation
+    #     # cv = std_gap / mean_gap 
+    #     # return (cv - 1) / (cv + 1)
     
+    # def _levenshtein_distance(self, s1, s2):
+    #     """Calculate Levenshtein (edit) distance between two strings or sequences."""
+    #     # Handle sequences (lists) directly for word-level comparison
+    #     if isinstance(s1, list) and isinstance(s2, list):
+    #         if len(s1) < len(s2):
+    #             s1, s2 = s2, s1
+    #         if len(s2) == 0:
+    #             return len(s1)
+    #         previous_row = list(range(len(s2) + 1))
+    #         for i, w1 in enumerate(s1):
+    #             current_row = [i + 1]
+    #             for j, w2 in enumerate(s2):
+    #                 insertions = previous_row[j + 1] + 1
+    #                 deletions = current_row[j] + 1
+    #                 substitutions = previous_row[j] + (w1 != w2)
+    #                 current_row.append(min(insertions, deletions, substitutions))
+    #             previous_row = current_row
+    #         return previous_row[-1]
+    #     else:
+    #         # Fallback: treat as strings for character-level comparison
+    #         if len(s1) < len(s2):
+    #             return self._levenshtein_distance(s2, s1)
+    #         if len(s2) == 0:
+    #             return len(s1)
+    #         previous_row = range(len(s2) + 1)
+    #         for i, c1 in enumerate(s1):
+    #             current_row = [i + 1]
+    #             for j, c2 in enumerate(s2):
+    #                 insertions = previous_row[j + 1] + 1
+    #                 deletions = current_row[j] + 1
+    #                 substitutions = previous_row[j] + (c1 != c2)
+    #                 current_row.append(min(insertions, deletions, substitutions))
+    #             previous_row = current_row
+    #         return previous_row[-1]
+
+
     def _levenshtein_distance(self, s1, s2):
-        """Calculate Levenshtein (edit) distance between two strings or sequences."""
-        # Handle sequences (lists) directly for word-level comparison
-        if isinstance(s1, list) and isinstance(s2, list):
-            if len(s1) < len(s2):
-                s1, s2 = s2, s1
-            if len(s2) == 0:
-                return len(s1)
-            previous_row = list(range(len(s2) + 1))
-            for i, w1 in enumerate(s1):
-                current_row = [i + 1]
-                for j, w2 in enumerate(s2):
-                    insertions = previous_row[j + 1] + 1
-                    deletions = current_row[j] + 1
-                    substitutions = previous_row[j] + (w1 != w2)
-                    current_row.append(min(insertions, deletions, substitutions))
-                previous_row = current_row
-            return previous_row[-1]
-        else:
-            # Fallback: treat as strings for character-level comparison
-            if len(s1) < len(s2):
-                return self._levenshtein_distance(s2, s1)
-            if len(s2) == 0:
-                return len(s1)
-            previous_row = range(len(s2) + 1)
-            for i, c1 in enumerate(s1):
-                current_row = [i + 1]
-                for j, c2 in enumerate(s2):
-                    insertions = previous_row[j + 1] + 1
-                    deletions = current_row[j] + 1
-                    substitutions = previous_row[j] + (c1 != c2)
-                    current_row.append(min(insertions, deletions, substitutions))
-                previous_row = current_row
-            return previous_row[-1]
+        """Calculate Levenshtein distance using C-optimized backend."""
+        # editdistance handles both strings and lists of strings natively and is ~100x faster
+        return editdistance.eval(s1, s2)
+
+
     
     def _get_sentence_centroid(self, words):
         """Compute the centroid vector for a sentence by averaging FastText vectors of words."""
@@ -208,6 +271,14 @@ class DeepProfiler:
             return np.mean(vectors, axis=0)
         else:
             return None
+
+
+        # def _get_sentence_centroid(self, words):
+        # if self.fasttext_model is None:
+        #     return None
+        # model = self.fasttext_model                   # local ref
+        # vecs = [model[w] for w in words if w in model]
+        # return np.mean(vecs, axis=0) if vecs else None
     
     # =========================================================================
     # SUB-METHODS: Modular Measure Calculation
@@ -881,37 +952,37 @@ class DeepProfiler:
         
         # SINGLE UNIFIED PASS OVER THE DOCUMENT
         for word in doc.iter_words():
-            # debug: print each word with its POS tag
-            # print(f"{word.text} -> {word.upos}")
-
-            # --- A. Global Tracking (Includes everything) ---
+            # 1. PRE-PARSE ONCE PER WORD
+            parsed_feats = set(word.feats.split('|')) if word.feats else set()
+            word_lower = word.text.lower()
+            word_upos = word.upos
+            
+            # --- A. Global Tracking ---
             global_pos += 1
             tokens.append(word.text)
             
-            if word.upos in pos_map:
-                pos_map[word.upos].append(global_pos)
+            if word_upos in pos_map:
+                pos_map[word_upos].append(global_pos)
             
             for feat_name in feat_map.keys():
-                if self._check_feature(word, feat_name):
+                if self._check_feature_optimized(word_upos, parsed_feats, feat_name):
                     feat_map[feat_name].append(global_pos)
 
             # --- B. Non-Punctuation Tracking ---
-            if word.upos not in ('PUNCT', 'SYM', 'X'):
+            if word_upos not in ('PUNCT', 'SYM', 'X'):
                 non_punct_pos += 1
                 total_words += 1
                 total_chars += len(word.text)
                 word_lengths.append(len(word.text))
                 
-                lower_non_punct_tokens.append(word.text.lower())
-                lower_non_punct_tags.append(word.upos)
+                lower_non_punct_tokens.append(word_lower)
+                lower_non_punct_tags.append(word_upos)
                 
-                # Map POS for lower_non_punct
-                if word.upos in pos_map_lower_non_punct:
-                    pos_map_lower_non_punct[word.upos].append(non_punct_pos)
+                if word_upos in pos_map_lower_non_punct:
+                    pos_map_lower_non_punct[word_upos].append(non_punct_pos)
                     
-                # Map Features for lower_non_punct
                 for feat_name in feat_map_lower_non_punct.keys():
-                    if self._check_feature(word, feat_name):
+                    if self._check_feature_optimized(word_upos, parsed_feats, feat_name):
                         feat_map_lower_non_punct[feat_name].append(non_punct_pos)
 
 
@@ -1167,6 +1238,24 @@ class DeepProfiler:
                 if centroid1 is not None and centroid2 is not None and np.linalg.norm(centroid1) > 0 and np.linalg.norm(centroid2) > 0:
                     cos_dist = cosine(centroid1, centroid2)
                     cosine_distances.append(cos_dist)
+
+
+                # …inside _extract_measures, replace the per‑sentence loop with…
+
+                # build centroids array
+                # centroids = []
+                # for sent in doc.sentences:
+                #     cent = self._get_sentence_centroid([w.text for w in sent.words])
+                #     if cent is not None:
+                #         centroids.append(cent)
+                # if len(centroids) >= 2:
+                #     C = np.vstack(centroids)
+                #     U, V = C[:-1], C[1:]
+                #     nu = np.linalg.norm(U, axis=1)
+                #     nv = np.linalg.norm(V, axis=1)
+                #     cosine_distances.extend(
+                #         (1.0 - np.sum(U * V, axis=1) / (nu * nv)).tolist()
+                #     )
         
         # stats['Sentence overlap (Avg)'] = np.mean(overlaps) if overlaps else 0
         stats['Word overlap (Count)'] = np.sum(overlap_counts) if overlap_counts else 0
@@ -1185,54 +1274,129 @@ class DeepProfiler:
 
         return stats
 
+    
+    # …existing code…
+
+    # def get_multilingual_profile(self, text_series: pd.Series):
+    #     # 1. Census
+    #     print("🔍 Phase 1: Census…")
+    #     texts = text_series.dropna().astype(str).values       # NumPy array, once
+    #     n = texts.size
+    #     langs = np.empty(n, dtype=object)                    # pre‑allocate
+
+    #     for start in range(0, n, 2000):
+    #         batch = texts[start : start + 2000]
+    #         docs = self.lid_pipeline.bulk_process(batch)
+    #         langs[start : start + len(docs)] = [d.lang for d in docs]
+
+    #     lang_series = pd.Series(langs, index=text_series.dropna().index)
+
+    #     # group once, avoid Python‑level iteration over rows
+    #     grouped = text_series.dropna().astype(str).groupby(lang_series)
+
+    #     final_report: dict = {}
+    #     for lang, subset in grouped:
+    #         print(f"📊 Profiling '{lang}' (100% of detected text)...")
+    #         subset_txt = subset.values.tolist()
+            
+    #         try:
+    #             nlp = self._make_pipeline(lang)
+    #             all_stats = []
+                
+    #             # Process in memory-safe chunks of 2000 texts
+    #             CHUNK_SIZE = 2000
+    #             for i in tqdm(range(0, len(subset_txt), CHUNK_SIZE), desc=f"Processing {lang}"):
+    #                 chunk = subset_txt[i:i + CHUNK_SIZE]
+    #                 in_docs = [stanza.Document([], text=t) for t in chunk]
+    #                 out_docs = nlp(in_docs)
+                    
+    #                 # Extract measures for this chunk
+    #                 chunk_stats = [
+    #                     self._extract_measures(d, lang, chunk[j])
+    #                     for j, d in enumerate(out_docs)
+    #                 ]
+    #                 all_stats.extend(chunk_stats)
+
+    #             df = pd.DataFrame(all_stats)
+    #             final_report[lang] = df.mean().round(4).to_dict()
+
+    #         except Exception as e:
+    #             print(f"Skipping {lang}: {e}")
+
+    #     return pd.DataFrame(final_report)
+
     def get_multilingual_profile(self, text_series: pd.Series):
         # 1. Census
         print("🔍 Phase 1: Census...")
-        texts = text_series.dropna().astype(str).tolist()
-        # Simple batch census
-        langs = []
-        # Stanza's pipeline expects either a single document or a *list of
-        # Documents* when working in bulk mode.  Passing a plain Python list of
-        # strings triggers the `AttributeError: 'list' object has no attribute
-        # 'text'` seen in the failure log because the pipeline calls
-        # `LangIDProcessor.process` on the entire list as if it were one document.
-        #
-        # Use `bulk_process` to wrap the strings in Documents and activate bulk
-        # mode so each element of the batch is handled independently.
-        for i in range(0, len(texts), 100):
-            batch = texts[i:i+100]
-            docs = self.lid_pipeline.bulk_process(batch)
-            langs.extend([d.lang for d in docs])
-        
-        lang_series = pd.Series(langs, index=text_series.dropna().index)
-        unique_langs = lang_series.unique().tolist()
-        
-        final_report = {}
+        texts = text_series.dropna().astype(str).values       # NumPy array, once
+        n = texts.size
+        langs = np.empty(n, dtype=object)                    # pre‑allocate
 
-        # 2. Comprehensive Profile
-        for lang in unique_langs:
-            print(f"📊 Profiling '{lang}' (100% of detected text)...")
-            subset = text_series[lang_series == lang]
-            subset_txt = subset.astype(str).tolist()
+        # Phase 1 uses the shallow LID pipeline, so 2000 is safe for the GPU
+        for start in range(0, n, 2000):
+            batch = texts[start : start + 2000]
+            docs = self.lid_pipeline.bulk_process(batch)
+            langs[start : start + len(docs)] = [d.lang for d in docs]
+
+        lang_series = pd.Series(langs, index=text_series.dropna().index)
+
+        # group once, avoid Python‑level iteration over rows
+        grouped = text_series.dropna().astype(str).groupby(lang_series)
+
+        final_report: dict = {}
+        
+        # --- THE SMART CAP ---
+        # Cap deep processing to 50 messages per language to ensure real-time speeds
+        MAX_SAMPLES_PER_LANG = 50 
+
+        for lang, subset in grouped:
+            
+            # --- THE STRATIFIED SAMPLER ---
+            if len(subset) > MAX_SAMPLES_PER_LANG:
+                # Randomly sample the subset to maintain statistical validity without freezing the PC
+                subset_txt = subset.sample(n=MAX_SAMPLES_PER_LANG, random_state=42).values.tolist()
+                print(f"📊 Profiling '{lang}' (Sampled {MAX_SAMPLES_PER_LANG} of {len(subset)} texts)...")
+            else:
+                # If a language is rare, profile 100% of it so we miss nothing
+                subset_txt = subset.values.tolist()
+                print(f"📊 Profiling '{lang}' (100% of {len(subset)} detected texts)...")
             
             try:
-                stanza.download(lang, processors='tokenize,mwt,pos,lemma', verbose=False)
-                nlp = stanza.Pipeline(lang=lang, processors='tokenize,mwt,pos,lemma', verbose=False, use_gpu=self.use_gpu)
+                nlp = self._make_pipeline(lang)
+                all_stats = []
                 
-                # Process docs
-                in_docs = [stanza.Document([], text=t) for t in subset_txt]
-                out_docs = nlp(in_docs)
-                
-                # Extract & Aggregate (pass original text for paragraph detection)
-                all_stats = [self._extract_measures(d, lang, subset_txt[i]) for i, d in enumerate(out_docs)]
+                # MX230 GPU VRAM Optimization: 
+                # Dropped chunk size to 50 to prevent CUDA Out Of Memory (OOM) errors
+                CHUNK_SIZE = 50
+                for i in tqdm(range(0, len(subset_txt), CHUNK_SIZE), desc=f"Processing {lang}"):
+                    chunk = subset_txt[i:i + CHUNK_SIZE]
+                    in_docs = [stanza.Document([], text=t) for t in chunk]
+                    out_docs = nlp(in_docs)
+                    
+                    # Extract measures for this chunk
+                    chunk_stats = [
+                        self._extract_measures(d, lang, chunk[j])
+                        for j, d in enumerate(out_docs)
+                    ]
+                    all_stats.extend(chunk_stats)
+
+                    # VRAM Management: Explicitly clear the heavy neural trees from memory 
+                    # before loading the next chunk into the GPU
+                    del in_docs
+                    del out_docs
+                    gc.collect()
+
                 df = pd.DataFrame(all_stats)
-                
-                # Calculate Means
                 final_report[lang] = df.mean().round(4).to_dict()
                 
-                del nlp
+                # Clear the entire language pipeline from VRAM before moving to the next language
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache() # Force PyTorch to release VRAM
                 gc.collect()
+
             except Exception as e:
                 print(f"Skipping {lang}: {e}")
 
         return pd.DataFrame(final_report)
+
+        
