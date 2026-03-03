@@ -1185,26 +1185,34 @@ class DeepProfiler:
 
         return stats
 
-    def get_multilingual_profile(self, text_series: pd.Series, samples_per_lang=100):
+    def get_multilingual_profile(self, text_series: pd.Series):
         # 1. Census
         print("🔍 Phase 1: Census...")
         texts = text_series.dropna().astype(str).tolist()
         # Simple batch census
         langs = []
+        # Stanza's pipeline expects either a single document or a *list of
+        # Documents* when working in bulk mode.  Passing a plain Python list of
+        # strings triggers the `AttributeError: 'list' object has no attribute
+        # 'text'` seen in the failure log because the pipeline calls
+        # `LangIDProcessor.process` on the entire list as if it were one document.
+        #
+        # Use `bulk_process` to wrap the strings in Documents and activate bulk
+        # mode so each element of the batch is handled independently.
         for i in range(0, len(texts), 100):
             batch = texts[i:i+100]
-            docs = self.lid_pipeline(batch)
+            docs = self.lid_pipeline.bulk_process(batch)
             langs.extend([d.lang for d in docs])
         
         lang_series = pd.Series(langs, index=text_series.dropna().index)
-        top_langs = lang_series.value_counts().head(5).index.tolist()
+        unique_langs = lang_series.unique().tolist()
         
         final_report = {}
 
-        # 2. Stratified Profile
-        for lang in top_langs:
-            print(f"📊 Profiling '{lang}'...")
-            subset = text_series[lang_series == lang].sample(min(samples_per_lang, len(text_series[lang_series == lang])))
+        # 2. Comprehensive Profile
+        for lang in unique_langs:
+            print(f"📊 Profiling '{lang}' (100% of detected text)...")
+            subset = text_series[lang_series == lang]
             subset_txt = subset.astype(str).tolist()
             
             try:
