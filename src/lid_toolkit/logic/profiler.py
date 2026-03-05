@@ -55,9 +55,9 @@ class DeepProfiler:
         self.lid_pipeline = stanza.Pipeline(
             lang="multilingual",
             processors="langid",
-            tokenize_batch_size=4096,
-            pos_batch_size=4096,
-            batch_size=4096,
+            tokenize_batch_size=256,
+            pos_batch_size=256,
+            batch_size=256,
             use_gpu=self.use_gpu,
             verbose=False,
         )
@@ -79,7 +79,7 @@ class DeepProfiler:
                 tokenize_batch_size=64,
                 pos_batch_size=64,
                 batch_size=64,
-                use_gpu=True,
+                use_gpu=self.use_gpu,
                 verbose=False,
             )
         return self._nlp_cache[lang]
@@ -1331,11 +1331,12 @@ class DeepProfiler:
         texts = text_series.dropna().astype(str).values       # NumPy array, once
         n = texts.size
         langs = np.empty(n, dtype=object)                    # pre‑allocate
-
+        LID_CHUNK_SIZE = 250
         # Phase 1 uses the shallow LID pipeline, so 2000 is safe for the GPU
-        for start in range(0, n, 2000):
-            batch = texts[start : start + 2000]
-            docs = self.lid_pipeline.bulk_process(batch)
+        for start in tqdm(range(0, n, LID_CHUNK_SIZE), desc="Census Progress"):
+            batch = texts[start : start + LID_CHUNK_SIZE]
+            truncated_batch = [str(msg)[:300] for msg in batch]
+            docs = self.lid_pipeline.bulk_process(truncated_batch)
             langs[start : start + len(docs)] = [d.lang for d in docs]
 
         lang_series = pd.Series(langs, index=text_series.dropna().index)
