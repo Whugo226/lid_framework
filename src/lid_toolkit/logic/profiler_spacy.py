@@ -53,7 +53,7 @@ class DeepProfiler:
             'de': 'de_core_news_sm',  # German
             'el': 'el_core_news_sm',  # Greek
             'it': 'it_core_news_sm',  # Italian
-            'ja': 'ja_core_news_sm',  # Japanese
+            'ja': 'ja_ginza',         # Japanese
             'ko': 'ko_core_news_sm',  # Korean
             'lt': 'lt_core_news_sm',  # Lithuanian
             'mk': 'mk_core_news_sm',  # Macedonian
@@ -95,12 +95,16 @@ class DeepProfiler:
                 spacy.cli.download(model_name)
 
             # --- 1. LOAD MODEL & APPLY SUDACHI FIX ---
-            if lang == 'ja':
-                nlp = spacy.load(
-                    model_name, 
-                    disable=["parser", "ner"],
-                    config={"nlp": {"tokenizer": {"split_mode": "A"}}} 
-                )
+            # if lang == 'ja':
+            #     nlp = spacy.load(
+            #         model_name, 
+            #         disable=["parser", "ner"],
+            #         config={"nlp": {"tokenizer": {"split_mode": "A"}}} 
+            #     )
+            if lang == 'ko':
+                # Force pure-Python rule-based tokenizer (Perfect for Korean eojeols, bypasses C++)
+                ko_config = {"nlp": {"tokenizer": {"@tokenizers": "spacy.Tokenizer.v1"}}}
+                nlp = spacy.load(model_name, disable=["parser", "ner"], config=ko_config)
             else:
                 nlp = spacy.load(model_name, disable=["parser", "ner"])
 

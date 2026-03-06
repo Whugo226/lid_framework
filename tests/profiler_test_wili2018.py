@@ -13,7 +13,7 @@ def main():
     start_time = time.time()
     
     CSV_PATH = os.path.join(os.path.dirname(__file__), 'data', 'x_test.txt')
-    RESULT_EXCEL_PATH = os.path.join(os.path.dirname(__file__), 'profiler_results_wili2018_with_spacy.xlsx')
+    RESULT_EXCEL_PATH = os.path.join(os.path.dirname(__file__), 'profiler_results_wili2018_with_spacy_small_models.xlsx')
 
     print(f"[{time.strftime('%H:%M:%S')}] Loading data from {CSV_PATH}...")
     
