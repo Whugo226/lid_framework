@@ -28,7 +28,7 @@ class DeepProfiler:
         # 1. Dynamically find the path to the model relative to this python script
         # __file__ is profiler.py. We go up one level to 'lid_toolkit', then into 'resources'
         base_dir = Path(__file__).parent.parent 
-        model_path = base_dir / "models" / "fasttext" / "lid.176.ftz"
+        model_path = base_dir / "models" / "fasttext" / "lid.176.bin"
         
         # 2. Check if it exists so we don't crash silently
         if not model_path.exists():
@@ -1303,11 +1303,25 @@ class DeepProfiler:
 
 
     def get_multilingual_profile(self, text_series: pd.Series):
+        """Return a multilingual feature profile for each language detected in
+        ``text_series``.
+
+        During the initial census FastText predictions include confidence scores;
+        texts whose top prediction probability is below ``CONF_THRESHOLD`` are
+        discarded *before* any sampling or spaCy processing.  This mirrors the
+        behaviour of :mod:`predict_fasttext_x_test` and ensures that the
+        downstream profiling only operates on high‑certainty examples.
+
+        ``text_series`` should be a pandas Series of strings (NaNs will be
+        dropped).  The returned object is a DataFrame mapping each language code
+        to its measured features.
+        """
         # 1. Census (Using FastText)
         print("🔍 Phase 1: Census...")
         texts = text_series.dropna().astype(str).values       # NumPy array, once
         n = texts.size
         langs = np.empty(n, dtype=object)                    # pre‑allocate
+        confs = np.zeros(n, dtype=float)                    # store confidence for each text
         
         # FastText requires text to be on a single line, so we strip newlines
         cleaned_texts = [text.replace('\n', ' ') for text in texts]
@@ -1319,16 +1333,27 @@ class DeepProfiler:
             
             # FastText predict() returns a tuple: (labels, probabilities)
             # Example output: (['__label__en', '__label__fr'], [0.99, 0.95])
-            predictions, _ = self.lid_model.predict(batch)
+            predictions, probs = self.lid_model.predict(batch)
             
             # Strip out the '__label__' prefix to just get the 'en' or 'fr' ISO code
             batch_langs = [pred[0].replace('__label__', '') for pred in predictions]
+            batch_confs = [float(p[0]) for p in probs]  # only look at top score
             langs[start : start + len(batch_langs)] = batch_langs
+            confs[start : start + len(batch_confs)] = batch_confs
 
         lang_series = pd.Series(langs, index=text_series.dropna().index)
+        conf_series = pd.Series(confs, index=text_series.dropna().index)
+
+        # --- APPLY CONFIDENCE FILTER BEFORE GROUPING ---
+        CONF_THRESHOLD = 0.95
+        high_conf_mask = conf_series >= CONF_THRESHOLD
+        kept = high_conf_mask.sum()
+        dropped = len(high_conf_mask) - kept
+        print(f"✅ Census: kept {kept} texts with confidence >= {CONF_THRESHOLD} (dropped {dropped})")
 
         # Group once, avoid Python‑level iteration over rows
-        grouped = text_series.dropna().astype(str).groupby(lang_series)
+        filtered_texts = text_series.dropna().astype(str)[high_conf_mask]
+        grouped = filtered_texts.groupby(lang_series[high_conf_mask])
 
         final_report: dict = {}
         
