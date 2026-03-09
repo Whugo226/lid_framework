@@ -465,6 +465,36 @@ def write_correlation_summary():
         measure_data[row['Measure']]['expected'].append(e)
         measure_data[row['Measure']]['actual'].append(a)
 
+    # Manual function to write correlation summary to CSV
+def write_correlation_summary():
+    if not test_results:
+        return
+
+    # --- NEW: ADD THESE TWO LISTS FOR THE GLOBAL SCORE ---
+    all_numeric_expected = []
+    all_numeric_actual = []
+
+    # Group numeric expected/actual pairs by measure
+    measure_data = defaultdict(lambda: {'expected': [], 'actual': []})
+    for row in test_results:
+        expected = row['Expected']
+        actual = row['Actual']
+        if expected == 'N/A' or actual == 'N/A':
+            continue
+        try:
+            e = float(expected)
+            a = float(actual)
+            
+            # --- NEW: POPULATE GLOBAL LISTS ---
+            all_numeric_expected.append(e)
+            all_numeric_actual.append(a)
+            
+            measure_data[row['Measure']]['expected'].append(e)
+            measure_data[row['Measure']]['actual'].append(a)
+        except (TypeError, ValueError):
+            continue
+
+    # (Existing logic for writing individual measures)
     with open(CORRELATION_SUMMARY_CSV_PATH, mode='w', encoding='utf-8', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=['Measure', 'MAE', 'Pearson', 'Spearman'])
         writer.writeheader()
@@ -472,22 +502,33 @@ def write_correlation_summary():
             expected_arr = np.array(vals['expected'])
             actual_arr = np.array(vals['actual'])
             mae = float(np.mean(np.abs(actual_arr - expected_arr)))
-            # Pearson: requires variance in both arrays
+            
             if len(expected_arr) >= 2 and np.std(expected_arr) > 0 and np.std(actual_arr) > 0:
                 pearson, _ = pearsonr(expected_arr, actual_arr)
             else:
                 pearson = float('nan')
-            # Spearman: requires at least 2 data points
+            
             if len(expected_arr) >= 2:
                 spearman, _ = spearmanr(expected_arr, actual_arr)
             else:
                 spearman = float('nan')
+            
             writer.writerow({
                 'Measure': measure,
                 'MAE': mae,
                 'Pearson': pearson,
                 'Spearman': spearman,
             })
+
+    # --- NEW: CALCULATE AND PRINT THE GLOBAL HEADLINE NUMBER ---
+    if len(all_numeric_expected) > 1:
+        global_r, _ = pearsonr(all_numeric_expected, all_numeric_actual)
+        print("\n" + "="*40)
+        print(f"🎓 PROFESSOR'S GLOBAL CORRELATION")
+        print(f"Total points analyzed: {len(all_numeric_expected)}")
+        print(f"Headline Alignment Score: r = {global_r:.4f}")
+        print("="*40 + "\n")
+
     print(f"Wrote correlation summary to {CORRELATION_SUMMARY_CSV_PATH}")
 
 

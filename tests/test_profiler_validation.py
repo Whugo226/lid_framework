@@ -123,6 +123,7 @@ MEASURE_MAP = {
     'Word entropy (Doc)': 'Word entropy',
     'Zipf steepness of curve (Doc)': 'Zipf curve steepness',
     'Zipf goodness of fit (Doc)': 'Zipf goodness-of-fit',
+    'Zipf goodness of fit (Spearman) (Doc)': 'Zipf goodness-of-fit (Spearman)',
     'Zipf frequency (Doc)': 'Lexical sophistication (Zipf frequency)',
     'Average contextual diversity (Doc)': 'Average contextual diversity',
     'Frequent word count (Doc)': 'Frequent word count',
@@ -451,6 +452,17 @@ def write_results_to_csv():
             writer.writerow(row)
     print(f"Wrote test results to {RESULT_CSV_PATH}")
 
+
+
+
+def test_zipf_spearman_metric():
+    """Ensure the profiler returns a Spearman-based goodness-of-fit value between 0 and 1."""
+    sample = "This sentence is just to generate some word frequencies and a Zipf curve."
+    stats = get_profiler_stats(sample)
+    assert 'Zipf goodness-of-fit (Spearman)' in stats, "Spearman metric missing from profiler output"
+    val = stats['Zipf goodness-of-fit (Spearman)']
+    assert isinstance(val, float)
+    assert 0.0 <= val <= 1.0, f"Spearman value out of bounds: {val}"
 
 # Session-scoped fixture to write results after all tests
 @pytest.fixture(scope="session", autouse=True)
