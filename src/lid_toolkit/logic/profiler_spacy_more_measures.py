@@ -22,6 +22,45 @@ import spacy
 
 
 class DeepProfiler:
+    # Human-readable labels for spaCy UPOS tags (used in output column names)
+    POS_LABELS: dict = {
+        'ADJ':  'Adjective',
+        'ADV':  'Adverb',
+        'ADP':  'Adposition',
+        'AUX':  'Auxiliary',
+        'DET':  'Determiner',
+        'INTJ': 'Interjection',
+        'NOUN': 'Noun',
+        'NUM':  'Numeral',
+        'PART': 'Particle',
+        'PRON': 'Pronoun',
+        'PROPN':'Proper noun',
+        'VERB': 'Lexical verb',
+        # CCONJ / SCONJ intentionally absent – they keep their spaCy tag
+        # in per-tag rows; the merged Conjunction group covers the expected column.
+    }
+
+    # Expanded human-readable labels for morphological feature keys
+    FEAT_LABELS: dict = {
+        'First person':    'First person pronoun',
+        'Second person':   'Second person pronoun',
+        'Third person':    'Third person pronoun',
+        'Singular':        'Singular word',
+        'Plural':          'Plural word',
+        'Indefinite':      'Indefinite word',
+        'Definite':        'Definite word',
+        'Finite':          'Finite verb',
+        'Infinitive':      'Infinitive verb',
+        'Past':            'Past tense',
+        'Present':         'Present tense',
+        'Passive':         'Passive voice',
+        # These map to themselves:
+        'Personal pronoun':'Personal pronoun',
+        'Interrogative':   'Interrogative',
+        'Demonstrative':   'Demonstrative',
+        'Verbal adjective':'Verbal adjective',
+    }
+
     def __init__(self):
         print("⏳ Initializing DeepProfiler (Lingualyzer Implementation)...")
         
@@ -80,7 +119,7 @@ class DeepProfiler:
         self.TAG_GROUPS = {
             'Lexical item': {'ADJ', 'ADV', 'INTJ', 'NOUN', 'PROPN', 'VERB'},
             'Grammatical item': {'ADP', 'AUX', 'CCONJ', 'DET', 'NUM', 'PART', 'PRON', 'SCONJ'},
-            'Verb_All': {'VERB', 'AUX'}, # "Verb count" in Lingualyzer = Verb + Aux
+            'Verb': {'VERB', 'AUX'},  # "Verb count" in Lingualyzer = Verb + Aux
             'Conjunction': {'CCONJ', 'SCONJ'}
         }
         
@@ -383,7 +422,7 @@ class DeepProfiler:
         # Hapax legomena average position (normalized 0 to 1) and SD: use original token positions
         # Only count the first occurrence of each hapax word (case-insensitive, non-punct) in the original tokens
        
-        stats['Hapax legomena average position'] = ((np.mean(hapax_positions))-1) / (doc_len-1) if hapax_positions and doc_len > 1 else 0
+        stats['Hapax legomena avg position'] = ((np.mean(hapax_positions))-1) / (doc_len-1) if hapax_positions and doc_len > 1 else 0
 
         if hapax_positions and doc_len > 1 and len(hapax_positions) >= 2:
             # normalized = [p / (doc_len-1) for p in hapax_positions]
@@ -413,23 +452,24 @@ class DeepProfiler:
         # ...existing code...
 
         # At the end of _calc_lexical_diversity, after defining moving_average_ttr:
-        stats['Moving average TTR'] = moving_average_ttr(lower_non_punct_tokens, window_size=100)
+        stats['Moving average type-token ratio'] = moving_average_ttr(lower_non_punct_tokens, window_size=100)
 
         # ...existing code...
         # Per-PoS TTRs
         pos_tags = ['ADJ', 'ADV', 'INTJ', 'VERB', 'NOUN', 'PROPN', 'ADP', 'AUX', 
                  'DET', 'NUM', 'PART', 'PRON']
         for tag in pos_tags:
+            label = self.POS_LABELS.get(tag, tag)
             positions = pos_map_lower_non_punct.get(tag, [])
             if positions:
                 # Get tokens at these positions
                 pos_tokens = [lower_non_punct_tokens[i-1] for i in positions if i > 0]
                 if pos_tokens:
-                    stats[f'{tag} TTR'] = len(set(pos_tokens)) / len(pos_tokens)
+                    stats[f'{label} type-token ratio'] = len(set(pos_tokens)) / len(pos_tokens)
                 else:
-                    stats[f'{tag} TTR'] = 0
+                    stats[f'{label} type-token ratio'] = 0
             else:
-                stats[f'{tag} TTR'] = 0
+                stats[f'{label} type-token ratio'] = 0
         
         # Combined group TTRs
         # Lexical item TTR (open class: ADJ, ADV, INTJ, NOUN, PROPN, VERB)
@@ -439,9 +479,9 @@ class DeepProfiler:
             lexical_positions.extend(pos_map_lower_non_punct.get(tag, []))
         if lexical_positions:
             lexical_tokens = [lower_non_punct_tokens[i-1] for i in lexical_positions if i > 0]
-            stats['Lexical item TTR'] = len(set(lexical_tokens)) / len(lexical_tokens) if lexical_tokens else 0
+            stats['Lexical item type-token ratio'] = len(set(lexical_tokens)) / len(lexical_tokens) if lexical_tokens else 0
         else:
-            stats['Lexical item TTR'] = 0
+            stats['Lexical item type-token ratio'] = 0
         
         # Grammatical item TTR (closed class: ADP, AUX, CCONJ, DET, NUM, PART, PRON, SCONJ)
         grammatical_tags = {'ADP', 'AUX', 'CCONJ', 'DET', 'NUM', 'PART', 'PRON', 'SCONJ'}
@@ -450,9 +490,9 @@ class DeepProfiler:
             grammatical_positions.extend(pos_map_lower_non_punct.get(tag, []))
         if grammatical_positions:
             grammatical_tokens = [lower_non_punct_tokens[i-1] for i in grammatical_positions if i > 0]
-            stats['Grammatical item TTR'] = len(set(grammatical_tokens)) / len(grammatical_tokens) if grammatical_tokens else 0
+            stats['Grammatical item type-token ratio'] = len(set(grammatical_tokens)) / len(grammatical_tokens) if grammatical_tokens else 0
         else:
-            stats['Grammatical item TTR'] = 0
+            stats['Grammatical item type-token ratio'] = 0
         
         # Verb_All TTR (VERB + AUX)
         verb_all_tags = {'VERB', 'AUX'}
@@ -461,9 +501,9 @@ class DeepProfiler:
             verb_all_positions.extend(pos_map_lower_non_punct.get(tag, []))
         if verb_all_positions:
             verb_all_tokens = [lower_non_punct_tokens[i-1] for i in verb_all_positions if i > 0]
-            stats['Verb_All TTR'] = len(set(verb_all_tokens)) / len(verb_all_tokens) if verb_all_tokens else 0
+            stats['Verb type-token ratio'] = len(set(verb_all_tokens)) / len(verb_all_tokens) if verb_all_tokens else 0
         else:
-            stats['Verb_All TTR'] = 0
+            stats['Verb type-token ratio'] = 0
 
         # Conjunction type-token ratio (CCONJ + SCONJ)
         conjunction_tags = {'CCONJ', 'SCONJ'}
@@ -473,9 +513,9 @@ class DeepProfiler:
         if conjunction_positions:
             conjunction_tokens = [lower_non_punct_tokens[i-1] for i in conjunction_positions if i > 0]
             distinct_conjunctions = set(conjunction_tokens)
-            stats['Conjunction TTR'] = len(distinct_conjunctions) / len(conjunction_tokens) if conjunction_tokens else 0
+            stats['Conjunction type-token ratio'] = len(distinct_conjunctions) / len(conjunction_tokens) if conjunction_tokens else 0
         else:
-            stats['Conjunction TTR'] = 0
+            stats['Conjunction type-token ratio'] = 0
         
         return stats
     
@@ -483,25 +523,20 @@ class DeepProfiler:
         
         stats = {}
     
-        # Global average word length (lowercased, non-punct tokens)
-        if lower_non_punct_tokens:
-            stats['Word length (non-punct)'] = np.mean([len(t) for t in lower_non_punct_tokens])
-        else:
-            stats['Word length (non-punct)'] = 0
-    
         # Per-PoS average word lengths (using positions in pos_map_lower_non_punct)
         pos_tags = ['ADJ', 'ADV', 'INTJ', 'VERB', 'NOUN', 'PROPN', 'ADP', 'AUX', 
                     'DET', 'NUM', 'PART', 'PRON']
         for tag in pos_tags:
+            label = self.POS_LABELS.get(tag, tag)
             positions = pos_map_lower_non_punct.get(tag, [])
             lengths = [len(lower_non_punct_tokens[i-1]) for i in positions if 0 < i <= len(lower_non_punct_tokens)]
-            stats[f'{tag} word length'] = np.mean(lengths) if lengths else 0
+            stats[f'{label} length'] = np.mean(lengths) if lengths else 0
     
         # Combined group word lengths
         group_defs = {
             'Lexical item': {'ADJ', 'ADV', 'INTJ', 'NOUN', 'PROPN', 'VERB'},
             'Grammatical item': {'ADP', 'AUX', 'CCONJ', 'DET', 'NUM', 'PART', 'PRON', 'SCONJ'},
-            'Verb_All': {'VERB', 'AUX'},
+            'Verb': {'VERB', 'AUX'},
             'Conjunction': {'CCONJ', 'SCONJ'}
         }
         for group, tags in group_defs.items():
@@ -509,7 +544,7 @@ class DeepProfiler:
             for tag in tags:
                 group_positions.extend(pos_map_lower_non_punct.get(tag, []))
             lengths = [len(lower_non_punct_tokens[i-1]) for i in group_positions if 0 < i <= len(lower_non_punct_tokens)]
-            stats[f'{group} word length'] = np.mean(lengths) if lengths else 0
+            stats[f'{group} length'] = np.mean(lengths) if lengths else 0
     
         return stats
 
@@ -519,8 +554,8 @@ class DeepProfiler:
         stats = {}
         
         if not zipf_scores:
-            stats['Zipf curve steepness'] = 0
-            stats['Zipf goodness-of-fit'] = 0
+            stats['Zipf steepness of curve'] = 0
+            stats['Zipf goodness of fit'] = 0
             stats['Average contextual diversity'] = 0
             stats['Frequent word incidence'] = 0
             stats['Infrequent word incidence'] = 0
@@ -591,7 +626,7 @@ class DeepProfiler:
                     # Fallback if extremely flat/skewed 
                     s_mle = 1.0 
                 
-                stats['Zipf curve steepness'] = abs(s_mle)
+                stats['Zipf steepness of curve'] = abs(s_mle)
                 
                 # Goodness-of-fit: Squared Pearson correlation between actual and predicted
                 weights = ranks ** -s_mle
@@ -599,13 +634,13 @@ class DeepProfiler:
                 r_val, _ = pearsonr(freq_above_min, theo_freqs)
                 
                 # Clamp to [0, 1] just in case of floating point anomalies
-                stats['Zipf goodness-of-fit'] = max(0.0, min(1.0, r_val ** 2))
+                stats['Zipf goodness of fit'] = max(0.0, min(1.0, r_val ** 2))
             else:
-                stats['Zipf curve steepness'] = 0
-                stats['Zipf goodness-of-fit'] = 0
+                stats['Zipf steepness of curve'] = 0
+                stats['Zipf goodness of fit'] = 0
         else:
-            stats['Zipf curve steepness'] = 0
-            stats['Zipf goodness-of-fit'] = 0    
+            stats['Zipf steepness of curve'] = 0
+            stats['Zipf goodness of fit'] = 0    
         
         # Average contextual diversity (approximated by Zipf score)
         stats['Average contextual diversity'] = np.mean(zipf_scores)
@@ -646,20 +681,24 @@ class DeepProfiler:
                 lemmas_per_word[(token.lemma_, token.pos_)].add(token.text.lower())
         
         if distances:
-            stats['Word-lemma distance (avg)'] = np.mean(distances)
-            stats['Word-lemma distance (max)'] = np.max(distances)
+            stats['Word-lemma Levenshtein dist.'] = np.mean(distances)
         else:
-            stats['Word-lemma distance (avg)'] = 0
-            stats['Word-lemma distance (max)'] = 0
+            stats['Word-lemma Levenshtein dist.'] = 0
         
         # Word-types per lemma (overall) - differentiated by PoS
         if lemmas_per_word:
             types_per_lemma = [len(word_forms) for word_forms in lemmas_per_word.values()]
-            stats['Word-types per lemma'] = np.mean(types_per_lemma)
+            stats['Word types per lemma'] = np.mean(types_per_lemma)
         else:
-            stats['Word-types per lemma'] = 0
+            stats['Word types per lemma'] = 0
         
         # Word-types per lemma for specific PoS
+        pos_filter_labels = {
+            'noun':        'nouns',
+            'verb':        'verbs',
+            'lexical':     'lexical items',
+            'grammatical': 'grammatical items',
+        }
         for pos_filter, pos_tags in [('noun', {'NOUN'}), ('verb', {'VERB', 'AUX'}), 
                                        ('lexical', {'ADJ', 'ADV', 'INTJ', 'NOUN', 'PROPN', 'VERB'}),
                                        ('grammatical', {'ADP', 'AUX', 'CCONJ', 'DET', 'NUM', 'PART', 'PRON', 'SCONJ'})]:
@@ -668,11 +707,12 @@ class DeepProfiler:
                 if token.pos_ in pos_tags and token.lemma_:
                     lemma_map[token.lemma_].add(token.text.lower())
             
+            col = f'Word types per lemma ({pos_filter_labels[pos_filter]})'
             if lemma_map:
                 types_per_lemma = [len(word_forms) for word_forms in lemma_map.values()]
-                stats[f'Word-types per lemma ({pos_filter})'] = np.mean(types_per_lemma)
+                stats[col] = np.mean(types_per_lemma)
             else:
-                stats[f'Word-types per lemma ({pos_filter})'] = 0
+                stats[col] = 0
         
         return stats
     
@@ -843,10 +883,11 @@ class DeepProfiler:
         pos_tags = ['ADJ', 'ADV', 'INTJ', 'VERB', 'NOUN', 'PROPN', 'ADP', 'AUX', 
                     'DET', 'NUM', 'PART', 'PRON']
         for tag in pos_tags:
+            label = self.POS_LABELS.get(tag, tag)
             positions = pos_map_lower_non_punct.get(tag, [])
-            stats[f'{tag} concentration'] = calc_concentration(positions, doc_len)
-            stats[f'{tag} average position'] = calc_avg_position(positions, doc_len)
-            stats[f'{tag} position SD'] = calc_position_sd(positions, doc_len)
+            stats[f'{label} concentration'] = calc_concentration(positions, doc_len)
+            stats[f'{label} avg position'] = calc_avg_position(positions, doc_len)
+            stats[f'{label} position SD'] = calc_position_sd(positions, doc_len)
 
         # Tag group distributional measures (using self.TAG_GROUPS)
         for group_name, tag_set in self.TAG_GROUPS.items():
@@ -855,15 +896,16 @@ class DeepProfiler:
                 group_positions.extend(pos_map_lower_non_punct.get(tag, []))
             group_positions_sorted = sorted(group_positions)
             stats[f'{group_name} concentration'] = calc_concentration(group_positions_sorted, doc_len)
-            stats[f'{group_name} average position'] = calc_avg_position(group_positions_sorted, doc_len)
+            stats[f'{group_name} avg position'] = calc_avg_position(group_positions_sorted, doc_len)
             stats[f'{group_name} position SD'] = calc_position_sd(group_positions_sorted, doc_len)
         
         # Feature-based distributional measures
         for feat in feat_map_lower_non_punct:
+            label = self.FEAT_LABELS.get(feat, feat)
             positions = feat_map_lower_non_punct[feat]
-            stats[f'{feat} concentration'] = calc_concentration(positions, doc_len)
-            stats[f'{feat} average position'] = calc_avg_position(positions, doc_len)
-            stats[f'{feat} position SD'] = calc_position_sd(positions, doc_len)
+            stats[f'{label} concentration'] = calc_concentration(positions, doc_len)
+            stats[f'{label} avg position'] = calc_avg_position(positions, doc_len)
+            stats[f'{label} position SD'] = calc_position_sd(positions, doc_len)
         
         # Frequency-based distributional measures
         freq_positions = []
@@ -880,17 +922,17 @@ class DeepProfiler:
                 unknown_positions.append(i)
         
         stats['Frequent word concentration'] = calc_concentration(freq_positions, doc_len)
-        stats['Frequent word average position'] = calc_avg_position(freq_positions, doc_len)
+        stats['Frequent word avg position'] = calc_avg_position(freq_positions, doc_len)
         stats['Frequent word position SD'] = calc_position_sd(freq_positions, doc_len)
         stats['Frequent word burstiness'] = self._calc_burstiness(freq_positions, doc_len)
         
         stats['Infrequent word concentration'] = calc_concentration(infreq_positions, doc_len)
-        stats['Infrequent word average position'] = calc_avg_position(infreq_positions, doc_len)
+        stats['Infrequent word avg position'] = calc_avg_position(infreq_positions, doc_len)
         stats['Infrequent word position SD'] = calc_position_sd(infreq_positions, doc_len)
         stats['Infrequent word burstiness'] = self._calc_burstiness(infreq_positions, doc_len)
         
         stats['Unknown word concentration'] = calc_concentration(unknown_positions, doc_len)
-        stats['Unknown word average position'] = calc_avg_position(unknown_positions, doc_len)
+        stats['Unknown word avg position'] = calc_avg_position(unknown_positions, doc_len)
         stats['Unknown word position SD'] = calc_position_sd(unknown_positions, doc_len)
         stats['Unknown word burstiness'] = self._calc_burstiness(unknown_positions, doc_len)
         
@@ -900,15 +942,52 @@ class DeepProfiler:
     # SKIP SETS: keys excluded from sentence / paragraph summarisation
     # =========================================================================
     SKIP_AT_SENT_LEVEL: set = {
-        "Moving average TTR",
+        "Moving average type-token ratio",
         "Honoré's statistic",
         "Sentence count",
-        "Zipf curve steepness",
-        "Zipf goodness-of-fit",
+        "Zipf steepness of curve",
+        "Zipf goodness of fit",
+        # Burstiness measures are undefined at sentence level (expected list has only Doc + Par)
+        "Hapax legomena burstiness",
+        "Adjective burstiness",
+        "Adverb burstiness",
+        "Interjection burstiness",
+        "Lexical verb burstiness",
+        "Noun burstiness",
+        "Proper noun burstiness",
+        "Adposition burstiness",
+        "Auxiliary burstiness",
+        "Determiner burstiness",
+        "Numeral burstiness",
+        "Particle burstiness",
+        "Pronoun burstiness",
+        "Lexical item burstiness",
+        "Grammatical item burstiness",
+        "Verb burstiness",
+        "Conjunction burstiness",
+        "Personal pronoun burstiness",
+        "First person pronoun burstiness",
+        "Second person pronoun burstiness",
+        "Third person pronoun burstiness",
+        "Interrogative burstiness",
+        "Demonstrative burstiness",
+        "Singular word burstiness",
+        "Plural word burstiness",
+        "Indefinite word burstiness",
+        "Definite word burstiness",
+        "Finite verb burstiness",
+        "Infinitive verb burstiness",
+        "Verbal adjective burstiness",
+        "Past tense burstiness",
+        "Present tense burstiness",
+        "Passive voice burstiness",
+        "Frequent word burstiness",
+        "Infrequent word burstiness",
+        "Unknown word burstiness",
     }
     SKIP_AT_PAR_LEVEL: set = {
-        "Zipf curve steepness",
-        "Zipf goodness-of-fit",
+        "Zipf steepness of curve",
+        "Zipf goodness of fit",
     }
 
     # =========================================================================
@@ -1256,19 +1335,22 @@ class DeepProfiler:
 
         # Standard Tags
         for tag in pos_map_lower_non_punct:
+            if tag in ('CCONJ', 'SCONJ'):
+                continue
+            label = self.POS_LABELS.get(tag, tag)
             cnt = len(pos_map_lower_non_punct[tag])
-            stats[f'{tag} count'] = cnt
-            stats[f'{tag} incidence'] = (cnt / doc_len) * 1000
+            stats[f'{label} count'] = cnt
+            stats[f'{label} incidence'] = (cnt / doc_len) * 1000
             # Type count for this PoS
             pos_tokens = [lower_non_punct_tokens[i-1] for i in pos_map_lower_non_punct[tag] if i > 0 and i <= len(lower_non_punct_tokens)]
-            stats[f'{tag} type count'] = len(set(pos_tokens))
+            stats[f'{label} type count'] = len(set(pos_tokens))
             # Burstiness for this PoS
-            stats[f'{tag} burstiness'] = self._calc_burstiness(pos_map_lower_non_punct[tag], doc_len)
+            stats[f'{label} burstiness'] = self._calc_burstiness(pos_map_lower_non_punct[tag], doc_len)
 
         # Punctuation measures (tracked separately in pos_map)
         punct_count = len(pos_map.get('PUNCT', []))
-        stats['PUNCT count'] = punct_count
-        stats['PUNCT incidence'] = (punct_count / len(tokens)) * 1000 if doc_len > 0 else 0
+        stats['Punctuation count'] = punct_count
+        stats['Punctuation incidence'] = (punct_count / len(tokens)) * 1000 if doc_len > 0 else 0
 
         # Combined Groups (Lingualyzer Specifics)
         for name, tag_set in self.TAG_GROUPS.items():
@@ -1288,11 +1370,12 @@ class DeepProfiler:
 
         # --- Group 4: Morphological Features ---
         for feat, positions in feat_map_lower_non_punct.items():
+            label = self.FEAT_LABELS.get(feat, feat)
             cnt = len(positions)
-            stats[f'{feat} count'] = cnt
-            stats[f'{feat} incidence'] = (cnt / doc_len) * 1000
+            stats[f'{label} count'] = cnt
+            stats[f'{label} incidence'] = (cnt / doc_len) * 1000
             # Burstiness
-            stats[f'{feat} burstiness'] = self._calc_burstiness(positions, doc_len)
+            stats[f'{label} burstiness'] = self._calc_burstiness(positions, doc_len)
 
         # --- Group 5: Lexical Diversity ---
         lex_div_stats = self._calc_lexical_diversity(lower_non_punct_tokens, pos_map_lower_non_punct, doc_len)
@@ -1304,11 +1387,11 @@ class DeepProfiler:
         
         # --- Group 7: Complexity (Entropy & Zipf) ---
         if zipf_scores:
-            stats['Lexical sophistication (Zipf frequency)'] = np.mean(zipf_scores)
+            stats['Zipf frequency'] = np.mean(zipf_scores)
             stats['Frequent word count'] = sum(1 for z in zipf_scores if z > 6.0)
             stats['Infrequent word count'] = sum(1 for z in zipf_scores if z < 4.0)
         else:
-            stats['Lexical sophistication (Zipf frequency)'] = 0
+            stats['Zipf frequency'] = 0
             stats['Frequent word count'] = 0
             stats['Infrequent word count'] = 0
 
