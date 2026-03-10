@@ -6,7 +6,7 @@ import csv
 
 # Ensure the src directory is in the path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
-from lid_toolkit.logic.profiler_spacy import DeepProfiler
+from lid_toolkit.logic.profiler_spacy_more_measures import DeepProfiler
 
 def main():
     # 1. Start the benchmarking timer
@@ -31,7 +31,7 @@ def main():
     
     # OPTIMIZATION 2: Memory Deallocation
     # Delete the original dataframe to free up RAM before the heavy NLP processing begins
-    
+    del f
     load_time = time.time() - start_time
     print(f"[{time.strftime('%H:%M:%S')}] Loaded {len(texts)} messages in {load_time:.2f} seconds.")
 
