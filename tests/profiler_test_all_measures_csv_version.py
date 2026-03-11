@@ -12,15 +12,20 @@ def main():
     # 1. Start the benchmarking timer
     start_time = time.time()
     
-    # for XLSX input we treat the first column as the text series
-    XLSX_PATH = os.path.join(os.path.dirname(__file__), 'data', 'simple_sentences_all_measures.xlsx')
-    RESULT_EXCEL_PATH = os.path.join(os.path.dirname(__file__), 'profiler_results_wili2018_with_spacy_small_models_all_measures.xlsx')
+    # path to CSV file: first column holds the text values
+    CSV_PATH = os.path.join(os.path.dirname(__file__), 'data', 'simple_sentences_all_measures.csv')
+    RESULT_CSV_PATH = os.path.join(os.path.dirname(__file__), 'profiler_results_wili2018_with_spacy_small_models_all_measures.csv')
 
-    print(f"[{time.strftime('%H:%M:%S')}] Loading data from {XLSX_PATH}...")
+    print(f"[{time.strftime('%H:%M:%S')}] Loading data from {CSV_PATH}...")
     
-    # read the first column of the workbook (no header) into a Series
-    # pandas returns a DataFrame so we select the 0th column afterwards
-    texts = pd.read_excel(XLSX_PATH, header=None, usecols=[0], engine='openpyxl')
+    # read first column, respecting quoted fields (so embedded newlines stay inside a document)
+    texts = pd.read_csv(
+        CSV_PATH,
+        header=None,
+        usecols=[0],
+        quoting=csv.QUOTE_MINIMAL,
+        engine='python'  # python engine handles multiline quoted fields reliably
+    )
     texts = texts.iloc[:,0].astype(str)
     # strip whitespace/newlines and drop any empty rows
     texts = texts.str.strip().dropna()
@@ -43,8 +48,8 @@ def main():
     profile_time = time.time() - profile_start
     print(f"[{time.strftime('%H:%M:%S')}] Profiling completed in {profile_time:.2f} seconds.")
 
-    print(f"[{time.strftime('%H:%M:%S')}] Saving report to Excel...")
-    report.to_excel(RESULT_EXCEL_PATH, index=True)
+    print(f"[{time.strftime('%H:%M:%S')}] Saving report to CSV...")
+    report.to_csv(RESULT_CSV_PATH, index=True)
     
     total_time = time.time() - start_time
     print(f"[{time.strftime('%H:%M:%S')}] Done! Total execution time: {total_time:.2f} seconds.")
