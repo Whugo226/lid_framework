@@ -8,19 +8,20 @@ import sklearn
 import pytest
 import spacy
 import threading
+from openpyxl import load_workbook
 from collections import defaultdict
 from scipy.stats import pearsonr, spearmanr
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
-from lid_toolkit.logic.profiler_spacy_more_measures import DeepProfiler
+from lid_toolkit.logic.profiler_spacy_bttm_up_approach import DeepProfiler
 
-CSV_PATH = os.path.join(os.path.dirname(__file__), 'data', 'lingualyzer_ground_truth_dutch.csv')
-RESULT_CSV_PATH = os.path.join(os.path.dirname(__file__), 'profiler_spacy_test_results_dutch.csv')
-CORRELATION_SUMMARY_CSV_PATH = os.path.join(os.path.dirname(__file__), 'profiler_spacy_correlation_dutch_summary.csv')
+CSV_PATH = os.path.join(os.path.dirname(__file__), 'data', 'lingualyzer_ground_truth_english.xlsx')
+RESULT_CSV_PATH = os.path.join(os.path.dirname(__file__), 'profiler_spacy_test_results_english_new4.csv')
+CORRELATION_SUMMARY_CSV_PATH = os.path.join(os.path.dirname(__file__), 'profiler_spacy_correlation_english_summary.csv')
 TOLERANCE = 1e-2
 
 profiler = DeepProfiler()
-nlp = profiler._make_pipeline('nl')
+nlp = profiler._make_pipeline('en')
 
 test_results = []
 results_lock = threading.Lock()
@@ -28,7 +29,7 @@ results_lock = threading.Lock()
 def get_profiler_stats(sentence):
     """Return a feature dict resembling a single-row profiling output.
 
-    The ground‑truth CSV contains both "Doc" metrics and sentence-level
+    The ground-truth Excel file contains both "Doc" metrics and sentence-level
     overlap measures (Sent-Sent Avg).  The latter are calculated by
     ``DeepProfiler._calc_cross_level_overlaps`` when the profiler runs on
     an entire document, so we replicate that logic here.
@@ -59,15 +60,34 @@ def get_profiler_stats(sentence):
     return stats
 
 def load_ground_truth():
-    with open(CSV_PATH, encoding='utf-8-sig') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            measure = row['Measure'].strip()
-            sentence = row['Sentence'].strip()
-            value = row['Value'].strip()
+    workbook = load_workbook(CSV_PATH, data_only=True, read_only=True)
+    try:
+        sheet = workbook.active
+        rows = sheet.iter_rows(values_only=True)
+        headers = next(rows, None)
+        if headers is None:
+            return
+
+        normalized_headers = [str(h).strip() if h is not None else "" for h in headers]
+        required = {"Measure", "Sentence", "Value"}
+        missing = required.difference(normalized_headers)
+        if missing:
+            raise ValueError(f"Missing required columns in ground-truth workbook: {sorted(missing)}")
+
+        header_to_index = {header: index for index, header in enumerate(normalized_headers)}
+        for row in rows:
+            measure_raw = row[header_to_index["Measure"]] if row else None
+            sentence_raw = row[header_to_index["Sentence"]] if row else None
+            value_raw = row[header_to_index["Value"]] if row else None
+
+            measure = str(measure_raw).strip() if measure_raw is not None else ""
+            sentence = str(sentence_raw).strip() if sentence_raw is not None else ""
+            value = str(value_raw).strip() if value_raw is not None else ""
             if not measure or not sentence or not value:
                 continue
             yield measure, sentence, value
+    finally:
+        workbook.close()
 
 @pytest.mark.parametrize('measure,sentence,value', list(load_ground_truth()))
 def test_profiler_measures_explicit(measure, sentence, value):

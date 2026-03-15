@@ -25,6 +25,7 @@ test = [
     "ruff",  # linting
     "ty", # checking types
     "ipdb", # debugging
+    "openpyxl",  # Excel file I/O
 ]
 
 [project.urls]

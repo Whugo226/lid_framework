@@ -6,14 +6,14 @@ import csv
 
 # Ensure the src directory is in the path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
-from lid_toolkit.logic.profiler_spacy_more_measures import DeepProfiler
+from lid_toolkit.logic.profiler_spacy_bttm_up_approach import DeepProfiler
 
 def main():
     # 1. Start the benchmarking timer
     start_time = time.time()
     
     CSV_PATH = os.path.join(os.path.dirname(__file__), 'data', 'x_test.txt')
-    RESULT_EXCEL_PATH = os.path.join(os.path.dirname(__file__), 'profiler_results_wili2018_with_spacy_small_models.xlsx')
+    RESULT_EXCEL_PATH = os.path.join(os.path.dirname(__file__), 'profiler_results_wili2018_with_spacy_small_models_all_measures.xlsx')
 
     print(f"[{time.strftime('%H:%M:%S')}] Loading data from {CSV_PATH}...")
     

@@ -12,10 +12,10 @@ from collections import defaultdict
 from scipy.stats import pearsonr, spearmanr
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
-from lid_toolkit.logic.profiler_spacy_more_measures import DeepProfiler
+from lid_toolkit.logic.profiler_spacy_bttm_up_approach import DeepProfiler
 
 CSV_PATH = os.path.join(os.path.dirname(__file__), 'data', 'lingualyzer_ground_truth_english.csv')
-RESULT_CSV_PATH = os.path.join(os.path.dirname(__file__), 'profiler_spacy_test_results_english.csv')
+RESULT_CSV_PATH = os.path.join(os.path.dirname(__file__), 'profiler_spacy_test_results_english_new2.csv')
 CORRELATION_SUMMARY_CSV_PATH = os.path.join(os.path.dirname(__file__), 'profiler_spacy_correlation_english_summary.csv')
 TOLERANCE = 1e-2
 
@@ -48,10 +48,11 @@ def get_profiler_stats(sentence):
         stats['Paragraph length'] = 0.0
 
     # compute sentence-based overlap metrics (adjacent pairs inside the text)
-    sent_docs = [sent.as_doc() for sent in doc.sents]
+    sents_filtered = profiler._filter_valid_sentences(doc.sents)
+    sent_docs = [sent.as_doc() for sent in sents_filtered]
     # we don't bother splitting into paragraphs for the test; an empty list is fine
     par_docs: list = []
-    sent_to_par = profiler._build_sent_to_par_map(sentence, doc, par_docs)
+    sent_to_par = profiler._build_sent_to_par_map(sentence, sents_filtered, par_docs)
     overlap_stats = profiler._calc_cross_level_overlaps(doc, par_docs, sent_docs, sent_to_par, 'en')
 
     stats.update(overlap_stats)

@@ -1,0 +1,352 @@
+Measure,MAE,Pearson,Spearman
+Adjective avg position (Doc),0.0,nan,nan
+Adjective burstiness (Doc),0.0,nan,nan
+Adjective concentration (Doc),0.0,nan,nan
+Adjective count (Doc),0.0,nan,nan
+Adjective incidence (Doc),3.3333321880490985e-08,nan,nan
+Adjective length (Doc),0.0,nan,nan
+Adjective position SD (Doc),0.0,nan,nan
+Adjective type count (Doc),0.0,nan,nan
+Adjective type-token ratio (Doc),0.0,nan,nan
+Adjective-lexical item ratio (Doc),3.333333331578814e-10,nan,nan
+Adjective-noun ratio (Doc),0.0,nan,nan
+Adposition avg position (Doc),2.2222224060897133e-10,nan,nan
+Adposition burstiness (Doc),5.551115123125783e-17,nan,nan
+Adposition concentration (Doc),3.3333330540230577e-10,nan,nan
+Adposition count (Doc),0.0,nan,nan
+Adposition incidence (Doc),0.0,nan,nan
+Adposition length (Doc),0.0,nan,nan
+Adposition position SD (Doc),3.702076978306934e-10,nan,nan
+Adposition type count (Doc),0.0,nan,nan
+Adposition type-token ratio (Doc),0.0,nan,nan
+Adposition-determiner ratio (Doc),0.0,nan,nan
+Adposition-grammatical item ratio (Doc),0.16666666633333335,nan,nan
+Adposition-noun ratio (Doc),0.0,nan,nan
+Adposition-verb ratio (Doc),0.0,nan,nan
+Adverb avg position (Doc),3.70370345503801e-10,nan,nan
+Adverb burstiness (Doc),3.3333330540230577e-10,nan,nan
+Adverb concentration (Doc),3.3333330540230577e-10,nan,nan
+Adverb count (Doc),0.0,nan,nan
+Adverb incidence (Doc),0.0,nan,nan
+Adverb length (Doc),3.33333360913457e-10,nan,nan
+Adverb position SD (Doc),2.608948335147687e-10,nan,nan
+Adverb type count (Doc),0.0,nan,nan
+Adverb type-token ratio (Doc),0.0,nan,nan
+Adverb-adjective ratio (Doc),0.0,nan,nan
+Adverb-lexical item ratio (Doc),3.3333330540230577e-10,nan,nan
+Adverb-verb ratio (Doc),0.0,nan,nan
+Auxiliary avg position (Doc),0.0,nan,nan
+Auxiliary burstiness (Doc),0.0,nan,nan
+Auxiliary concentration (Doc),0.0,nan,nan
+Auxiliary count (Doc),0.0,nan,nan
+Auxiliary incidence (Doc),3.3333321880490985e-08,nan,nan
+Auxiliary length (Doc),0.0,nan,nan
+Auxiliary position SD (Doc),0.0,nan,nan
+Auxiliary type count (Doc),0.0,nan,nan
+Auxiliary type-token ratio (Doc),0.0,nan,nan
+Auxiliary-grammatical item ratio (Doc),0.0,nan,nan
+Auxiliary-lexical verb ratio (Doc),0.0,nan,nan
+Average contextual diversity (Doc),1.9124999999999996,nan,nan
+Conjunction avg position (Doc),1.481481604059809e-10,nan,nan
+Conjunction burstiness (Doc),3.33333360913457e-10,nan,nan
+Conjunction concentration (Doc),3.3333330540230577e-10,nan,nan
+Conjunction count (Doc),1.0,nan,nan
+Conjunction incidence (Doc),66.66666670000001,nan,nan
+Conjunction length (Doc),0.0,nan,nan
+Conjunction position SD (Doc),4.078726245637654e-10,nan,nan
+Conjunction type count (Doc),0.0,nan,nan
+Conjunction type-token ratio (Doc),0.0,nan,nan
+Conjunction-grammatical item ratio (Doc),0.0,nan,nan
+Conjunction-noun ratio (Doc),0.0,nan,nan
+Conjunction-verb ratio (Doc),3.3333330540230577e-10,nan,nan
+Cosine dist. (Sent-Sent Avg),0.8796,nan,nan
+Definite word avg position (Doc),3.33333360913457e-10,nan,nan
+Definite word burstiness (Doc),2.8571434107504956e-10,nan,nan
+Definite word concentration (Doc),0.0,nan,nan
+Definite word count (Doc),0.0,nan,nan
+Definite word incidence (Doc),3.3333321880490985e-08,nan,nan
+Definite word position SD (Doc),3.553074501283504e-11,nan,nan
+Definite-indefinite word ratio (Doc),0.0,nan,nan
+Demonstrative avg position (Doc),2.564104484292784e-11,nan,nan
+Demonstrative burstiness (Doc),2.222223516312738e-10,nan,nan
+Demonstrative concentration (Doc),3.3333330540230577e-10,nan,nan
+Demonstrative count (Doc),0.0,nan,nan
+Demonstrative incidence (Doc),2.2222195639187703e-08,nan,nan
+Demonstrative position SD (Doc),3.982388863121855e-10,nan,nan
+Determiner avg position (Doc),0.145833333,nan,nan
+Determiner burstiness (Doc),0.4,nan,nan
+Determiner concentration (Doc),0.333333333,nan,nan
+Determiner count (Doc),1.0,nan,nan
+Determiner incidence (Doc),111.11111107777779,nan,nan
+Determiner length (Doc),0.0,nan,nan
+Determiner position SD (Doc),0.04941139205504469,nan,nan
+Determiner type count (Doc),1.0,nan,nan
+Determiner type-token ratio (Doc),0.0,nan,nan
+Determiner-adjective ratio (Doc),0.0,nan,nan
+Determiner-grammatical item ratio (Doc),3.333333331578814e-10,nan,nan
+Determiner-noun ratio (Doc),0.0,nan,nan
+Feature overlap count (Sent-Sent Avg),4.0,nan,nan
+Feature overlap ratio (Sent-Sent Avg),0.031746031857142865,nan,nan
+Finite verb avg position (Doc),3.33333360913457e-10,nan,nan
+Finite verb burstiness (Doc),0.0,nan,nan
+Finite verb concentration (Doc),3.3333330540230577e-10,nan,nan
+Finite verb count (Doc),0.0,nan,nan
+Finite verb incidence (Doc),3.3333321880490985e-08,nan,nan
+Finite verb position SD (Doc),1.9705209686193825e-10,nan,nan
+First person pronoun avg position (Doc),3.0302982345631335e-11,nan,nan
+First person pronoun burstiness (Doc),2.8571434107504956e-10,nan,nan
+First person pronoun concentration (Doc),3.3333330540230577e-10,nan,nan
+First person pronoun count (Doc),0.0,nan,nan
+First person pronoun incidence (Doc),0.0,nan,nan
+First person pronoun position SD (Doc),6.506856164989472e-11,nan,nan
+First person-personal pronoun ratio (Doc),0.0,nan,nan
+First-second person pronoun ratio (Doc),0.0,nan,nan
+First-third person pronoun ratio (Doc),0.0,nan,nan
+Frequent word avg position (Doc),2.564104484292784e-11,nan,nan
+Frequent word burstiness (Doc),1.8192525264026926e-10,nan,nan
+Frequent word concentration (Doc),3.3333330540230577e-10,nan,nan
+Frequent word count (Doc),0.0,nan,nan
+Frequent word incidence (Doc),0.0,nan,nan
+Frequent word position SD (Doc),2.3157209483315455e-10,nan,nan
+Grammatical item avg position (Doc),0.1148148148888889,nan,nan
+Grammatical item burstiness (Doc),0.1029550924606707,nan,nan
+Grammatical item concentration (Doc),0.26666666699999997,nan,nan
+Grammatical item count (Doc),1.0,nan,nan
+Grammatical item incidence (Doc),100.0,nan,nan
+Grammatical item length (Doc),0.3999999999999999,nan,nan
+Grammatical item position SD (Doc),0.08556245243307536,nan,nan
+Grammatical item type count (Doc),0.0,nan,nan
+Grammatical item type-token ratio (Doc),0.0,nan,nan
+Hapax legomena avg position (Doc),4.0740744111644744e-10,nan,nan
+Hapax legomena burstiness (Doc),2.1685125917159098e-10,nan,nan
+Hapax legomena concentration (Doc),3.3333330540230577e-10,nan,nan
+Hapax legomena count (Doc),0.0,nan,nan
+Hapax legomena incidence (Doc),0.0,nan,nan
+Hapax legomena position SD (Doc),2.7462343510364917e-10,nan,nan
+Honoré's statistic (Doc),0.0,nan,nan
+Indefinite word avg position (Doc),1.1111112030448567e-10,nan,nan
+Indefinite word burstiness (Doc),2.8571434107504956e-10,nan,nan
+Indefinite word concentration (Doc),3.3333330540230577e-10,nan,nan
+Indefinite word count (Doc),0.0,nan,nan
+Indefinite word incidence (Doc),0.0,nan,nan
+Indefinite word position SD (Doc),3.0964614206041574e-10,nan,nan
+Infinitive verb avg position (Doc),3.33333360913457e-10,nan,nan
+Infinitive verb burstiness (Doc),0.0,nan,nan
+Infinitive verb concentration (Doc),3.3333330540230577e-10,nan,nan
+Infinitive verb count (Doc),0.0,nan,nan
+Infinitive verb incidence (Doc),3.3333321880490985e-08,nan,nan
+Infinitive verb position SD (Doc),1.9705209686193825e-10,nan,nan
+Infinitive-finite verb ratio (Doc),0.0,nan,nan
+Infrequent word avg position (Doc),0.0,nan,nan
+Infrequent word burstiness (Doc),0.0,nan,nan
+Infrequent word concentration (Doc),0.0,nan,nan
+Infrequent word count (Doc),2.0,nan,nan
+Infrequent word incidence (Doc),222.2222221888889,nan,nan
+Infrequent word position SD (Doc),0.0,nan,nan
+Interjection avg position (Doc),0.05555555533333334,nan,nan
+Interjection burstiness (Doc),0.666666667,nan,nan
+Interjection concentration (Doc),0.666666667,nan,nan
+Interjection count (Doc),2.0,nan,nan
+Interjection incidence (Doc),166.6666667,nan,nan
+Interjection length (Doc),3.33333360913457e-10,nan,nan
+Interjection position SD (Doc),0.502309481,nan,nan
+Interjection type count (Doc),2.0,nan,nan
+Interjection type-token ratio (Doc),0.0,nan,nan
+Interjection-adjective ratio (Doc),0.0,nan,nan
+Interjection-lexical item ratio (Doc),3.3333330540230577e-10,nan,nan
+Interjection-noun ratio (Doc),0.0,nan,nan
+Interjection-verb ratio (Doc),0.0,nan,nan
+Interrogative avg position (Doc),0.363636364,nan,nan
+Interrogative burstiness (Doc),1.0,nan,nan
+Interrogative concentration (Doc),0.333333333,nan,nan
+Interrogative count (Doc),3.0,nan,nan
+Interrogative incidence (Doc),250.0,nan,nan
+Interrogative position SD (Doc),0.363636364,nan,nan
+Lemma overlap count (Sent-Sent Avg),1.0,nan,nan
+Lemma overlap ratio (Sent-Sent Avg),0.0,nan,nan
+Letter count (Doc),0.0,nan,nan
+Letter entropy (Doc),2.892868167236884e-10,nan,nan
+Levenshtein PoS dist. (Sent-Sent Avg),1.1111110642669786e-10,nan,nan
+Levenshtein character dist. (Sent-Sent Avg),0.023255813534883707,nan,nan
+Levenshtein lemma dist. (Sent-Sent Avg),3.3333330540230577e-10,nan,nan
+Levenshtein word dist. (Sent-Sent Avg),3.3333330540230577e-10,nan,nan
+Lexical item avg position (Doc),3.3333330540230577e-10,nan,nan
+Lexical item burstiness (Doc),1.8192525264026926e-10,nan,nan
+Lexical item concentration (Doc),0.0,nan,nan
+Lexical item count (Doc),0.0,nan,nan
+Lexical item incidence (Doc),4.5454612518369686e-08,nan,nan
+Lexical item length (Doc),0.0,nan,nan
+Lexical item position SD (Doc),3.1200780847839837e-10,nan,nan
+Lexical item type count (Doc),0.0,nan,nan
+Lexical item type-token ratio (Doc),0.0,nan,nan
+Lexical verb avg position (Doc),0.10416666699999999,nan,nan
+Lexical verb burstiness (Doc),0.666666667,nan,nan
+Lexical verb concentration (Doc),0.0,nan,nan
+Lexical verb count (Doc),1.0,nan,nan
+Lexical verb incidence (Doc),111.11111107777779,nan,nan
+Lexical verb length (Doc),0.0,nan,nan
+Lexical verb position SD (Doc),0.10255230635168154,nan,nan
+Lexical verb type count (Doc),0.0,nan,nan
+Lexical verb type-token ratio (Doc),0.0,nan,nan
+Lexical verb-lexical item ratio (Doc),0.0,nan,nan
+Lexical-grammatical item ratio (Doc),3.33333360913457e-10,nan,nan
+Moving average type-token ratio (Doc),0.0,nan,nan
+Noun avg position (Doc),3.33333360913457e-10,nan,nan
+Noun burstiness (Doc),0.0,nan,nan
+Noun concentration (Doc),0.0,nan,nan
+Noun count (Doc),0.0,nan,nan
+Noun incidence (Doc),3.3333321880490985e-08,nan,nan
+Noun length (Doc),3.33333360913457e-10,nan,nan
+Noun position SD (Doc),1.9705209686193825e-10,nan,nan
+Noun type count (Doc),0.0,nan,nan
+Noun type-token ratio (Doc),0.0,nan,nan
+Noun-lexical item ratio (Doc),1.4285714278194916e-10,nan,nan
+Numeral avg position (Doc),3.3333330540230577e-10,nan,nan
+Numeral burstiness (Doc),0.0,nan,nan
+Numeral concentration (Doc),3.3333330540230577e-10,nan,nan
+Numeral count (Doc),0.0,nan,nan
+Numeral incidence (Doc),2.7272676561551634e-08,nan,nan
+Numeral length (Doc),0.0,nan,nan
+Numeral position SD (Doc),1.576416774895506e-10,nan,nan
+Numeral type count (Doc),0.0,nan,nan
+Numeral type-token ratio (Doc),0.0,nan,nan
+Numeral-grammatical item ratio (Doc),1.1111110642669786e-10,nan,nan
+Numeral-noun ratio (Doc),0.0,nan,nan
+Paragraph count (Doc),1.0,nan,nan
+Paragraph length (Doc),5.0,nan,nan
+Particle avg position (Doc),3.33333360913457e-10,nan,nan
+Particle burstiness (Doc),0.0,nan,nan
+Particle concentration (Doc),0.0,nan,nan
+Particle count (Doc),0.0,nan,nan
+Particle incidence (Doc),3.3333321880490985e-08,nan,nan
+Particle length (Doc),0.0,nan,nan
+Particle position SD (Doc),1.9705209686193825e-10,nan,nan
+Particle type count (Doc),0.0,nan,nan
+Particle type-token ratio (Doc),0.0,nan,nan
+Particle-grammatical item ratio (Doc),0.0,nan,nan
+Particle-verb ratio (Doc),3.3333330540230577e-10,nan,nan
+Passive voice avg position (Doc),0.5,nan,nan
+Passive voice burstiness (Doc),0.684210526,nan,nan
+Passive voice concentration (Doc),0.333333333,nan,nan
+Passive voice count (Doc),2.0,nan,nan
+Passive voice incidence (Doc),125.0,nan,nan
+Passive voice position SD (Doc),0.397474667,nan,nan
+Past tense avg position (Doc),3.33333360913457e-10,nan,nan
+Past tense burstiness (Doc),3.3333330540230577e-10,nan,nan
+Past tense concentration (Doc),3.3333330540230577e-10,nan,nan
+Past tense count (Doc),0.0,nan,nan
+Past tense incidence (Doc),0.0,nan,nan
+Past tense position SD (Doc),2.3599236453897277e-10,nan,nan
+Personal pronoun avg position (Doc),0.0,nan,nan
+Personal pronoun burstiness (Doc),1.2034656604598126e-10,nan,nan
+Personal pronoun concentration (Doc),0.0,nan,nan
+Personal pronoun count (Doc),0.0,nan,nan
+Personal pronoun incidence (Doc),4.4444391278375406e-08,nan,nan
+Personal pronoun position SD (Doc),1.1692613544056485e-10,nan,nan
+Plural word avg position (Doc),3.3333324989115454e-10,nan,nan
+Plural word burstiness (Doc),4.4444459224024513e-10,nan,nan
+Plural word concentration (Doc),3.3333330540230577e-10,nan,nan
+Plural word count (Doc),0.0,nan,nan
+Plural word incidence (Doc),2.7272676561551634e-08,nan,nan
+Plural word position SD (Doc),2.3162466389337055e-10,nan,nan
+Plural-singular word ratio (Doc),0.0,nan,nan
+PoS overlap count (Sent-Sent Avg),0.0,nan,nan
+PoS overlap ratio (Sent-Sent Avg),0.0,nan,nan
+Present tense avg position (Doc),0.10416666699999999,nan,nan
+Present tense burstiness (Doc),0.666666667,nan,nan
+Present tense concentration (Doc),0.0,nan,nan
+Present tense count (Doc),1.0,nan,nan
+Present tense incidence (Doc),111.11111107777779,nan,nan
+Present tense position SD (Doc),0.10255230635168154,nan,nan
+Present-past tense ratio (Doc),0.0,nan,nan
+Pronoun avg position (Doc),0.0,nan,nan
+Pronoun burstiness (Doc),4.206635040304718e-13,nan,nan
+Pronoun concentration (Doc),0.0,nan,nan
+Pronoun count (Doc),0.0,nan,nan
+Pronoun incidence (Doc),3.636364453996066e-08,nan,nan
+Pronoun length (Doc),0.0,nan,nan
+Pronoun position SD (Doc),4.783309859313079e-10,nan,nan
+Pronoun type count (Doc),0.0,nan,nan
+Pronoun type-token ratio (Doc),0.0,nan,nan
+Pronoun-determiner ratio (Doc),1.5,nan,nan
+Pronoun-grammatical item ratio (Doc),4.285714561014231e-10,nan,nan
+Pronoun-noun ratio (Doc),0.0,nan,nan
+Proper noun avg position (Doc),3.3333330540230577e-10,nan,nan
+Proper noun burstiness (Doc),3.3333330540230577e-10,nan,nan
+Proper noun concentration (Doc),0.0,nan,nan
+Proper noun count (Doc),0.0,nan,nan
+Proper noun incidence (Doc),3.3333321880490985e-08,nan,nan
+Proper noun length (Doc),0.0,nan,nan
+Proper noun position SD (Doc),4.350667048846901e-11,nan,nan
+Proper noun type count (Doc),0.0,nan,nan
+Proper noun type-token ratio (Doc),0.0,nan,nan
+Proper noun-determiner ratio (Doc),0.0,nan,nan
+Proper noun-lexical item ratio (Doc),0.0,nan,nan
+Proper noun-noun ratio (Doc),0.0,nan,nan
+Proper noun-pronoun ratio (Doc),0.0,nan,nan
+Punctuation count (Doc),0.0,nan,nan
+Punctuation incidence (Doc),2.7272676561551634e-08,nan,nan
+Second person pronoun avg position (Doc),3.33333360913457e-10,nan,nan
+Second person pronoun burstiness (Doc),2.8571434107504956e-10,nan,nan
+Second person pronoun concentration (Doc),3.3333330540230577e-10,nan,nan
+Second person pronoun count (Doc),0.0,nan,nan
+Second person pronoun incidence (Doc),3.3333321880490985e-08,nan,nan
+Second person pronoun position SD (Doc),3.553074501283504e-11,nan,nan
+Second person-personal pronoun ratio (Doc),0.0,nan,nan
+Second-third person pronoun ratio (Doc),0.0,nan,nan
+Sentence count (Doc),0.0,nan,nan
+Sentence length (Doc),0.0,nan,nan
+Singular word avg position (Doc),4.285714005902719e-10,nan,nan
+Singular word burstiness (Doc),0.0,nan,nan
+Singular word concentration (Doc),3.3333330540230577e-10,nan,nan
+Singular word count (Doc),0.0,nan,nan
+Singular word incidence (Doc),0.0,nan,nan
+Singular word position SD (Doc),4.285714561014231e-10,nan,nan
+Sub-coordinating conjunction ratio (Doc),0.16666666666666669,nan,nan
+Third person pronoun avg position (Doc),3.33333360913457e-10,nan,nan
+Third person pronoun burstiness (Doc),1.1111107867112224e-10,nan,nan
+Third person pronoun concentration (Doc),3.3333330540230577e-10,nan,nan
+Third person pronoun count (Doc),0.0,nan,nan
+Third person pronoun incidence (Doc),0.0,nan,nan
+Third person pronoun position SD (Doc),3.866008069230986e-10,nan,nan
+Third person-personal pronoun ratio (Doc),0.0,nan,nan
+Type count (Doc),0.0,nan,nan
+Type-token ratio (Doc),0.0,nan,nan
+Unknown word avg position (Doc),0.0357142852857143,nan,nan
+Unknown word burstiness (Doc),0.6681142291203466,nan,nan
+Unknown word concentration (Doc),0.333333333,nan,nan
+Unknown word count (Doc),1.0,nan,nan
+Unknown word incidence (Doc),125.0,nan,nan
+Unknown word position SD (Doc),0.07142857185714285,nan,nan
+Verb avg position (Doc),2.7272728519989187e-10,nan,nan
+Verb burstiness (Doc),3.155977076896299e-10,nan,nan
+Verb concentration (Doc),0.0,nan,nan
+Verb count (Doc),1.0,nan,nan
+Verb incidence (Doc),111.1111110888889,nan,nan
+Verb length (Doc),0.0,nan,nan
+Verb position SD (Doc),1.437434060669318e-10,nan,nan
+Verb type count (Doc),0.0,nan,nan
+Verb type-token ratio (Doc),0.0,nan,nan
+Verb-noun ratio (Doc),3.3333330540230577e-10,nan,nan
+Verbal adjective avg position (Doc),0.023809523857142856,nan,nan
+Verbal adjective burstiness (Doc),0.666666667,nan,nan
+Verbal adjective concentration (Doc),0.333333333,nan,nan
+Verbal adjective count (Doc),1.0,nan,nan
+Verbal adjective incidence (Doc),125.0,nan,nan
+Verbal adjective position SD (Doc),0.08482787336566319,nan,nan
+Verbal adjective-finite verb ratio (Doc),0.5,nan,nan
+Verbal adjective-infinitive verb ratio (Doc),1.0,nan,nan
+Word count (Doc),0.0,nan,nan
+Word entropy (Doc),1.0860512489330176e-10,nan,nan
+Word length (Doc),0.0,nan,nan
+Word overlap count (Sent-Sent Avg),0.0,nan,nan
+Word overlap ratio (Sent-Sent Avg),1.4285714278194916e-08,nan,nan
+Word types per lemma (Doc),2.2222224060897133e-10,nan,nan
+Word types per lemma (grammatical items) (Doc),0.1071428571428572,nan,nan
+Word types per lemma (lexical items) (Doc),0.11111111077777758,nan,nan
+Word types per lemma (nouns) (Doc),0.2777777777777777,nan,nan
+Word types per lemma (verbs) (Doc),0.2777777777777777,nan,nan
+Word-lemma Levenshtein dist. (Doc),2.8571428556389833e-10,nan,nan
+Zipf frequency (Doc),2.9976000000000007,nan,nan
+Zipf goodness of fit (Doc),4.178895685047479e-08,nan,nan
+Zipf steepness of curve (Doc),3.8236806054747774e-08,nan,nan

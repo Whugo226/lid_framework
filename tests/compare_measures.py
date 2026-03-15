@@ -53,7 +53,7 @@ def read_measures(path: Path) -> set[str]:
 def main(args: list[str] | None = None) -> None:
     # Use your specific paths if no args provided
     if not args and len(sys.argv) == 1:
-        current_path = Path(r"C:\Users\User\OneDrive\Masters\Python\toolkit_dev\lid_toolkit\project_context\profiler_current_measures.txt")
+        current_path = Path(r"C:\Users\User\OneDrive\Masters\Python\toolkit_dev\lid_toolkit\project_context\profiler_current_measures_bttmup_approach1.txt")
         expected_path = Path(r"C:\Users\User\OneDrive\Masters\Python\toolkit_dev\lid_toolkit\project_context\profiler_expected_measures.txt")
     else:
         args = args or sys.argv[1:]
