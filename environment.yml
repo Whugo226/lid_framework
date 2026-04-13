@@ -1,0 +1,12 @@
+name: language_identification_project
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - protobuf
+  - openpyxl
+  - pandas
+  - pip
+  - pip:
+    - fasttext

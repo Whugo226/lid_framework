@@ -3,7 +3,7 @@ import pandas as pd
 from pathlib import Path
 
 # configuration copied from DeepProfiler for consistency
-MAX_SAMPLES_PER_LANG = 50
+MAX_SAMPLES_PER_LANG = 300
 SUPPORTED_SPACY_LANGS = {
     'ca', 'zh', 'hr', 'da', 'nl', 'en', 'fi', 'fr', 'de', 'el', 
     'it', 'ja', 'ko', 'lt', 'mk', 'nb', 'pl', 'pt', 'ro', 'ru', 
@@ -72,7 +72,7 @@ def main():
     else:
         final_df = pd.DataFrame(columns=df.columns)
 
-    output_path = base_dir / "fasttext_predictions.csv"
+    output_path = base_dir / "fasttext_predictions_hpc.csv"
     final_df.to_csv(output_path, index=False, encoding="utf-8-sig")
     print(f"Exported sampled predictions to {output_path}")
 

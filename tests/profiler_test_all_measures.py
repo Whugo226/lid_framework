@@ -14,7 +14,7 @@ def main():
     
     # for XLSX input we treat the first column as the text series
     XLSX_PATH = os.path.join(os.path.dirname(__file__), 'data', 'simple_sentences_all_measures.xlsx')
-    RESULT_EXCEL_PATH = os.path.join(os.path.dirname(__file__), 'profiler_results_simple_sentence_with_spacy_small_models_all_measures_bttmup.xlsx')
+    RESULT_EXCEL_PATH = os.path.join(os.path.dirname(__file__), 'profiler_results_simple_sentence_all_measures.xlsx')
 
     print(f"[{time.strftime('%H:%M:%S')}] Loading data from {XLSX_PATH}...")
     

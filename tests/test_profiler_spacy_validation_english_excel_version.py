@@ -13,10 +13,10 @@ from collections import defaultdict
 from scipy.stats import pearsonr, spearmanr
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
-from lid_toolkit.logic.profiler_spacy_bttm_up_approach import DeepProfiler
+from lid_toolkit.logic.profiler_knowledge_base import DeepProfiler
 
 CSV_PATH = os.path.join(os.path.dirname(__file__), 'data', 'lingualyzer_ground_truth_english.xlsx')
-RESULT_CSV_PATH = os.path.join(os.path.dirname(__file__), 'profiler_spacy_test_results_english_new4.csv')
+RESULT_CSV_PATH = os.path.join(os.path.dirname(__file__), 'profiler_spacy_test_results_english_.csv')
 CORRELATION_SUMMARY_CSV_PATH = os.path.join(os.path.dirname(__file__), 'profiler_spacy_correlation_english_summary.csv')
 TOLERANCE = 1e-2
 
