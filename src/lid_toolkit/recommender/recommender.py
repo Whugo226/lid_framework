@@ -108,10 +108,9 @@ class Recommender:
                 "Check that the text_series contains valid, non-trivial text."
             )
 
-        builder  = self.store.builder
-        fp       = builder.build(lang_profile_df)
-        result   = self.engine.query(fp, priority_metric=priority_metric, k=k)
-        return result
+        return self.recommend_from_profile(
+            lang_profile_df, priority_metric=priority_metric, k=k
+        )
 
     def recommend_from_profile(
         self,
@@ -125,9 +124,15 @@ class Recommender:
         Useful when you have already run ``DeepProfiler.get_multilingual_profile()``
         and want to avoid re-running the profiler.
         """
+        user_iso_codes = frozenset(lang_profile_df.columns)
         builder = self.store.builder
         fp      = builder.build(lang_profile_df)
-        return self.engine.query(fp, priority_metric=priority_metric, k=k)
+        return self.engine.query(
+            fp,
+            priority_metric=priority_metric,
+            k=k,
+            user_iso_codes=user_iso_codes,
+        )
 
     # ------------------------------------------------------------------
     # Weight learning

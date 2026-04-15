@@ -57,10 +57,14 @@ class NeighbourResult:
     dataset_name: str
     distance: float
     similarity_pct: float          # 100 * (1 - normalised_distance)
-    best_model: str                # best model for this neighbour (by priority metric)
+    best_model: str                # best covered model for this neighbour (by priority metric)
     best_score: float              # its score on the priority metric
     per_stratum_distances: dict[str, float]
     performances: dict[str, dict[str, float]]
+    # Coverage fields — populated when user_iso_codes is provided to query()
+    coverage_gap: frozenset[str] = field(default_factory=frozenset)
+    # model_variant → set of languages it cannot handle from the user's set
+    per_model_gaps: dict[str, frozenset[str]] = field(default_factory=dict)
 
 
 @dataclass
@@ -72,6 +76,8 @@ class Recommendation:
     neighbours: list[NeighbourResult]
     all_model_scores: dict[str, float]         # inverse-distance-weighted score per model
     explanation: str                           # human-readable explanation
+    # Languages in the user's dataset that no recommended model covers
+    uncoverable_languages: frozenset[str] = field(default_factory=frozenset)
 
 
 class SimilarityEngine:
@@ -112,6 +118,7 @@ class SimilarityEngine:
         query_fingerprint: OrderedDict[str, float],
         priority_metric: str = "f1_macro",
         k: Optional[int] = None,
+        user_iso_codes: Optional[frozenset[str]] = None,
     ) -> Recommendation:
         """
         Find the k nearest historical datasets and produce a recommendation.
@@ -125,6 +132,15 @@ class SimilarityEngine:
             ``f1_macro``, ``precision_macro``, ``recall_macro``.
         k :
             Override the instance-level k (useful for ablation studies).
+        user_iso_codes :
+            The set of ISO 639-1 language codes present in the user's dataset
+            (i.e. ``frozenset(lang_profile_df.columns)``).  When provided, the
+            engine applies a **language coverage guard**: each candidate model
+            is checked against the languages it was trained on (inferred from
+            the historical dataset's ``iso_codes``).  Models that cannot cover
+            all user languages are penalised or, when all candidates have gaps,
+            the one with the smallest gap is preferred.  The recommendation
+            explanation will list any uncoverable languages explicitly.
 
         Returns
         -------
@@ -134,23 +150,40 @@ class SimilarityEngine:
             raise ValueError(f"priority_metric must be one of {METRICS}.")
 
         k_use = k if k is not None else self.k
-        neighbours = self._compute_neighbours(query_fingerprint, priority_metric)
+        neighbours = self._compute_neighbours(
+            query_fingerprint, priority_metric, user_iso_codes=user_iso_codes
+        )
 
         if not neighbours:
             raise RuntimeError("No neighbours found — MKB store may be empty or unfinalised.")
 
         top_k = neighbours[:k_use]
 
-        # Inverse-distance-weighted model voting
-        model_scores = self._idw_vote(top_k, priority_metric)
+        # Inverse-distance-weighted model voting — coverage-aware
+        model_scores = self._idw_vote(top_k, priority_metric, user_iso_codes=user_iso_codes)
 
         # Confidence: fraction of neighbours whose best_model agrees with the winner
         best_model = max(model_scores, key=model_scores.__getitem__)
         n_agreeing = sum(1 for nb in top_k if nb.best_model == best_model)
         confidence = n_agreeing / len(top_k)
 
+        # Languages that no model in the top-k can cover
+        uncoverable: frozenset[str] = frozenset()
+        if user_iso_codes:
+            all_covered: set[str] = set()
+            for nb in top_k:
+                for variant, perfs in nb.performances.items():
+                    train_langs = perfs.get("_training_languages") or frozenset(nb.performances)
+                    if isinstance(train_langs, (set, frozenset)):
+                        all_covered |= set(train_langs)
+                    else:
+                        # Fall back: assume the historical dataset's iso_codes
+                        all_covered |= set(self.store.get_entry(nb.dataset_name).iso_codes)
+            uncoverable = user_iso_codes - all_covered
+
         explanation = self._build_explanation(
-            query_fingerprint, top_k, best_model, model_scores, priority_metric, confidence
+            query_fingerprint, top_k, best_model, model_scores,
+            priority_metric, confidence, user_iso_codes, uncoverable
         )
 
         return Recommendation(
@@ -160,6 +193,7 @@ class SimilarityEngine:
             neighbours=top_k,
             all_model_scores=model_scores,
             explanation=explanation,
+            uncoverable_languages=uncoverable,
         )
 
     # ------------------------------------------------------------------
@@ -302,8 +336,17 @@ class SimilarityEngine:
         self,
         query_fp: OrderedDict[str, float],
         priority_metric: str,
+        user_iso_codes: Optional[frozenset[str]] = None,
     ) -> list[NeighbourResult]:
-        """Compute distances to all historical datasets and sort ascending."""
+        """
+        Compute distances to all historical datasets and sort ascending.
+
+        When ``user_iso_codes`` is provided, each model variant is checked for
+        language coverage.  The ``best_model`` field of each NeighbourResult is
+        set to the best *fully-covering* model variant.  If no variant covers all
+        user languages, the variant with the smallest coverage gap (fewest missing
+        languages) is chosen and the gap is recorded in ``coverage_gap``.
+        """
         store = self.store
         results: list[NeighbourResult] = []
 
@@ -315,12 +358,33 @@ class SimilarityEngine:
             per_stratum = self._stratum_distances(query_fp, entry.fingerprint)
             dist = self._weighted_distance(per_stratum)
 
-            # Best model for this historical dataset
+            # ── Coverage-aware model selection ────────────────────────────────
+            per_model_gaps: dict[str, frozenset[str]] = {}
+            if user_iso_codes:
+                for variant, perfs in entry.performances.items():
+                    # Training languages: explicitly stored or inferred from dataset
+                    train_langs = perfs.get("_training_languages")
+                    if isinstance(train_langs, (set, frozenset)):
+                        known = frozenset(train_langs)
+                    else:
+                        # Inference: model trained on this historical dataset covers its languages
+                        known = frozenset(entry.iso_codes)
+                    gap = user_iso_codes - known
+                    per_model_gaps[variant] = gap
+
+                # Prefer fully-covering variants; fall back to smallest gap
+                fully_covering = {v: p for v, p in entry.performances.items()
+                                  if not per_model_gaps[v]}
+                candidates = fully_covering if fully_covering else entry.performances
+            else:
+                candidates = entry.performances
+
             best_var, best_perf = max(
-                entry.performances.items(),
+                candidates.items(),
                 key=lambda kv: kv[1].get(priority_metric, -1),
             )
             best_score = best_perf.get(priority_metric, float("nan"))
+            gap = per_model_gaps.get(best_var, frozenset())
 
             results.append(NeighbourResult(
                 dataset_name=name,
@@ -330,6 +394,8 @@ class SimilarityEngine:
                 best_score=best_score,
                 per_stratum_distances=per_stratum,
                 performances=entry.performances,
+                coverage_gap=gap,
+                per_model_gaps=per_model_gaps,
             ))
 
         if not results:
@@ -347,23 +413,36 @@ class SimilarityEngine:
         self,
         neighbours: list[NeighbourResult],
         priority_metric: str,
+        user_iso_codes: Optional[frozenset[str]] = None,
     ) -> dict[str, float]:
         """
         Inverse-distance-weighted voting across k neighbours.
 
-        Each model's score is the sum of its (priority_metric performance ×
-        inverse distance) across all neighbours that recommend it, normalised
-        by the total inverse weight.
+        Each model's IDW score = sum(inv_distance × metric_score × coverage_factor).
+        ``coverage_factor`` is 1.0 for fully-covering variants and
+        ``1 - gap_fraction`` otherwise, so models that miss many user languages
+        are down-weighted proportionally rather than hard-filtered (which would
+        leave the user with no recommendation at all in edge cases).
         """
         model_weighted_scores: dict[str, float] = {}
         model_weights: dict[str, float] = {}
+
+        n_user_langs = len(user_iso_codes) if user_iso_codes else 0
 
         for nb in neighbours:
             inv_d = 1.0 / (nb.distance + 1e-9)
             for model, perfs in nb.performances.items():
                 score = perfs.get(priority_metric, 0.0)
+
+                # Coverage penalty: fully covering → 1.0; missing k langs → 1 - k/n
+                if user_iso_codes and n_user_langs > 0:
+                    gap = nb.per_model_gaps.get(model, frozenset())
+                    coverage_factor = 1.0 - len(gap) / n_user_langs
+                else:
+                    coverage_factor = 1.0
+
                 model_weighted_scores[model] = (
-                    model_weighted_scores.get(model, 0.0) + inv_d * score
+                    model_weighted_scores.get(model, 0.0) + inv_d * score * coverage_factor
                 )
                 model_weights[model] = model_weights.get(model, 0.0) + inv_d
 
@@ -380,6 +459,8 @@ class SimilarityEngine:
         model_scores: dict[str, float],
         priority_metric: str,
         confidence: float,
+        user_iso_codes: Optional[frozenset[str]] = None,
+        uncoverable: frozenset[str] = frozenset(),
     ) -> str:
         """Generate a human-readable explanation string."""
         lines: list[str] = []
@@ -389,15 +470,37 @@ class SimilarityEngine:
             f"Confidence: {confidence:.0%} ({sum(1 for nb in top_k if nb.best_model == best_model)}"
             f"/{len(top_k)} neighbours agree)"
         )
-        lines.append("")
 
+        # ── Coverage warning — placed prominently at the top ─────────────────
+        if user_iso_codes:
+            best_gap = top_k[0].per_model_gaps.get(best_model, frozenset()) if top_k else frozenset()
+            if best_gap:
+                lines.append(
+                    f"\n⚠️  COVERAGE WARNING: '{best_model}' was not trained on "
+                    f"{len(best_gap)} of your {len(user_iso_codes)} language(s): "
+                    f"{sorted(best_gap)}.\n"
+                    "   These languages will be silently misclassified. "
+                    "Consider retraining on your full language set."
+                )
+            if uncoverable:
+                lines.append(
+                    f"⚠️  UNCOVERABLE LANGUAGES: {sorted(uncoverable)} appear in your dataset "
+                    "but are absent from ALL historical benchmark datasets. "
+                    "No reliable recommendation can be made for these languages."
+                )
+
+        lines.append("")
         lines.append("Top-k nearest historical datasets:")
         for i, nb in enumerate(top_k, 1):
+            gap_note = ""
+            if user_iso_codes:
+                nb_gap = nb.per_model_gaps.get(nb.best_model, frozenset())
+                gap_note = f",  coverage gap: {sorted(nb_gap)}" if nb_gap else ",  full coverage"
             lines.append(
                 f"  {i}. {nb.dataset_name}  "
                 f"(similarity: {nb.similarity_pct:.1f}%,  "
                 f"best model: {nb.best_model},  "
-                f"{priority_metric}: {nb.best_score:.4f})"
+                f"{priority_metric}: {nb.best_score:.4f}{gap_note})"
             )
 
         lines.append("")
@@ -417,12 +520,19 @@ class SimilarityEngine:
                 lines.append(f"  {label}: distance = {d:.4f}")
 
         lines.append("")
-        lines.append(f"All model scores (IDW-weighted {priority_metric}):")
+        lines.append(f"All model scores (IDW-weighted {priority_metric}, coverage-penalised):")
         for model, score in sorted(model_scores.items(), key=lambda kv: -kv[1]):
             marker = " ← recommended" if model == best_model else ""
-            lines.append(f"  {model}: {score:.4f}{marker}")
+            # Show gap size across top-k neighbours for each model
+            if user_iso_codes and top_k:
+                gaps = [nb.per_model_gaps.get(model, frozenset()) for nb in top_k]
+                avg_gap = sum(len(g) for g in gaps) / len(gaps)
+                gap_info = f"  [avg gap: {avg_gap:.1f} langs]" if avg_gap > 0 else "  [full coverage]"
+            else:
+                gap_info = ""
+            lines.append(f"  {model}: {score:.4f}{gap_info}{marker}")
 
-        # Categorical notes
+        # ── Categorical notes ─────────────────────────────────────────────────
         n_tonal = int(query_fp.get("cat__n_tonal", 0))
         n_cjk   = int(query_fp.get("cat__has_cjk", 0))
         if n_tonal > 0:
