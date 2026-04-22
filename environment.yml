@@ -1,12 +1,82 @@
-name: language_identification_project
+# =============================================================================
+# environment.yml — lid_toolkit conda environment (Stellenbosch HPC)
+#
+# Create:  conda env create -f environment.yml
+# Update:  conda env update -f environment.yml --prune
+# Activate: conda activate thesis_final
+#
+# After creating the environment, download the spaCy language models with:
+#   python scripts/download_spacy_models.py
+# =============================================================================
+
+name: thesis_final
+
 channels:
   - conda-forge
   - defaults
+
 dependencies:
+  # ── Core scientific stack ────────────────────────────────────────────────
   - python=3.11
-  - protobuf
-  - openpyxl
-  - pandas
   - pip
+  - numpy>=1.26
+  - pandas>=2.1
+  - scipy>=1.12
+  - scikit-learn>=1.4
+  - tqdm>=4.66
+
+  # ── NLP / language tooling ────────────────────────────────────────────────
+  - spacy>=3.7            # language pipeline; models installed separately via pip
+
+  # ── Utilities ────────────────────────────────────────────────────────────
+  - pyyaml>=6.0           # config file parsing
+  - openpyxl>=3.1         # Excel I/O in tests
+
+  # ── Pip-only packages ────────────────────────────────────────────────────
   - pip:
-    - fasttext
+    # FastText language identification model loader
+    - fasttext-wheel>=0.9.2
+
+    # Compressed FastText word vectors (for cosine similarity in DeepProfiler)
+    - compress-fasttext>=0.1.4
+
+    # Word frequency scoring (Zipf)
+    - wordfreq>=3.1.1
+
+    # Fast Levenshtein distance
+    - editdistance>=0.8.1
+
+    # HuggingFace model hub (downloads compressed FastText models at runtime)
+    - huggingface-hub>=0.23
+
+    # CLI framework used by lid_toolkit entry point
+    - typer>=0.12
+
+    # spaCy language models — 24 languages supported by DeepProfiler
+    # Install order: larger models first to surface any disk-space issues early.
+    - https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/fr_core_news_sm-3.8.0/fr_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/de_core_news_sm-3.8.0/de_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/es_core_news_sm-3.8.0/es_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/pt_core_news_sm-3.8.0/pt_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/it_core_news_sm-3.8.0/it_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/nl_core_news_sm-3.8.0/nl_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/ru_core_news_sm-3.8.0/ru_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/zh_core_web_sm-3.8.0/zh_core_web_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/ja_core_news_sm-3.8.0/ja_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/ko_core_news_sm-3.8.0/ko_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/pl_core_news_sm-3.8.0/pl_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/sv_core_news_sm-3.8.0/sv_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/da_core_news_sm-3.8.0/da_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/nb_core_news_sm-3.8.0/nb_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/fi_core_news_sm-3.8.0/fi_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/el_core_news_sm-3.8.0/el_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/ro_core_news_sm-3.8.0/ro_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/ca_core_news_sm-3.8.0/ca_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/hr_core_news_sm-3.8.0/hr_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/lt_core_news_sm-3.8.0/lt_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/mk_core_news_sm-3.8.0/mk_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/sl_core_news_sm-3.8.0/sl_core_news_sm-3.8.0-py3-none-any.whl
+    - https://github.com/explosion/spacy-models/releases/download/uk_core_news_sm-3.8.0/uk_core_news_sm-3.8.0-py3-none-any.whl
+    # Japanese: spaCy uses GiNZA (not the standard spaCy-models repo)
+    - ja-ginza

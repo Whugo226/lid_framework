@@ -1,6 +1,6 @@
 [project]
 name = "lid_toolkit"
-version = "y"
+version = "0.1.0"
 description = "A Python toolkit for language identification"
 readme = "README.md"
 authors = [

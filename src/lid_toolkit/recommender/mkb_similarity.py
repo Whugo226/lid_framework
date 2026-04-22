@@ -36,7 +36,7 @@ import numpy as np
 import pandas as pd
 
 from .fingerprint_builder import FingerprintBuilder
-from .mkb_store import MKBStore, METRICS
+from .mkb_store import MKBStore, CORE_METRICS
 
 logger = logging.getLogger(__name__)
 
@@ -145,10 +145,12 @@ class SimilarityEngine:
         Returns
         -------
         Recommendation
-        """
-        if priority_metric not in METRICS:
-            raise ValueError(f"priority_metric must be one of {METRICS}.")
 
+        Notes
+        -----
+        The ``priority_metric`` can be any metric stored in the MKBStore
+        (e.g., accuracy, f1_macro, f1_weighted, inference_time_total_s, etc.).
+        """
         k_use = k if k is not None else self.k
         neighbours = self._compute_neighbours(
             query_fingerprint, priority_metric, user_iso_codes=user_iso_codes

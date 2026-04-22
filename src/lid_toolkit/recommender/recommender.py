@@ -302,8 +302,6 @@ class Recommender:
         n_samples :
             Maximum text samples to profile per language (default 50).
         """
-        import glob as _glob
-
         from lid_toolkit.logic.profiler_knowledge_base import DeepProfiler
 
         root    = Path(datasets_root)
@@ -321,42 +319,18 @@ class Recommender:
                 logger.info("Profile for '%s' already exists, skipping.", dataset_name)
                 continue
 
-            # Try to load a parquet or CSV file from the dataset directory
-            parquet_files = list(dataset_dir.glob("*.parquet"))
-            csv_files     = list(dataset_dir.glob("*.csv"))
-            all_files     = parquet_files + csv_files
-
-            if not all_files:
-                logger.warning("No parquet/CSV found in '%s', skipping.", dataset_dir)
-                continue
-
-            frames = []
-            for f in all_files:
-                try:
-                    df = pd.read_parquet(f) if f.suffix == ".parquet" else pd.read_csv(f)
-                    if "text" in df.columns:
-                        frames.append(df[["text"]].dropna())
-                except Exception as exc:
-                    logger.warning("Could not read '%s': %s", f, exc)
-
-            if not frames:
-                logger.warning("No usable text data in '%s', skipping.", dataset_name)
-                continue
-
-            texts = pd.concat(frames)["text"].reset_index(drop=True)
-            if len(texts) > n_samples * 30:   # cap to avoid very long runs
-                texts = texts.sample(n=n_samples * 30, random_state=42)
-
-            logger.info("Profiling '%s' (%d texts)...", dataset_name, len(texts))
+            logger.info("Profiling '%s' (building mode)...", dataset_name)
             try:
-                lang_profile = profiler.get_multilingual_profile(texts)
+                lang_profile = profiler.run_profile("building", parquet_dir=dataset_dir)
                 if lang_profile.empty:
                     logger.warning("Empty profile for '%s', skipping.", dataset_name)
                     continue
                 with open(out_path, "wb") as fh:
                     pickle.dump(lang_profile, fh, protocol=pickle.HIGHEST_PROTOCOL)
-                logger.info("  Saved to %s  (%d features, %d languages).",
-                            out_path, lang_profile.shape[0], lang_profile.shape[1])
+                logger.info(
+                    "  Saved to %s  (%d features, %d languages).",
+                    out_path, lang_profile.shape[0], lang_profile.shape[1],
+                )
             except Exception as exc:
                 logger.error("Profiling failed for '%s': %s", dataset_name, exc)
 

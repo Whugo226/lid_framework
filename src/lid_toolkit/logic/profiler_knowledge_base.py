@@ -7,6 +7,7 @@ from wordfreq import zipf_frequency
 from scipy.stats import entropy, linregress
 from tqdm import tqdm
 import re
+import random
 from scipy.spatial.distance import cosine
 from scipy.optimize import root_scalar
 from scipy.stats import pearsonr
@@ -1885,179 +1886,324 @@ class DeepProfiler:
             
         return empty_metrics
 
+    # =========================================================================
+    # PUBLIC PROFILING API (two-mode architecture)
+    # =========================================================================
 
-    def get_multilingual_profile(self, text_series: pd.Series):
-        """Return a multilingual feature profile for each language detected in
-        ``text_series``.
+    def _run_census(
+        self,
+        cleaned_texts: list,
+        original_index,
+        conf_threshold: float,
+    ) -> tuple:
+        """Run FastText LID on cleaned_texts and return (lang_series, conf_series).
 
-        Each document is processed at three granularities — document, paragraph,
-        and sentence — and cross-level overlap / distance measures are computed
-        for every pairing (Par-Doc, Sent-Doc, Par-Par, Sent-Par, Sent-Sent).
-        The returned DataFrame maps each language code to the mean of all
-        per-document feature vectors.
+        The confidence threshold is NOT applied here — callers apply it to
+        allow each mode to handle filtering differently.
         """
-        # ── Phase 1: Census (FastText LID) ──────────────────────────────────
-        print("🔍 Phase 1: Census...")
-        texts = text_series.dropna().astype(str).values
-        n = texts.size
+        n = len(cleaned_texts)
         langs = np.empty(n, dtype=object)
         confs = np.zeros(n, dtype=float)
-        cleaned_texts = [t.replace('\n', ' ') for t in texts]
-
-        LID_CHUNK_SIZE = 5000
+        LID_CHUNK_SIZE = 5_000
         for start in tqdm(range(0, n, LID_CHUNK_SIZE), desc="Census Progress"):
             batch = cleaned_texts[start: start + LID_CHUNK_SIZE]
             predictions, probs = self.lid_model.predict(batch)
-            batch_langs = [pred[0].replace('__label__', '') for pred in predictions]
-            batch_confs = [float(p[0]) for p in probs]
-            langs[start: start + len(batch_langs)] = batch_langs
-            confs[start: start + len(batch_confs)] = batch_confs
+            langs[start: start + len(batch)] = [
+                p[0].replace('__label__', '') for p in predictions
+            ]
+            confs[start: start + len(batch)] = [float(p[0]) for p in probs]
+        return (
+            pd.Series(langs, index=original_index),
+            pd.Series(confs, index=original_index),
+        )
 
-        lang_series = pd.Series(langs, index=text_series.dropna().index)
-        conf_series = pd.Series(confs, index=text_series.dropna().index)
+    def _profile_language_group(
+        self,
+        lang: str,
+        subset_txt: list,
+    ):
+        """Run the full three-level spaCy profiling pipeline for one language.
 
-        CONF_THRESHOLD = 0.95
-        high_conf_mask = conf_series >= CONF_THRESHOLD
-        kept = high_conf_mask.sum()
-        dropped = len(high_conf_mask) - kept
-        print(f"✅ Census: kept {kept} texts (confidence ≥ {CONF_THRESHOLD}; dropped {dropped})")
+        Parameters
+        ----------
+        lang : str
+            ISO 639-1 code for the language group.
+        subset_txt : list[str]
+            Pre-sampled raw texts (≤ 100 items). Caller is responsible for
+            sampling and SUPPORTED_SPACY_LANGS filtering.
 
-        filtered_texts = text_series.dropna().astype(str)[high_conf_mask]
-        grouped = filtered_texts.groupby(lang_series[high_conf_mask])
+        Returns
+        -------
+        dict | None
+            Mean feature dict (ready to become a DataFrame column), or None
+            on failure or empty output.
+        """
+        if not subset_txt:
+            return None
+
+        _logger = logging.getLogger(__name__)
+        all_rows: list = []
+
+        try:
+            nlp = self._make_pipeline(lang)
+
+            # Load FastText word-vector model once per language (for cosine distance)
+            if self.fasttext_model is None or self.current_fasttext_lang != lang:
+                print(f"   Loading FastText model for '{lang}'...")
+                self._load_fasttext_model(lang)
+                self.current_fasttext_lang = lang
+
+            # ── Batch paragraph processing ──────────────────────────────
+            all_par_texts: list = []
+            doc_par_indices: list = []
+            for raw in subset_txt:
+                par_texts = [p.strip() for p in re.split(r'\n\s*\n', raw.strip()) if p.strip()]
+                if not par_texts:
+                    par_texts = [raw.strip() or " "]
+                start_idx = len(all_par_texts)
+                all_par_texts.extend(par_texts)
+                doc_par_indices.append(list(range(start_idx, start_idx + len(par_texts))))
+
+            print(f"   Processing {len(subset_txt)} docs / {len(all_par_texts)} paragraphs...")
+            all_par_docs = list(nlp.pipe(all_par_texts))
+
+            # ── Full-document pass ─────────────────────────────────────
+            full_docs = list(nlp.pipe(subset_txt))
+
+            for doc_idx, full_doc in enumerate(tqdm(full_docs, desc=f"Processing {lang}")):
+                raw_text = subset_txt[doc_idx]
+                par_docs = [all_par_docs[i] for i in doc_par_indices[doc_idx]]
+                n_pars   = len(par_docs)
+
+                sents_all = self._filter_valid_sentences(full_doc.sents)
+                n_sents   = len(sents_all)
+
+                # ── STEP 1: Sentences (atomic unit) ──────────────────────────────
+                sent_docs       = [sent.as_doc() for sent in sents_all]
+                sent_feats_list = [self._extract_measures(sd, lang) for sd in sent_docs]
+
+                # ── STEP 2: Sentence-level summary ───────────────────────────────
+                row: dict = {}
+                row.update(self._summarize(sent_feats_list, 'Sent', self.SKIP_AT_SENT_LEVEL))
+
+                # ── STEP 3: Map sentences → paragraphs ───────────────────────────
+                sent_to_par = self._build_sent_to_par_map(raw_text, sents_all, par_docs)
+
+                # ── STEP 4: Paragraph level ──────────────────────────────────────
+                par_feats_list: list = []
+                for par_idx, par_doc in enumerate(par_docs):
+                    sents_in_par = [sent_feats_list[i]
+                                    for i, pi in enumerate(sent_to_par)
+                                    if pi == par_idx]
+                    par_supplement = self._extract_measures(par_doc, lang)
+                    if sents_in_par:
+                        par_cascade = self._aggregate_to_one(sents_in_par)
+                        par_feats   = {**par_cascade,
+                                       **{k: par_supplement[k]
+                                          for k in self.NON_CASCADABLE_KEYS
+                                          if k in par_supplement}}
+                    else:
+                        par_feats = par_supplement
+                    par_feats_list.append(par_feats)
+
+                row.update(self._summarize(par_feats_list, 'Par', self.SKIP_AT_PAR_LEVEL))
+
+                par_sent_counts = [f.get('Sentence count', 0) for f in par_feats_list]
+                if par_sent_counts:
+                    arr = np.array(par_sent_counts, dtype=float)
+                    row['Paragraph length (Par Avg)'] = float(np.nanmean(arr))
+                    row['Paragraph length (Par SD)']  = float(np.nanstd(arr, ddof=1)) if len(arr) > 1 else 0.0
+                    row['Paragraph length (Par Max)'] = float(np.nanmax(arr))
+                    row['Paragraph length (Par Min)'] = float(np.nanmin(arr))
+
+                # ── STEP 5: Document level ───────────────────────────────────────
+                doc_supplement = self._extract_measures(full_doc, lang)
+                doc_cascade    = self._aggregate_to_one(sent_feats_list)
+                doc_feats      = {**doc_cascade,
+                                  **{k: doc_supplement[k]
+                                     for k in self.NON_CASCADABLE_KEYS
+                                     if k in doc_supplement}}
+
+                for k, v in doc_feats.items():
+                    if k not in self.INTERNAL_KEYS:
+                        row[f"{k} (Doc)"] = v
+
+                row['Paragraph count (Doc)']  = n_pars
+                row['Paragraph length (Doc)'] = n_sents / n_pars if n_pars > 0 else 0.0
+
+                # ── STEP 6: Cross-level overlaps ─────────────────────────────────
+                row.update(self._calc_cross_level_overlaps(
+                    full_doc, par_docs, sent_docs, sent_to_par, lang
+                ))
+
+                all_rows.append(row)
+
+        except Exception as e:
+            import traceback
+            _logger.error("Profiling failed for '%s': %s", lang, e)
+            traceback.print_exc()
+            return None
+
+        if not all_rows:
+            _logger.warning("No rows produced for '%s'.", lang)
+            return None
+
+        return pd.DataFrame(all_rows).mean().round(4).to_dict()
+
+    def _profile_building_mode(self, parquet_dir: Path) -> pd.DataFrame:
+        """Path A — Ground-Truth Directed Profiling.
+
+        Reads all *.parquet files in ``parquet_dir``, extracts the ISO 639-1
+        code from each filename stem (pattern ``^([a-z]{2,3})_``), pools
+        texts per language, stochastically shuffles, samples ≤ 100, and
+        profiles each language using the shared spaCy pipeline.
+
+        The returned DataFrame has ``attrs["source_environment"]`` set to
+        ``parquet_dir.name`` (NOT preserved by pandas concat/merge).
+        """
+        lang_texts: dict = {}
+        _logger = logging.getLogger(__name__)
+
+        for f in sorted(parquet_dir.glob("*.parquet")):
+            m = re.match(r'^([a-z]{2,3})_', f.stem)
+            if not m:
+                _logger.warning("Skipping '%s': cannot extract ISO code.", f.name)
+                continue
+            lang = m.group(1)
+            if lang not in self.SPACY_MODELS:
+                _logger.warning("Skipping '%s': no spaCy model for '%s'.", f.name, lang)
+                continue
+            try:
+                df_file = pd.read_parquet(f)
+                if "text" not in df_file.columns:
+                    _logger.warning("Skipping '%s': no 'text' column.", f.name)
+                    continue
+                texts = df_file["text"].dropna().astype(str).tolist()
+                lang_texts.setdefault(lang, []).extend(texts)
+            except Exception as exc:
+                _logger.warning("Could not read '%s': %s", f.name, exc)
+
+        if not lang_texts:
+            _logger.warning("No usable parquet files found in '%s'.", parquet_dir)
+            return pd.DataFrame()
 
         final_report: dict = {}
-        MAX_SAMPLES_PER_LANG = 50
-        SUPPORTED_SPACY_LANGS = {
-            'ca', 'zh', 'hr', 'da', 'nl', 'en', 'fi', 'fr', 'de', 'el',
-            'it', 'ja', 'ko', 'lt', 'mk', 'nb', 'pl', 'pt', 'ro', 'ru',
-            'sl', 'es', 'sv', 'uk'
-        }
+        MAX_SAMPLES = 100
+        for lang, texts in lang_texts.items():
+            random.shuffle(texts)          # stochastic, no fixed seed
+            subset_txt = texts[:MAX_SAMPLES]
+            print(f"📊 Building '{lang}' ({len(subset_txt)}/{len(texts)} texts)...")
+            result = self._profile_language_group(lang, subset_txt)
+            if result is not None:
+                final_report[lang] = result
 
-        # ── Phase 2: Per-language profiling ────────────────────────────────
+        df = pd.DataFrame(final_report)
+        df.attrs["source_environment"] = parquet_dir.name
+        return df
+
+    def _profile_user_mode(self, text_series: pd.Series) -> pd.DataFrame:
+        """Path B — Diagnostic Discovery Profiling.
+
+        Takes a stochastic snapshot of up to 10 000 rows, runs FastText LID
+        with CONF_THRESHOLD = 0.0 (profile the data *as-is*, noise and all),
+        discovers language candidates, then profiles ≤ 100 samples per
+        discovered language.
+        """
+        _logger = logging.getLogger(__name__)
+        clean = text_series.dropna().astype(str)
+        SNAPSHOT_SIZE = 10_000
+
+        print(f"🔍 Phase 1: Snapshot Census ({min(len(clean), SNAPSHOT_SIZE)} rows)...")
+        snapshot = clean.sample(n=min(len(clean), SNAPSHOT_SIZE), random_state=None)
+        cleaned_texts = [t.replace('\n', ' ') for t in snapshot.values]
+
+        CONF_THRESHOLD = 0.0          # CRITICAL: profile as-is, no confidence filtering
+        lang_series, conf_series = self._run_census(
+            cleaned_texts, snapshot.index, conf_threshold=CONF_THRESHOLD
+        )
+        # All texts pass at threshold 0.0
+        mask = conf_series >= CONF_THRESHOLD
+        filtered = snapshot[mask]
+        grouped = filtered.groupby(lang_series[mask])
+
+        final_report: dict = {}
+        MAX_SAMPLES = 100
         for lang, subset in grouped:
-            if lang not in SUPPORTED_SPACY_LANGS:
+            if lang not in self.SPACY_MODELS:
                 print(f"⏭️  Skipping '{lang}' (unsupported spaCy language).")
                 continue
-
-            if len(subset) > MAX_SAMPLES_PER_LANG:
-                subset_txt = subset.sample(n=MAX_SAMPLES_PER_LANG, random_state=42).values.tolist()
-                print(f"📊 Profiling '{lang}' (sampled {MAX_SAMPLES_PER_LANG}/{len(subset)} texts)...")
-            else:
-                subset_txt = subset.values.tolist()
-                print(f"📊 Profiling '{lang}' (100% of {len(subset)} texts)...")
-
-            try:
-                nlp = self._make_pipeline(lang)
-
-                # Load FastText word-vector model once per language (for cosine distance)
-                if self.fasttext_model is None or self.current_fasttext_lang != lang:
-                    print(f"   Loading FastText model for '{lang}'...")
-                    self._load_fasttext_model(lang)
-                    self.current_fasttext_lang = lang
-
-                # ── Batch paragraph processing ──────────────────────────────
-                # Split every raw text into paragraphs and pipe them ALL through
-                # nlp in a single batched call to preserve spaCy's throughput.
-                all_par_texts: list[str] = []
-                doc_par_indices: list[list[int]] = []  # doc_idx → indices in all_par_texts
-                for raw in subset_txt:
-                    par_texts = [p.strip() for p in re.split(r'\n\s*\n', raw.strip()) if p.strip()]
-                    if not par_texts:
-                        par_texts = [raw.strip() or " "]
-                    start_idx = len(all_par_texts)
-                    all_par_texts.extend(par_texts)
-                    doc_par_indices.append(list(range(start_idx, start_idx + len(par_texts))))
-
-                print(f"   Processing {len(subset_txt)} docs / {len(all_par_texts)} paragraphs...")
-                all_par_docs = list(nlp.pipe(all_par_texts))
-
-                # ── Full-document pass ─────────────────────────────────────
-                full_docs = list(nlp.pipe(subset_txt))
-
-                all_rows: list[dict] = []
-
-                for doc_idx, full_doc in enumerate(tqdm(full_docs, desc=f"Processing {lang}")):
-                    raw_text = subset_txt[doc_idx]
-                    par_docs = [all_par_docs[i] for i in doc_par_indices[doc_idx]]
-                    n_pars   = len(par_docs)
-                    
-                    # Filter out empty/whitespace-only sentences
-                    sents_all = self._filter_valid_sentences(full_doc.sents)
-                    n_sents   = len(sents_all)
-
-                    # ── STEP 1: Sentences (atomic unit) ──────────────────────────────
-                    sent_docs       = [sent.as_doc() for sent in sents_all]
-                    sent_feats_list = [self._extract_measures(sd, lang) for sd in sent_docs]
-
-                    # ── STEP 2: Sentence-level summary ───────────────────────────────
-                    row: dict = {}
-                    row.update(self._summarize(sent_feats_list, 'Sent', self.SKIP_AT_SENT_LEVEL))
-
-                    # ── STEP 3: Map sentences → paragraphs ───────────────────────────
-                    sent_to_par = self._build_sent_to_par_map(raw_text, sents_all, par_docs)
-
-                    # ── STEP 4: Paragraph level ──────────────────────────────────────
-                    # Each paragraph's cascadable metrics come from its sentences;
-                    # non-cascadable keys are supplemented from the full par_doc.
-                    par_feats_list: list[dict] = []
-                    for par_idx, par_doc in enumerate(par_docs):
-                        sents_in_par = [sent_feats_list[i]
-                                        for i, pi in enumerate(sent_to_par)
-                                        if pi == par_idx]
-                        par_supplement = self._extract_measures(par_doc, lang)
-                        if sents_in_par:
-                            par_cascade = self._aggregate_to_one(sents_in_par)
-                            par_feats   = {**par_cascade,
-                                           **{k: par_supplement[k]
-                                              for k in self.NON_CASCADABLE_KEYS
-                                              if k in par_supplement}}
-                        else:
-                            # Edge case: no sentences mapped here — use full extraction
-                            par_feats = par_supplement
-                        par_feats_list.append(par_feats)
-
-                    row.update(self._summarize(par_feats_list, 'Par', self.SKIP_AT_PAR_LEVEL))
-
-                    # Paragraph length in sentences, summarised
-                    par_sent_counts = [f.get('Sentence count', 0) for f in par_feats_list]
-                    if par_sent_counts:
-                        arr = np.array(par_sent_counts, dtype=float)
-                        row['Paragraph length (Par Avg)'] = float(np.nanmean(arr))
-                        row['Paragraph length (Par SD)']  = float(np.nanstd(arr, ddof=1)) if len(arr) > 1 else 0.0
-                        row['Paragraph length (Par Max)'] = float(np.nanmax(arr))
-                        row['Paragraph length (Par Min)'] = float(np.nanmin(arr))
-
-                    # ── STEP 5: Document level ───────────────────────────────────────
-                    # Cascadable metrics come from all sentences; non-cascadable keys
-                    # are supplemented from the full document extraction.
-                    doc_supplement = self._extract_measures(full_doc, lang)
-                    doc_cascade    = self._aggregate_to_one(sent_feats_list)
-                    doc_feats      = {**doc_cascade,
-                                      **{k: doc_supplement[k]
-                                         for k in self.NON_CASCADABLE_KEYS
-                                         if k in doc_supplement}}
-
-                    for k, v in doc_feats.items():
-                        if k not in self.INTERNAL_KEYS:
-                            row[f"{k} (Doc)"] = v
-
-                    # Paragraph count and length live only at Doc level
-                    row['Paragraph count (Doc)']  = n_pars
-                    row['Paragraph length (Doc)'] = n_sents / n_pars if n_pars > 0 else 0.0
-
-                    # ── STEP 6: Cross-level overlaps ─────────────────────────────────
-                    row.update(self._calc_cross_level_overlaps(
-                        full_doc, par_docs, sent_docs, sent_to_par, lang
-                    ))
-
-                    all_rows.append(row)
-
-                df = pd.DataFrame(all_rows)
-                final_report[lang] = df.mean().round(4).to_dict()
-
-            except Exception as e:
-                import traceback
-                print(f"❌ Skipping '{lang}': {e}")
-                traceback.print_exc()
+            subset_txt = (
+                subset.sample(n=min(len(subset), MAX_SAMPLES), random_state=None)
+                .values.tolist()
+            )
+            print(f"📊 Profiling '{lang}' ({len(subset_txt)} texts)...")
+            result = self._profile_language_group(lang, subset_txt)
+            if result is not None:
+                final_report[lang] = result
 
         return pd.DataFrame(final_report)
+
+    def run_profile(
+        self,
+        mode: str,
+        *,
+        text_series: pd.Series = None,
+        parquet_dir=None,
+    ) -> pd.DataFrame:
+        """High-level entry point for dataset profiling.
+
+        Parameters
+        ----------
+        mode : {"building", "user"}
+            ``"building"`` — Ground-Truth Directed Profiling (Path A).
+                Requires ``parquet_dir``. Extracts language labels from
+                Parquet filenames; no FastText census performed.
+            ``"user"`` — Diagnostic Discovery Profiling (Path B).
+                Requires ``text_series``. Runs a snapshot census at
+                CONF_THRESHOLD=0.0 to profile unlabelled user data as-is.
+        text_series : pd.Series, optional
+            Required for ``mode="user"``.
+        parquet_dir : Path or str, optional
+            Required for ``mode="building"``. Must be a directory containing
+            ``*.parquet`` files named ``{iso}_{id}.parquet``.
+
+        Returns
+        -------
+        pd.DataFrame
+            Rows = linguistic features, columns = ISO 639-1 language codes.
+            Both modes produce the same feature schema (S1–S6 + overlaps).
+        """
+        if mode == "building":
+            if parquet_dir is None:
+                raise ValueError("'parquet_dir' is required for mode='building'.")
+            if text_series is not None:
+                raise ValueError(
+                    "'text_series' must not be provided for mode='building'. "
+                    "Use 'parquet_dir' instead."
+                )
+            return self._profile_building_mode(Path(parquet_dir))
+
+        elif mode == "user":
+            if text_series is None:
+                raise ValueError("'text_series' is required for mode='user'.")
+            if parquet_dir is not None:
+                raise ValueError(
+                    "'parquet_dir' must not be provided for mode='user'. "
+                    "Use 'text_series' instead."
+                )
+            return self._profile_user_mode(text_series)
+
+        else:
+            raise ValueError(
+                f"Unknown mode '{mode}'. Expected 'building' or 'user'."
+            )
+
+    def get_multilingual_profile(self, text_series: pd.Series) -> pd.DataFrame:
+        """Return a multilingual feature profile for each language detected in
+        ``text_series``.
+
+        .. deprecated::
+            Use ``run_profile(mode='user', text_series=text_series)`` directly.
+            This wrapper is kept for backward compatibility.
+        """
+        return self.run_profile("user", text_series=text_series)

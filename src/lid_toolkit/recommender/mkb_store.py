@@ -28,8 +28,9 @@ A *performance record* is a nested dict::
         ...
     }
 
-Any metric key recognised by the recommender (``accuracy``, ``f1_macro``,
-``precision_macro``, ``recall_macro``) is stored.
+Any metric key from the benchmark metadata (e.g., ``accuracy``, ``f1_macro``,
+``f1_weighted``, ``precision_weighted``, ``recall_weighted``,
+``inference_time_total_s``) is stored without filtering.
 
 Directory layout expected by ``build_from_filesystem``
 -------------------------------------------------------
@@ -63,7 +64,8 @@ from .fingerprint_builder import FingerprintBuilder
 
 logger = logging.getLogger(__name__)
 
-METRICS = ("accuracy", "f1_macro", "precision_macro", "recall_macro")
+# Core metrics (used as defaults). All metrics from benchmark_metadata.json are stored.
+CORE_METRICS = ("accuracy", "f1_macro", "precision_macro", "recall_macro")
 
 # mlruns subdirectories are MLflow internals — never load from there
 _SKIP_DIRS = {"mlruns", "__pycache__"}
@@ -148,14 +150,17 @@ class MKBStore:
             Free-form label, e.g. ``"fasttext_word"`` or
             ``"tfidf_lr_char_ngram_3_5"``.
         metrics :
-            Dict with at least one of the recognised METRICS keys.
+            Dict of any metrics (e.g., accuracy, f1_macro, f1_weighted,
+            precision_weighted, recall_weighted, inference_time_total_s, etc.).
+            All metrics in the dict are stored; none are filtered out.
         """
         if dataset_name not in self._entries:
             self._entries[dataset_name] = DatasetEntry(
                 name=dataset_name, iso_codes=[],
             )
         entry = self._entries[dataset_name]
-        kept = {k: float(v) for k, v in metrics.items() if k in METRICS}
+        # Store all metrics from the JSON, not just a hardcoded subset
+        kept = {k: float(v) for k, v in metrics.items()}
         entry.performances[model_variant] = kept
 
     def finalise(self) -> None:
@@ -218,9 +223,11 @@ class MKBStore:
         return self._entries[dataset_name]
 
     def best_model_per_dataset(self, metric: str = "f1_macro") -> dict[str, str]:
-        """Return {dataset_name: best_model_variant} by ``metric``."""
-        if metric not in METRICS:
-            raise ValueError(f"metric must be one of {METRICS}, got '{metric}'.")
+        """Return {dataset_name: best_model_variant} by ``metric``.
+
+        The metric can be any metric stored in the performances (e.g., accuracy,
+        f1_macro, f1_weighted, inference_time_total_s, etc.).
+        """
         result = {}
         for name, entry in self._entries.items():
             if not entry.performances:
@@ -357,6 +364,13 @@ class MKBStore:
 
     def summary(self) -> pd.DataFrame:
         """Return a DataFrame with one row per dataset."""
+        # Collect all unique metrics across all entries
+        all_metrics: set[str] = set()
+        for entry in self._entries.values():
+            for perf in entry.performances.values():
+                all_metrics.update(perf.keys())
+        all_metrics = sorted(all_metrics)  # Sort for consistent column order
+
         rows = []
         for name, entry in self._entries.items():
             row = {
@@ -365,11 +379,11 @@ class MKBStore:
                 "n_model_variants": len(entry.performances),
                 "has_fingerprint": entry.fingerprint is not None,
             }
-            for metric in METRICS:
+            for metric in all_metrics:
                 best_score = max(
-                    (perf.get(metric, -1) for perf in entry.performances.values()),
+                    (perf.get(metric, float("nan")) for perf in entry.performances.values()),
                     default=float("nan"),
                 )
-                row[f"best_{metric}"] = round(best_score, 4)
+                row[f"best_{metric}"] = round(best_score, 4) if not np.isnan(best_score) else float("nan")
             rows.append(row)
         return pd.DataFrame(rows).set_index("dataset")
