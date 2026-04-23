@@ -133,14 +133,13 @@ class DeepProfiler:
                 print(f"   Downloading spaCy model '{model_name}'...")
                 spacy.cli.download(model_name)
 
-            # --- 1. LOAD MODEL & APPLY SUDACHI FIX ---
-            # if lang == 'ja':
-            #     nlp = spacy.load(
-            #         model_name, 
-            #         disable=["parser", "ner"],
-            #         config={"nlp": {"tokenizer": {"split_mode": "A"}}} 
-            #     )
-            if lang == 'ko':
+            # --- 1. LOAD MODEL & APPLY LANGUAGE-SPECIFIC FIXES ---
+            if lang == 'ja':
+                # confection>=1.3.x enforces strict types; ja_ginza's compound_splitter
+                # ships split_mode=None which fails validation — override to "C" (long units).
+                ja_config = {"components": {"compound_splitter": {"split_mode": "C"}}}
+                nlp = spacy.load(model_name, disable=["ner"], config=ja_config)
+            elif lang == 'ko':
                 # Force pure-Python rule-based tokenizer (Perfect for Korean eojeols, bypasses C++)
                 ko_config = {"nlp": {"tokenizer": {"@tokenizers": "spacy.Tokenizer.v1"}}}
                 nlp = spacy.load(model_name, disable=[ "ner"], config=ko_config)
