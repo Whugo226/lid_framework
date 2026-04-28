@@ -198,6 +198,81 @@ class SimilarityEngine:
             uncoverable_languages=uncoverable,
         )
 
+    def trace_query(
+        self,
+        query_fingerprint: OrderedDict[str, float],
+        priority_metric: str = "f1_macro",
+        k: Optional[int] = None,
+        user_iso_codes: Optional[frozenset[str]] = None,
+    ) -> tuple["Recommendation", dict]:
+        """
+        Run the full query pipeline and return (Recommendation, math_trace).
+
+        The math_trace dict contains every intermediate variable for manual
+        verification: PCA pipeline, per-stratum Euclidean distances, Hamming,
+        weighted composite D, max_D, similarity%, top-k list, IDW
+        inv_d/coverage_factor/numerators/denominators, and confidence.
+        """
+        trace: dict = {
+            "priority_metric": priority_metric,
+            "k": k if k is not None else self.k,
+        }
+
+        # § 0: PCA pipeline summary
+        strat = self.store.stratifier
+        trace["pca_pipeline"] = {
+            s: {
+                "n_components": sfit.n_components,
+                "explained_variance_pct": [
+                    round(float(v) * 100, 2) for v in sfit.explained_variance_ratio
+                ],
+                "cumulative_pct": round(float(sum(sfit.explained_variance_ratio)) * 100, 2),
+            }
+            for s, sfit in strat._fits.items()
+        }
+        trace["stratum_weights"] = dict(self.stratum_weights)
+
+        # §§ 1–5: distances, max_D, sorted candidates (collected inside _compute_neighbours)
+        neighbours = self._compute_neighbours(
+            query_fingerprint, priority_metric,
+            user_iso_codes=user_iso_codes, _outer_trace=trace,
+        )
+        if not neighbours:
+            raise RuntimeError("No neighbours found — MKB store may be empty or unfinalised.")
+
+        k_use = k if k is not None else self.k
+        top_k = neighbours[:k_use]
+        trace["top_k"] = [
+            {"dataset": r.dataset_name, "D": r.distance, "sim_pct": r.similarity_pct}
+            for r in top_k
+        ]
+
+        # §§ 6–7: IDW vote (collected inside _idw_vote)
+        idw_trace: dict = {}
+        model_scores = self._idw_vote(
+            top_k, priority_metric,
+            user_iso_codes=user_iso_codes, _trace=idw_trace,
+        )
+        trace["idw"] = idw_trace
+
+        # § 8: confidence
+        best_model = max(model_scores, key=model_scores.__getitem__)
+        n_agreeing = sum(1 for nb in top_k if nb.best_model == best_model)
+        confidence = n_agreeing / len(top_k)
+        trace["confidence"] = {
+            "n_agreeing": n_agreeing,
+            "k": len(top_k),
+            "confidence": confidence,
+        }
+        trace["recommended_model"] = best_model
+
+        # Build the full Recommendation via the existing query() path
+        rec = self.query(
+            query_fingerprint, priority_metric=priority_metric,
+            k=k, user_iso_codes=user_iso_codes,
+        )
+        return rec, trace
+
     # ------------------------------------------------------------------
     # Weight learning (optional, data-driven)
     # ------------------------------------------------------------------
@@ -285,6 +360,7 @@ class SimilarityEngine:
         self,
         fp_a: OrderedDict[str, float],
         fp_b: OrderedDict[str, float],
+        _trace: Optional[dict] = None,
     ) -> dict[str, float]:
         """
         Compute per-stratum Euclidean distance between two fingerprints.
@@ -307,38 +383,73 @@ class SimilarityEngine:
                 continue
             # Ensure same length (should always be equal after fitting)
             min_len = min(va.size, vb.size)
-            result[s] = float(np.linalg.norm(va[:min_len] - vb[:min_len]))
+            diff = va[:min_len] - vb[:min_len]
+            result[s] = float(np.linalg.norm(diff))
+            if _trace is not None:
+                _trace.setdefault("stratum_details", {})[s] = {
+                    "query_vec": va[:min_len].tolist(),
+                    "candidate_vec": vb[:min_len].tolist(),
+                    "diff_vec": diff.tolist(),
+                    "euclidean_d": result[s],
+                }
 
         # Categorical S6: normalised Hamming distance on cat__ keys
         cat_keys_a = {k: v for k, v in fp_a.items() if k.startswith("cat__")}
         cat_keys_b = {k: v for k, v in fp_b.items() if k.startswith("cat__")}
         all_cat_keys = set(cat_keys_a) | set(cat_keys_b)
         if all_cat_keys:
-            n_diff = sum(
-                1 for k in all_cat_keys
+            differing = [
+                k for k in all_cat_keys
                 if abs(cat_keys_a.get(k, 0.0) - cat_keys_b.get(k, 0.0)) > 0.5
-            )
+            ]
+            n_diff = len(differing)
             result["cat"] = n_diff / len(all_cat_keys)
         else:
+            differing = []
+            n_diff = 0
             result["cat"] = 0.0
+
+        if _trace is not None:
+            _trace["hamming"] = {
+                "n_cat_flags": len(all_cat_keys),
+                "n_differing": n_diff,
+                "differing_keys": differing,
+                "d_cat": result["cat"],
+            }
 
         return result
 
-    def _weighted_distance(self, per_stratum: dict[str, float]) -> float:
+    def _weighted_distance(
+        self,
+        per_stratum: dict[str, float],
+        _trace: Optional[dict] = None,
+    ) -> float:
         """Compute the scalar weighted composite distance from per-stratum distances."""
         total = 0.0
         weight_sum = 0.0
+        terms: dict = {}
         for s, d in per_stratum.items():
             w = self.stratum_weights.get(s, 1.0)
             total += w * d
             weight_sum += w
-        return total / weight_sum if weight_sum > 0 else 0.0
+            if _trace is not None:
+                terms[s] = {"w": w, "d": d, "w_times_d": w * d}
+        composite = total / weight_sum if weight_sum > 0 else 0.0
+        if _trace is not None:
+            _trace["weighted_composite"] = {
+                "per_stratum_terms": terms,
+                "weight_sum": weight_sum,
+                "total_numerator": total,
+                "composite_D": composite,
+            }
+        return composite
 
     def _compute_neighbours(
         self,
         query_fp: OrderedDict[str, float],
         priority_metric: str,
         user_iso_codes: Optional[frozenset[str]] = None,
+        _outer_trace: Optional[dict] = None,
     ) -> list[NeighbourResult]:
         """
         Compute distances to all historical datasets and sort ascending.
@@ -357,8 +468,9 @@ class SimilarityEngine:
             if entry.fingerprint is None or not entry.performances:
                 continue
 
-            per_stratum = self._stratum_distances(query_fp, entry.fingerprint)
-            dist = self._weighted_distance(per_stratum)
+            candidate_trace: Optional[dict] = {} if _outer_trace is not None else None
+            per_stratum = self._stratum_distances(query_fp, entry.fingerprint, _trace=candidate_trace)
+            dist = self._weighted_distance(per_stratum, _trace=candidate_trace)
 
             # ── Coverage-aware model selection ────────────────────────────────
             per_model_gaps: dict[str, frozenset[str]] = {}
@@ -400,6 +512,13 @@ class SimilarityEngine:
                 per_model_gaps=per_model_gaps,
             ))
 
+            if _outer_trace is not None and candidate_trace is not None:
+                candidate_trace["dataset"] = name
+                candidate_trace["composite_D"] = dist
+                candidate_trace["best_model"] = best_var
+                candidate_trace["best_score"] = best_score
+                _outer_trace.setdefault("all_candidates", []).append(candidate_trace)
+
         if not results:
             return []
 
@@ -409,6 +528,14 @@ class SimilarityEngine:
             r.similarity_pct = round((1.0 - r.distance / max_dist) * 100, 1)
 
         results.sort(key=lambda r: r.distance)
+
+        if _outer_trace is not None:
+            _outer_trace["max_D"] = max_dist
+            _outer_trace["sorted_candidates"] = [
+                {"dataset": r.dataset_name, "D": r.distance, "sim_pct": r.similarity_pct}
+                for r in results
+            ]
+
         return results
 
     def _idw_vote(
@@ -416,6 +543,7 @@ class SimilarityEngine:
         neighbours: list[NeighbourResult],
         priority_metric: str,
         user_iso_codes: Optional[frozenset[str]] = None,
+        _trace: Optional[dict] = None,
     ) -> dict[str, float]:
         """
         Inverse-distance-weighted voting across k neighbours.
@@ -430,9 +558,11 @@ class SimilarityEngine:
         model_weights: dict[str, float] = {}
 
         n_user_langs = len(user_iso_codes) if user_iso_codes else 0
+        idw_per_nb: list[dict] = [] if _trace is not None else []  # always built for trace
 
         for nb in neighbours:
             inv_d = 1.0 / (nb.distance + 1e-9)
+            nb_record: dict = {"dataset": nb.dataset_name, "inv_d": inv_d, "per_model": {}}
             for model, perfs in nb.performances.items():
                 score = perfs.get(priority_metric, 0.0)
 
@@ -441,17 +571,35 @@ class SimilarityEngine:
                     gap = nb.per_model_gaps.get(model, frozenset())
                     coverage_factor = 1.0 - len(gap) / n_user_langs
                 else:
+                    gap = frozenset()
                     coverage_factor = 1.0
 
+                contribution = inv_d * score * coverage_factor
                 model_weighted_scores[model] = (
-                    model_weighted_scores.get(model, 0.0) + inv_d * score * coverage_factor
+                    model_weighted_scores.get(model, 0.0) + contribution
                 )
                 model_weights[model] = model_weights.get(model, 0.0) + inv_d
 
-        return {
+                if _trace is not None:
+                    nb_record["per_model"][model] = {
+                        "score": score,
+                        "gap_size": len(gap),
+                        "coverage_factor": coverage_factor,
+                        "contribution": contribution,
+                    }
+            if _trace is not None:
+                idw_per_nb.append(nb_record)
+
+        normalized = {
             m: model_weighted_scores[m] / model_weights[m]
             for m in model_weighted_scores
         }
+        if _trace is not None:
+            _trace["per_neighbour"] = idw_per_nb
+            _trace["raw_numerators"] = dict(model_weighted_scores)
+            _trace["denominators"] = dict(model_weights)
+            _trace["normalized_idw_scores"] = normalized
+        return normalized
 
     def _build_explanation(
         self,

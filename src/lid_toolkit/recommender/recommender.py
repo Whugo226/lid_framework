@@ -134,6 +134,32 @@ class Recommender:
             user_iso_codes=user_iso_codes,
         )
 
+    def recommend_from_profile_traced(
+        self,
+        lang_profile_df: pd.DataFrame,
+        priority_metric: str = "f1_macro",
+        k: Optional[int] = None,
+    ) -> tuple[Recommendation, dict]:
+        """
+        Return (Recommendation, math_trace) for manual step-by-step verification.
+
+        The math_trace dict contains every intermediate variable computed during
+        recommendation: PCA pipeline, per-stratum Euclidean distances, Hamming,
+        weighted composite D, max_D, similarity%, top-k list, IDW
+        inv_d/coverage_factor/numerators/denominators, and confidence.
+        """
+        user_iso_codes = frozenset(lang_profile_df.columns)
+        fp = self.store.builder.build(lang_profile_df)
+        trace: dict = {"query_iso_codes": sorted(user_iso_codes)}
+        rec, engine_trace = self.engine.trace_query(
+            fp,
+            priority_metric=priority_metric,
+            k=k,
+            user_iso_codes=user_iso_codes,
+        )
+        trace.update(engine_trace)
+        return rec, trace
+
     # ------------------------------------------------------------------
     # Weight learning
     # ------------------------------------------------------------------

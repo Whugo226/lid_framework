@@ -324,6 +324,7 @@ class MKBStore:
                     meta = json.load(fh)
                 dataset_name = meta.get("dataset") or meta.get("name") or mf.parent.parent.name
                 variant      = meta.get("variant") or meta.get("pipeline") or mf.parent.name
+                variant      = f"{variant}_{dataset_name}"
                 metrics_raw  = meta.get("metrics", {})
                 store.add_performance(dataset_name, variant, metrics_raw)
             except Exception as exc:

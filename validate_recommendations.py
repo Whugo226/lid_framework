@@ -205,7 +205,7 @@ def load_all_benchmarks(
     """
     scores: dict[str, float] = {}
     for metadata_path in benchmark_dir.glob(f"*/{dataset_name}/*/benchmark_metadata.json"):
-        variant_name = metadata_path.parent.name
+        variant_name = f"{metadata_path.parent.name}_{dataset_name}"
         try:
             with open(metadata_path, encoding="utf-8") as f:
                 data = json.load(f)
@@ -270,6 +270,93 @@ def aggregate_results(results: list[dict]) -> dict:
 # ---------------------------------------------------------------------------
 # Report output
 # ---------------------------------------------------------------------------
+
+def write_math_trace_report(traces: list[dict], output_path: Path) -> None:
+    """Write a human-readable step-by-step math trace for all evaluated datasets."""
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write("# Math Trace Report\n\n")
+        f.write("Step-by-step verification of the recommendation math for each dataset.\n\n")
+
+        for trace in traces:
+            dataset = trace.get("dataset_name", "unknown")
+            f.write(f"---\n\n## Dataset: `{dataset}`\n\n")
+            f.write(f"**Query languages:** `{trace.get('query_iso_codes', [])}`  \n")
+            f.write(f"**Priority metric:** `{trace.get('priority_metric')}` | k = {trace.get('k')}\n\n")
+
+            # § 0: PCA pipeline
+            f.write("### § 0 · PCA Pipeline\n\n")
+            f.write("| Stratum | PCs retained | Per-PC variance % | Cumulative % |\n")
+            f.write("|---|---|---|---|\n")
+            for s, info in trace.get("pca_pipeline", {}).items():
+                per_pc = ", ".join(f"{v:.1f}" for v in info["explained_variance_pct"])
+                f.write(f"| {s} | {info['n_components']} | [{per_pc}] | {info['cumulative_pct']}% |\n")
+            f.write(f"\n**Stratum weights (w_s):** `{trace.get('stratum_weights', {})}`\n\n")
+
+            # §§ 1–3: Per-stratum distances for every candidate
+            f.write("### §§ 1–3 · Per-Stratum Distances (all candidates)\n\n")
+            for cand in trace.get("all_candidates", []):
+                f.write(f"#### Candidate: `{cand['dataset']}`\n\n")
+                details = cand.get("stratum_details", {})
+                if details:
+                    f.write("| Stratum | d_s (Euclidean) |\n|---|---|\n")
+                    for s, d in details.items():
+                        f.write(f"| {s} | `{d['euclidean_d']:.6f}` |\n")
+                hamming = cand.get("hamming", {})
+                if hamming:
+                    f.write(f"| cat (Hamming) | `{hamming['d_cat']:.6f}` "
+                            f"({hamming['n_differing']}/{hamming['n_cat_flags']} flags differ) |\n")
+                    if hamming.get("differing_keys"):
+                        f.write(f"\nDiffering categorical flags: `{hamming['differing_keys']}`\n")
+                wc = cand.get("weighted_composite", {})
+                if wc:
+                    f.write("\n**Weighted composite D:**\n\n")
+                    f.write("| Stratum | w_s | d_s | w_s × d_s |\n|---|---|---|---|\n")
+                    for s, t in wc["per_stratum_terms"].items():
+                        f.write(f"| {s} | {t['w']} | {t['d']:.6f} | {t['w_times_d']:.6f} |\n")
+                    f.write(f"| **Total** | Σw = {wc['weight_sum']:.4f} | | "
+                            f"**D = {wc['composite_D']:.6f}** |\n\n")
+
+            # §§ 4–5: Similarity % and sorted candidate list
+            max_d = trace.get("max_D", float("nan"))
+            f.write(f"### §§ 4–5 · Similarity % (max_D = `{max_d:.6f}`)\n\n")
+            f.write("sim% = (1 − D / max_D) × 100\n\n")
+            f.write("| # | Dataset | D | sim% | In top-k? |\n|---|---|---|---|---|\n")
+            k_val = trace.get("k", 3)
+            for i, c in enumerate(trace.get("sorted_candidates", []), 1):
+                in_topk = "← yes" if i <= k_val else ""
+                f.write(f"| {i} | {c['dataset']} | `{c['D']:.6f}` | {c['sim_pct']}% | {in_topk} |\n")
+            f.write("\n")
+
+            # §§ 6–7: IDW vote
+            f.write("### §§ 6–7 · IDW Vote\n\n")
+            f.write("score(m) = Σ(inv_d × metric_score × coverage_factor) / Σ(inv_d)\n\n")
+            idw = trace.get("idw", {})
+            for nb in idw.get("per_neighbour", []):
+                f.write(f"**Neighbour: `{nb['dataset']}`** — inv_d = `{nb['inv_d']:.6f}`\n\n")
+                f.write("| Model | metric score | gap_size | coverage_factor | contribution |\n")
+                f.write("|---|---|---|---|---|\n")
+                for model, m in nb["per_model"].items():
+                    f.write(f"| {model} | {m['score']:.6f} | {m['gap_size']} "
+                            f"| {m['coverage_factor']:.4f} | {m['contribution']:.6f} |\n")
+                f.write("\n")
+
+            f.write("**IDW aggregated scores (numerator / denominator → normalized):**\n\n")
+            f.write("| Model | Σ numerator | Σ denominator | IDW score |\n|---|---|---|---|\n")
+            for model in sorted(idw.get("normalized_idw_scores", {})):
+                num = idw["raw_numerators"].get(model, 0)
+                den = idw["denominators"].get(model, 0)
+                score = idw["normalized_idw_scores"][model]
+                f.write(f"| {model} | {num:.6f} | {den:.6f} | **{score:.6f}** |\n")
+            f.write("\n")
+
+            # § 8: Confidence
+            conf = trace.get("confidence", {})
+            f.write("### § 8 · Confidence\n\n")
+            f.write(f"confidence = n_agreeing / k = "
+                    f"{conf.get('n_agreeing')} / {conf.get('k')} = "
+                    f"**{conf.get('confidence', 0):.2%}**\n\n")
+            f.write(f"**→ Recommended model:** `{trace.get('recommended_model')}`\n\n")
+
 
 def write_json_report(
     results: list[dict],
@@ -443,6 +530,10 @@ def parse_args() -> argparse.Namespace:
         "--datasets", nargs="+", default=None, metavar="DATASET",
         help="Subset of dataset names to evaluate (default: all 17)",
     )
+    parser.add_argument(
+        "--math-trace", action="store_true",
+        help="Dump step-by-step math to debug_math_trace.md for manual verification",
+    )
     return parser.parse_args()
 
 
@@ -471,6 +562,7 @@ def main() -> None:
     PROFILE_CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
     results: list[dict] = []
+    all_traces: list[dict] = []
 
     for idx, dataset_name in enumerate(datasets_to_run, 1):
         logger.info("─" * 60)
@@ -497,9 +589,16 @@ def main() -> None:
 
         # ── Step 2: recommendation ────────────────────────────────────────
         try:
-            rec_result = recommender.recommend_from_profile(
-                lang_profile_df, priority_metric=args.metric
-            )
+            if args.math_trace:
+                rec_result, math_trace = recommender.recommend_from_profile_traced(
+                    lang_profile_df, priority_metric=args.metric
+                )
+                math_trace["dataset_name"] = dataset_name
+                all_traces.append(math_trace)
+            else:
+                rec_result = recommender.recommend_from_profile(
+                    lang_profile_df, priority_metric=args.metric
+                )
         except Exception as exc:
             logger.error("[%s] Recommendation failed: %s — skipping.", dataset_name, exc)
             continue
@@ -576,6 +675,10 @@ def main() -> None:
     # ── Reports ───────────────────────────────────────────────────────────
     write_json_report(results, agg, args.metric, SCRIPT_DIR / "validation_report.json")
     write_markdown_report(results, agg, args.metric, SCRIPT_DIR / "validation_report.md")
+    if args.math_trace and all_traces:
+        trace_path = SCRIPT_DIR / "debug_math_trace.md"
+        write_math_trace_report(all_traces, trace_path)
+        logger.info("Math trace written to %s", trace_path)
     logger.info("Done.")
 
 
