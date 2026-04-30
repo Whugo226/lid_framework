@@ -205,7 +205,7 @@ def load_all_benchmarks(
     """
     scores: dict[str, float] = {}
     for metadata_path in benchmark_dir.glob(f"*/{dataset_name}/*/benchmark_metadata.json"):
-        variant_name = f"{metadata_path.parent.name}_{dataset_name}"
+        variant_name = metadata_path.parent.name
         try:
             with open(metadata_path, encoding="utf-8") as f:
                 data = json.load(f)
