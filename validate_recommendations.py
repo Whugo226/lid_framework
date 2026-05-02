@@ -617,8 +617,19 @@ def main() -> None:
         gt_model = max(benchmarks, key=benchmarks.__getitem__)
         gt_score = benchmarks[gt_model]
 
-        is_correct  = rec_result.recommended_model == gt_model
-        rec_score   = benchmarks.get(rec_result.recommended_model)
+        # Off-the-shelf models (cld3, lid.176, xlm_roberta) have no training
+        # dataset — the MKB labels them {model}_{mkb_dataset} but the benchmark
+        # dirs use {model}_{eval_dataset}.  If the direct key isn't found, retry
+        # with the current eval dataset as the suffix.
+        rec_model_key = rec_result.recommended_model
+        if rec_model_key not in benchmarks:
+            base = rec_model_key.rsplit("_", 1)[0]
+            fallback = f"{base}_{dataset_name}"
+            if fallback in benchmarks:
+                rec_model_key = fallback
+
+        is_correct  = rec_model_key == gt_model
+        rec_score   = benchmarks.get(rec_model_key)
         delta       = (gt_score - rec_score) if rec_score is not None else None
 
         status = "CORRECT ✓" if is_correct else f"WRONG  ✗  (GT = {gt_model})"

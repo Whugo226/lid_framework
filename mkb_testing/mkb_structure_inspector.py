@@ -133,7 +133,7 @@ def main():
     print()
 
     # ── Inspect a raw profile ─────────────────────────────────────────────────
-    sample_profile = profiles_dir / "xnli.pkl"
+    sample_profile = profiles_dir / "language-identification.pkl"
     if sample_profile.exists():
         inspect_raw_profile(sample_profile)
     else:
