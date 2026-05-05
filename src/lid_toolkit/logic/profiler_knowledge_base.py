@@ -107,8 +107,11 @@ class DeepProfiler:
             'sv': 'sv_core_news_sm',  # Swedish
             'uk': 'uk_core_news_sm'   # Ukrainian
         }
-        
-        
+
+        self.FASTTEXT_TO_SPACY = {
+            'no': 'nb',  # FastText outputs 'no' for Norwegian, but spaCy model is 'nb'
+        }
+
         self.fasttext_model = None
         self.current_fasttext_lang = None
         # cache for per‑language spaCy pipelines
@@ -2128,17 +2131,19 @@ class DeepProfiler:
         final_report: dict = {}
         MAX_SAMPLES = 100
         for lang, subset in grouped:
-            if lang not in self.SPACY_MODELS:
+            # Map FastText codes to spaCy codes if needed
+            spacy_lang = self.FASTTEXT_TO_SPACY.get(lang, lang)
+            if spacy_lang not in self.SPACY_MODELS:
                 print(f"⏭️  Skipping '{lang}' (unsupported spaCy language).")
                 continue
             subset_txt = (
                 subset.sample(n=min(len(subset), MAX_SAMPLES), random_state=None)
                 .values.tolist()
             )
-            print(f"📊 Profiling '{lang}' ({len(subset_txt)} texts)...")
-            result = self._profile_language_group(lang, subset_txt)
+            print(f"📊 Profiling '{spacy_lang}' ({len(subset_txt)} texts)...")
+            result = self._profile_language_group(spacy_lang, subset_txt)
             if result is not None:
-                final_report[lang] = result
+                final_report[spacy_lang] = result
 
         return pd.DataFrame(final_report)
 

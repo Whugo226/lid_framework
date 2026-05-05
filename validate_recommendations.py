@@ -344,7 +344,7 @@ def write_math_trace_report(traces: list[dict], output_path: Path) -> None:
             f.write("| Model | Σ numerator | Σ denominator | IDW score |\n|---|---|---|---|\n")
             for model in sorted(idw.get("normalized_idw_scores", {})):
                 num = idw["raw_numerators"].get(model, 0)
-                den = idw["denominators"].get(model, 0)
+                den = idw.get("denominator", 0)
                 score = idw["normalized_idw_scores"][model]
                 f.write(f"| {model} | {num:.6f} | {den:.6f} | **{score:.6f}** |\n")
             f.write("\n")

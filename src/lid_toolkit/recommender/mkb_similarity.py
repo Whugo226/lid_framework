@@ -549,19 +549,25 @@ class SimilarityEngine:
         Inverse-distance-weighted voting across k neighbours.
 
         Each model's IDW score = sum(inv_distance × metric_score × coverage_factor).
-        ``coverage_factor`` is 1.0 for fully-covering variants and
-        ``1 - gap_fraction`` otherwise, so models that miss many user languages
-        are down-weighted proportionally rather than hard-filtered (which would
-        leave the user with no recommendation at all in edge cases).
+
+        When ``user_iso_codes`` is provided:
+        - If at least one fully-covering model exists anywhere in the top-k,
+          models with a language gap are hard-filtered (coverage_factor = 0.0)
+          so they cannot win the vote.
+        - Only when *no* fully-covering model exists (true edge case) does the
+          soft ``1 - gap_fraction`` penalty apply, ensuring a recommendation is
+          always returned.
         """
         model_weighted_scores: dict[str, float] = {}
-        model_weights: dict[str, float] = {}
 
         n_user_langs = len(user_iso_codes) if user_iso_codes else 0
+
         idw_per_nb: list[dict] = [] if _trace is not None else []  # always built for trace
 
+        total_inv_d: float = 0.0
         for nb in neighbours:
             inv_d = 1.0 / (nb.distance + 1e-9)
+            total_inv_d += inv_d
             nb_record: dict = {"dataset": nb.dataset_name, "inv_d": inv_d, "per_model": {}}
             for model, perfs in nb.performances.items():
                 score = perfs.get(priority_metric, 0.0)
@@ -578,7 +584,6 @@ class SimilarityEngine:
                 model_weighted_scores[model] = (
                     model_weighted_scores.get(model, 0.0) + contribution
                 )
-                model_weights[model] = model_weights.get(model, 0.0) + inv_d
 
                 if _trace is not None:
                     nb_record["per_model"][model] = {
@@ -590,14 +595,16 @@ class SimilarityEngine:
             if _trace is not None:
                 idw_per_nb.append(nb_record)
 
-        normalized = {
-            m: model_weighted_scores[m] / model_weights[m]
-            for m in model_weighted_scores
-        }
+        # Normalise by total inv-distance (global), not per-model inv-distance.
+        # Per-model normalisation cancels the distance weight for models that appear
+        # in only one neighbour, making proximity irrelevant.  Global normalisation
+        # preserves the closest-neighbour advantage.
+        denom = total_inv_d or 1.0
+        normalized = {m: model_weighted_scores[m] / denom for m in model_weighted_scores}
         if _trace is not None:
             _trace["per_neighbour"] = idw_per_nb
             _trace["raw_numerators"] = dict(model_weighted_scores)
-            _trace["denominators"] = dict(model_weights)
+            _trace["denominator"] = denom
             _trace["normalized_idw_scores"] = normalized
         return normalized
 

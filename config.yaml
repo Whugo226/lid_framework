@@ -25,7 +25,7 @@ paths:
 
   # Root of model_benchmarking results (sub-dirs per model family).
   # Needed for Phase 2 (MKB assembly). Set to null to skip assembly.
-  benchmark_dir: "~/LID_Experiments/model_benchmarking"
+  benchmark_dir: "~/LID_Experiments/model_benchmarking_knowledge"
 
   # Final serialised MKBStore (used by Recommender.from_store()).
   mkb_output_path: "mkb.pkl"
