@@ -157,7 +157,7 @@ echo "spaCy models download complete."
 #     Config env-var overrides so paths point to the right locations.
 export LID_DATASETS_ROOT="${LID_ROOT}/datasets/01b_knowledge_benchmark_20_cleaned"
 export LID_PROFILES_DIR="${TMP}/profiles"
-export LID_BENCHMARK_DIR="${LID_ROOT}/model_benchmarking"
+export LID_BENCHMARK_DIR="${LID_ROOT}/model_benchmarking_knowledge"
 export LID_MKB_OUTPUT="${TMP}/mkb.pkl"
 
 echo "Starting MKB build (6 datasets)..."
