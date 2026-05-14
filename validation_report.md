@@ -48,36 +48,50 @@
 
 Datasets where the top-1 recommendation did not match ground truth (15/17), sorted by performance loss:
 
-- **multilingual_cc_news**: toolkit recommended `fasttext_subword_wikipedia` (score 0.9787), but ground truth was `fasttext_subword_multilingual_cc_news` (score 0.9971); performance gap = +0.0185
-  - Neighbours: multilingual_cc_news (78.7%, best=`fasttext_subword_multilingual_cc_news`) | wikipedia (73.5%, best=`fasttext_subword_wikipedia`) | xlsum (72.6%, best=`fasttext_subword_xlsum`)
-- **mmarco**: toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9802), but ground truth was `fasttext_subword_mmarco` (score 0.9975); performance gap = +0.0173
-  - Neighbours: OpenLID-v2 (63.8%, best=`fasttext_subword_OpenLID-v2`) | mmarco (62.7%, best=`fasttext_subword_mmarco`) | tydiqa (59.4%, best=`fasttext_subword_tydiqa`)
-- **tweet_sentiment_multilingual**: toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9827), but ground truth was `bow_char_ngram_3_5_tweet_sentiment_multilingual` (score 0.9981); performance gap = +0.0154
-  - Neighbours: tweet_sentiment_multilingual (74.4%, best=`bow_char_ngram_3_5_tweet_sentiment_multilingual`) | exorde-social-media-december-2024-week1 (69.5%, best=`fasttext_subword_exorde-social-media-december-2024-week1`) | OpenLID-v2 (68.5%, best=`fasttext_subword_OpenLID-v2`)
-- **tydiqa**: toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9856), but ground truth was `fasttext_subword_tydiqa` (score 0.9999); performance gap = +0.0143
-  - Neighbours: tydiqa (90.1%, best=`fasttext_subword_tydiqa`) | mmarco (80.3%, best=`fasttext_subword_mmarco`) | stsb_multi_mt (74.6%, best=`tfidf_lr_char_ngram_3_5_stsb_multi_mt`)
-- **massive**: toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9881), but ground truth was `fasttext_subword_massive` (score 0.9974); performance gap = +0.0093
-  - Neighbours: massive (85.9%, best=`fasttext_subword_massive`) | exorde-social-media-december-2024-week1 (61.9%, best=`fasttext_subword_exorde-social-media-december-2024-week1`) | multilingual_toxicity_dataset (54.0%, best=`fasttext_subword_multilingual_toxicity_dataset`)
-- **exorde-social-media-december-2024-week1**: toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9688), but ground truth was `lid.176_exorde-social-media-december-2024-week1` (score 0.9779); performance gap = +0.0091
-  - Neighbours: multilingual_toxicity_dataset (76.1%, best=`fasttext_subword_multilingual_toxicity_dataset`) | exorde-social-media-december-2024-week1 (74.5%, best=`fasttext_subword_exorde-social-media-december-2024-week1`) | tweet_sentiment_multilingual (72.9%, best=`bow_char_ngram_3_5_tweet_sentiment_multilingual`)
-- **multi_eurlex**: toolkit recommended `fasttext_subword_wikipedia` (score 0.9959), but ground truth was `bow_maxabs_lr_char_ngram_3_5_multi_eurlex` (score 0.9998); performance gap = +0.0039
-  - Neighbours: multi_eurlex (73.5%, best=`tfidf_char_ngram_3_5_multi_eurlex`) | wikipedia (58.5%, best=`fasttext_subword_wikipedia`) | multilingual_cc_news (58.3%, best=`fasttext_subword_multilingual_cc_news`)
-- **multilingual_toxicity_dataset**: toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9899), but ground truth was `fasttext_subword_multilingual_toxicity_dataset` (score 0.9937); performance gap = +0.0037
-  - Neighbours: OpenLID-v2 (59.7%, best=`fasttext_subword_OpenLID-v2`) | multilingual_toxicity_dataset (55.0%, best=`fasttext_subword_multilingual_toxicity_dataset`) | language-identification (48.2%, best=`tfidf_char_ngram_3_5_language-identification`)
-- **flores_plus**: toolkit recommended `fasttext_subword_wikipedia` (score 0.9924), but ground truth was `fasttext_subword_OpenLID-v2` (score 0.9951); performance gap = +0.0027
-  - Neighbours: flores_plus (92.7%, best=`fasttext_subword_OpenLID-v2`) | europarl (77.8%, best=`tfidf_char_ngram_3_5_europarl`) | multilingual_cc_news (74.7%, best=`fasttext_subword_multilingual_cc_news`)
-- **stsb_multi_mt**: toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9916), but ground truth was `tfidf_lr_char_ngram_3_5_stsb_multi_mt` (score 0.9942); performance gap = +0.0026
-  - Neighbours: OpenLID-v2 (53.8%, best=`fasttext_subword_OpenLID-v2`) | wikipedia (52.4%, best=`fasttext_subword_wikipedia`) | mmarco (52.3%, best=`fasttext_subword_mmarco`)
-- **xnli**: toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9975), but ground truth was `fasttext_subword_xnli` (score 0.9996); performance gap = +0.0022
-  - Neighbours: xnli (55.9%, best=`fasttext_subword_xnli`) | massive (51.0%, best=`fasttext_subword_massive`) | exorde-social-media-december-2024-week1 (44.6%, best=`fasttext_subword_exorde-social-media-december-2024-week1`)
-- **language-identification**: toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9958), but ground truth was `fasttext_subword_language-identification` (score 0.9979); performance gap = +0.0021
-  - Neighbours: language-identification (92.6%, best=`tfidf_char_ngram_3_5_language-identification`) | amazon_reviews_multi (78.9%, best=`fasttext_subword_amazon_reviews_multi`) | xlsum (68.3%, best=`fasttext_subword_xlsum`)
-- **europarl**: toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9979), but ground truth was `bow_char_ngram_3_5_europarl` (score 0.9995); performance gap = +0.0017
-  - Neighbours: europarl (91.4%, best=`tfidf_char_ngram_3_5_europarl`) | flores_plus (75.6%, best=`fasttext_subword_OpenLID-v2`) | language-identification (64.7%, best=`tfidf_char_ngram_3_5_language-identification`)
-- **amazon_reviews_multi**: toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9990), but ground truth was `fasttext_subword_amazon_reviews_multi` (score 0.9998); performance gap = +0.0009
-  - Neighbours: amazon_reviews_multi (83.9%, best=`fasttext_subword_amazon_reviews_multi`) | language-identification (81.8%, best=`tfidf_char_ngram_3_5_language-identification`) | europarl (63.6%, best=`tfidf_char_ngram_3_5_europarl`)
-- **xlsum**: toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9986), but ground truth was `fasttext_subword_xlsum` (score 0.9989); performance gap = +0.0002
-  - Neighbours: xlsum (92.6%, best=`fasttext_subword_xlsum`) | multilingual_cc_news (83.5%, best=`fasttext_subword_multilingual_cc_news`) | flores_plus (78.1%, best=`fasttext_subword_OpenLID-v2`)
+- **multilingual_cc_news** (21 langs): toolkit recommended `fasttext_subword_wikipedia` (score 0.9787), but ground truth was `fasttext_subword_multilingual_cc_news` (score 0.9971); performance gap = +0.0185
+  - Neighbours: multilingual_cc_news (21 langs, 78.7%, best=`fasttext_subword_multilingual_cc_news`) | wikipedia (24 langs, 73.5%, best=`fasttext_subword_wikipedia`) | xlsum (9 langs, 72.6%, best=`fasttext_subword_xlsum`)
+
+- **mmarco** (10 langs): toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9802), but ground truth was `fasttext_subword_mmarco` (score 0.9975); performance gap = +0.0173
+  - Neighbours: OpenLID-v2 (23 langs, 63.8%, best=`fasttext_subword_OpenLID-v2`) | mmarco (10 langs, 62.7%, best=`fasttext_subword_mmarco`) | tydiqa (5 langs, 59.4%, best=`fasttext_subword_tydiqa`)
+
+- **tweet_sentiment_multilingual** (6 langs): toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9827), but ground truth was `bow_char_ngram_3_5_tweet_sentiment_multilingual` (score 0.9981); performance gap = +0.0154
+  - Neighbours: tweet_sentiment_multilingual (6 langs, 74.4%, best=`bow_char_ngram_3_5_tweet_sentiment_multilingual`) | exorde-social-media-december-2024-week1 (24 langs, 69.5%, best=`fasttext_subword_exorde-social-media-december-2024-week1`) | OpenLID-v2 (23 langs, 68.5%, best=`fasttext_subword_OpenLID-v2`)
+
+- **tydiqa** (5 langs): toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9856), but ground truth was `fasttext_subword_tydiqa` (score 0.9999); performance gap = +0.0143
+  - Neighbours: tydiqa (5 langs, 90.1%, best=`fasttext_subword_tydiqa`) | mmarco (10 langs, 80.3%, best=`fasttext_subword_mmarco`) | stsb_multi_mt (10 langs, 74.6%, best=`tfidf_lr_char_ngram_3_5_stsb_multi_mt`)
+
+- **massive** (18 langs): toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9881), but ground truth was `fasttext_subword_massive` (score 0.9974); performance gap = +0.0093
+  - Neighbours: massive (18 langs, 85.9%, best=`fasttext_subword_massive`) | exorde-social-media-december-2024-week1 (24 langs, 61.9%, best=`fasttext_subword_exorde-social-media-december-2024-week1`) | multilingual_toxicity_dataset (9 langs, 54.0%, best=`fasttext_subword_multilingual_toxicity_dataset`)
+
+- **exorde-social-media-december-2024-week1** (24 langs): toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9688), but ground truth was `lid.176_exorde-social-media-december-2024-week1` (score 0.9779); performance gap = +0.0091
+  - Neighbours: multilingual_toxicity_dataset (9 langs, 76.1%, best=`fasttext_subword_multilingual_toxicity_dataset`) | exorde-social-media-december-2024-week1 (24 langs, 74.5%, best=`fasttext_subword_exorde-social-media-december-2024-week1`) | tweet_sentiment_multilingual (6 langs, 72.9%, best=`bow_char_ngram_3_5_tweet_sentiment_multilingual`)
+
+- **multi_eurlex** (16 langs): toolkit recommended `fasttext_subword_wikipedia` (score 0.9959), but ground truth was `bow_maxabs_lr_char_ngram_3_5_multi_eurlex` (score 0.9998); performance gap = +0.0039
+  - Neighbours: multi_eurlex (16 langs, 73.5%, best=`tfidf_char_ngram_3_5_multi_eurlex`) | wikipedia (24 langs, 58.5%, best=`fasttext_subword_wikipedia`) | multilingual_cc_news (21 langs, 58.3%, best=`fasttext_subword_multilingual_cc_news`)
+
+- **multilingual_toxicity_dataset** (9 langs): toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9899), but ground truth was `fasttext_subword_multilingual_toxicity_dataset` (score 0.9937); performance gap = +0.0037
+  - Neighbours: OpenLID-v2 (23 langs, 59.7%, best=`fasttext_subword_OpenLID-v2`) | multilingual_toxicity_dataset (9 langs, 55.0%, best=`fasttext_subword_multilingual_toxicity_dataset`) | language-identification (12 langs, 48.2%, best=`tfidf_char_ngram_3_5_language-identification`)
+
+- **flores_plus** (23 langs): toolkit recommended `fasttext_subword_wikipedia` (score 0.9924), but ground truth was `fasttext_subword_OpenLID-v2` (score 0.9951); performance gap = +0.0027
+  - Neighbours: flores_plus (23 langs, 92.7%, best=`fasttext_subword_OpenLID-v2`) | europarl (13 langs, 77.8%, best=`tfidf_char_ngram_3_5_europarl`) | multilingual_cc_news (21 langs, 74.7%, best=`fasttext_subword_multilingual_cc_news`)
+
+- **stsb_multi_mt** (10 langs): toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9916), but ground truth was `tfidf_lr_char_ngram_3_5_stsb_multi_mt` (score 0.9942); performance gap = +0.0026
+  - Neighbours: OpenLID-v2 (23 langs, 53.8%, best=`fasttext_subword_OpenLID-v2`) | wikipedia (24 langs, 52.4%, best=`fasttext_subword_wikipedia`) | mmarco (10 langs, 52.3%, best=`fasttext_subword_mmarco`)
+
+- **xnli** (7 langs): toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9975), but ground truth was `fasttext_subword_xnli` (score 0.9996); performance gap = +0.0022
+  - Neighbours: xnli (7 langs, 55.9%, best=`fasttext_subword_xnli`) | massive (18 langs, 51.0%, best=`fasttext_subword_massive`) | exorde-social-media-december-2024-week1 (24 langs, 44.6%, best=`fasttext_subword_exorde-social-media-december-2024-week1`)
+
+- **language-identification** (12 langs): toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9958), but ground truth was `fasttext_subword_language-identification` (score 0.9979); performance gap = +0.0021
+  - Neighbours: language-identification (12 langs, 92.6%, best=`tfidf_char_ngram_3_5_language-identification`) | amazon_reviews_multi (6 langs, 78.9%, best=`fasttext_subword_amazon_reviews_multi`) | xlsum (9 langs, 68.3%, best=`fasttext_subword_xlsum`)
+
+- **europarl** (13 langs): toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9979), but ground truth was `bow_char_ngram_3_5_europarl` (score 0.9995); performance gap = +0.0017
+  - Neighbours: europarl (13 langs, 91.4%, best=`tfidf_char_ngram_3_5_europarl`) | flores_plus (23 langs, 75.6%, best=`fasttext_subword_OpenLID-v2`) | language-identification (12 langs, 64.7%, best=`tfidf_char_ngram_3_5_language-identification`)
+
+- **amazon_reviews_multi** (6 langs): toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9990), but ground truth was `fasttext_subword_amazon_reviews_multi` (score 0.9998); performance gap = +0.0009
+  - Neighbours: amazon_reviews_multi (6 langs, 83.9%, best=`fasttext_subword_amazon_reviews_multi`) | language-identification (12 langs, 81.8%, best=`tfidf_char_ngram_3_5_language-identification`) | europarl (13 langs, 63.6%, best=`tfidf_char_ngram_3_5_europarl`)
+
+- **xlsum** (9 langs): toolkit recommended `fasttext_subword_exorde-social-media-december-2024-week1` (score 0.9986), but ground truth was `fasttext_subword_xlsum` (score 0.9989); performance gap = +0.0002
+  - Neighbours: xlsum (9 langs, 92.6%, best=`fasttext_subword_xlsum`) | multilingual_cc_news (21 langs, 83.5%, best=`fasttext_subword_multilingual_cc_news`) | flores_plus (23 langs, 78.1%, best=`fasttext_subword_OpenLID-v2`)
 
 ---
 

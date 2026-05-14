@@ -546,64 +546,41 @@ class SimilarityEngine:
         _trace: Optional[dict] = None,
     ) -> dict[str, float]:
         """
-        Inverse-distance-weighted voting across k neighbours.
+        Inverse-distance-weighted plurality vote across k neighbours.
 
-        Each model's IDW score = sum(inv_distance × metric_score × coverage_factor).
+        Each neighbour casts its full inv-distance weight exclusively to its
+        single best model (already coverage-aware from ``_compute_neighbours``).
+        The vote is scaled by that neighbour's best score so that high-confidence
+        matches count more than marginal ones.
 
-        When ``user_iso_codes`` is provided:
-        - If at least one fully-covering model exists anywhere in the top-k,
-          models with a language gap are hard-filtered (coverage_factor = 0.0)
-          so they cannot win the vote.
-        - Only when *no* fully-covering model exists (true edge case) does the
-          soft ``1 - gap_fraction`` penalty apply, ensuring a recommendation is
-          always returned.
+        This prevents generalist models with uniformly-high-but-never-best scores
+        from accumulating enough cross-neighbour weight to defeat a specialist that
+        is clearly optimal for the closest dataset.
         """
-        model_weighted_scores: dict[str, float] = {}
-
-        n_user_langs = len(user_iso_codes) if user_iso_codes else 0
-
-        idw_per_nb: list[dict] = [] if _trace is not None else []  # always built for trace
-
+        model_votes: dict[str, float] = {}
         total_inv_d: float = 0.0
+        vote_records: list[dict] = []
+
         for nb in neighbours:
             inv_d = 1.0 / (nb.distance + 1e-9)
             total_inv_d += inv_d
-            nb_record: dict = {"dataset": nb.dataset_name, "inv_d": inv_d, "per_model": {}}
-            for model, perfs in nb.performances.items():
-                score = perfs.get(priority_metric, 0.0)
-
-                # Coverage penalty: fully covering → 1.0; missing k langs → 1 - k/n
-                if user_iso_codes and n_user_langs > 0:
-                    gap = nb.per_model_gaps.get(model, frozenset())
-                    coverage_factor = 1.0 - len(gap) / n_user_langs
-                else:
-                    gap = frozenset()
-                    coverage_factor = 1.0
-
-                contribution = inv_d * score * coverage_factor
-                model_weighted_scores[model] = (
-                    model_weighted_scores.get(model, 0.0) + contribution
-                )
-
-                if _trace is not None:
-                    nb_record["per_model"][model] = {
-                        "score": score,
-                        "gap_size": len(gap),
-                        "coverage_factor": coverage_factor,
-                        "contribution": contribution,
-                    }
+            # Each neighbour endorses only its own best (coverage-aware) model.
+            vote = inv_d * nb.best_score
+            model_votes[nb.best_model] = model_votes.get(nb.best_model, 0.0) + vote
             if _trace is not None:
-                idw_per_nb.append(nb_record)
+                vote_records.append({
+                    "dataset": nb.dataset_name,
+                    "inv_d": inv_d,
+                    "best_model": nb.best_model,
+                    "best_score": nb.best_score,
+                    "vote": vote,
+                })
 
-        # Normalise by total inv-distance (global), not per-model inv-distance.
-        # Per-model normalisation cancels the distance weight for models that appear
-        # in only one neighbour, making proximity irrelevant.  Global normalisation
-        # preserves the closest-neighbour advantage.
         denom = total_inv_d or 1.0
-        normalized = {m: model_weighted_scores[m] / denom for m in model_weighted_scores}
+        normalized = {m: v / denom for m, v in model_votes.items()}
         if _trace is not None:
-            _trace["per_neighbour"] = idw_per_nb
-            _trace["raw_numerators"] = dict(model_weighted_scores)
+            _trace["plurality_votes"] = vote_records
+            _trace["raw_numerators"] = dict(model_votes)
             _trace["denominator"] = denom
             _trace["normalized_idw_scores"] = normalized
         return normalized

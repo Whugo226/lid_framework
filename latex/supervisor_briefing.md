@@ -3,7 +3,7 @@
 **Prepared for:** Academic Supervisor Meeting  
 **Date:** 2026-05-06  
 **Author:** Masters Candidate, 25167626@sun.ac.za  
-**Document scope:** Architecture, methodology, experimental setup, and validation results for the Language Identification (LID) Recommendation Toolkit.
+**Document scope:** Architecture, methodology, experimental setup, and validation results for the Language Identification (LID) Recommendation
 
 ---
 

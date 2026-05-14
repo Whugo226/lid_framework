@@ -42,9 +42,10 @@ $$
 
 Benchmark performances:
 
-Dataset	Model A (fasttext_word) f1_macro	Model B (tfidf_lr) f1_macro
-H1	0.82	0.79
-H2	0.75	0.88
+| Dataset | Model A (fasttext_word) f1_macro | Model B (tfidf_lr) f1_macro |
+|---|---|---|
+| H1 | 0.82 | 0.79 |
+| H2 | 0.75 | 0.88 |
 PHASE A — MKB Building
 Step A.1 — Feature Stratification Assignment
 Intuition: The 3,066 raw features encode wildly different linguistic phenomena. Grouping them before PCA preserves semantic coherence—morphological variance won't swamp structural variance in a joint decomposition. Code: feature_stratifier.py:132-139, _assign_stratum().
@@ -62,12 +63,13 @@ Substitution:
 "Mean sentence length (norm.)" → S4 ✗, S5 ✗, S1 ✗, S2 ✗, S3 "" ✓ → S3
 Result:
 
-Stratum	Features
-S1_morphological	f1, f2
-S2_lexical_diversity	f3, f4
-S3_structural	f5, f6
-S4_info_theoretic	f7, f8
-S5_cross_level	f9, f10
+| Stratum | Features |
+|---|---|
+| S1_morphological | f1, f2 |
+| S2_lexical_diversity | f3, f4 |
+| S3_structural | f5, f6 |
+| S4_info_theoretic | f7, f8 |
+| S5_cross_level | f9, f10 |
 Step A.2 — Per-Stratum Standardisation
 Intuition: Features within a stratum may have very different scales (e.g., f6 is a ratio 0–1 but f7 is entropy in bits 0–5). StandardScaler brings each column to zero mean and unit population-std, so PCA finds directions of relative variance rather than being dominated by the largest-scale feature. Code: feature_stratifier.py:222-225, FeatureStratifier.fit().
 
@@ -188,12 +190,13 @@ Linguistic interpretation: PC1 is a "morphological richness" axis. Spanish (high
 
 The same procedure applied to all 5 strata. Condensed results (full arithmetic available on request for each):
 
-Stratum	PC1 direction	$\lambda_1/\sum\lambda$	en PC1	es PC1	zh PC1
-S1	$[+0.707, +0.707]$	99.5%	+0.5163	+1.4105	−1.9262
-S2	$[+0.707, +0.707]$	100%	−0.3780	−1.5121	+1.8900
-S3	$[+0.707, -0.707]$	98.98%	−0.1982	−1.6162	+1.8142
-S4	$[+0.707, +0.707]$	99.1%	−0.1890	−1.6221	+1.8112
-S5	$[+0.707, -0.707]$	99.9%	−0.7085	−1.2645	+1.9731
+| Stratum | PC1 direction | $\lambda_1/\sum\lambda$ | en PC1 | es PC1 | zh PC1 |
+|---|---|---|---|---|---|
+| S1 | $[+0.707, +0.707]$ | 99.5% | +0.5163 | +1.4105 | −1.9262 |
+| S2 | $[+0.707, +0.707]$ | 100% | −0.3780 | −1.5121 | +1.8900 |
+| S3 | $[+0.707, -0.707]$ | 98.98% | −0.1982 | −1.6162 | +1.8142 |
+| S4 | $[+0.707, +0.707]$ | 99.1% | −0.1890 | −1.6221 | +1.8112 |
+| S5 | $[+0.707, -0.707]$ | 99.9% | −0.7085 | −1.2645 | +1.9731 |
 S2 key numbers: $\mu_{f3}=0.6333$, $\sigma_{f3}=0.12472$; $\mu_{f4}=0.4333$, $\sigma_{f4}=0.12472$. After standardisation the two columns are identical ($r=1.0$), so PC1 explains 100% and $\mathbf{v}_1 = [0.707, 0.707]$.
 
 S3 key numbers: f5 and f6 move in opposite directions across languages (zh has more nouns but shorter sentences). Cov matrix $\mathbf{C}_{S3} = \begin{pmatrix}1.5 & -1.4695 \\ -1.4695 & 1.5\end{pmatrix}$. Larger eigenvalue $\lambda_1 = 1.5 + 1.4695 = 2.9695$ → $\mathbf{v}_1 = [+0.707, -0.707]$. PC1 = (noun density) − (sentence length). zh scores highest: short sentences packed with content words.
@@ -637,7 +640,7 @@ $$
 
 Substitution — Q vs H1 (17 keys total):
 
-| Key | Q | H1 | $|Q-H|$ | Disagrees? |
+| Key | Q | H1 | $\|Q-H\|$ | Disagrees? |
 |---|---|---|---|---|
 | cat__n_languages | 3 | 2 | 1 | YES |
 | cat__n_tonal | 1 | 0 | 1 | YES |
@@ -658,7 +661,7 @@ $$d_{\text{cat}}(Q,H1) = \frac{7}{17} = \mathbf{0.4118}$$
 
 Substitution — Q vs H2:
 
-| Key | Q | H2 | $|Q-H|$ | Disagrees? |
+| Key | Q | H2 | $\|Q-H\|$ | Disagrees? |
 |---|---|---|---|---|
 | cat__n_languages | 3 | 2 | 1 | YES |
 | cat__n_tonal | 1 | 1 | 0 | no |
@@ -686,26 +689,28 @@ $$
 
 Substitution — Q vs H1 (all $w_s = 1.0$):
 
-Stratum	$d_s$	$w_s$	$w_s \times d_s$
-S1_morphological	2.8810	1.0	2.8810
-S2_lexical_diversity	2.4514	1.0	2.4514
-S3_structural	2.5897	1.0	2.5897
-S4_info_theoretic	1.9896	1.0	1.9896
-S5_cross_level	3.0229	1.0	3.0229
-cat (S6)	0.4118	1.0	0.4118
-Sum		6.0	13.3464
+| Stratum | $d_s$ | $w_s$ | $w_s \times d_s$ |
+|---|---|---|---|
+| S1_morphological | 2.8810 | 1.0 | 2.8810 |
+| S2_lexical_diversity | 2.4514 | 1.0 | 2.4514 |
+| S3_structural | 2.5897 | 1.0 | 2.5897 |
+| S4_info_theoretic | 1.9896 | 1.0 | 1.9896 |
+| S5_cross_level | 3.0229 | 1.0 | 3.0229 |
+| cat (S6) | 0.4118 | 1.0 | 0.4118 |
+| **Sum** | | **6.0** | **13.3464** |
 $$D(Q, H1) = \frac{13.3464}{6.0} = \mathbf{2.2244}$$
 
 Substitution — Q vs H2:
 
-Stratum	$d_s$	$w_s \times d_s$
-S1	1.0126	1.0126
-S2	1.2585	1.2585
-S3	1.5936	1.5936
-S4	1.8379	1.8379
-S5	0.8377	0.8377
-cat	0.1765	0.1765
-Sum		6.7168
+| Stratum | $d_s$ | $w_s \times d_s$ |
+|---|---|---|
+| S1 | 1.0126 | 1.0126 |
+| S2 | 1.2585 | 1.2585 |
+| S3 | 1.5936 | 1.5936 |
+| S4 | 1.8379 | 1.8379 |
+| S5 | 0.8377 | 0.8377 |
+| cat | 0.1765 | 0.1765 |
+| **Sum** | | **6.7168** |
 $$D(Q, H2) = \frac{6.7168}{6.0} = \mathbf{1.1195}$$
 
 Similarity percentages (code: mkb_similarity.py:526-528):
@@ -787,19 +792,20 @@ $$n_{\text{agree}} = 1 \quad (H2\text{ only}), \quad k = 2$$
 $$\text{confidence} = \frac{1}{2} = \mathbf{0.50} \; (50\%)$$
 
 Summary — Complete Numerical Pipeline
-Stage	Operation	Key Output
-A.1	Stratum assignment (first-match)	5 strata × 2 features each
-A.2	StandardScaler per stratum	$\mu, \sigma$ vectors stored in StratumFit.scaler
-A.3	PCA per stratum	1 PC retained per stratum ($\geq$99% variance); $\mathbf{v}_1$ stored in StratumFit.pca
-A.4	Aggregate statistics per PC	5 stats × 1 PC × 5 strata = 25-dim continuous block
-A.5	Typology flags	17-dim categorical S6 block; total fingerprint = 42 dims
-B.1	Transform Q through saved scaler + PCA	Q PC scores per language per stratum
-B.2	Aggregate Q stats	Q fingerprint (42 dims)
-B.3	Euclidean per stratum	$d_{S1}$–$d_{S5}$: Q closer to H2 on all strata
-B.4	Normalised Hamming on cat__*	$d_{\text{cat}}(Q,H1)=0.41$ vs $d_{\text{cat}}(Q,H2)=0.18$
-B.5	Weighted composite $D$	$D(Q,H1)=2.224$, $D(Q,H2)=1.120$
-B.6	IDW vote	norm(B)=0.850 > norm(A)=0.774 → tfidf_lr
-B.7	Confidence	50% (1/2 neighbours agree)
+| Stage | Operation | Key Output |
+|---|---|---|
+| A.1 | Stratum assignment (first-match) | 5 strata × 2 features each |
+| A.2 | StandardScaler per stratum | $\mu, \sigma$ vectors stored in StratumFit.scaler |
+| A.3 | PCA per stratum | 1 PC retained per stratum ($\geq$99% variance); $\mathbf{v}_1$ stored in StratumFit.pca |
+| A.4 | Aggregate statistics per PC | 5 stats × 1 PC × 5 strata = 25-dim continuous block |
+| A.5 | Typology flags | 17-dim categorical S6 block; total fingerprint = 42 dims |
+| B.1 | Transform Q through saved scaler + PCA | Q PC scores per language per stratum |
+| B.2 | Aggregate Q stats | Q fingerprint (42 dims) |
+| B.3 | Euclidean per stratum | $d_{S1}$–$d_{S5}$: Q closer to H2 on all strata |
+| B.4 | Normalised Hamming on cat__* | $d_{\text{cat}}(Q,H1)=0.41$ vs $d_{\text{cat}}(Q,H2)=0.18$ |
+| B.5 | Weighted composite $D$ | $D(Q,H1)=2.224$, $D(Q,H2)=1.120$ |
+| B.6 | IDW vote | norm(B)=0.850 > norm(A)=0.774 → tfidf_lr |
+| B.7 | Confidence | 50% (1/2 neighbours agree) |
 Why H2 consistently dominates: Q contains zh — a tonal, CJK, isolating language. H2 also contains zh, so its fingerprint encodes the wide morphological/entropy spread that zh introduces (high $\sigma_0$, extreme min/max on all strata). Q's fingerprint inherits that same shape. H1 (en+es only) is uniformly in the "morphologically-rich, low-entropy, cohesive" quadrant of all five strata — a poor match.
 
 Why Model B wins despite H1 preferring Model A: H2 (the closer neighbour) gets weight $0.893$ vs H1's $0.450$ — a 2:1 ratio. Even though Model A performs slightly better on H1 (0.82 vs 0.79), Model B's advantage on the heavily-weighted H2 (0.88 vs 0.75) dominates the aggregation. This is the core IDW mechanism: proximity amplifies the nearer dataset's vote.
