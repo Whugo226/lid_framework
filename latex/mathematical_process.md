@@ -8,18 +8,17 @@ Priority metric: f1_macro
 
 10 Representative Features (stratum assignment follows first-match-wins priority in feature_stratifier.py:59-127):
 
-| # | Feature Name | Stratum | Matching Pattern |
-|---|---|---|---|
-| f1 | "Plural word incidence" | S1_morphological | "plural word" |
-| f2 | "Past tense incidence" | S1_morphological | "past tense" |
-| f3 | "Type-token ratio" | S2_lexical_diversity | "type-token ratio" |
-| f4 | "Hapax legomena ratio" | S2_lexical_diversity | "hapax legomena" |
-| f5 | "Noun count incidence" | S3_structural | "" (catch-all) |
-| f6 | "Mean sentence length (norm.)" | S3_structural | "" (catch-all) |
-| f7 | "Word entropy" | S4_info_theoretic | "entropy" |
-| f8 | "Zipf steepness" | S4_info_theoretic | "zipf steepness" |
-| f9 | "Cosine distance sent-doc" | S5_cross_level | "cosine distance" |
-| f10 | "Overlap count par-doc" | S5_cross_level | "overlap count" |
+#	Feature Name	Stratum	Matching Pattern
+f1	"Plural word incidence"	S1_morphological	"plural word"
+f2	"Past tense incidence"	S1_morphological	"past tense"
+f3	"Type-token ratio"	S2_lexical_diversity	"type-token ratio"
+f4	"Hapax legomena ratio"	S2_lexical_diversity	"hapax legomena"
+f5	"Noun count incidence"	S3_structural	"" (catch-all)
+f6	"Mean sentence length (norm.)"	S3_structural	"" (catch-all)
+f7	"Word entropy"	S4_info_theoretic	"entropy"
+f8	"Zipf steepness"	S4_info_theoretic	"zipf steepness"
+f9	"Cosine distance sent-doc"	S5_cross_level	"cosine distance"
+f10	"Overlap count par-doc"	S5_cross_level	"overlap count"
 f7 is checked first against S4 patterns (line 61–65) before any S2 pattern, so "Word entropy" → S4, not S2.
 
 Pooled Language Profiles (used for PCA fitting, after deduplication in MKBStore.finalise() at mkb_store.py:179-181):
