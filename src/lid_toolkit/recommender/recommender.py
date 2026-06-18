@@ -150,7 +150,7 @@ class Recommender:
         """
         user_iso_codes = frozenset(lang_profile_df.columns)
         fp = self.store.builder.build(lang_profile_df)
-        trace: dict = {"query_iso_codes": sorted(user_iso_codes)}
+        trace: dict = {"query_iso_codes": sorted(user_iso_codes), "query_fingerprint": dict(fp)}
         rec, engine_trace = self.engine.trace_query(
             fp,
             priority_metric=priority_metric,

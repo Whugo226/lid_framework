@@ -175,12 +175,16 @@ class SimilarityEngine:
             all_covered: set[str] = set()
             for nb in top_k:
                 for variant, perfs in nb.performances.items():
-                    train_langs = perfs.get("_training_languages") or frozenset(nb.performances)
+                    train_langs = perfs.get("_training_languages")
                     if isinstance(train_langs, (set, frozenset)):
-                        all_covered |= set(train_langs)
+                        known = frozenset(train_langs)
                     else:
-                        # Fall back: assume the historical dataset's iso_codes
-                        all_covered |= set(self.store.get_entry(nb.dataset_name).iso_codes)
+                        known = frozenset(self.store.get_entry(nb.dataset_name).iso_codes)
+                        for ds_name in sorted(self.store.datasets, key=len, reverse=True):
+                            if variant.endswith(f"_{ds_name}"):
+                                known = frozenset(self.store.get_entry(ds_name).iso_codes)
+                                break
+                    all_covered |= known
             uncoverable = user_iso_codes - all_covered
 
         explanation = self._build_explanation(
@@ -481,8 +485,12 @@ class SimilarityEngine:
                     if isinstance(train_langs, (set, frozenset)):
                         known = frozenset(train_langs)
                     else:
-                        # Inference: model trained on this historical dataset covers its languages
+                        # Infer training dataset from variant name suffix (longest match wins)
                         known = frozenset(entry.iso_codes)
+                        for ds_name in sorted(store.datasets, key=len, reverse=True):
+                            if variant.endswith(f"_{ds_name}"):
+                                known = frozenset(store.get_entry(ds_name).iso_codes)
+                                break
                     gap = user_iso_codes - known
                     per_model_gaps[variant] = gap
 
