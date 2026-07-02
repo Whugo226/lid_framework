@@ -36,7 +36,7 @@ import numpy as np
 import pandas as pd
 
 from .fingerprint_builder import FingerprintBuilder
-from .mkb_store import MKBStore, CORE_METRICS
+from .mkb_store import MKBStore, CORE_METRICS, LOWER_IS_BETTER_METRICS
 
 logger = logging.getLogger(__name__)
 
@@ -315,22 +315,35 @@ class SimilarityEngine:
         per_stratum_dists: dict[str, list[float]] = {s: [] for s in stratum_names}
         perf_gaps: list[float] = []
 
+        lower_is_better = priority_metric in LOWER_IS_BETTER_METRICS
         for i, name_i in enumerate(entry_names):
             fp_i  = store.get_entry(name_i).fingerprint
-            best_i = max(
-                store.get_entry(name_i).performances.items(),
-                key=lambda kv: kv[1].get(priority_metric, -1)
-            )[1].get(priority_metric, 0.0)
+            if lower_is_better:
+                best_i = min(
+                    store.get_entry(name_i).performances.items(),
+                    key=lambda kv: kv[1].get(priority_metric, float("inf"))
+                )[1].get(priority_metric, 0.0)
+            else:
+                best_i = max(
+                    store.get_entry(name_i).performances.items(),
+                    key=lambda kv: kv[1].get(priority_metric, -1)
+                )[1].get(priority_metric, 0.0)
 
             for j, name_j in enumerate(entry_names):
                 if i == j:
                     continue
                 fp_j   = store.get_entry(name_j).fingerprint
                 dists  = self._stratum_distances(fp_i, fp_j)
-                best_j = max(
-                    store.get_entry(name_j).performances.items(),
-                    key=lambda kv: kv[1].get(priority_metric, -1)
-                )[1].get(priority_metric, 0.0)
+                if lower_is_better:
+                    best_j = min(
+                        store.get_entry(name_j).performances.items(),
+                        key=lambda kv: kv[1].get(priority_metric, float("inf"))
+                    )[1].get(priority_metric, 0.0)
+                else:
+                    best_j = max(
+                        store.get_entry(name_j).performances.items(),
+                        key=lambda kv: kv[1].get(priority_metric, -1)
+                    )[1].get(priority_metric, 0.0)
 
                 for s in stratum_names:
                     per_stratum_dists[s].append(dists.get(s, 0.0))
@@ -501,10 +514,16 @@ class SimilarityEngine:
             else:
                 candidates = entry.performances
 
-            best_var, best_perf = max(
-                candidates.items(),
-                key=lambda kv: kv[1].get(priority_metric, -1),
-            )
+            if priority_metric in LOWER_IS_BETTER_METRICS:
+                best_var, best_perf = min(
+                    candidates.items(),
+                    key=lambda kv: kv[1].get(priority_metric, float("inf")),
+                )
+            else:
+                best_var, best_perf = max(
+                    candidates.items(),
+                    key=lambda kv: kv[1].get(priority_metric, -1),
+                )
             best_score = best_perf.get(priority_metric, float("nan"))
             gap = per_model_gaps.get(best_var, frozenset())
 
@@ -573,12 +592,18 @@ class SimilarityEngine:
         idw_per_nb: list[dict] = [] if _trace is not None else []  # always built for trace
 
         total_inv_d: float = 0.0
+        lower_is_better = priority_metric in LOWER_IS_BETTER_METRICS
         for nb in neighbours:
             inv_d = 1.0 / (nb.distance + 1e-9)
             total_inv_d += inv_d
             nb_record: dict = {"dataset": nb.dataset_name, "inv_d": inv_d, "per_model": {}}
             for model, perfs in nb.performances.items():
-                score = perfs.get(priority_metric, 0.0)
+                raw_score = perfs.get(priority_metric, 0.0)
+                # Invert lower-is-better metrics so higher scores always win
+                if lower_is_better:
+                    score = 1.0 / (raw_score + 1e-9) if raw_score > 0 else 1e9
+                else:
+                    score = raw_score
 
                 # Coverage penalty: fully covering → 1.0; missing k langs → 1 - k/n
                 if user_iso_codes and n_user_langs > 0:

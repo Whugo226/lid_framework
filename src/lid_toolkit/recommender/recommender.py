@@ -204,15 +204,23 @@ class Recommender:
         ]
 
         rows = []
+        from lid_toolkit.recommender.mkb_store import LOWER_IS_BETTER_METRICS
+        lower_is_better = priority_metric in LOWER_IS_BETTER_METRICS
         for query_name in datasets:
             query_entry = store.get_entry(query_name)
             query_fp    = query_entry.fingerprint
 
             # Ground-truth best model for this dataset
-            true_model = max(
-                query_entry.performances.items(),
-                key=lambda kv: kv[1].get(priority_metric, -1),
-            )[0]
+            if lower_is_better:
+                true_model = min(
+                    query_entry.performances.items(),
+                    key=lambda kv: kv[1].get(priority_metric, float("inf")),
+                )[0]
+            else:
+                true_model = max(
+                    query_entry.performances.items(),
+                    key=lambda kv: kv[1].get(priority_metric, -1),
+                )[0]
 
             # Temporarily mask this dataset
             orig_fp = query_entry.fingerprint

@@ -34,7 +34,7 @@ st.set_page_config(
 )
 
 # ── Defaults from environment ──────────────────────────────────────────────────
-_ROOT = Path(__file__).resolve().parents[4]   # project root
+_ROOT = Path(__file__).resolve().parents[3]   # project root (toolkit_dev/lid_toolkit/)
 
 _DEFAULT_STORE = str(
     Path(os.environ.get(
@@ -49,7 +49,13 @@ _DEFAULT_EXPERIMENTS = str(
     ))
 )
 
-_METRICS = ["f1_weighted", "f1_macro", "accuracy", "precision_macro", "recall_macro"]
+_METRICS = [
+    "f1_weighted", "f1_macro", "accuracy",
+    "precision_macro", "precision_weighted",
+    "recall_macro", "recall_weighted",
+    "inference_time_total_s", "inference_time_ms_per_sample",
+    "throughput_samples_per_sec",
+]
 
 _STRATUM_LABELS: dict[str, str] = {
     "S1_morphological":     "Morphological Richness (S1)",
@@ -135,7 +141,7 @@ def _tab_overview(result, config, profiling_time: float, store_datasets: list[st
             },
         ))
         fig_gauge.update_layout(height=240, margin=dict(t=10, b=0, l=20, r=20))
-        st.plotly_chart(fig_gauge, use_container_width=True)
+        st.plotly_chart(fig_gauge, width='stretch')
 
     with right:
         st.subheader("Paradigm Breakdown (Top-k Neighbours)")
@@ -152,7 +158,7 @@ def _tab_overview(result, config, profiling_time: float, store_datasets: list[st
             fig_pie.update_traces(textinfo="label+percent")
             fig_pie.update_layout(height=240, margin=dict(t=10, b=0, l=0, r=0),
                                   showlegend=False)
-            st.plotly_chart(fig_pie, use_container_width=True)
+            st.plotly_chart(fig_pie, width='stretch')
         else:
             st.info("No neighbour data available.")
 
@@ -171,7 +177,7 @@ def _tab_overview(result, config, profiling_time: float, store_datasets: list[st
             "Coverage Gap": (", ".join(sorted(nb.coverage_gap))
                              if nb.coverage_gap else "✓ Full coverage"),
         })
-    st.dataframe(pd.DataFrame(nb_rows).set_index("Rank"), use_container_width=True)
+    st.dataframe(pd.DataFrame(nb_rows).set_index("Rank"), width='stretch')
 
     st.divider()
 
@@ -194,7 +200,7 @@ def _tab_overview(result, config, profiling_time: float, store_datasets: list[st
         height=max(220, len(score_df) * 26 + 60),
     )
     fig_scores.update_yaxes(categoryorder="total ascending")
-    st.plotly_chart(fig_scores, use_container_width=True)
+    st.plotly_chart(fig_scores, width='stretch')
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -233,7 +239,7 @@ def _tab_walkthrough(result, config, store):
                 })
             st.dataframe(
                 pd.DataFrame(pca_rows).set_index("Stratum"),
-                use_container_width=True,
+                width='stretch',
             )
         weights = trace.get("stratum_weights", {})
         if weights:
@@ -247,7 +253,7 @@ def _tab_walkthrough(result, config, store):
                 title="Stratum Weights (higher = more influential in distance calculation)",
             )
             fig_w.update_layout(height=280, coloraxis_showscale=False)
-            st.plotly_chart(fig_w, use_container_width=True)
+            st.plotly_chart(fig_w, width='stretch')
 
     # ── Step 2: Fingerprint space ─────────────────────────────────────────────
     with st.expander("**Step 2 — Nearest Neighbour Matching in Fingerprint Space**",
@@ -409,7 +415,7 @@ def _render_fingerprint_scatter(config, store):
             showlegend=True,
         ))
         fig.update_layout(height=480, legend_title_text="")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
 
     except Exception as exc:
         st.warning(f"Fingerprint scatter unavailable: {exc}")
@@ -435,7 +441,7 @@ def _render_stratum_distances(neighbours):
         title="Per-Stratum Euclidean Distance (query vs each top-k neighbour)",
     )
     fig.update_layout(height=360)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
 def _render_idw_breakdown(trace):
@@ -468,10 +474,10 @@ def _render_idw_breakdown(trace):
             labels={"Contribution": f"Contribution to Score"},
         )
         fig_stack.update_layout(height=370)
-        st.plotly_chart(fig_stack, use_container_width=True)
+        st.plotly_chart(fig_stack, width='stretch')
 
         with st.expander("Detailed contribution table"):
-            st.dataframe(df_c.round(5), use_container_width=True)
+            st.dataframe(df_c.round(5), width='stretch')
 
     # Final normalised scores
     norm = idw.get("normalized_idw_scores", {})
@@ -481,7 +487,7 @@ def _render_idw_breakdown(trace):
             {"Model": _short(m, 50), "Normalised IDW Score": round(s, 5)}
             for m, s in sorted(norm.items(), key=lambda x: -x[1])
         ]).set_index("Model")
-        st.dataframe(norm_df, use_container_width=True)
+        st.dataframe(norm_df, width='stretch')
 
     denom = idw.get("denominator", None)
     if denom is not None:
@@ -597,7 +603,7 @@ def _tab_run_model(result, config, texts: pd.Series | None, experiments_dir: str
             title=f"Predicted Language Distribution  ({len(preds)} samples)",
         )
         fig_dist.update_layout(height=350, coloraxis_showscale=False)
-        st.plotly_chart(fig_dist, use_container_width=True)
+        st.plotly_chart(fig_dist, width='stretch')
 
         # Sample predictions table
         st.markdown(f"**Sample Predictions (first 50 of {len(preds)}):**")
@@ -605,7 +611,7 @@ def _tab_run_model(result, config, texts: pd.Series | None, experiments_dir: str
             "Text": sample_texts[:50],
             "Predicted Language": preds[:50],
         })
-        st.dataframe(preview_df, use_container_width=True, height=300)
+        st.dataframe(preview_df, width='stretch', height=300)
 
         # Download button
         full_df = pd.DataFrame({"text": sample_texts, "predicted_lang": preds})
@@ -671,7 +677,7 @@ def _tab_baseline(result, config, store):
     fig_comp.update_traces(texttemplate="%{text:.4f}", textposition="outside")
     fig_comp.update_layout(height=260, showlegend=False, xaxis_range=[0, None])
     fig_comp.update_yaxes(categoryorder="total ascending")
-    st.plotly_chart(fig_comp, use_container_width=True)
+    st.plotly_chart(fig_comp, width='stretch')
 
     d1, d2 = st.columns(2)
     delta_vs_default = rec_score - default_score
@@ -706,7 +712,7 @@ always recommending the globally best model.
                 .sort_values("Datasets Won", ascending=False)
                 .set_index("Model")
             )
-            st.dataframe(wdf, use_container_width=True)
+            st.dataframe(wdf, width='stretch')
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -780,7 +786,7 @@ def _tab_coverage(result, config):
         yaxis_title="Detected Language",
         xaxis_tickangle=-30,
     )
-    st.plotly_chart(fig_heat, use_container_width=True)
+    st.plotly_chart(fig_heat, width='stretch')
 
     st.caption(
         "Only top-8 models by IDW score are shown. "
@@ -801,7 +807,7 @@ def _tab_coverage(result, config):
         else:
             status = "? Coverage unknown"
         summary_rows.append({"ISO Code": lang, "Status": status})
-    st.dataframe(pd.DataFrame(summary_rows).set_index("ISO Code"), use_container_width=True)
+    st.dataframe(pd.DataFrame(summary_rows).set_index("ISO Code"), width='stretch')
 
     # Alerts
     if uncoverable:
@@ -856,7 +862,10 @@ def main():
             "Optimisation metric",
             _METRICS,
             index=0,
-            help="Benchmark metric to maximise when ranking models.",
+            help=(
+                "Metric to optimise: accuracy/F1/precision/recall (higher=better) or "
+                "inference_time_* (lower=better) or throughput (higher=better)."
+            ),
         )
 
         st.divider()
@@ -873,10 +882,10 @@ def main():
         )
 
         st.divider()
-        analyse = st.button("🔍  Analyse Corpus", type="primary", use_container_width=True)
+        analyse = st.button("🔍  Analyse Corpus", type="primary", width='stretch')
 
         if "result" in st.session_state:
-            if st.button("🗑  Clear Results", use_container_width=True):
+            if st.button("🗑  Clear Results", width='stretch'):
                 for key in ["result", "config", "texts", "profiling_time",
                             "run_preds", "run_texts", "run_model"]:
                     st.session_state.pop(key, None)

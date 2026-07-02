@@ -65,7 +65,17 @@ from .fingerprint_builder import FingerprintBuilder
 logger = logging.getLogger(__name__)
 
 # Core metrics (used as defaults). All metrics from benchmark_metadata.json are stored.
-CORE_METRICS = ("accuracy", "f1_macro", "precision_macro", "recall_macro")
+CORE_METRICS = (
+    "accuracy", "f1_macro", "f1_weighted",
+    "precision_macro", "precision_weighted",
+    "recall_macro", "recall_weighted",
+)
+
+# Metrics where lower is better (all others assume higher is better)
+LOWER_IS_BETTER_METRICS = frozenset({
+    "inference_time_total_s",
+    "inference_time_ms_per_sample",
+})
 
 # mlruns subdirectories are MLflow internals — never load from there
 _SKIP_DIRS = {"mlruns", "__pycache__"}
@@ -227,15 +237,24 @@ class MKBStore:
 
         The metric can be any metric stored in the performances (e.g., accuracy,
         f1_macro, f1_weighted, inference_time_total_s, etc.).
+        For metrics where lower is better (inference_time_*), the min is selected.
         """
+        from .mkb_store import LOWER_IS_BETTER_METRICS
         result = {}
+        lower_is_better = metric in LOWER_IS_BETTER_METRICS
         for name, entry in self._entries.items():
             if not entry.performances:
                 continue
-            best = max(
-                entry.performances.items(),
-                key=lambda kv: kv[1].get(metric, -1),
-            )
+            if lower_is_better:
+                best = min(
+                    entry.performances.items(),
+                    key=lambda kv: kv[1].get(metric, float("inf")),
+                )
+            else:
+                best = max(
+                    entry.performances.items(),
+                    key=lambda kv: kv[1].get(metric, -1),
+                )
             result[name] = best[0]
         return result
 
