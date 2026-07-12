@@ -1,9 +1,13 @@
 """
 Semantically-stratified PCA compression of DeepProfiler features.
 
-The 3,066 raw linguistic features are partitioned into five linguistically
+The raw linguistic features (a fixed 2,726-feature core schema per language;
+up to ~2,926 in the pooled union when conditional paragraph-level variants
+fire for multi-paragraph corpora) are partitioned into five linguistically
 coherent strata *before* any dimensionality reduction, then PCA is applied
-independently within each stratum.  This avoids the instability of a global
+independently within each stratum. The fitting step's validity filter keeps
+exactly the 2,726-feature core, so every fingerprint is built from the same
+fixed feature space.  This avoids the instability of a global
 PCA at low n, and preserves linguistic semantics in the reduced space.
 
 Strata (mutually exclusive, exhaustive over the features produced by

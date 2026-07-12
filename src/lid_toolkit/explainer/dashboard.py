@@ -218,7 +218,7 @@ def _tab_walkthrough(result, config, store):
     # ── Step 1: Corpus fingerprint ────────────────────────────────────────────
     with st.expander("**Step 1 — Corpus Fingerprint**", expanded=True):
         st.markdown(
-            "**DeepProfiler** extracts ~3,066 linguistic features per language across "
+            "**DeepProfiler** extracts 2,726 linguistic features per language across "
             "6 semantic strata. These are reduced via per-stratum PCA into a compact "
             "**fingerprint** representing your corpus's linguistic character."
         )
