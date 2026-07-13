@@ -139,8 +139,10 @@ may go no further than the thesis's own Ch3/Ch5 disclaimers.
 **Why:** "Calibrated" asserts probabilistic calibration the evidence does not
 support; an examiner will catch the overclaim.
 **Incident / evidence ceiling:** calibration evidence is **directional only** —
-2/3 vs 1/14 correct, exact one-sided **p = 0.063**, described in-thesis as
-"suggestive rather than established." Safe existing phrasings to mirror:
+2/2 vs 1/15 correct, exact one-sided **p = 0.022** (0.0221), described in-thesis as
+"promising rather than established." (The review-era "2/3 vs 1/14, p = 0.063" is
+**stale** — see **thesis-claims-archaeology** A-10; never reintroduce it.) Safe
+existing phrasings to mirror:
 `methodology_chapter.tex:256` "not a calibrated probability";
 `demonstration_and_evaluation.tex:327` "rather than established calibration".
 For fuller wording guidance use **thesis-writing-and-style**.
@@ -219,7 +221,7 @@ Run top-to-bottom before asking the user to approve a commit or a merge.
 
 **Forbidden-phrase / regression sweep (check 7):**
 ```
-grep -rniE "leave-one-out|3,?066|five model families|calibrated confidence" "c:/Users/User/OneDrive/Masters/Thesis/Thesis Template Legit" --include="*.tex"
+grep -rniE "leave-one-out|3,?066|five model families|calibrated confidence|2/3 vs 1/14|p ?= ?0\.063" "c:/Users/User/OneDrive/Masters/Thesis/Thesis Template Legit" --include="*.tex"
 ```
 Expect only the known-legitimate survivors (a stratum-weight Pearson analysis's
 "leave-one-out dataset pairs"; disclaimer uses of "calibrat*"). Any *new* hit is

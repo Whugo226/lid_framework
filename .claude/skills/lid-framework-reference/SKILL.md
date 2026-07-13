@@ -313,10 +313,11 @@ does (BibTeX keys from `methodology_chapter.tex`):
 Do not invent details beyond these summaries — they are paraphrases of the
 thesis's own sentences (methodology_chapter.tex:196–226), which is the ceiling.
 
-Related open item: the stratified-vs-global PCA **ablation is deferred**; the
-deferral sentence is commented out at `methodology_chapter.tex:215`. Either
-reinstate it as a limitation or run the ablation — never claim the ablation
-exists.
+Related open item: the stratified-vs-global PCA **ablation is deferred**. This
+is **already stated live** as a Ch3 limitation at `methodology_chapter.tex:405`
+(so the thesis does not silently drop it); a more specific deferral sentence is
+additionally commented out at `methodology_chapter.tex:215`. Optionally reinstate
+:215 as elaboration, or run the ablation — but never claim the ablation exists.
 
 ## 8. Examiner-safe language rules (hard constraints)
 

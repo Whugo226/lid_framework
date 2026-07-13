@@ -244,3 +244,10 @@ concentrated in adverb/demonstrative/passive families — `tab:groundtruth_dutch
   `pdflatex --version`.
 - This ledger is a snapshot, not a living doc: the skill library supersedes it
   once built. If ledger and artifact disagree, the artifact wins.
+- **SUPERSEDED 2026-07-13:** the 12-skill library now exists at
+  `.claude/skills/` (thesis-index router + 11 siblings), authored and
+  Phase-3 reviewed/fixed from this ledger. Prefer the skills over this ledger;
+  load **thesis-index** first. This file remains only as the distillation
+  audit trail. Correction folded in during authoring: confidence split is
+  2/2 vs 1/15, p = 0.0221 (the "2/3 vs 1/14, p = 0.063" above was review-era
+  stale); live `\candidatetodo` count is 5, not 6/7.
