@@ -20,9 +20,10 @@ Key design choices (see architectural plan for full justification)
   binary flags (``cat__*`` keys) and is kept separate from the continuous
   block so that it can be weighted independently.
 
-* **Confidence score**: the standard deviation of the k neighbours'
-  best-model choices (1 = unanimous, 0 = all disagree) gives a calibrated
-  signal of recommendation certainty.
+* **Confidence score**: the fraction of the k neighbours whose own best
+  model agrees with the recommendation (1 = unanimous, 0 = none agree).
+  This is a *consensus measure* of neighbourhood consistency — not a
+  calibrated probability that the recommendation is optimal.
 """
 
 from __future__ import annotations
@@ -37,6 +38,7 @@ import pandas as pd
 
 from .fingerprint_builder import FingerprintBuilder
 from .mkb_store import MKBStore, CORE_METRICS, LOWER_IS_BETTER_METRICS
+from .model_language_coverage import zero_shot_inventory
 
 logger = logging.getLogger(__name__)
 
@@ -119,6 +121,7 @@ class SimilarityEngine:
         priority_metric: str = "f1_macro",
         k: Optional[int] = None,
         user_iso_codes: Optional[frozenset[str]] = None,
+        strict_coverage: bool = False,
     ) -> Recommendation:
         """
         Find the k nearest historical datasets and produce a recommendation.
@@ -134,13 +137,22 @@ class SimilarityEngine:
             Override the instance-level k (useful for ablation studies).
         user_iso_codes :
             The set of ISO 639-1 language codes present in the user's dataset
-            (i.e. ``frozenset(lang_profile_df.columns)``).  When provided, the
+            (i.e. ``frozenset(lang_profile_df.columns)``, or an explicitly
+            declared language set for deployment queries).  When provided, the
             engine applies a **language coverage guard**: each candidate model
-            is checked against the languages it was trained on (inferred from
-            the historical dataset's ``iso_codes``).  Models that cannot cover
-            all user languages are penalised or, when all candidates have gaps,
-            the one with the smallest gap is preferred.  The recommendation
-            explanation will list any uncoverable languages explicitly.
+            is checked against the languages it can identify — its published
+            inventory for the zero-shot models (see
+            ``model_language_coverage``), otherwise the language set of its
+            training corpus.  Models that cannot cover all user languages are
+            soft-penalised in the vote (Eq. idw_vote) and the recommendation
+            explanation lists any coverage gaps and uncoverable languages
+            explicitly.
+        strict_coverage :
+            Operational deployment mode.  When True, models with a coverage
+            gap are hard-filtered from the vote (coverage factor 0.0) whenever
+            at least one candidate covers every coverable user language, so a
+            partially-covering model can never outvote a fully-covering one.
+            Default False — the soft-penalty behaviour of Eq. (idw_vote).
 
         Returns
         -------
@@ -162,7 +174,10 @@ class SimilarityEngine:
         top_k = neighbours[:k_use]
 
         # Inverse-distance-weighted model voting — coverage-aware
-        model_scores = self._idw_vote(top_k, priority_metric, user_iso_codes=user_iso_codes)
+        model_scores = self._idw_vote(
+            top_k, priority_metric,
+            user_iso_codes=user_iso_codes, strict_coverage=strict_coverage,
+        )
 
         # Confidence: fraction of neighbours whose best_model agrees with the winner
         best_model = max(model_scores, key=model_scores.__getitem__)
@@ -174,17 +189,9 @@ class SimilarityEngine:
         if user_iso_codes:
             all_covered: set[str] = set()
             for nb in top_k:
+                entry = self.store.get_entry(nb.dataset_name)
                 for variant, perfs in nb.performances.items():
-                    train_langs = perfs.get("_training_languages")
-                    if isinstance(train_langs, (set, frozenset)):
-                        known = frozenset(train_langs)
-                    else:
-                        known = frozenset(self.store.get_entry(nb.dataset_name).iso_codes)
-                        for ds_name in sorted(self.store.datasets, key=len, reverse=True):
-                            if variant.endswith(f"_{ds_name}"):
-                                known = frozenset(self.store.get_entry(ds_name).iso_codes)
-                                break
-                    all_covered |= known
+                    all_covered |= self._model_known_languages(variant, perfs, entry)
             uncoverable = user_iso_codes - all_covered
 
         explanation = self._build_explanation(
@@ -208,6 +215,7 @@ class SimilarityEngine:
         priority_metric: str = "f1_macro",
         k: Optional[int] = None,
         user_iso_codes: Optional[frozenset[str]] = None,
+        strict_coverage: bool = False,
     ) -> tuple["Recommendation", dict]:
         """
         Run the full query pipeline and return (Recommendation, math_trace).
@@ -220,6 +228,7 @@ class SimilarityEngine:
         trace: dict = {
             "priority_metric": priority_metric,
             "k": k if k is not None else self.k,
+            "strict_coverage": strict_coverage,
         }
 
         # § 0: PCA pipeline summary
@@ -255,7 +264,8 @@ class SimilarityEngine:
         idw_trace: dict = {}
         model_scores = self._idw_vote(
             top_k, priority_metric,
-            user_iso_codes=user_iso_codes, _trace=idw_trace,
+            user_iso_codes=user_iso_codes, strict_coverage=strict_coverage,
+            _trace=idw_trace,
         )
         trace["idw"] = idw_trace
 
@@ -273,7 +283,7 @@ class SimilarityEngine:
         # Build the full Recommendation via the existing query() path
         rec = self.query(
             query_fingerprint, priority_metric=priority_metric,
-            k=k, user_iso_codes=user_iso_codes,
+            k=k, user_iso_codes=user_iso_codes, strict_coverage=strict_coverage,
         )
         return rec, trace
 
@@ -461,6 +471,38 @@ class SimilarityEngine:
             }
         return composite
 
+    def _model_known_languages(
+        self,
+        variant: str,
+        perfs: dict[str, float],
+        entry,
+    ) -> frozenset[str]:
+        """
+        Languages that model `variant` can identify.
+
+        Resolution order:
+        1. An explicit ``_training_languages`` set stored in the performance
+           record (authoritative when present).
+        2. The published inventory for zero-shot models (lid.176, CLD3,
+           XLM-V language-id) — these models' coverage is a property of the
+           model, NOT of the benchmark corpus they were evaluated on.
+        3. Fallback for trained configurations: the language set of the
+           training corpus inferred from the variant-name suffix
+           (longest dataset-name match wins).
+        """
+        train_langs = perfs.get("_training_languages")
+        if isinstance(train_langs, (set, frozenset)):
+            return frozenset(train_langs)
+        zs = zero_shot_inventory(variant)
+        if zs is not None:
+            return zs
+        known = frozenset(entry.iso_codes)
+        for ds_name in sorted(self.store.datasets, key=len, reverse=True):
+            if variant.endswith(f"_{ds_name}"):
+                known = frozenset(self.store.get_entry(ds_name).iso_codes)
+                break
+        return known
+
     def _compute_neighbours(
         self,
         query_fp: OrderedDict[str, float],
@@ -493,23 +535,21 @@ class SimilarityEngine:
             per_model_gaps: dict[str, frozenset[str]] = {}
             if user_iso_codes:
                 for variant, perfs in entry.performances.items():
-                    # Training languages: explicitly stored or inferred from dataset
-                    train_langs = perfs.get("_training_languages")
-                    if isinstance(train_langs, (set, frozenset)):
-                        known = frozenset(train_langs)
-                    else:
-                        # Infer training dataset from variant name suffix (longest match wins)
-                        known = frozenset(entry.iso_codes)
-                        for ds_name in sorted(store.datasets, key=len, reverse=True):
-                            if variant.endswith(f"_{ds_name}"):
-                                known = frozenset(store.get_entry(ds_name).iso_codes)
-                                break
+                    known = self._model_known_languages(variant, perfs, entry)
                     gap = user_iso_codes - known
                     per_model_gaps[variant] = gap
 
-                # Prefer fully-covering variants; fall back to smallest gap
+                # Prefer fully-covering variants; fall back to smallest gap.
+                # Languages that NO variant covers are reported separately as
+                # uncoverable — they must not disqualify otherwise fully-
+                # covering models, so coverage is judged on the effective gap
+                # (gap minus the entry-wide uncoverable set).
+                entry_uncoverable: frozenset[str] = (
+                    frozenset.intersection(*per_model_gaps.values())
+                    if per_model_gaps else frozenset()
+                )
                 fully_covering = {v: p for v, p in entry.performances.items()
-                                  if not per_model_gaps[v]}
+                                  if not (per_model_gaps[v] - entry_uncoverable)}
                 candidates = fully_covering if fully_covering else entry.performances
             else:
                 candidates = entry.performances
@@ -570,6 +610,7 @@ class SimilarityEngine:
         neighbours: list[NeighbourResult],
         priority_metric: str,
         user_iso_codes: Optional[frozenset[str]] = None,
+        strict_coverage: bool = False,
         _trace: Optional[dict] = None,
     ) -> dict[str, float]:
         """
@@ -577,17 +618,41 @@ class SimilarityEngine:
 
         Each model's IDW score = sum(inv_distance × metric_score × coverage_factor).
 
-        When ``user_iso_codes`` is provided:
-        - If at least one fully-covering model exists anywhere in the top-k,
-          models with a language gap are hard-filtered (coverage_factor = 0.0)
-          so they cannot win the vote.
-        - Only when *no* fully-covering model exists (true edge case) does the
-          soft ``1 - gap_fraction`` penalty apply, ensuring a recommendation is
-          always returned.
+        When ``user_iso_codes`` is provided, the coverage factor cov(m, q)
+        depends on the mode:
+
+        - **Default (soft penalty)** — the thesis Eq. (idw_vote) behaviour:
+          cov = 1.0 for fully-covering models, else ``1 - |gap|/|L_q|``.
+          Gapped models are penalised but can still win the vote.
+        - **strict_coverage=True** — operational deployment mode: if at least
+          one model in the top-k covers every *coverable* user language,
+          gapped models are hard-filtered (cov = 0.0) so they cannot win.
+          Languages that NO candidate covers are reported separately as
+          ``uncoverable_languages`` and excluded from this test (effective
+          gaps), so a few exotic languages cannot disable the filter.  Only
+          when no fully-covering model exists does the soft penalty apply,
+          ensuring a recommendation is always returned.
         """
         model_weighted_scores: dict[str, float] = {}
 
         n_user_langs = len(user_iso_codes) if user_iso_codes else 0
+
+        # Strict mode: determine whether any model in the top-k covers every
+        # coverable user language (effective gap = gap minus the languages no
+        # candidate at all can cover).
+        any_fully_covering = False
+        global_uncoverable: frozenset[str] = frozenset()
+        n_coverable = n_user_langs
+        if strict_coverage and user_iso_codes and n_user_langs > 0:
+            all_gaps = [
+                nb.per_model_gaps.get(model, frozenset())
+                for nb in neighbours
+                for model in nb.performances
+            ]
+            if all_gaps:
+                global_uncoverable = frozenset.intersection(*all_gaps)
+            n_coverable = n_user_langs - len(global_uncoverable)
+            any_fully_covering = any(not (g - global_uncoverable) for g in all_gaps)
 
         idw_per_nb: list[dict] = [] if _trace is not None else []  # always built for trace
 
@@ -605,10 +670,24 @@ class SimilarityEngine:
                 else:
                     score = raw_score
 
-                # Coverage penalty: fully covering → 1.0; missing k langs → 1 - k/n
+                # Coverage factor cov(m, q) — see docstring for the two modes.
                 if user_iso_codes and n_user_langs > 0:
                     gap = nb.per_model_gaps.get(model, frozenset())
-                    coverage_factor = 1.0 - len(gap) / n_user_langs
+                    if strict_coverage:
+                        eff_gap = gap - global_uncoverable
+                        if not eff_gap:
+                            coverage_factor = 1.0
+                        elif any_fully_covering:
+                            coverage_factor = 0.0
+                        else:
+                            coverage_factor = (
+                                1.0 - len(eff_gap) / n_coverable
+                                if n_coverable > 0 else 1.0
+                            )
+                    else:
+                        # Default: soft penalty exactly as Eq. (idw_vote) —
+                        # full gap over the total user language count.
+                        coverage_factor = 1.0 - len(gap) / n_user_langs
                 else:
                     gap = frozenset()
                     coverage_factor = 1.0

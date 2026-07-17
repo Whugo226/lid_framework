@@ -176,9 +176,47 @@ IDW(m) = Σ_{i=1..k} [1/(D(q,h_i)+ε)] · perf(m,h_i) · cov(m,q)
 ```
 
 ε = 1e-9. `cov(m,q)` is the language-coverage factor: 1.0 if model m's
-training languages cover the user's ISO set, else `1 − gap/n_user_langs`; if
-any fully-covering model exists in the top-k, gapped models are hard-filtered
-(factor 0). Denominator is the **global** Σ inv-distance (per-model
+known languages cover the user's ISO set, else `1 − gap/n_user_langs` — the
+**soft penalty is the default and is what Eq. eq:idw_vote and the Ch5
+walkthrough describe** (a gapped model can still win the vote; the guard then
+warns). [artifact-verified 2026-07-16] An earlier version of this file (and
+the `_idw_vote` docstring) claimed unconditional hard-filtering — that was
+never implemented and is not in the thesis math. Since 2026-07-16 an
+**opt-in** `strict_coverage=True` parameter (on `query`, `trace_query`, and
+the `Recommender` facade methods) provides hard-filtering for operational
+deployments: models with an *effective* gap (gap minus languages no candidate
+covers at all) get factor 0 whenever a fully-covering candidate exists in the
+top-k. Default remains False = thesis behaviour.
+
+Model "known languages" resolution (2026-07-16 fix,
+`recommender\model_language_coverage.py`): explicit `_training_languages` in
+the performance record (never populated in the deployed MKB) → published
+zero-shot inventories (lid.176: 176 langs, CLD3: 103 base codes, XLM-V
+language-id: 102 FLEURS langs; `nb` credited via the `no` macrolanguage,
+`iw`→`he`, `fil`/`tl` aliased) → training-corpus iso_codes inferred from the
+variant-name suffix (trained configs only). Before this fix, zero-shot models
+were wrongly credited with only the benchmark corpus's languages, so
+wide-coverage queries (e.g. 64 company languages) falsely reported lid.176 as
+gapped. The facade methods also accept a `user_iso_codes` override so a
+deployment can declare languages beyond what the profiler detects.
+
+Census-detected coverage (2026-07-16, opt-in `use_detected_coverage=True` on
+the `Recommender` facade): `_profile_user_mode` attaches
+`df.attrs["detected_languages"]` and `["detected_language_counts"]`. The
+coverage basis comes from the lid.176 census, split two ways — **coverage**
+(which languages are present) counts only HIGH-confidence detections
+(prob ≥ 0.50, as a fraction of the full census, ≥1% support), which drops
+lid.176 low-confidence mislabels (e.g. German→`als`/Alemannic); **per-language
+profiling sampling stays at conf 0.0** so the fingerprint reflects data as-is.
+Default (`use_detected_coverage=False`) uses the profiled columns — so the WiLI
+walkthrough and validation are unchanged. Prose: Ch4
+`design_and_implementation.tex` coverage-guard subsection
+(`subsec:coverage_guard_confidence`). Caveat: the profiler *uses* lid.176, so
+lid.176 covers whatever it detects — a high-confidence idiosyncratic code can
+collapse a multi-model choice to lid.176 sole survivor; inspect
+`detected_language_counts` when it matters.
+
+Denominator is the **global** Σ inv-distance (per-model
 normalisation would cancel proximity for single-neighbour models).
 Lower-is-better metrics (`inference_time_*`) are inverted before voting.
 

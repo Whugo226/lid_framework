@@ -76,6 +76,9 @@ class Recommender:
         text_series: pd.Series,
         priority_metric: str = "f1_macro",
         k: Optional[int] = None,
+        user_iso_codes: Optional[frozenset[str]] = None,
+        strict_coverage: bool = False,
+        use_detected_coverage: bool = False,
     ) -> Recommendation:
         """
         Recommend the best LID model for a user-provided dataset.
@@ -89,6 +92,26 @@ class Recommender:
             ``"precision_macro"``, or ``"recall_macro"``.
         k : int, optional
             Number of nearest neighbours (overrides instance-level ``k``).
+        user_iso_codes : frozenset[str], optional
+            Explicitly declared language set for the coverage guard.  By
+            default the languages *detected by the profiler* are used — a
+            subset of the profiler's supported languages.  Deployments whose
+            data spans languages beyond the profiler's scope should declare
+            the full operational language set here so candidate models are
+            vetted against it.
+        strict_coverage : bool
+            When True, models that cannot cover the declared language set are
+            hard-filtered from the vote whenever a fully-covering candidate
+            exists (operational deployment mode).  Default False: the soft
+            coverage penalty of Eq. (idw_vote).
+        use_detected_coverage : bool
+            When True (and ``user_iso_codes`` is not given), the coverage guard
+            uses the language set the profiler's lid.176 census *detected* in
+            the data — including languages beyond the 24 the profiler can
+            characterise — rather than only the profiled (in-scope) columns.
+            This lets the framework vet models against the corpus's true
+            language range without the practitioner declaring it.  Default
+            False preserves the profiled-columns behaviour.
 
         Returns
         -------
@@ -109,7 +132,9 @@ class Recommender:
             )
 
         return self.recommend_from_profile(
-            lang_profile_df, priority_metric=priority_metric, k=k
+            lang_profile_df, priority_metric=priority_metric, k=k,
+            user_iso_codes=user_iso_codes, strict_coverage=strict_coverage,
+            use_detected_coverage=use_detected_coverage,
         )
 
     def recommend_from_profile(
@@ -117,14 +142,24 @@ class Recommender:
         lang_profile_df: pd.DataFrame,
         priority_metric: str = "f1_macro",
         k: Optional[int] = None,
+        user_iso_codes: Optional[frozenset[str]] = None,
+        strict_coverage: bool = False,
+        use_detected_coverage: bool = False,
     ) -> Recommendation:
         """
         Recommend using a pre-computed language profile (skip profiling step).
 
         Useful when you have already run ``DeepProfiler.get_multilingual_profile()``
         and want to avoid re-running the profiler.
+
+        ``user_iso_codes`` overrides the profile-derived language set for the
+        coverage guard (see :meth:`recommend`); ``strict_coverage`` enables the
+        hard coverage filter; ``use_detected_coverage`` uses the profiler's
+        census-detected language set instead of the profiled columns.
         """
-        user_iso_codes = frozenset(lang_profile_df.columns)
+        user_iso_codes = self._resolve_iso_codes(
+            lang_profile_df, user_iso_codes, use_detected_coverage
+        )
         builder = self.store.builder
         fp      = builder.build(lang_profile_df)
         return self.engine.query(
@@ -132,13 +167,38 @@ class Recommender:
             priority_metric=priority_metric,
             k=k,
             user_iso_codes=user_iso_codes,
+            strict_coverage=strict_coverage,
         )
+
+    @staticmethod
+    def _resolve_iso_codes(
+        lang_profile_df: pd.DataFrame,
+        user_iso_codes: Optional[frozenset[str]],
+        use_detected_coverage: bool,
+    ) -> frozenset[str]:
+        """Resolve the language set for the coverage guard.
+
+        Precedence: an explicit ``user_iso_codes`` always wins; otherwise, when
+        ``use_detected_coverage`` is set and the profiler attached a non-empty
+        census-detected set, use that; otherwise fall back to the profiled
+        (in-scope) columns.
+        """
+        if user_iso_codes is not None:
+            return user_iso_codes
+        if use_detected_coverage:
+            detected = lang_profile_df.attrs.get("detected_languages")
+            if detected:
+                return frozenset(detected)
+        return frozenset(lang_profile_df.columns)
 
     def recommend_from_profile_traced(
         self,
         lang_profile_df: pd.DataFrame,
         priority_metric: str = "f1_macro",
         k: Optional[int] = None,
+        user_iso_codes: Optional[frozenset[str]] = None,
+        strict_coverage: bool = False,
+        use_detected_coverage: bool = False,
     ) -> tuple[Recommendation, dict]:
         """
         Return (Recommendation, math_trace) for manual step-by-step verification.
@@ -147,8 +207,15 @@ class Recommender:
         recommendation: PCA pipeline, per-stratum Euclidean distances, Hamming,
         weighted composite D, max_D, similarity%, top-k list, IDW
         inv_d/coverage_factor/numerators/denominators, and confidence.
+
+        ``user_iso_codes`` overrides the profile-derived language set for the
+        coverage guard (see :meth:`recommend`); ``strict_coverage`` enables the
+        hard coverage filter; ``use_detected_coverage`` uses the profiler's
+        census-detected language set instead of the profiled columns.
         """
-        user_iso_codes = frozenset(lang_profile_df.columns)
+        user_iso_codes = self._resolve_iso_codes(
+            lang_profile_df, user_iso_codes, use_detected_coverage
+        )
         fp = self.store.builder.build(lang_profile_df)
         trace: dict = {"query_iso_codes": sorted(user_iso_codes), "query_fingerprint": dict(fp)}
         rec, engine_trace = self.engine.trace_query(
@@ -156,6 +223,7 @@ class Recommender:
             priority_metric=priority_metric,
             k=k,
             user_iso_codes=user_iso_codes,
+            strict_coverage=strict_coverage,
         )
         trace.update(engine_trace)
         return rec, trace

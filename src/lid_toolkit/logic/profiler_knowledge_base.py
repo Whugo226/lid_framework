@@ -2145,7 +2145,38 @@ class DeepProfiler:
             if result is not None:
                 final_report[spacy_lang] = result
 
-        return pd.DataFrame(final_report)
+        # ── Census-detected language inventory (for the coverage guard) ──────
+        # Two DECOUPLED uses of the same lid.176 census:
+        #   • Coverage — WHICH languages are present, driving the coverage guard
+        #     — is derived only from HIGH-CONFIDENCE detections
+        #     (prob ≥ COVERAGE_MIN_CONF), as a fraction of the FULL census.  The
+        #     high bar drops lid.176's low-confidence mislabels (e.g. tagging
+        #     German text 'als'/Alemannic), which would otherwise inflate the
+        #     language set models are vetted against; the fixed full-census
+        #     denominator keeps the threshold's effect monotonic.  This detects
+        #     languages BEYOND the 24 the profiler can characterise, so a
+        #     recommendation is not made blind to languages present in the data.
+        #   • Per-language SAMPLING for profiling (the loop above) keeps every
+        #     top-1 assignment at confidence 0.0, so the profiled text — and the
+        #     resulting fingerprint — reflect the data as-is, noise and all.
+        # Consumed opt-in by the recommender (use_detected_coverage=True); by
+        # default nothing reads these attrs, so existing behaviour is unchanged.
+        COVERAGE_MIN_CONF = 0.50   # a detection counts toward coverage only if this confident
+        DETECT_MIN_FRAC   = 0.01   # …and the language must be ≥1% of the full census
+        n_census = int(len(conf_series)) or 1
+        hi_codes = lang_series[conf_series >= COVERAGE_MIN_CONF].map(
+            lambda c: self.FASTTEXT_TO_SPACY.get(c, c)
+        )
+        detected_counts = {str(code): int(n) for code, n in hi_codes.value_counts().items()}
+        detected_languages = frozenset(
+            code for code, n in detected_counts.items()
+            if n / n_census >= DETECT_MIN_FRAC
+        )
+
+        df = pd.DataFrame(final_report)
+        df.attrs["detected_languages"] = detected_languages
+        df.attrs["detected_language_counts"] = detected_counts
+        return df
 
     def run_profile(
         self,
