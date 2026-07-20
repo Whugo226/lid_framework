@@ -5,8 +5,16 @@ reserved validation splits (03_validation_15_cleaned).
 FROZEN PROTOCOL — mirrors the recorded evaluation run exactly:
   - priority metric : f1_weighted
   - neighbourhood   : k = 3, inverse-distance-weighted voting
-  - recommender call: recommend_from_profile(profile) with NO user_iso_codes
-                      (coverage guard inactive, as in the recorded run)
+  - recommender call: recommend_from_profile(profile) with NO user_iso_codes.
+                      NOTE: this does NOT disable the language-coverage guard.
+                      Recommender._resolve_iso_codes defaults the guard's language
+                      set to the profiled columns when user_iso_codes is None, so
+                      the guard is ACTIVE here — exactly as it was in the recorded
+                      evaluation run, which made the identical call. The guard runs
+                      under the CORRECTED zero-shot inventories
+                      (recommender/model_language_coverage.py); post-correction it
+                      changes no recommendation on the evaluation split and affects
+                      only the confidence stratification.
   - sampling        : 500 texts per language file, seed 42
   - MKB             : mkb.pkl (17-dataset portfolio, librispeech excluded)
 
@@ -141,6 +149,45 @@ def load_all_benchmarks(dataset_name: str) -> dict[str, float]:
     return scores
 
 
+class UnresolvableRecommendation(RuntimeError):
+    """A recommended model has no benchmark record on the validation side."""
+
+
+# Zero-shot models carry no training corpus. The evaluation-side benchmark dirs
+# suffixed them with the *evaluation* dataset (``cld3_mmarco``); the validation-side
+# dirs record them bare (``cld3``). Trained variants are suffixed with their
+# *training* corpus in both, so they must match exactly.
+_ZERO_SHOT_PREFIXES = ("lid.176", "cld3", "xlm_v_base_language_id")
+
+
+def resolve_benchmark_key(rec_key: str, benchmarks: dict[str, float], dataset: str) -> str:
+    """
+    Map a recommended MKB variant key onto its validation benchmark key.
+
+    Raises UnresolvableRecommendation rather than returning None: this is a
+    one-shot run, and a recommendation that cannot be scored must abort the run
+    instead of being silently recorded as incorrect with a null performance gap.
+    """
+    if rec_key in benchmarks:
+        return rec_key
+
+    for prefix in _ZERO_SHOT_PREFIXES:
+        if rec_key == prefix or rec_key.startswith(prefix + "_"):
+            for candidate in (prefix, f"{prefix}_{dataset}"):
+                if candidate in benchmarks:
+                    return candidate
+            raise UnresolvableRecommendation(
+                f"[{dataset}] zero-shot recommendation '{rec_key}' has no benchmark "
+                f"record (tried '{prefix}', '{prefix}_{dataset}')."
+            )
+
+    raise UnresolvableRecommendation(
+        f"[{dataset}] recommendation '{rec_key}' has no benchmark record. Trained "
+        f"variants are keyed by training corpus and must match exactly; found "
+        f"{len(benchmarks)} variants for this dataset."
+    )
+
+
 def preflight() -> bool:
     """Fail early if the validation-side cross-benchmark is not in place."""
     ok = True
@@ -191,22 +238,17 @@ def main() -> None:
         gt_model = max(benchmarks, key=benchmarks.__getitem__)
         gt_score = benchmarks[gt_model]
 
-        # OTS variants carry per-dataset suffixes in the benchmark dirs
-        rec_key = rec.recommended_model
-        if rec_key not in benchmarks:
-            base = rec_key.rsplit("_", 1)[0]
-            fallback = f"{base}_{dataset_name}"
-            if fallback in benchmarks:
-                rec_key = fallback
+        # Aborts the run if the recommendation cannot be scored — see
+        # resolve_benchmark_key. Never records an unscoreable recommendation.
+        rec_key = resolve_benchmark_key(rec.recommended_model, benchmarks, dataset_name)
 
-        rec_score = benchmarks.get(rec_key)
-        delta = (gt_score - rec_score) if rec_score is not None else None
+        rec_score = benchmarks[rec_key]
+        delta = gt_score - rec_score
         is_correct = rec_key == gt_model
 
-        logger.info("[%s] rec=%s  conf=%.2f  %s  Δ=%s",
+        logger.info("[%s] rec=%s  conf=%.2f  %s  Δ=%+.4f",
                     dataset_name, rec.recommended_model, rec.confidence,
-                    "CORRECT" if is_correct else f"wrong (GT={gt_model})",
-                    f"{delta:+.4f}" if delta is not None else "n/a")
+                    "CORRECT" if is_correct else f"wrong (GT={gt_model})", delta)
 
         results.append({
             "dataset": dataset_name,
@@ -216,8 +258,9 @@ def main() -> None:
             "is_correct": is_correct,
             "ground_truth_model": gt_model,
             "ground_truth_score": round(gt_score, 6),
-            "recommended_score": round(rec_score, 6) if rec_score is not None else None,
-            "performance_delta": round(delta, 6) if delta is not None else None,
+            "benchmark_key": rec_key,
+            "recommended_score": round(rec_score, 6),
+            "performance_delta": round(delta, 6),
             "all_benchmark_scores": {k: round(v, 6) for k, v in sorted(benchmarks.items())},
             "top3_neighbours": [
                 {"dataset": nb.dataset_name, "similarity_pct": nb.similarity_pct,
@@ -228,8 +271,7 @@ def main() -> None:
 
     n = len(results)
     correct = sum(r["is_correct"] for r in results)
-    deltas = np.array([r["performance_delta"] for r in results
-                       if r["performance_delta"] is not None])
+    deltas = np.array([r["performance_delta"] for r in results])
     nonzero = [r for r in results if r["confidence"] > 0]
     zero = [r for r in results if r["confidence"] == 0]
 
@@ -238,7 +280,14 @@ def main() -> None:
         "protocol": {
             "priority_metric": PRIORITY_METRIC, "k": K,
             "n_per_lang": N_PER_LANG, "seed": SEED,
-            "coverage_guard": "inactive (no user_iso_codes; mirrors recorded evaluation run)",
+            "coverage_guard": (
+                "ACTIVE on the profile-derived language set. No user_iso_codes is "
+                "passed, which does NOT disable the guard: Recommender._resolve_iso_codes "
+                "defaults it to the profiled columns. This mirrors the recorded "
+                "evaluation run, which made the identical call and was likewise active. "
+                "Zero-shot inventories are the corrected ones "
+                "(recommender/model_language_coverage.py)."
+            ),
             "mkb": str(MKB_PATH), "splits": "03_validation_15_cleaned",
             "frozen": "protocol fixed before ground-truth inspection; single run",
         },
