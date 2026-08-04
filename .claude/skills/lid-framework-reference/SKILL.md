@@ -1,6 +1,6 @@
 ---
 name: lid-framework-reference
-description: Domain knowledge pack for the thesis's LID model-recommendation framework. Load this whenever you must reason about, write about, review, or defend the framework itself — the DeepProfiler → FeatureStratifier → FingerprintBuilder → MKBStore → SimilarityEngine pipeline, the S1–S6 strata and their feature counts, the composite-distance / IDW / consensus-confidence math, the 17-corpus/24-language data design, the model roster, or the headline validation numbers (17.6% top-1, 0.0078 mean regret, 2/2 vs 1/15 confidence split). Do NOT load it for: how to run/verify artifacts (use artifact-verification-playbook), tracing where a claim lives in the thesis text (use thesis-claims-archaeology), running the dashboard demo (use dashboard-demo-runbook), or writing-style/LaTeX questions (use thesis-writing-and-style). Paths, env, and git conventions live in thesis-estate-and-env.
+description: Domain knowledge pack for the thesis's LID model-recommendation framework. Load this whenever you must reason about, write about, review, or defend the framework itself — the DeepProfiler → FeatureStratifier → FingerprintBuilder → MKBStore → SimilarityEngine pipeline, the S1–S6 strata and their feature counts, the composite-distance / IDW / consensus-confidence math, the 17-corpus/24-language data design, the model roster, or the headline validation numbers (99.18% mean range capture, 0.0073 mean regret, 2/17 strict top-1, confidence signal untested — figures regenerated 2026-07-31). Do NOT load it for: how to run/verify artifacts (use artifact-verification-playbook), tracing where a claim lives in the thesis text (use thesis-claims-archaeology), running the dashboard demo (use dashboard-demo-runbook), or writing-style/LaTeX questions (use thesis-writing-and-style). Paths, env, and git conventions live in thesis-estate-and-env.
 ---
 
 # LID Framework Reference
@@ -291,36 +291,63 @@ for constant policies).
 
 ## 6. Headline results — corrected figures with provenance
 
-Primary artifacts (repo root): `validation_report.json` (timestamp
-2026-05-14, priority `f1_weighted`, k=3), `random_baseline_mc_results.json`,
-and `analysis\validation_statistics.py` (recomputes baselines/stats from the
-report; re-run it rather than trusting prose).
+> ⚠️ **REGENERATED 2026-07-31 — the whole of this section was rewritten.** The
+> evaluation was re-run after the coverage-guard correction (2026-07-17) and the
+> reporting-measures rework (2026-07-21). **`validation_report.json` (2026-05-14)
+> is no longer the source of record for Ch5** and neither is
+> `analysis\validation_statistics.py`, which reads it. Both still exist and both
+> still print the OLD numbers (3/17, 0.0078, 2/2-vs-1/15) — running them will
+> mislead you.
+
+**Primary artifact is now `analysis\reporting_measures_2026-07-21.json`**
+(generator `analysis\reporting_measures.py`), which reports three evaluation
+conditions plus every baseline policy. `random_baseline_mc_results.json` is
+unchanged and still current.
+
+The headline metric changed too: Ch5 now **leads with range capture** (how much
+of the achievable performance range the recommendation captures) and demotes
+strict exact-match to a strictness check.
+
+Condition A (evaluation splits, full MKB) is the headline condition:
 
 | Figure | Value | Provenance |
 |---|---|---|
-| Strict top-1 accuracy | **17.6%** (3/17: OpenLID-v2, FLORES+, Wikipedia) | [artifact-verified 2026-07-12] `validation_report.json` |
-| Wilson 95% CI on accuracy | [6.2%, 41.0%] | [artifact-verified 2026-07-12] ran `validation_statistics.py` |
-| Mean regret Δ_f1 | **0.0078** (median 0.0022, max 0.0489 = Tweet Sentiment) | [artifact-verified 2026-07-12] `validation_report.json` |
-| Random-policy mean regret | **0.3830** (MC mean, 10⁵ trials, seed 42; analytic expectation 0.3832) | [artifact-verified 2026-07-12] `random_baseline_mc_results.json` |
-| Best constant policy | **0.0127** mean / 0.0627 max (`fasttext_subword` Exorde-trained); 0 of 103 constant policies beat the framework | [artifact-verified 2026-07-12] ran `validation_statistics.py` |
-| Constant XLM-V Base (zero-shot) | 0.0175 mean / 0.0633 max | [artifact-verified 2026-07-12] same |
-| Chance exact-match | 0.95% (1/105); framework ≈ 18× chance | [artifact-verified 2026-07-12] same |
-| Confidence split | **2/2 correct at non-zero confidence (0.67, 0.33) vs 1/15 at zero confidence**; exact hypergeometric one-sided **p = 0.0221** | [artifact-verified 2026-07-12] ran `validation_statistics.py`; matches Ch5 §Confidence (`demonstration_and_evaluation.tex:242`) |
-| MRR of ground truth in IDW ranking | 0.203 (top-1 = top-3 = top-5 = 3/17) | [artifact-verified 2026-07-12] same |
-| Corpus re-identification | top-1 12/17 (70.6%), top-3 14/17 (82.4%) | [artifact-verified 2026-07-12] same |
-| Shortlist quality | top-3 contains a candidate within 0.5pp of optimum in 12/17; mean best-of-shortlist gap 0.0047 | [thesis-verified 2026-07-12] Ch5:250; recomputable from report |
-| MKB scale | 17 datasets, 1,785 performance records in `mkb.pkl` | [artifact-verified 2026-07-12] loaded `mkb.pkl` (filesystem `model_benchmarking_knowledge` now holds 1,888 metadata files — a superset incl. excluded corpora) |
-| spaCy vs stanza throughput | 5,570 vs 289 tokens/s | [unverified, from review session] `analysis\bench_results.json` exists — check before citing |
-| Lingualyzer ground truth | English 351/351 (100%); Dutch 314/351 (89.5%), 37 disagreements in adverb/demonstrative/passive families | [unverified, from review session] `project_context\lingualyzer_ground*_*.xlsx` |
+| **Mean range capture** (headline) | **99.18%** (worst case 96.89%) | [artifact-verified 2026-07-31] `reporting_measures_2026-07-21.json` |
+| **Mean regret Δ_f1** | **0.0073** (median 0.0029, max 0.0259) | [artifact-verified 2026-07-31] same |
+| Strict top-1 accuracy | **2/17 = 11.8%** (was 3/17 before the coverage fix) | [artifact-verified 2026-07-31] same |
+| Rank of ground truth | mean 6.4, median 5, max 23; top-3 6/17, top-10 14/17 | [artifact-verified 2026-07-31] same |
+| Random-policy mean regret | **0.3830** (MC mean, 10⁵ trials, seed 42; analytic 0.3832) | [artifact-verified 2026-07-12] `random_baseline_mc_results.json` — unchanged |
+| Blind constant pick (mean of 103 policies) | **0.3902** | [artifact-verified 2026-07-31] `reporting_measures_2026-07-21.json` |
+| Best constant policy (ORACLE, hindsight) | **0.0127** mean / 0.0627 max / 98.61% range capture | [artifact-verified 2026-07-31] same |
+| Constant XLM-V Base (zero-shot) | 0.0175 mean / 98.02% range capture | [artifact-verified 2026-07-31] same |
+| Constant `lid.176` (zero-shot) | 0.0207 mean / 97.76% | [artifact-verified 2026-07-31] same |
+| Constant CLD3 (zero-shot) | 0.0305 mean / 96.58% | [artifact-verified 2026-07-31] same |
+| **LLM baseline — NOW RUN** | `gpt-oss-120b` via Groq, 3 draws × 17, 51 calls: mean gap **0.0823**, max 0.4182, 90.2% range capture, exact-match 9.8%, self-consistency 0.569 | [artifact-verified 2026-07-31] `reporting_measures_2026-07-21.json` → `llm_baseline`; raw `llm_baseline_gptoss.json` |
+| Paired framework-vs-policy (sign tests, condition A) | vs CLD3 17-0, p≈0; vs XLM-V 9-1-7, **p = 0.0029**; vs `lid.176` 8-9, p = 0.0478; vs best constant 6-3-8, **p = 0.0645 (n.s.)**; vs LLM 14-2-1, **p = 0.000107** | [artifact-verified 2026-07-31] same → `paired_framework_vs_policy` |
+| Condition B (reserved validation splits) | 1/17 exact, regret 0.0079, range capture 99.11% | [artifact-verified 2026-07-31] same |
+| Condition C (leave-one-corpus-out refit) | **0/17 exact, regret 0.0160, range capture 98.21%** — the generalisation bound | [artifact-verified 2026-07-31] same |
+| MKB scale | 17 datasets, 1,785 performance records, 105 variants/query | [artifact-verified 2026-07-31] loaded `mkb.pkl` |
+| In-domain vs cross-domain landscape | in-domain mean 0.939–0.995 (SD 0.008–0.060); cross-domain 0.551–0.604 | [artifact-verified 2026-07-31] ran `analysis\benchmark_landscape.py` |
+| Distance concentration | relative contrast 1.55 mean, CV 0.25 over 272 pairs; per-stratum RC 1.46–3.95 | [artifact-verified 2026-07-31] `analysis\distance_contrast_2026-07-31.json` |
+| spaCy vs stanza throughput | 1.5 s / 5,570 tok/s vs 29.2 s / 289 tok/s; 8,427 vs 8,426 tokens | [artifact-verified 2026-07-31] `analysis\bench_results.json` — now confirmed |
+| Lingualyzer ground truth | Dutch 314/351 (89.5%), 37 disagreements: adverb 12, demonstrative 6, passive 6, interrogative 6, unknown-word 2, other 5 | [artifact-verified 2026-07-31] `tests\data\lingualyzer_human_comparison.csv`. English 351/351 still [unverified] — no artifact with a correctness column located |
+| End-to-end profiling | 69.1 s for 5 languages × 100 segments, 2,726 features | [artifact-verified 2026-07-31] `analysis\r13_timing.json` |
 
-**STALE-FIGURE WARNING.** Two figures circulated in earlier session notes and
-must not be reintroduced:
-1. "Confidence 2/3 vs 1/14, p = 0.063" is **stale** (an earlier report
-   version). The current artifact and the compiled Ch5 both say **2/2 vs
-   1/15, p = 0.022**.
-2. `validation_report.json` itself contains `confidence_calibration_r:
+**STALE-FIGURE WARNING.** Figures that must NOT be reintroduced:
+1. **The confidence-signal result is RETRACTED.** "2/2 vs 1/15, p = 0.022" was
+   itself superseded — it "did not survive the coverage-guard correction"
+   (Ch5 §Confidence). Under corrected coverage inventories **13 of 17
+   evaluations receive non-zero confidence and 4 receive zero**, and Ch5 now
+   states the signal is **untested on this sample**, with two configurations
+   underpowered to have shown an effect at any outcome. Do not write "promising
+   rather than established" — that is now itself an overclaim. See §8 rule 1.
+2. "Confidence 2/3 vs 1/14, p = 0.063" — stale two generations back.
+3. Old headline numbers **3/17 / 17.6% / mean gap 0.0078 / max 0.0489 (Tweet
+   Sentiment)** are superseded by 2/17 / 0.0073 / max 0.0259. The Tweet
+   Sentiment worst case in particular no longer holds.
+4. `validation_report.json` contains `confidence_calibration_r:
    0.7434, p: 0.0006` — **do not cite this Pearson r**. Ch5 explicitly
-   retracts it: with 15 of 17 confidence values = 0.00, "any reported r value
+   retracts it: with most confidence values at 0.00, "any reported r value
    would be dominated by the two non-zero observations" — the hypergeometric
    exact test is the thesis's chosen statistic.
 Old report versions (`validation_report_old_apr28/apr30/may2/may14.json`) and
@@ -360,8 +387,13 @@ additionally commented out at `methodology_chapter.tex:215`. Optionally reinstat
 ## 8. Examiner-safe language rules (hard constraints)
 
 1. Confidence C is a **consensus measure/signal/index** — never "calibrated
-   confidence", never a probability. Empirical support is "promising rather
-   than established" (2/2 vs 1/15, p = 0.022, fragile at n=2).
+   confidence", never a probability. **As of 2026-07-21 the ceiling dropped
+   again: the signal is UNTESTED on this sample.** The earlier favourable
+   association did not survive the coverage-guard correction; Ch5 now says no
+   scenario provides evidence the signal is informative, and two were
+   underpowered to provide it at any outcome. Write "untested on this sample"
+   or "requires a materially larger held-out set" — do NOT write "promising
+   rather than established", which is now itself an overclaim.
 2. Validation protocol = **held-out sample validation** on disjoint per-corpus
    row splits — never "leave-one-out validation across the MKB". (LOO exists
    only as the stratum-weight correlation analysis and the `evaluate_loo()`
@@ -370,11 +402,14 @@ additionally commented out at `methodology_chapter.tex:215`. Optionally reinstat
    linger in old code docstrings).
 4. **Three trained families, six configurations, three zero-shot** — never
    "five model families".
-5. Headline framing the thesis itself uses: strict accuracy is the *stringent*
-   metric (18× chance); **mean regret 0.0078 vs random 0.3830 vs best constant
-   0.0127** is the primary validity criterion; worst case 0.0489 is traced to
-   a named aggregation failure mode (generalist neighbour outvoting a
-   correctly retrieved specialist).
+5. Headline framing the thesis now uses: **range capture leads (99.18% mean,
+   96.89% worst case)**; mean regret **0.0073** vs random 0.3830 vs blind
+   constant pick 0.3902 vs best constant 0.0127 vs LLM 0.0823; strict
+   exact-match **2/17** is demoted to a strictness check, not the headline.
+   Note the honest limit: the framework's advantage over the *hindsight-chosen*
+   best constant policy is **not statistically significant (p = 0.0645)** —
+   the significant wins are over CLD3, XLM-V (p = 0.0029) and the LLM
+   (p = 0.000107). Never claim it beats the best constant policy significantly.
 6. The external examiner is believed to be an IR expert: the framework IS a
    retrieval system (k-NN over fingerprints). Be ready for precision@k / MRR
    framing (MRR = 0.203 is already computed), "why not learned ranking /
@@ -384,11 +419,14 @@ additionally commented out at `methodology_chapter.tex:215`. Optionally reinstat
 
 ## Provenance and maintenance
 
-Date-stamp: all [artifact-verified] and [thesis-verified] tags refer to
-**2026-07-12**. Volatile items: headline numbers change if `mkb.pkl` or
-`validation_report.json` are regenerated; stratum counts change if the MKB is
-refit; the types-per-lemma/Honoré/dead-pattern cleanups (§2) and the
-stratification drafts' `\input` adoption were still pending on this date.
+Date-stamps are mixed. **§6 headline results and §8 rules 1 and 5 were
+regenerated 2026-07-31** against the post-coverage-fix artifacts. Everything
+else (§1–§5, §7 — pipeline map, strata, math, data design, literature) still
+carries its **2026-07-12** verification and was not re-checked in that pass;
+those facts are structural and unlikely to have moved, but treat the date
+difference as real. Volatile items: headline numbers change if the evaluation is
+re-run; stratum counts change if the MKB is refit; the types-per-lemma /
+Honoré / dead-pattern cleanups (§2) were still pending as of 2026-07-31.
 
 One-line re-verification commands (run from
 `C:\Users\User\OneDrive\Masters\Python\toolkit_dev\lid_toolkit`):
@@ -397,10 +435,15 @@ One-line re-verification commands (run from
 # Stratum table (expect: Core features: 2726  families: 327  PCs: 63)
 C:\Users\User\miniconda3\envs\thesis_final\python.exe analysis\stratum_audit.py
 
-# Headline stats (expect: 17.6%/0.0078; best constant 0.0127; 2/2 vs 1/15 p=0.0221; MRR 0.203; re-id 12/17)
-C:\Users\User\miniconda3\envs\thesis_final\python.exe analysis\validation_statistics.py
+# CURRENT headline stats — read the artifact, do NOT run validation_statistics.py
+# (expect condition A: range capture 99.18 / regret 0.007287 / top1 2/17; LLM 0.0823)
+Get-Content analysis\reporting_measures_2026-07-21.json
 
-# Random baseline (expect mc_mean_gap.mean ≈ 0.3830, analytic 0.3832, framework 0.0078)
+# ⚠️ SUPERSEDED: validation_statistics.py reads validation_report.json (2026-05-14)
+# and still prints the pre-coverage-fix numbers (3/17, 0.0078, 2/2 vs 1/15).
+# Useful only for the random/chance context figures — never for the headline.
+
+# Random baseline (expect mc_mean_gap.mean ≈ 0.3830, analytic 0.3832) — still current
 Get-Content random_baseline_mc_results.json
 
 # MKB counts (expect 17 datasets / 1785 records / 332-dim fingerprints)

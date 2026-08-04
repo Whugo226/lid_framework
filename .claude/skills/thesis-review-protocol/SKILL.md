@@ -156,15 +156,17 @@ recommendation**. The Chair does not hunt for new findings; the Chair judges.
 - **Baseline strength**: are the baselines the ones an examiner would demand
   (random, best-constant policy, LLM arm)? A weak baseline inflates every
   claim.
-- Statistical soundness **at small n** — this thesis lives at small n. Current
-  verified example: the confidence-signal evidence is a 2/2-vs-1/15 correct
-  split, exact one-sided p = 0.0221 (thesis quotes p = 0.022 at
-  `demonstration_and_evaluation.tex:327`), which the thesis itself caps as
-  "nominally significant… promising support… rather than established
-  calibration" — resting on only two non-zero-confidence observations. That
-  self-imposed ceiling is the ceiling for the review too: do NOT let
-  significance be overclaimed, and do NOT let "promising support" be read as
-  "shown."
+- Statistical soundness **at small n** — this thesis lives at small n.
+  ⚠️ **Updated 2026-07-31:** the confidence-signal evidence is **retracted**, not
+  merely fragile. The 2/2-vs-1/15 / p = 0.0221 association did not survive the
+  coverage-guard correction, and Ch5 now reports the signal as **untested on
+  this sample** (13 non-zero / 4 zero under corrected inventories). The review's
+  ceiling moves with it: flag "promising rather than established" as an
+  *overclaim* if you find it, and do not treat its absence as a gap. The
+  significance boundary to police now is that the framework beats CLD3, XLM-V
+  (p = 0.0029) and the LLM (p = 0.000107), but **not** the hindsight-chosen best
+  constant policy (p = 0.0645). Headline figures: range capture 99.18%, mean
+  regret 0.0073, strict top-1 2/17.
 - Results-support-claims: each headline sentence must be entailed by a
   table/figure.
 - Ablations present? Failure cases discussed honestly?
@@ -338,13 +340,16 @@ to run a fresh full review and NOT to reopen settled items.
   the "calibrated confidence" language). The authoritative fixed-vs-open ledger
   is **thesis-claims-archaeology** — read it before you critique, or you will
   re-raise dead findings.
-- **Stale figure alert for re-review**: the last review discussed the
-  confidence signal using since-superseded numbers (2/3 vs 1/14, p = 0.063).
-  The current, artifact-verified figures (2026-07-12, confirmed in
-  `demonstration_and_evaluation.tex:327` and `:337`) are **2/2 vs 1/15 correct,
-  exact one-sided p = 0.0221** (thesis quotes p = 0.022). Do not flag the
-  thesis for "not matching the prior review" — the thesis is current; the old
-  review's numbers are stale.
+- **Stale figure alert for re-review (rewritten 2026-07-31 — now three
+  generations deep):** "2/3 vs 1/14, p = 0.063" → "2/2 vs 1/15, p = 0.0221" →
+  **retracted**. The whole evaluation was re-run after the coverage-guard
+  correction (2026-07-17) and the reporting rework (2026-07-21). Current
+  artifact-verified figures come from
+  `analysis/reporting_measures_2026-07-21.json`: mean range capture **99.18%**,
+  mean regret **0.0073**, strict top-1 **2/17**, max regret **0.0259**, LLM
+  baseline **0.0823**, and the confidence signal **untested**. Do not flag the
+  thesis for "not matching the prior review" — the thesis is current, and any
+  review report older than 2026-07-21 is archaeology.
 - **Therefore the next pass should default to `re-review` mode**, not full
   review, unless the user explicitly wants a fresh full pass.
 - **Known STILL-OPEN small items** (from the session ledger, so you don't

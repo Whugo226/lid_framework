@@ -44,6 +44,13 @@ Located in: `.claude/skills/`
   (framework vs toolkit, corpus vs dataset, Meta-Knowledge Base, strata S1–S6).
   Load when producing or changing `.tex` prose, tables, captions, or front matter.
 
+- **thesis-voice-restoration** — Makes prose read as the author wrote it rather
+  than an LLM. Holds the voice fingerprint measured from his 2024 Skripsie, the
+  2026-08-03 baseline audit of all six chapters, the rewrite target list, and
+  the protected-elements rule (headings and structure are frozen; body prose
+  only). Supersedes the generic `/humanizer` skill inside the thesis estate.
+  Load for "does this sound AI-written?", "restore my voice", or a de-AI pass.
+
 - **evidence-standards** — Governs evidence *quality*: what counts as
   examiner-safe proof, which statistical methods are actually implemented in
   `analysis/*.py`, the six rules for admitting a result, and the hard claim
@@ -55,7 +62,12 @@ Located in: `.claude/skills/`
 - **artifact-verification-playbook** — Read-only recipes to trace any numeric
   claim to a saved artifact and re-derive it by running a command ("measure,
   don't eyeball"). For numbers like 2,726 features / 327 families / 63 PCs / 17
-  datasets / 17.6% accuracy / 0.0078 mean regret / p = 0.022 confidence split.
+  datasets / 99.18% range capture / 0.0073 mean regret / 2/17 strict top-1.
+  ⚠️ Validation figures were regenerated **2026-07-31** after the coverage-guard
+  correction: `validation_report.json` and `validation_statistics.py` are
+  superseded; the source of record is
+  `analysis/reporting_measures_2026-07-21.json`, and the confidence-signal
+  result is **retracted** (see thesis-claims-archaeology A-13).
 
 - **thesis-claims-archaeology** — The settled-battles register: every claim
   found wrong and corrected (leave-one-out wording, feature counts, model-family
@@ -102,6 +114,7 @@ pointing to the correct sibling — so they compose without overlap.
 |------|------|
 | Fresh session / "where do I start" | `thesis-index` |
 | Edit a chapter | `thesis-change-control` → `thesis-writing-and-style` (+ `evidence-standards` if claims) |
+| "Does this sound AI-written?" / voice pass | `thesis-voice-restoration` → `thesis-change-control` |
 | Verify a number | `artifact-verification-playbook` |
 | "Where does this number come from?" | `thesis-claims-archaeology` → `artifact-verification-playbook` |
 | Review / mock-defend a chapter | `thesis-review-protocol` (after `thesis-claims-archaeology`) |

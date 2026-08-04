@@ -70,13 +70,29 @@ hypergeometric p (lines 84-87) sums `comb(K,i)·comb(n-K,m-i)/comb(n,m)` over th
 upper tail `i = x … min(K,m)` — the exact one-sided Fisher probability of ≥x
 correct among the m non-zero-confidence draws.
 
-> ⚠️ **Corrected live number — supersedes the ledger.** The session-facts ledger
-> and older review material say the confidence split is **2/3 vs 1/14, p = 0.063**.
-> That is STALE. The current artifact is **2/2 vs 1/15, p = 0.0221**, and the
-> thesis chapter already reports p = 0.022. The 0.063 figure came from a
-> superseded split; the artifact wins. Re-verify with the command above before
-> citing either. The claim ceiling in §4 is UNCHANGED by this — p=0.022 is still
-> "nominally significant but fragile," never "calibrated."
+> 🛑 **SUPERSEDED 2026-07-31 — this whole subsection describes a retired pipeline.**
+> `validation_statistics.py` reads `validation_report.json` (2026-05-14), which
+> predates the **coverage-guard correction (2026-07-17)** and the
+> **reporting-measures rework (2026-07-21)**. It still prints 3/17, 0.0078 and
+> the 2/2-vs-1/15 confidence split. **Chapter 5 no longer uses any of it.**
+>
+> The live source of record is **`analysis\reporting_measures_2026-07-21.json`**
+> (generator `analysis\reporting_measures.py`). Current condition-A figures:
+> mean range capture **99.18%** (min 96.89%), mean regret **0.007287**, strict
+> top-1 **2/17**, max regret **0.0259**. Two further conditions now exist:
+> B (reserved validation splits) and C (leave-one-corpus-out refit, the
+> generalisation bound — 0/17, regret 0.0160).
+>
+> **The confidence result is retracted, not merely restated.** It "did not
+> survive the coverage-guard correction"; under corrected inventories 13 of 17
+> evaluations receive non-zero confidence and Ch5 reports the signal as
+> **untested on this sample**. The §4 claim ceiling below is therefore LOWERED,
+> not unchanged — see the notice in §4.
+>
+> The table below is retained only because rows [1], [2] and [5] (chance level,
+> constant-policy sweep, corpus re-identification) are still methodologically
+> sound descriptions of how those quantities are computed. Do not cite its
+> numbers.
 
 ### 1b. `analysis/random_baseline_mc.py` — Monte-Carlo random baseline (EQ3 floor)
 
@@ -133,25 +149,36 @@ Extracted from `chapters/demonstration_and_evaluation.tex` and
 `sec:confidence_calibration`, `sec:failure_analysis`). Match these conventions
 exactly when adding evidential prose.
 
-1. **Regret is the primary criterion; strict accuracy is secondary.** Lead with
-   mean Δf1 = 0.0078 (within ~1pp of optimum) and *bound the worst case*
-   (max 0.0489). Present the 17.6% strict accuracy only alongside its Wilson CI
-   [6.2%, 41.0%] and the "high-accuracy regime / near-ties" explanation — never
-   as a standalone headline.
-2. **Three baselines, all beaten or accounted for.** Random (Monte-Carlo floor
-   0.3830), best constant policy (0.0127), constant zero-shot XLM-V (0.0175);
-   framework 0.0078 beats every one. The LLM baseline (`analysis/llm_baseline.py`)
-   is the third arm and is **decision=RUN, not yet executed** — the chapter
-   carries a `\candidatetodo` for it. Do not claim the LLM comparison is done.
-3. **Confidence-stratified analysis, honestly scoped.** 2/2 vs 1/15, exact
-   p = 0.022, "nominally significant … but the estimate is fragile … promising
-   rather than established." The near-constant confidence distribution (15/17 = 0)
-   "precludes valid Pearson correlation" — so no r-value is reported. Reproduce
-   this restraint.
-4. **Failure cases sit beside the aggregates.** The Tweet Sentiment Δ=0.0489
-   worst case gets its own mechanistic analysis (generalist neighbour outvotes
-   retrieved specialist). Every aggregate in the chapter is accompanied by its
-   failure mode. An aggregate without its failure discussion is incomplete.
+1. **Range capture leads; regret second; strict accuracy is a strictness check.**
+   (Reordered 2026-07-21.) Lead with mean range capture **99.18%** (worst case
+   96.89%), then mean Δf1 **0.0073** (median 0.0029, max 0.0259). Strict
+   exact-match is now **2/17** and is explicitly demoted — never a standalone
+   headline, and never the lead.
+2. **Baselines are now tiered, and the LLM arm IS DONE.** The chapter groups them
+   by whether a practitioner could pick them in advance: *uninformed* — random
+   Monte-Carlo 0.3830, blind constant pick 0.3902; *realistic defaults* — LLM
+   `gpt-oss-120b` 0.0823, CLD3 0.0305, `lid.176` 0.0207, XLM-V 0.0175;
+   *hindsight upper bound* — best constant policy 0.0127. Framework 0.0073.
+   The LLM baseline has been **executed** (51 Groq calls, 3 draws × 17); the old
+   "decision=RUN, not yet executed" note is retired.
+3. **Confidence signal: UNTESTED — do not scope it, disclaim it.** The
+   2/2-vs-1/15 result is retracted; it did not survive the coverage-guard
+   correction. Under corrected inventories 13 of 17 evaluations carry non-zero
+   confidence and 4 carry zero. Ch5's own words are now the ceiling: no scenario
+   provides evidence the signal is informative, two were underpowered to do so
+   at any outcome, and evaluation "requires a materially larger held-out set
+   than the present 17 queries." Reproduce that, not "promising."
+4. **The significance boundary is the thing to get right.** Paired sign tests
+   (condition A): the framework beats CLD3 (17-0), XLM-V (**p = 0.0029**) and
+   the LLM (**p = 0.000107**) significantly; it does **not** significantly beat
+   the hindsight-chosen best constant policy (**p = 0.0645**) and is level with
+   `lid.176` (8-9, p = 0.0478 nominal). Never write that the framework
+   significantly outperforms the best constant policy.
+5. **Failure cases sit beside the aggregates.** Every aggregate in the chapter is
+   accompanied by its failure mode. An aggregate without its failure discussion
+   is incomplete. (The specific worst case moved: max regret is now 0.0259, not
+   the old 0.0489 Tweet Sentiment figure — re-read the chapter for the current
+   named failure before citing one.)
 5. **Small-n honesty phrasing (copy the register, not just the fact):**
    - "reflects the small evaluation sample" / "Wilson interval … reflects the
      small evaluation sample"
@@ -191,19 +218,36 @@ Admission-gate checklist (tick all three or do not write the sentence):
 
 **Never write "calibrated confidence" or call the confidence signal
 "calibrated."** It is a **consensus signal** (fraction of the k=3 neighbours
-agreeing on the best model). The thesis's own words are the ceiling — you may
-restate them, never exceed them:
+agreeing on the best model).
 
-- `methodology_chapter.tex:405`: the IDW weighting and consensus index "should
-  be read as **best-effort support signals rather than calibrated confidences**."
-- `demonstration_and_evaluation.tex:327`: "**promising support** for the
-  confidence mechanism **rather than established calibration**."
-- `demonstration_and_evaluation.tex:242`: p = 0.022 "reaches nominal
-  significance … but … the estimate is **fragile** … read as **promising rather
-  than established**."
-- `demonstration_and_evaluation.tex:250`: "**establishing calibration
-  statistically will … require a larger evaluation sample than the present 17
-  queries.**"
+> ⚠️ **The ceiling was LOWERED on 2026-07-21 — it is no longer "promising."**
+> The favourable 2/2-vs-1/15 association did not survive the coverage-guard
+> correction. Ch5 now reports the signal as **untested on this sample**: across
+> every configuration examined, and on the reserved validation splits, no
+> scenario provides evidence that it is informative, and two could not have
+> provided such evidence at any outcome given only one or two non-zero
+> observations. Under corrected inventories the split is **13 non-zero / 4 zero**,
+> not 2/15.
+>
+> **Permitted:** "untested on this sample", "requires a materially larger
+> held-out set than the present 17 queries", "a measure of neighbourhood
+> agreement, not a calibrated probability".
+> **Now forbidden (it was permitted before):** "promising rather than
+> established", "promising support", "nominally significant", any citation of
+> p = 0.022 or the 2/2-vs-1/15 split.
+
+The thesis's own current words are the ceiling — restate, never exceed:
+
+- `methodology_chapter.tex` (consensus-index paragraph): the IDW weighting and
+  consensus index "should be read as **best-effort support signals rather than
+  calibrated confidences**." (Still accurate.)
+- `demonstration_and_evaluation.tex` §Confidence: "It is a measure of
+  neighbourhood agreement, **not a calibrated probability** that the
+  recommendation is optimal… The signal is therefore reported as **untested on
+  this sample**."
+
+Line numbers in this section were accurate at 2026-07-12 and have since drifted
+— anchor on the quoted text, and re-grep before citing a locator.
 
 Note: the section is *titled* "Confidence Calibration" and the design *asks
 whether* the signal is calibrated — that framing is fine. What is forbidden is
@@ -212,17 +256,24 @@ a settled property.
 
 **VERIFIED evidence vs directional support — the distinction to keep sharp:**
 
-| VERIFIED (state plainly) | DIRECTIONAL / SUGGESTIVE (hedge explicitly) |
-|---|---|
-| Framework mean regret 0.0078 beats all 103 constant policies (0 beat it) | The confidence signal discriminates correct from incorrect (2/2 vs 1/15) |
-| No random policy in 100k trials matched the framework (P≤framework = 0.0) | The k-ablation trade-off "will improve with MKB expansion" |
-| Fingerprints re-identify source corpus 12/17 top-1, 14/17 top-3 | Non-zero confidence ⇒ more reliable recommendations |
-| Wilson CI for 3/17 accuracy is [6.2%, 41.0%] | Any statement that the confidence is a probability/calibrated |
-| p = 0.022 for the 2×2 split (exact, one-sided) | That p=0.022 *establishes* the mechanism (it is nominal + fragile) |
+Rebuilt 2026-07-31 against the post-coverage-fix artifacts. A third column is
+now needed, because some claims that were "directional" have become
+**unsupported** — they are not to be hedged, they are not to be written.
+
+| VERIFIED (state plainly) | DIRECTIONAL (hedge explicitly) | UNSUPPORTED (do not write) |
+|---|---|---|
+| Mean range capture 99.18%, worst case 96.89% | The k-ablation trade-off "will improve with MKB expansion" | The confidence signal discriminates correct from incorrect |
+| Mean regret 0.0073 beats every baseline tier | Range capture will hold on corpus types absent from the MKB | Non-zero confidence ⇒ more reliable recommendations |
+| No random policy in 100k trials matched the framework (P≤framework = 0.0) | Larger MKB narrows the gap to the oracle | Any citation of p = 0.022 or the 2/2-vs-1/15 split |
+| Framework beats XLM-V (p = 0.0029) and the LLM (p = 0.000107) | | That the framework significantly beats the best constant policy (p = 0.0645 — it does not) |
+| LLM baseline mean gap 0.0823 vs framework 0.0073, 14-2-1 paired | | Any statement that the confidence is a probability or calibrated |
+| Leave-one-corpus-out: 0/17 exact, regret 0.0160, 98.21% capture | | That strict top-1 accuracy is the headline metric (it is a strictness check) |
 
 Left column = confirmed by artifact + appropriate statistic; write as fact.
-Right column = supported in direction only at n=17; always carries "promising,"
-"suggestive," "directional," or "expected to improve as the MKB grows."
+Middle = supported in direction only at n=17; always carries "suggestive",
+"directional", or "expected to improve as the MKB grows". Right column = the
+evidence was examined and does not support the claim; hedging does not rescue
+it.
 
 ---
 
@@ -246,27 +297,37 @@ Right column = supported in direction only at n=17; always carries "promising,"
 
 ## 6. Provenance and maintenance
 
-Volatile facts date-stamped **2026-07-12**; re-verify before citing.
+**§1a, §2, §4 and the VERIFIED/DIRECTIONAL/UNSUPPORTED table were regenerated
+2026-07-31.** §1b, §1c, §3 and §5 still carry their 2026-07-12 verification.
 
-- **Live statistics (confirmed by running):**
-  `C:\Users\User\miniconda3\envs\thesis_final\python.exe analysis\validation_statistics.py`
-  (repo root) — expect accuracy 3/17 (17.6%), mean gap 0.0078, chance 0.95%,
-  random-policy gap 0.3832, 103 constant policies (0 beat framework), MRR 0.203,
-  non-zero-conf 2/2, zero-conf 1/15, **hypergeometric one-sided p = 0.0221**,
-  Wilson accuracy [6.2%, 41.0%], re-ID 12/17 & 14/17.
+- **Live source of record:** `analysis\reporting_measures_2026-07-21.json`
+  (generator `analysis\reporting_measures.py`). Read the artifact:
+  `Get-Content analysis\reporting_measures_2026-07-21.json`. Condition A is the
+  headline — range capture 99.18/96.89, regret 0.007287, top-1 2/17, rank mean
+  6.4. Conditions B (validation splits) and C (leave-one-corpus-out) sit
+  alongside it, plus `llm_baseline` and `paired_framework_vs_policy`.
+- 🛑 **`analysis\validation_statistics.py` is SUPERSEDED for headline figures.**
+  It reads `validation_report.json` (2026-05-14), which predates the
+  coverage-guard correction, and still prints 3/17 / 0.0078 / 2-2-vs-1-15.
+  Its chance-level and constant-policy *methods* remain valid; its numbers do
+  not. Do not quote its output.
 - **Monte-Carlo baseline artifact:** `random_baseline_mc_results.json` (repo
-  root; 100k trials, seed 42; P(trial ≤ framework) = 0.0, P(≥3 exact) = 5.0×10⁻⁴).
-  Regenerate ONLY if the report changes: `python analysis\random_baseline_mc.py`
-  (this WRITES the file — a mutation; do not run casually).
-- **Superseded number to watch:** ledger/older review say confidence split
-  2/3-vs-1/14, p=0.063. STALE — live artifact is 2/2-vs-1/15, p=0.022. If any
-  chapter or draft still shows 0.063, flag it as a stale figure.
-- **Claim-ceiling anchors:** `methodology_chapter.tex:405`,
-  `demonstration_and_evaluation.tex:242,250,327`. Re-grep if line numbers drift:
-  `grep -niE "calibrat|promising rather than established|best-effort support" "Thesis Template Legit\chapters\demonstration_and_evaluation.tex" "Thesis Template Legit\chapters\methodology_chapter.tex"`
+  root; 100k trials, seed 42) — **still current and unchanged**. Regenerate ONLY
+  if the report changes: `python analysis\random_baseline_mc.py` (this WRITES
+  the file — a mutation; do not run casually).
+- **Superseded numbers to watch (three generations now):** 2/3-vs-1/14 p=0.063
+  → 2/2-vs-1/15 p=0.022 → **retracted entirely**. Also retired: 3/17 / 17.6% /
+  0.0078 / max 0.0489 Tweet Sentiment. Any of these in a chapter or draft is a
+  stale figure.
+- **Claim-ceiling anchors:** line numbers from 2026-07-12 have drifted; re-grep
+  rather than trusting them:
+  `grep -niE "calibrat|untested on this sample|neighbourhood agreement" "Thesis Template Legit\chapters\demonstration_and_evaluation.tex" "Thesis Template Legit\chapters\methodology_chapter.tex"`
   — expect only disclaimers, never an assertion of calibration.
-- **LLM baseline (EQ3 third arm):** `analysis/llm_baseline.py` exists, decision
-  = RUN, **not yet executed**. Until its results are saved, the LLM comparison
-  is a `\candidatetodo`, not evidence.
+- **LLM baseline (EQ3 third arm): EXECUTED.** `gpt-oss-120b` (open-weights, via
+  Groq), temperature 0.7, 3 repeats × 17 datasets = 51 calls. Mean gap 0.0823,
+  median 0.0560, max 0.4182, exact-match 9.8%, self-consistency 0.569; paired
+  vs framework 14-2-1, one-sided **p = 0.000107**. Raw:
+  `llm_baseline_gptoss.json` (repo root). Note `llm_baseline_MIXED_do_not_use.json`
+  sits beside it — the filename is the instruction.
 - **Artifacts feeding these scripts:** `validation_report.json` (May 14),
   `eval_profiles/*.pkl` (13 profiles), `mkb.pkl` (current 17-dataset MKB).

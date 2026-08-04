@@ -41,8 +41,8 @@ instructions. Success at every gate is **measurable** — never judged by eye.
 | Python | `C:\Users\User\miniconda3\envs\thesis_final\python.exe` (miniconda3, NOT anaconda3) |
 | LaTeX | MiKTeX 25.3 `pdflatex` on PATH; build = pdflatex → bibtex → pdflatex ×2 |
 | Canonical chapters | resolve from `thesis.tex` `\input` list — stale `.text` near-duplicates exist in `chapters/` |
-| Headline numbers | strict 17.6% (3/17); mean gap **0.0078**; random baseline Monte-Carlo mean **0.3830** (analytic expectation 0.3832 — thesis quotes both); best constant policy **0.0127**; zero-shot constant XLM-V **0.0175** |
-| Confidence signal | **2/2 vs 1/15 correct, exact p = 0.022** — "nominally significant but resting on only two non-zero-confidence evaluations" (Ch5). NEVER write "calibrated confidence" — it is a consensus signal. |
+| Headline numbers | **Updated 2026-07-31.** Mean range capture **99.18%** (min 96.89%) now leads; mean gap **0.0073**; strict top-1 **2/17** (demoted to a strictness check); random Monte-Carlo **0.3830**; blind constant pick **0.3902**; best constant policy **0.0127**; zero-shot XLM-V **0.0175**; LLM `gpt-oss-120b` **0.0823**. Source: `analysis\reporting_measures_2026-07-21.json` — **not** `validation_statistics.py`, which is superseded. |
+| Confidence signal | **Retracted 2026-07-21.** The 2/2-vs-1/15, p=0.022 result did not survive the coverage-guard correction; Ch5 reports the signal as **untested on this sample** (13 non-zero / 4 zero). Do not write "promising rather than established" — it is now an overclaim. NEVER write "calibrated confidence". |
 
 ## Campaign map
 
@@ -107,13 +107,28 @@ of every session reply until done. This gate cannot slip.
 
 ---
 
-## GATE 1 — LLM baseline run (user decision 2026-07-12: RUN it)
+## GATE 1 — LLM baseline run ✅ **CLOSED (verified 2026-07-31)**
 
-**Entry criteria:** `analysis/llm_baseline.py` exists; `validation_report.json`
-exists at repo root (verified, 2026-05-14 build); eval dir
+> **This gate is complete. Do not re-run it.** The arm was executed with
+> `gpt-oss-120b` (open-weights, served via Groq), temperature 0.7, 3 repeats ×
+> 17 datasets = 51 API calls. Results: mean gap **0.0823**, median 0.0560, max
+> 0.4182, range capture 90.2%, exact-match 9.8%, self-consistency 0.569; paired
+> against the framework 14-2-1, one-sided **p = 0.000107** — the strongest
+> significant comparison in the thesis. Raw artifact `llm_baseline_gptoss.json`
+> (repo root); summarised in `analysis\reporting_measures_2026-07-21.json` under
+> `llm_baseline`. Ch5 carries the full treatment (tiered baseline table + a
+> dedicated LLM section); Ch6's EQ3 answer includes it.
+>
+> ⚠️ `llm_baseline_MIXED_do_not_use.json` also sits in the repo root — the
+> filename is the instruction. `llm_baseline_results_llama33_partial.json` is an
+> abandoned partial run. Neither is the artifact of record.
+>
+> The historical entry criteria and procedure are kept below for provenance only.
+
+**Entry criteria (historical):** `analysis/llm_baseline.py` exists;
+`validation_report.json` exists at repo root (2026-05-14 build); eval dir
 `c:\Users\User\OneDrive\Masters\LID_experiments\datasets\02_evaluation_15_cleaned`
-exists. Output `llm_baseline_results.json` does NOT yet exist (verified
-2026-07-12 — the arm has never been run).
+exists.
 
 **What the script does** (verified by full read, 2026-07-12): simulates a
 practitioner asking an LLM which LID model to deploy. Per evaluation dataset

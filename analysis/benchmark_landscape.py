@@ -83,13 +83,14 @@ def main():
 
     # ── 1. trained configs: in-domain vs cross-domain ────────────────────────
     print("\n[1] Trained configurations — f1_weighted")
-    print(f"{'config':30s} {'in-dom mean':>11s} {'in-dom min':>10s} "
+    print(f"{'config':30s} {'in-dom mean':>11s} {'in-dom sd':>10s} {'in-dom min':>10s} "
           f"{'x-dom mean':>10s} {'x-dom sd':>9s} {'x-dom min':>9s}")
     for cfg, label in CONFIG_LABELS.items():
         ind = [r["f1w"] for r in recs if r["config"] == cfg and r["train"] == r["eval"]]
         xd = [r["f1w"] for r in recs if r["config"] == cfg
               and r["train"] and r["train"] != r["eval"]]
-        print(f"{label:30s} {statistics.mean(ind):11.4f} {min(ind):10.4f} "
+        print(f"{label:30s} {statistics.mean(ind):11.4f} {statistics.stdev(ind):10.4f} "
+              f"{min(ind):10.4f} "
               f"{statistics.mean(xd):10.4f} {statistics.stdev(xd):9.4f} {min(xd):9.4f}"
               f"   (n_in={len(ind)}, n_x={len(xd)})")
 

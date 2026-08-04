@@ -64,6 +64,7 @@ archaeology/framework skills supersede it where they disagree).
 | Check whether a claim was already corrected before touching it | **thesis-claims-archaeology** | — |
 | Edit / add / reword / update ANYTHING (prose, table, number, code) | **thesis-change-control** (gate) | the how-to sibling it routes you to |
 | Write / restyle LaTeX prose, tables, captions, front matter | **thesis-writing-and-style** | thesis-change-control |
+| "Does this read as AI-written?" / restore my voice / humanise a chapter | **thesis-voice-restoration** | thesis-change-control |
 | Decide if a NEW empirical claim is strong enough / examiner-safe | **evidence-standards** | — |
 | Review / examine / mock-defend a chapter or the whole thesis | **thesis-review-protocol** | thesis-claims-archaeology (mandatory before re-review) |
 | Prep for the oral defense (Q&A, examiner simulation) | **examiner-defense-pack** | dashboard-demo-runbook (for the live demo) |
@@ -89,10 +90,13 @@ is always in the set** — it is the gate every write passes through.
   → dashboard-demo-runbook.
 - **"Verify this number":** thesis-index → artifact-verification-playbook
   (+ thesis-claims-archaeology if you also need where it's stated in the .tex).
+- **"Make it not sound AI-written":** thesis-index → thesis-voice-restoration
+  → thesis-change-control. Do NOT load the generic /humanizer skill for thesis
+  text; thesis-voice-restoration supersedes it and explains why.
 
 ---
 
-## Skill inventory (12 incl. this router)
+## Skill inventory (13 incl. this router)
 
 | Skill | One line |
 |---|---|
@@ -103,6 +107,7 @@ is always in the set** — it is the gate every write passes through.
 | thesis-claims-archaeology | Settled battles: every corrected claim + re-check greps. |
 | thesis-change-control | The gate for HOW any change may land. |
 | thesis-writing-and-style | LaTeX house style + department checklist compliance. |
+| thesis-voice-restoration | Author's voice fingerprint + de-AI rewrite pass (body prose only). |
 | evidence-standards | What counts as examiner-safe proof for a new claim. |
 | thesis-review-protocol | Grounded examination-panel review (read-only). |
 | examiner-defense-pack | IR-tuned viva Q&A with concede/defend markings. |
@@ -120,7 +125,7 @@ cite it as a source for any fact — it deliberately holds none.
 ## Provenance and maintenance
 
 - Estate map, dates, and the 11 siblings verified against disk 2026-07-12.
-- Re-list the library: `ls "<toolkit repo>\.claude\skills"` — expect 12 dirs,
+- Re-list the library: `ls "<toolkit repo>\.claude\skills"` — expect 13 dirs,
   each with a `SKILL.md`.
 - If a sibling is renamed/added/removed, update the router table and the
   inventory here in the same change (this is the one file that must know the

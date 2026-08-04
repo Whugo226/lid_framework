@@ -72,6 +72,7 @@ landed, verified live), ❌ OPEN (wrong version still present — fix pending),
 | A-10 | Review-era stats: "2/3 vs 1/14, p = 0.063"; random baseline "0.3832" quoted as the MC figure | 2/2 vs 1/15, exact one-sided hypergeometric p = 0.0221; MC random baseline 0.3830 (analytic expectation 0.3832 — two estimators) | ✅ SETTLED in .tex / ⚠️ Ch5-vs-Ch6 0.3830/0.3832 inconsistency |
 | A-11 (CC-2) | Ch6 answers EQ3 with usability/practitioner utility (an earlier draft's EQ3) | EQ3 = comparison vs random / constant / LLM baselines; answered in Ch6 with 0.0078 vs 0.3832 vs 0.0127 | ✅ SETTLED / ⚠️ LLM-baseline arm still outstanding (flagged in-text) |
 | A-12 (CC-8) | Code-switching motivates Ch1 then is silently dropped | Ch1 explicitly scopes it out; Ch3 lists it as out of scope; Ch6 lists it as future work | ✅ SETTLED |
+| **A-13** | **Everything in A-10, plus 3/17 · 17.6% · 0.0078 · max 0.0489 · "promising rather than established"** | **The 2026-07-17 coverage fix and 2026-07-21 reporting rework superseded the whole evaluation. See A-13.** | ⚠️ **SUPERSEDES A-10 (added 2026-07-31)** |
 
 ---
 
@@ -329,6 +330,50 @@ numbers are themselves now archaeology.
   cd "c:/Users/User/OneDrive/Masters/Python/toolkit_dev/lid_toolkit" && C:/Users/User/miniconda3/envs/thesis_final/python.exe analysis/validation_statistics.py
   # expect: 2/2 vs 1/15, p = 0.0221, mean gap 0.007803, random 0.3832 (analytic)
   ```
+
+## A-13 — The whole evaluation was re-run; A-10's "current" figures are now archaeology too
+
+**Added 2026-07-31. Read this before quoting ANY validation number.**
+
+A-10 exists to enforce "re-verify before reuse." It then named a set of figures
+as current. Those figures are now themselves stale — which is the entry's own
+lesson applied to itself.
+
+Two changes did it:
+1. **Coverage-guard correction (2026-07-17)**, artifact
+   `analysis\coverage_fix_validation_impact_2026-07-17.json` — corrected the
+   zero-shot language inventories, which changed which recommendations are
+   counted correct.
+2. **Reporting-measures rework (2026-07-21)**, artifact
+   `analysis\reporting_measures_2026-07-21.json` — Ch5 re-led on *range capture*
+   rather than strict exact-match, and added two further evaluation conditions.
+
+| Was "current" per A-10 | Is now (condition A) |
+|---|---|
+| accuracy 3/17 = 17.6%, Wilson [6.2%, 41.0%] | **2/17 = 11.8%**, demoted to a strictness check |
+| mean gap 0.0078 | **0.007287** |
+| max gap 0.0489 (Tweet Sentiment) | **0.0259** — the Tweet Sentiment worst case no longer holds |
+| — | **mean range capture 99.18%, min 96.89%** ← the new headline |
+| confidence 2/2 vs 1/15, p = 0.0221 | **retracted — signal reported as untested**; split is now 13 non-zero / 4 zero |
+| best constant 0.0127 | 0.012727 — unchanged ✅ |
+| random MC 0.3830 / analytic 0.3832 | unchanged ✅ |
+| LLM arm "not yet executed" | **executed** — `gpt-oss-120b`, mean gap 0.0823, p = 0.000107 |
+
+**New facts with no A-10 equivalent:** blind constant pick 0.3902; condition B
+(reserved validation splits) 1/17, 0.0079, 99.11%; condition C
+(leave-one-corpus-out refit) 0/17, 0.0160, 98.21%; paired sign tests, of which
+the load-bearing one is that the framework does **not** significantly beat the
+hindsight-chosen best constant policy (p = 0.0645).
+
+**Do not run `analysis\validation_statistics.py` for headline figures.** It reads
+the 2026-05-14 `validation_report.json` and faithfully prints the old numbers.
+
+**Re-check:**
+```bash
+cd "c:/Users/User/OneDrive/Masters/Python/toolkit_dev/lid_toolkit"
+cat analysis/reporting_measures_2026-07-21.json   # condition A = headline
+```
+If a newer `reporting_measures_*.json` exists, it wins over this entry.
 
 ## A-11 (CC-2) — Ch6's EQ3 answer answered the wrong question
 

@@ -52,33 +52,60 @@ neighbours whose own best model coincides with the recommendation.
    raises them when the answer naturally touches the area — it converts a
    weakness into evidence of rigour.
 
-## Canonical figures (all ✅ verified 2026-07-12 against thesis .tex AND by running `analysis/validation_statistics.py`)
+## Canonical figures
 
-| Figure | Value | Thesis locator |
+> 🛑 **DO NOT QUOTE THE OLD TABLE IN A VIVA — regenerated 2026-07-31.**
+> The evaluation was re-run after the coverage-guard correction (2026-07-17) and
+> the reporting rework (2026-07-21). Every accuracy, regret and confidence figure
+> below the line changed, and **the confidence result was retracted outright**.
+> Source of record is now `analysis\reporting_measures_2026-07-21.json`;
+> `analysis\validation_statistics.py` is superseded and still prints the old
+> numbers. Locators in the right-hand column are pre-rework and have drifted —
+> re-grep before citing a line number aloud.
+
+**Current figures (condition A = evaluation splits, full MKB):**
+
+| Figure | Value | Note |
 |---|---|---|
-| Strict top-1 accuracy | 17.6% (3/17); Wilson 95% CI [6.2%, 41.0%] | `demonstration_and_evaluation.tex:91,201` |
-| Mean / median / max regret | 0.0078 / 0.0022 / 0.0489 | `:95,205,201` |
-| Random baseline mean regret | 0.3830 (Monte-Carlo 10⁵ policies, seeded) / 0.3832 (analytic) | `:117,127` |
-| Best constant policy | 0.0127 (fasttext_subword, Exorde-trained); max 0.0627 | `:128` |
-| Constant XLM-V Base (zero-shot) | 0.0175; max 0.0633 | `:129` |
-| Chance of exact top-1 match | 0.95% (1 of 105 variants); 17.6% ≈ 18× chance | `:112` |
-| P(3 exact matches by chance) | 5.0×10⁻⁴; 0 of 100,000 random policies ≤ framework's 0.0078 | `:117` |
-| Confidence split | non-zero conf 2/2 correct vs zero-conf 1/15; exact one-sided hypergeometric **p = 0.0221** | `:242`; conclusion `:39,53` |
-| Corpus re-identification | top-1 12/17 (70.6%); top-3 14/17 (82.4%) | `:104-105,138` |
-| k=1 ablation | exact 8/17 (47.1%) but mean regret 0.0784, max 0.8766 | `:228` (tab:k_ablation) |
-| Top-3 shortlist | candidate within 0.5pp of optimum in 12/17; mean best-of-shortlist gap 0.0047, worst 0.0173 | `:250` |
-| **MRR** (mean reciprocal rank of ground-truth model in engine ranking) | **0.203** (analysis script output; NOT reported in thesis text) | `analysis/validation_statistics.py` [3] |
+| **Mean range capture** (the headline) | **99.18%**, worst case 96.89% | Ch5 now leads with this, not accuracy |
+| Mean / median / max regret | **0.0073 / 0.0029 / 0.0259** | old 0.0078/0.0022/0.0489 retired |
+| Strict top-1 accuracy | **2/17 (11.8%)** | explicitly demoted to a strictness check |
+| Rank of ground truth | mean 6.4, median 5; top-3 6/17, top-10 14/17 | |
+| Random baseline mean regret | 0.3830 (MC 10⁵) / 0.3832 (analytic) | unchanged ✅ |
+| Blind constant pick | 0.3902 (mean of 103 policies) | new |
+| Best constant policy (ORACLE) | 0.0127; max 0.0627; 98.61% capture | unchanged ✅ |
+| Constant XLM-V / lid.176 / CLD3 | 0.0175 / 0.0207 / 0.0305 | zero-shot tier |
+| **LLM baseline — RUN** | `gpt-oss-120b`, mean gap **0.0823**, 90.2% capture, self-consistency 0.569 | paired 14-2-1, **p = 0.000107** |
+| **Paired significance** | vs CLD3 17-0; vs XLM-V **p = 0.0029**; vs LLM **p = 0.000107**; vs `lid.176` 8-9 (p = 0.0478); **vs best constant p = 0.0645 — NOT significant** | know this boundary cold |
+| Condition B (reserved validation splits) | 1/17 exact, 0.0079 regret, 99.11% capture | confirmatory run done |
+| Condition C (leave-one-corpus-out) | **0/17 exact, 0.0160 regret, 98.21% capture** | the generalisation bound |
+| **Confidence signal** | **RETRACTED — untested on this sample.** 13 non-zero / 4 zero under corrected inventories | see the warning below |
 | Features / families / PCs | 2,726 core / 327 families / 63 PCs; per-stratum 813/433/1,200/20/260 feats, 16/15/16/5/11 PCs, ≥95.2% variance | `analysis/stratum_audit.py`; drafts tables |
 | spaCy vs stanza throughput | 5,570 vs 289 tokens/s (~19×), identical ~8,400-token input, i7-1065G7 CPU | `design_and_implementation.tex:83-98` |
 | Lingualyzer ground truth | English 351/351 (100%); Dutch 314/351 (89.5%), 37 disagreements | `design_and_implementation.tex:158-198` |
 | Short-text regime | 120-char truncation at word boundaries (40 for CJK); floors 30/10 chars | `design_and_implementation.tex:465` |
 | Scope | 17 corpora, 24 spaCy-supported languages, 3 trained families (6 configs) + 3 zero-shot | conclusion `:24-26,84` |
 
-⚠️ STALE FIGURE ALERT: the session-facts ledger records the confidence split as
-"2/3 vs 1/14, p = 0.063" — that is review-era and WRONG for the current thesis.
-The compiled thesis and the script both give **2/2 vs 1/15, p = 0.0221**. Use
-0.0221. (Unverified-today ledger figure: 1,785 `benchmark_metadata.json`
-records — re-verify before quoting.)
+⚠️ **CONFIDENCE-SIGNAL ANSWER HAS CHANGED — rehearse the new one.**
+Three generations: "2/3 vs 1/14, p = 0.063" → "2/2 vs 1/15, p = 0.0221" →
+**retracted**. The association did not survive the coverage-guard correction.
+If asked whether the confidence signal works, the honest answer is now:
+
+> "It is a consensus measure — the fraction of retrieved neighbours agreeing on
+> the best model — not a calibrated probability. Whether it carries information
+> about correctness cannot be established on 17 queries: an earlier favourable
+> association did not survive a correction to the coverage inventories, and two
+> of the configurations examined were underpowered to have shown an effect at
+> any outcome. We report it as untested on this sample."
+
+**Do not quote p = 0.0221 or the 2/2-vs-1/15 split in the viva.** Claiming a
+retracted result is far more damaging than reporting an untested one, and the
+retraction is itself creditable — it shows the correction was applied against
+your own interest.
+
+The remaining Q&A material below was written against the pre-rework figures.
+The *arguments* still hold; the *numbers inside them* may not. Cross-check any
+figure against the table above before rehearsing an answer.
 
 All thesis locators are under
 `c:\Users\User\OneDrive\Masters\Thesis\Thesis Template Legit\chapters\`.

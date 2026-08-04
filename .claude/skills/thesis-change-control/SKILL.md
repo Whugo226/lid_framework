@@ -138,10 +138,13 @@ confidence signal. It is a **consensus confidence signal**. Any claim about it
 may go no further than the thesis's own Ch3/Ch5 disclaimers.
 **Why:** "Calibrated" asserts probabilistic calibration the evidence does not
 support; an examiner will catch the overclaim.
-**Incident / evidence ceiling:** calibration evidence is **directional only** —
-2/2 vs 1/15 correct, exact one-sided **p = 0.022** (0.0221), described in-thesis as
-"promising rather than established." (The review-era "2/3 vs 1/14, p = 0.063" is
-**stale** — see **thesis-claims-archaeology** A-10; never reintroduce it.) Safe
+**Incident / evidence ceiling (updated 2026-07-31):** the calibration evidence is
+now **retracted, not directional**. The 2/2-vs-1/15, p = 0.022 result did not
+survive the coverage-guard correction; Ch5 reports the signal as **untested on
+this sample** (13 non-zero / 4 zero). Writing "promising rather than
+established" is now itself an overclaim, as is any citation of p = 0.022. (Two
+earlier generations — "2/3 vs 1/14, p = 0.063" and the 2/2-vs-1/15 split — are
+both dead; see **thesis-claims-archaeology** A-13, which supersedes A-10.) Safe
 existing phrasings to mirror:
 `methodology_chapter.tex:256` "not a calibrated probability";
 `demonstration_and_evaluation.tex:327` "rather than established calibration".

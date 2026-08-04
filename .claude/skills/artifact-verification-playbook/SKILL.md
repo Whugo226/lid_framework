@@ -1,9 +1,25 @@
 ---
 name: artifact-verification-playbook
-description: Tested, read-only recipes to trace any numeric claim in the LID-toolkit MEng thesis to a saved artifact and re-derive it by running a command ("measure, don't eyeball"). Load this skill whenever you need to verify a thesis number (2,726 features / 327 families / 63 PCs / 17 datasets / 1,785 benchmark records / 17.6% accuracy / 0.0078 mean regret / p = 0.022 confidence split), inspect mkb.pkl or validation_report.json, count benchmark_metadata.json records, or answer "where does this number come from?". Do NOT load it for locating which .tex file/line states a claim (use thesis-claims-archaeology), for what counts as sufficient evidence for a NEW claim (use evidence-standards), for running the Streamlit dashboard (use dashboard-demo-runbook), or for conceptual explanations of the framework (use lid-framework-reference).
+description: Tested, read-only recipes to trace any numeric claim in the LID-toolkit MEng thesis to a saved artifact and re-derive it by running a command ("measure, don't eyeball"). Load this skill whenever you need to verify a thesis number (2,726 features / 327 families / 63 PCs / 17 datasets / 1,785 benchmark records / 99.18% range capture / 0.0073 mean regret / 2/17 strict top-1 — validation figures regenerated 2026-07-31; validation_report.json and validation_statistics.py are SUPERSEDED, use analysis/reporting_measures_2026-07-21.json), inspect mkb.pkl or reporting_measures JSON, count benchmark_metadata.json records, or answer "where does this number come from?". Do NOT load it for locating which .tex file/line states a claim (use thesis-claims-archaeology), for what counts as sufficient evidence for a NEW claim (use evidence-standards), for running the Streamlit dashboard (use dashboard-demo-runbook), or for conceptual explanations of the framework (use lid-framework-reference).
 ---
 
 # Artifact Verification Playbook
+
+> 🛑 **VALIDATION SECTIONS SUPERSEDED (2026-07-31).** Recipes in this file that
+> read `validation_report.json` (2026-05-14) or run
+> `analysis/validation_statistics.py` still *work*, but they re-derive
+> **pre-coverage-fix** numbers — 3/17, 0.0078, max 0.0489, 2/2-vs-1/15,
+> p = 0.0221 — none of which Chapter 5 uses any more.
+>
+> **Current source of record:** `analysis/reporting_measures_2026-07-21.json`
+> (generator `analysis/reporting_measures.py`), reporting three conditions plus
+> every baseline. Condition A headline: range capture **99.18%** (min 96.89%),
+> mean regret **0.007287**, strict top-1 **2/17**, max regret **0.0259**. The
+> confidence-signal result is **retracted**, not restated.
+>
+> Structural recipes in this file — `mkb.pkl` loading, feature/stratum counts
+> (2,726 / 327 / 63), record counts, the MKB API traps — are **unaffected and
+> still correct**. Only the validation-figure recipes are stale.
 
 Every recipe here was executed read-only on 2026-07-12 against the live estate;
 expected outputs shown are actual outputs. Rule of the house (convention #4 in

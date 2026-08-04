@@ -155,9 +155,10 @@ result presentation. Walk the panels in pipeline order:
 5. **Panel 4 — Baseline comparison** (claim: EQ3, meta-learning beats naive
    policies). Live per-query analogue of the thesis result — toolkit vs
    always-best-default vs random. Thesis-level numbers if asked: mean regret
-   0.0078 vs random 0.3832 vs best-constant 0.0127 (📋 review-session
-   figures, not re-verified 2026-07-12 — re-check via
-   artifact-verification-playbook before quoting).
+   **0.0073** vs random 0.3830 vs best-constant 0.0127, with mean range capture
+   **99.18%** as the headline (✅ re-verified 2026-07-31 against
+   `analysis/reporting_measures_2026-07-21.json`). The old 0.0078 figure is
+   pre-coverage-fix — do not quote it during a live demo.
 6. **Panel 3 — Run Model** (claim: the recommendation is actionable, not
    advisory). Run the recommended model live on the sample; show throughput
    and the predicted-language distribution matching the corpus.

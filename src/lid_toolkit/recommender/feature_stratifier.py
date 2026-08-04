@@ -15,10 +15,10 @@ Strata (mutually exclusive, exhaustive over the features produced by
 
     S1 – Morphological Richness
          Inflectional morphology: person, number, definiteness, tense,
-         voice, and word-lemma Levenshtein distance.
+         voice, word-lemma Levenshtein distance, and word-types-per-lemma
+         measures (inflected types per lemma ≈ paradigm size).
     S2 – Lexical Diversity
-         Type-token ratios, hapax legomena, Honoré's statistic, Zipf
-         frequency scores, and word-types-per-lemma measures.
+         Type-token ratios, hapax legomena, and Zipf frequency scores.
     S3 – Structural / Syntactic
          PoS incidence and count, PoS ratios, word/sentence/paragraph
          length and count statistics.
@@ -113,10 +113,19 @@ _STRATUM_PATTERNS: dict[str, list[str]] = {
         "type-token ratio",
         "moving average type",
         "hapax legomena",
+        # NOTE: inert — Honoré's statistic is not emitted by DeepProfiler
+        # (omitted from the schema as a transform of the retained hapax
+        # legomena measures), so this pattern never matches. Kept for
+        # forward-compatibility if the measure is reinstated.
         "honoré",
         "zipf frequency",
         "frequent word",
         "infrequent word",
+        # NOTE: unreachable — S4's "entropy" pattern is checked first under
+        # first-match-wins, so all entropy features route to S4
+        # (information-theoretic), never here. Kept only to document that
+        # entropy was considered for this stratum; do not read these as
+        # live S2 members.
         "word entropy",
         "letter entropy",
         # per-PoS type counts contribute to lexical diversity
