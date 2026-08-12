@@ -48,51 +48,250 @@ st.set_page_config(
 # ── Visual identity ────────────────────────────────────────────────────────────
 # Palette and chart styling live here so every panel draws from one source.
 # Surfaces and typography come from .streamlit/config.toml; these are the tokens
-# Plotly needs, which Streamlit's theme cannot reach. Colour carries meaning
-# only: amber = coverage warning, sage = covered / recommended, clay = error,
-# steel = interactive. Everything structural stays neutral.
-_INK      = "#E4E1DC"   # warm off-white — never pure white
-_MUTED    = "#948F88"
-_FAINT    = "#3A3D43"   # gridlines, axis rules
-_NEUTRAL  = "#565A61"   # non-highlighted series
-# The interactive accent (#5E8CA8) is set as primaryColor in config.toml, which
-# is what Streamlit's own widgets read; _STEEL is its lighter chart-safe tint.
-_STEEL    = "#8FA9C4"   # first chart series
-_AMBER    = "#C8A15A"   # warning / coverage gap
-_SAGE     = "#7FA981"   # covered / recommended
-_CLAY     = "#D4674E"   # error / uncoverable
-_SERIES   = ["#8FA9C4", "#C8A15A", "#7FA981", "#C08A6B",
-             "#6FA0A0", "#9B8AA6", "#B58193", "#7E8894"]
+# Plotly needs, which Streamlit's theme cannot reach.
+#
+# The system is Gentelella v4 (Colorlib, MIT) in its dark theme — see the design
+# note at the head of .streamlit/config.toml. Values are transcribed from that
+# template's _tokens.scss rather than approximated, so the Plotly charts and the
+# surrounding chrome resolve to the same hexes.
+#
+# Surfaces stack in three steps: the body recedes, cards sit on it, inset tiles
+# drop below the card again.
+_BODY     = "#0F1623"   # --body-bg
+_SURFACE  = "#1A2332"   # --bg-surface        (cards, sidebar, topbar)
+_SURFACE2 = "#141D2B"   # --bg-surface-secondary (inset tiles, table headers)
+_BORDER   = "#242E3D"   # --border-color, resolved opaque
+_BORDER_L = "#1F2836"   # --border-color-light
 
+_INK      = "#E6EBF2"   # --text
+_TEXT2    = "#B3BCCB"   # --text-secondary
+_MUTED    = "#8A93A3"   # --text-muted
+_DISABLED = "#5A6473"   # --text-disabled
+_FAINT    = "#232C3A"   # gridlines, axis rules
+_NEUTRAL  = "#5A6473"   # non-highlighted series
+
+# Brand accent — interactive affordances only (buttons, active tab, focus).
+_PRIMARY    = "#1ABB9C"  # --primary
+_PRIMARY_DK = "#169F85"  # --primary-dk
+
+# Named hues from the Gentelella palette. The three below keep the roles the
+# recommender's logic depends on, so the coverage guard and the error paths have
+# a stable colour even though the chart series now draw from the full palette.
+_SAGE  = "#2FB344"   # --green   : covered / recommended
+_AMBER = "#F59F00"   # --yellow  : coverage gap / advisory
+_CLAY  = "#D63939"   # --red     : error / uncoverable
+_STEEL = "#4299E1"   # --azure   : first chart series, neutral emphasis
+
+# Full 11-hue Gentelella palette for chart series, as the template's own demo
+# pages use it. This is deliberately decorative: hue no longer implies a warning
+# on its own, so anything that must be READ as a warning is also labelled.
+_SERIES = ["#4299E1", "#1ABB9C", "#F59F00", "#AE3EC9", "#2FB344", "#F76707",
+           "#4263EB", "#D6336C", "#17A2B8", "#74B816", "#D63939"]
+
+# The Gentelella component layer. Streamlit renders its own DOM, so the template
+# cannot be imported — what is reproduced here is its design system: the token
+# set, the card/stat-tile/nav-tab geometry, and the type scale. Selectors are
+# written against Streamlit 1.58's stable data-testid hooks, with the older
+# alias included where one exists, since those attributes are the only public
+# styling surface Streamlit offers.
 _CSS = """
 <style>
-  /* Tighten the default hero gap — an instrument panel, not a landing page. */
-  .block-container { padding-top: 2.4rem; padding-bottom: 3rem; }
+  :root {
+    --g-body:        #0F1623;
+    --g-surface:     #1A2332;
+    --g-surface-2:   #141D2B;
+    --g-border:      #242E3D;
+    --g-border-lt:   #1F2836;
+    --g-text:        #E6EBF2;
+    --g-text-2:      #B3BCCB;
+    --g-muted:       #8A93A3;
+    --g-disabled:    #5A6473;
+    --g-primary:     #1ABB9C;
+    --g-primary-dk:  #169F85;
+    --g-primary-lt:  rgba(26,187,156,0.14);
+    --g-radius:      6px;
+    --g-radius-sm:   4px;
+    --g-radius-lg:   8px;
+    --g-shadow:      rgba(0,0,0,0.30) 0 2px 4px 0;
+    --g-sidebar-text: #7B8FA3;
+  }
+
+  /* ── Frame ──────────────────────────────────────────────────────────────── */
+  /* Gentelella runs edge-to-edge with a compact gutter; the default Streamlit
+     hero gap belongs to a document, not to a console. */
+  .block-container { padding-top: 1.1rem; padding-bottom: 2.5rem;
+                     max-width: 100%; }
+  [data-testid="stHeader"] { background: transparent; }
 
   /* Figures are read as data: lock the numerals to tabular so columns align. */
   [data-testid="stMetricValue"], [data-testid="stDataFrame"],
-  .stDataFrame, code, pre { font-variant-numeric: tabular-nums; }
-  [data-testid="stMetricValue"] { font-weight: 500; letter-spacing: -0.01em; }
+  .stDataFrame, code, pre, table { font-variant-numeric: tabular-nums; }
+
+  /* ── Topbar ─────────────────────────────────────────────────────────────── */
+  .g-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px;
+      background: var(--g-surface);
+      border: 1px solid var(--g-border);
+      border-radius: var(--g-radius-lg);
+      box-shadow: var(--g-shadow);
+      padding: 0 16px; height: 52px; margin-bottom: 16px;
+  }
+  .g-brand { display: flex; align-items: center; gap: 10px; }
+  .g-logo {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: var(--g-radius-sm);
+      background: var(--g-primary); color: #06231D;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.02em;
+  }
+  .g-brandname { font-size: 14px; font-weight: 600; color: var(--g-text); }
+  .g-topbar-meta {
+      font-size: 12px; color: var(--g-muted); text-align: right;
+  }
+
+  /* ── Page header (pretitle / title / breadcrumb) ─────────────────────────── */
+  .g-pagehead { margin: 0 0 16px 2px; }
+  .g-pretitle {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.4px;
+      text-transform: uppercase; color: var(--g-muted); margin-bottom: 3px;
+  }
+  .g-title {
+      font-size: 1.35rem; font-weight: 600; letter-spacing: -0.015em;
+      color: var(--g-text); margin: 0 0 5px 0; line-height: 1.2;
+  }
+  .g-breadcrumb { font-size: 12px; color: var(--g-muted); }
+  .g-breadcrumb span { color: var(--g-disabled); margin: 0 6px; }
+
+  /* ── Nav tabs + card body ───────────────────────────────────────────────── */
+  /* The tab strip is the card header and the panel is the card body, so the six
+     panels read as one Gentelella card rather than six loose regions. */
+  .stTabs [data-baseweb="tab-list"] {
+      gap: 2px;
+      background: var(--g-surface);
+      border: 1px solid var(--g-border);
+      border-bottom: 1px solid var(--g-border);
+      border-radius: var(--g-radius-lg) var(--g-radius-lg) 0 0;
+      padding: 0 6px;
+  }
+  .stTabs [data-baseweb="tab"] {
+      height: 44px; padding: 0 15px;
+      font-size: 13px; font-weight: 500;
+      color: var(--g-muted); background: transparent;
+      border-radius: 0;
+      transition: color 120ms, box-shadow 120ms;
+  }
+  .stTabs [data-baseweb="tab"]:hover { color: var(--g-text-2); }
+  .stTabs [data-baseweb="tab"][aria-selected="true"] {
+      color: var(--g-primary);
+      box-shadow: inset 0 -2px 0 0 var(--g-primary);
+  }
+  /* Streamlit paints its own sliding underline; the inset shadow above is the
+     one that stays put, so the stock highlight is removed rather than recoloured. */
+  .stTabs [data-baseweb="tab-highlight"] { background: transparent; }
+  .stTabs [data-baseweb="tab-border"] { background: var(--g-border); }
+  .stTabs [data-baseweb="tab-panel"] {
+      background: var(--g-surface);
+      border: 1px solid var(--g-border);
+      border-top: none;
+      border-radius: 0 0 var(--g-radius-lg) var(--g-radius-lg);
+      box-shadow: var(--g-shadow);
+      padding: 20px 22px 24px 22px;
+  }
+
+  /* ── Stat tiles ─────────────────────────────────────────────────────────── */
+  /* Inset one step below the card they sit in, per Gentelella's surface stack. */
+  [data-testid="stMetric"], [data-testid="metric-container"] {
+      background: var(--g-surface-2);
+      border: 1px solid var(--g-border);
+      border-radius: var(--g-radius-lg);
+      padding: 13px 15px;
+  }
   [data-testid="stMetricLabel"] p {
-      font-size: 0.78rem; letter-spacing: 0.04em;
-      text-transform: uppercase; color: #948F88;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
+      text-transform: uppercase; color: var(--g-muted);
+  }
+  [data-testid="stMetricValue"] {
+      font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em;
+      color: var(--g-text);
   }
 
-  /* Identity band: a title, one attribution line, one rule. No badge, no glow. */
-  .lidf-title {
-      font-size: 1.5rem; font-weight: 600; letter-spacing: -0.015em;
-      color: #E4E1DC; margin: 0 0 0.3rem 0;
-  }
-  .lidf-sub {
-      font-size: 0.82rem; color: #948F88; margin: 0; letter-spacing: 0.02em;
-  }
-  .lidf-rule {
-      height: 2px; width: 3.5rem; background: #5E8CA8;
-      margin: 0.85rem 0 1.15rem 0;
+  /* ── Section titles (Gentelella's x_title: label over a hairline rule) ───── */
+  [data-testid="stHeadingWithActionElements"] h3,
+  [data-testid="stMarkdownContainer"] h3 {
+      font-size: 0.95rem; font-weight: 600; color: var(--g-text);
+      padding-bottom: 8px; margin-bottom: 14px;
+      border-bottom: 1px solid var(--g-border-lt);
   }
 
-  /* Section rules sit closer to the content they separate. */
-  hr { margin: 1.4rem 0 1.1rem 0; border-color: #2A2D32; }
+  /* ── Controls ───────────────────────────────────────────────────────────── */
+  .stButton button, .stDownloadButton button {
+      height: 34px; padding: 0 13px;
+      border-radius: var(--g-radius-sm);
+      font-size: 12.5px; font-weight: 500;
+      transition: background 120ms, border-color 120ms, color 120ms;
+  }
+  .stButton button[kind="primary"] {
+      background: var(--g-primary); border-color: var(--g-primary-dk);
+      color: #06231D;
+  }
+  .stButton button[kind="primary"]:hover {
+      background: var(--g-primary-dk); border-color: var(--g-primary-dk);
+      color: #062720;
+  }
+  label, [data-testid="stWidgetLabel"] p {
+      font-size: 12.5px !important; font-weight: 500; color: var(--g-text-2);
+  }
+
+  /* ── Sidebar ────────────────────────────────────────────────────────────── */
+  [data-testid="stSidebar"] { border-right: 1px solid var(--g-border); }
+  [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {
+      font-size: 11px !important; font-weight: 600; letter-spacing: 0.4px;
+      text-transform: uppercase; color: var(--g-sidebar-text);
+      border-bottom: none; padding-bottom: 0; margin-bottom: 10px;
+  }
+
+  /* ── Tables, captions, rules ────────────────────────────────────────────── */
+  [data-testid="stCaptionContainer"], [data-testid="stCaptionContainer"] p {
+      font-size: 12px; color: var(--g-muted); line-height: 1.5;
+  }
+  hr { margin: 1.3rem 0 1.15rem 0; border-color: var(--g-border-lt); }
+
+  /* ── Alerts ─────────────────────────────────────────────────────────────── */
+  /* Gentelella alerts are a low-alpha tint carrying a solid left accent, not
+     Streamlit's saturated slab. The variant is read off the inner content node
+     (stAlertContentInfo / …Warning / …Error / …Success) — that data-testid is
+     the only hook Streamlit exposes for which kind of alert this is. */
+  [data-testid="stAlertContainer"] {
+      border-radius: var(--g-radius);
+      border: 1px solid var(--g-border);
+      border-left-width: 3px;
+      font-size: 13px;
+      color: var(--g-text);
+  }
+  [data-testid="stAlertContainer"]:has([data-testid="stAlertContentInfo"]) {
+      background: rgba(6,111,209,0.18);   /* --blue-lt  */
+      border-left-color: #066FD1;
+  }
+  [data-testid="stAlertContainer"]:has([data-testid="stAlertContentWarning"]) {
+      background: rgba(245,159,0,0.16);   /* --yellow-lt */
+      border-left-color: #F59F00;
+  }
+  [data-testid="stAlertContainer"]:has([data-testid="stAlertContentError"]) {
+      background: rgba(214,57,57,0.16);   /* --red-lt   */
+      border-left-color: #D63939;
+  }
+  [data-testid="stAlertContainer"]:has([data-testid="stAlertContentSuccess"]) {
+      background: rgba(47,179,68,0.16);   /* --green-lt */
+      border-left-color: #2FB344;
+  }
+
+  /* ── Expanders ──────────────────────────────────────────────────────────── */
+  [data-testid="stExpander"] details {
+      background: var(--g-surface-2);
+      border: 1px solid var(--g-border);
+      border-radius: var(--g-radius);
+  }
+  [data-testid="stExpander"] summary { font-size: 13px; font-weight: 500; }
 </style>
 """
 
@@ -257,7 +456,7 @@ def _tab_corpus(config, profile, texts: pd.Series | None, profiling_time: float,
         fig_census = px.bar(
             census_df.head(40), x="Language", y="Documents", color="Status",
             color_discrete_map={"Profiled (in scope)": _STEEL,
-                                "Detected, out of scope": "#3E434A"},
+                                "Detected, out of scope": _DISABLED},
         )
         _style_fig(fig_census, 330)
         fig_census.update_layout(
@@ -445,9 +644,9 @@ def _tab_overview(result, config, query_ms: float, store_datasets: list[str]):
                 # Bands are structural, not semantic: keep them near-invisible so
                 # the reading itself is the only thing carrying colour.
                 "steps": [
-                    {"range": [0, 34], "color": "#212327"},
-                    {"range": [34, 67], "color": "#25272C"},
-                    {"range": [67, 100], "color": "#292C31"},
+                    {"range": [0, 34], "color": "#141D2B"},
+                    {"range": [34, 67], "color": "#1B2534"},
+                    {"range": [67, 100], "color": "#222D3E"},
                 ],
             },
         ))
@@ -471,7 +670,7 @@ def _tab_overview(result, config, query_ms: float, store_datasets: list[str]):
             fig_pie.update_traces(
                 textinfo="label+value", textposition="outside",
                 textfont=dict(size=11, color=_MUTED),
-                marker=dict(line=dict(color="#17181A", width=2)),
+                marker=dict(line=dict(color=_SURFACE, width=2)),
             )
             _style_fig(fig_pie, 290, showlegend=False)
             fig_pie.update_layout(margin=dict(t=34, b=34, l=44, r=44))
@@ -1140,11 +1339,13 @@ def _tab_coverage(result, config):
         # Muted fills on charcoal: a gap is the only cell that carries a warm
         # hue, so the eye lands on the problem rather than on the wall of ticks.
         colorscale=[
-            [0.0,  "#4A2E2A"],   # gap
-            [0.45, "#4A2E2A"],
-            [0.5,  "#2A2D32"],   # unknown
-            [0.55, "#2A2D32"],
-            [1.0,  "#2C3A33"],   # covered
+            # Tints of the Gentelella red / neutral / green over the card
+            # surface — the same three roles the legend names in words.
+            [0.0,  "#4A2230"],   # gap
+            [0.45, "#4A2230"],
+            [0.5,  "#1F2836"],   # unknown
+            [0.55, "#1F2836"],
+            [1.0,  "#1C3A2A"],   # covered
         ],
         zmin=0, zmax=1,
         showscale=False,
@@ -1212,12 +1413,25 @@ benchmark scope, discussed in the thesis.
 
 def main():
     st.markdown(_CSS, unsafe_allow_html=True)
+    # Gentelella's shell is a fixed topbar over a page header carrying a
+    # pretitle, an h1 and a breadcrumb. Streamlit owns the sidebar and the
+    # scroll container, so the topbar is rendered as the first block in the
+    # main pane rather than as a fixed element — the reading order is the same.
     st.markdown(
-        '<div class="lidf-title">LID Framework — Interactive Dashboard</div>'
-        '<div class="lidf-sub">Language identification model recommendation '
-        'from corpus fingerprints &nbsp;·&nbsp; Werner Hugo &nbsp;·&nbsp; '
+        '<div class="g-topbar">'
+        '  <div class="g-brand">'
+        '    <span class="g-logo">LID</span>'
+        '    <span class="g-brandname">LID Framework</span>'
+        '  </div>'
+        '  <div class="g-topbar-meta">Werner Hugo &nbsp;·&nbsp; '
         'MEng thesis, Stellenbosch University</div>'
-        '<div class="lidf-rule"></div>',
+        '</div>'
+        '<div class="g-pagehead">'
+        '  <div class="g-pretitle">Model recommendation</div>'
+        '  <h1 class="g-title">Interactive Dashboard</h1>'
+        '  <div class="g-breadcrumb">Meta-Knowledge Base<span>/</span>'
+        'Corpus fingerprint<span>/</span>Recommendation</div>'
+        '</div>',
         unsafe_allow_html=True,
     )
 
@@ -1363,10 +1577,10 @@ def main():
 
     with ctrl_r:
         st.markdown(
-            f"<div style='padding-top:2.0rem;color:{_MUTED};font-size:0.86rem'>"
+            f"<div style='padding-top:2.05rem;color:{_MUTED};font-size:12.5px'>"
             f"Corpus profiled in <b style='color:{_INK}'>{profiling_time:.1f}&nbsp;s</b>"
             f" (once) &nbsp;·&nbsp; this query answered in "
-            f"<b style='color:{_INK}'>{query_ms:.0f}&nbsp;ms</b> from the cached "
+            f"<b style='color:{_PRIMARY}'>{query_ms:.0f}&nbsp;ms</b> from the cached "
             f"fingerprint</div>",
             unsafe_allow_html=True,
         )

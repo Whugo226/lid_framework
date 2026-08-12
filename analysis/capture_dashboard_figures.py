@@ -26,10 +26,23 @@ Prerequisites
    The system Microsoft Edge is driven via ``channel="msedge"``, so no browser
    download is required.
 
-3. Run this script with that interpreter. It writes
-   fig1..fig4 into the thesis ``figures/dashboard/`` directory and a small
-   ``capture_facts.json`` beside itself recording the on-screen timing banner.
+3. Run this script with that interpreter. It writes fig1..fig4 into the thesis
+   ``figures/dashboard/<theme>/`` directory and a small ``capture_facts.json``
+   beside itself recording the on-screen timing banner.
+
+Output paths and earlier captures
+---------------------------------
+Captures are written to a per-theme subdirectory (default ``gentelella/``) and
+the script REFUSES to overwrite an existing PNG unless ``--force`` is passed.
+This is deliberate: the original charcoal-theme figures still sit in
+``figures/dashboard/`` and are the ones Chapter 5 currently \\includegraphics,
+so a re-run must never silently replace them. Point elsewhere with ``--out``.
+
+Usage::
+
+    <lidshot python> analysis/capture_dashboard_figures.py [--out DIR] [--force]
 """
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -39,8 +52,12 @@ from playwright.sync_api import sync_playwright
 URL = "http://localhost:8501"
 CSV = Path(r"c:/Users/User/OneDrive/Masters/Python/toolkit_dev/lid_toolkit"
            r"/test_examples/wili2018_walkthrough_600.csv")
-OUT = Path(r"c:/Users/User/OneDrive/Masters/Thesis/Thesis Template Legit/figures/dashboard")
-OUT.mkdir(parents=True, exist_ok=True)
+FIGROOT = Path(r"c:/Users/User/OneDrive/Masters/Thesis/Thesis Template Legit/figures/dashboard")
+
+# Set in main() from the command line; the default keeps the Gentelella captures
+# in their own subdirectory so the charcoal originals in FIGROOT stay untouched.
+OUT = FIGROOT / "gentelella"
+FORCE = False
 
 WIDTH = 1200
 
@@ -92,8 +109,10 @@ def shot(page, name, *, from_controls=False, from_title=False,
         box = page.get_by_text("Priority metric", exact=True).first.bounding_box()
         top = max(0.0, box["y"] - 16)
     elif from_title:
-        box = page.locator(".lidf-title").first.bounding_box()
-        top = max(0.0, box["y"] - 26)
+        # The Gentelella topbar is the first block in the main pane; cropping
+        # from it keeps the brand + page header in the figure.
+        box = page.locator(".g-topbar").first.bounding_box()
+        top = max(0.0, box["y"] - 20)
     bottom = float(vh)
     if stop_before:
         heads = page.get_by_role("heading", name=stop_before, exact=False)
@@ -106,6 +125,12 @@ def shot(page, name, *, from_controls=False, from_title=False,
             log(f"     (stop_before {stop_before!r} not usable: {b})")
     clip = {"x": 0.0, "y": top, "width": float(WIDTH), "height": bottom - top}
     path = OUT / name
+    if path.exists() and not FORCE:
+        raise SystemExit(
+            f"refusing to overwrite existing capture: {path}\n"
+            "Earlier captures are kept by default. Pass --force to replace "
+            "them, or --out DIR to write somewhere new."
+        )
     page.screenshot(path=str(path), clip=clip)
     log(f"  -> {path.name}  ({int(clip['height'])} css px, "
         f"{path.stat().st_size // 1024} KB)")
@@ -193,5 +218,21 @@ def main():
     log("done")
 
 
+def _cli():
+    global OUT, FORCE
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--out", type=Path, default=OUT,
+                    help="directory to write fig1..fig4 into "
+                         f"(default: {OUT})")
+    ap.add_argument("--force", action="store_true",
+                    help="replace captures that already exist in --out "
+                         "(off by default, so earlier figures are kept)")
+    args = ap.parse_args()
+    OUT, FORCE = args.out, args.force
+    OUT.mkdir(parents=True, exist_ok=True)
+    log(f"writing to {OUT}  (force={FORCE})")
+    return main()
+
+
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(_cli())

@@ -1,24 +1,31 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # Visual identity for the LID Framework explainer.
 #
-# Design brief: the artefact is an analytical instrument, not a consumer SaaS
-# landing page. The theme is built deliberately AGAINST the defaults that make
-# generated interfaces recognisable at a glance:
+# Design brief: adopt the visual language of Gentelella v4 (Colorlib, MIT), a
+# conventional admin-dashboard system, so the artefact reads as a professional
+# operations console rather than a one-off research script. The tokens below are
+# transcribed from Gentelella's own src/scss/v4/_tokens.scss (dark theme) so the
+# two systems agree exactly rather than approximately:
 #
-#   * Surfaces are a WARM neutral charcoal (#17181A) — not pure black, and not
-#     the cool blue-slate (#0b0f19 / #030712) that generated dark modes default
-#     to. Text is a warm off-white (#E4E1DC), never #FFFFFF.
-#   * The one interactive accent is a desaturated steel blue (#5E8CA8). The warm
-#     base against a cool accent is what gives the palette its character; there
-#     are no saturated violets or cyans, no gradients, and no glows anywhere.
-#   * Colour is reserved for MEANING, never decoration: amber marks a coverage
-#     warning, sage marks full coverage or the recommended candidate, clay marks
-#     an error. Every structural element is neutral, so a coloured pixel on the
-#     screen always means something.
-#   * Corner radius is small — not the uniform 16px pill that flattens hierarchy.
-#   * The typeface is IBM Plex: an engineering-documentation family with real
-#     tabular figures, self-hosted so the app renders identically with no
-#     network (the oral defence may be offline). Explicitly not Inter or Geist.
+#   * Two surface levels over a recessed body. The body is #0F1623; cards and
+#     the sidebar sit ON it at #1A2332; inset tiles drop to #141D2B. Depth comes
+#     from this three-step stack plus a hairline border, never from a gradient.
+#   * The brand accent is Gentelella's teal #1ABB9C (hover #169F85), used for
+#     interactive affordances: primary buttons, the active tab rule, links and
+#     focus rings.
+#   * The full 11-hue Gentelella palette drives chart series and badges, as on
+#     the template's own demo pages. Note the trade-off this accepts: colour is
+#     now decorative as well as semantic, so a yellow bar in a chart no longer
+#     implies a coverage warning the way it did under the previous theme. The
+#     coverage guard therefore states its meaning in text, never in hue alone.
+#   * Geometry follows Gentelella: 8px card radius, 6px base, 4px controls, and
+#     a 4px spacing scale. Body text is 14px / 1.43.
+#
+# Typeface: IBM Plex Sans is retained rather than Gentelella's Inter. Inter is
+# served from Google Fonts upstream, whereas these files are self-hosted so the
+# app renders identically with no network (the oral defence may be offline), and
+# IBM Plex has the tabular figures the metric tiles depend on. The two are both
+# neutral grotesques at text sizes, so the system reads as intended.
 #
 # Font files live in src/lid_toolkit/explainer/static/fonts/ — Streamlit resolves
 # the static directory relative to the SCRIPT, not the working directory, so they
@@ -71,52 +78,60 @@ base = "dark"
 font        = "IBM Plex Sans"
 headingFont = "IBM Plex Sans"
 codeFont    = "IBM Plex Mono"
-baseFontSize   = 15
+# Gentelella sets --font-size: 0.875rem (14px) with --line-height 1.4286. An
+# admin console runs denser type than a document; the panels carry more figures
+# per screen as a result.
+baseFontSize   = 14
 baseFontWeight = 400
-# Three working levels of hierarchy, carried by size and weight rather than by
-# colour; the h1 is deliberately modest — no hero type on an instrument panel.
-headingFontSizes   = ["1.5rem", "1.15rem", "1.0rem", "0.92rem", "0.88rem", "0.85rem"]
-headingFontWeights = [600, 600, 600, 500, 500, 500]
+# Gentelella's headings are small and tightly ranked — the card title is 13px.
+# Hierarchy is carried by weight and the rule beneath a title, not by size jumps.
+headingFontSizes   = ["1.35rem", "1.05rem", "0.95rem", "0.88rem", "0.85rem", "0.82rem"]
+headingFontWeights = [600, 600, 600, 600, 500, 500]
 
-primaryColor             = "#5E8CA8"   # desaturated steel — interactive only
-backgroundColor          = "#17181A"
-secondaryBackgroundColor = "#1E2023"
-textColor                = "#E4E1DC"
-linkColor                = "#7FA8C2"
-codeBackgroundColor      = "#212327"
-codeTextColor            = "#CBC6BF"
+primaryColor             = "#1ABB9C"   # Gentelella --primary
+backgroundColor          = "#0F1623"   # --body-bg (dark)
+secondaryBackgroundColor = "#1A2332"   # --bg-surface (dark)
+textColor                = "#E6EBF2"   # --text
+linkColor                = "#2FD4B2"
+codeBackgroundColor      = "#141D2B"   # --bg-surface-secondary
+codeTextColor            = "#B3BCCB"   # --text-secondary
 
-borderColor                    = "#32353B"
-dataframeBorderColor           = "#32353B"
-dataframeHeaderBackgroundColor = "#212327"
+# --border-color in the dark theme is rgba(255,255,255,0.08); Streamlit needs an
+# opaque value, so these are that alpha resolved over the surface beneath.
+borderColor                    = "#242E3D"
+dataframeBorderColor           = "#242E3D"
+dataframeHeaderBackgroundColor = "#141D2B"
 showWidgetBorder  = true
 showSidebarBorder = true
-baseRadius   = "small"
+baseRadius   = "medium"
 buttonRadius = "small"
 
 # Note: Streamlit 1.58 has no per-hue palette keys (red/green/...), so the
 # semantic colours used by st.warning / st.error / st.info come from its dark
-# base theme. The tokens the app draws itself live in dashboard.py so charts,
-# tables and alerts stay in one family.
+# base theme. The Gentelella hues the app draws itself live in dashboard.py so
+# charts, tables and alerts stay in one family.
 
-# Chart series, ordered by legibility on charcoal. Muted throughout so that a
-# saturated cell in a table or an alert still outranks any chart for attention.
+# The full Gentelella palette, ordered for legibility on the dark surface.
 chartCategoricalColors = [
-  "#8FA9C4",  # steel
-  "#C8A15A",  # amber
-  "#7FA981",  # sage
-  "#C08A6B",  # clay tan
-  "#6FA0A0",  # slate teal
-  "#9B8AA6",  # muted plum
-  "#B58193",  # dusty rose
-  "#7E8894",  # cool grey
+  "#4299E1",  # azure
+  "#1ABB9C",  # primary teal
+  "#F59F00",  # yellow
+  "#AE3EC9",  # purple
+  "#2FB344",  # green
+  "#F76707",  # orange
+  "#4263EB",  # indigo
+  "#D6336C",  # pink
+  "#17A2B8",  # cyan
+  "#74B816",  # lime
+  "#D63939",  # red
 ]
+# A teal ramp from the body surface up to the brand accent, for heatmaps.
 chartSequentialColors = [
-  "#20232A", "#28303A", "#313C4B", "#3B4A5D", "#465970",
-  "#546983", "#647996", "#7789A6", "#8D9BB5", "#A6B1C4",
+  "#111A28", "#122830", "#133538", "#144340", "#155048",
+  "#165E50", "#176B58", "#188060", "#199E7E", "#1ABB9C",
 ]
 
 [theme.sidebar]
-backgroundColor          = "#141517"
-secondaryBackgroundColor = "#1E2023"
-borderColor              = "#2C2F34"
+backgroundColor          = "#1A2332"   # --sidebar-bg
+secondaryBackgroundColor = "#141D2B"
+borderColor              = "#242E3D"

@@ -35,14 +35,44 @@ cd c:\Users\User\OneDrive\Masters\Python\toolkit_dev\lid_toolkit
   page title "LID Toolkit", sidebar with configuration + upload controls.
   Nothing heavy loads until you click **Analyse Corpus**.
 
-### Visual theme (added 2026-08-12)
+### Visual theme (added 2026-08-12; re-based on Gentelella 2026-08-12)
 
-The app ships a pinned dark theme in `<repo>\.streamlit\config.toml`: warm
-charcoal surfaces (#17181A), one desaturated steel accent (#5E8CA8), colour
-reserved for meaning (amber = coverage warning, sage = covered/recommended,
-clay = error), small radii, and IBM Plex Sans/Mono. The header comment in that
-file states the design rationale — quote it if an examiner asks why the
-interface looks the way it does.
+The app ships a pinned dark theme in `<repo>\.streamlit\config.toml` that
+reproduces the design system of **Gentelella v4** (Colorlib, MIT) — a
+conventional admin-dashboard template — so the artefact reads as an operations
+console rather than a one-off research script. Values are transcribed from that
+template's `src/scss/v4/_tokens.scss` (dark theme), not approximated:
+
+| Role | Token | Value |
+|---|---|---|
+| Body (recessed) | `--body-bg` | `#0F1623` |
+| Card / sidebar / topbar | `--bg-surface` | `#1A2332` |
+| Inset tile, table header | `--bg-surface-secondary` | `#141D2B` |
+| Border | `--border-color` | `#242E3D` (alpha resolved opaque) |
+| Brand accent | `--primary` | `#1ABB9C` teal (hover `#169F85`) |
+| Text / secondary / muted | `--text` … | `#E6EBF2` / `#B3BCCB` / `#8A93A3` |
+| Radius | card / base / control | 8px / 6px / 4px |
+
+Geometry and type follow the template: 14px / 1.43 body, 11px uppercase tile
+labels, 44px nav tabs. The six panels are rendered as **one Gentelella card** —
+the tab strip is the card header, the tab panel is the card body.
+
+Two deliberate departures from the template, worth stating if asked:
+
+* **Typeface is IBM Plex Sans, not Gentelella's Inter.** Inter is served from
+  Google Fonts upstream; these files are self-hosted so the demo renders
+  identically with no network, and IBM Plex has the tabular figures the metric
+  tiles depend on.
+* **Charts use the full 11-hue Gentelella palette** (azure, teal, yellow,
+  purple, green, orange, indigo, pink, cyan, lime, red), as the template's own
+  demo pages do. This is a change of policy from the previous theme, where hue
+  was reserved for meaning. **Consequence: a yellow bar in a chart no longer
+  implies a coverage warning.** Anything that must be read as a warning is
+  therefore labelled in text — the coverage guard says "COVERAGE WARNING" in
+  words and carries a solid amber left rule, it never relies on hue alone.
+
+The header comment in `config.toml` states the full rationale — quote it if an
+examiner asks why the interface looks the way it does.
 
 Two operational consequences:
 
@@ -257,10 +287,27 @@ thesis_final python):
 - umap still absent (PCA fallback active): `python -c "import umap"` →
   ModuleNotFoundError expected (thesis_final, 2026-07-12).
 - Model files on disk: `Test-Path "C:\Users\User\OneDrive\Masters\LID_experiments\off_the_shelf_models\fasttext\lid.176.bin"`.
-- Ch5 figures + the code state they document:
-  `figures/dashboard/fig{1..4}_*.png` in the thesis repo, captured 2026-08-12.
-  If the dashboard layout changes, those figures go stale and Ch5 §5.7.2 must be
-  re-captured; the capture is fully scripted (headless Edge via Playwright).
-- Runtime-verified 2026-08-12: all six tabs render without a Streamlit
-  exception, live inference runs from Panel 4, and switching the priority metric
-  re-queries without re-profiling.
+- Ch5 figures + the code state they document. **Two sets now exist:**
+  - `figures/dashboard/fig{1..4}_*.png` — the original charcoal theme, captured
+    2026-08-12. **These are the ones Ch5 §5.7.2 currently `\includegraphics`**,
+    and the 530 ms / 618 ms query timings quoted in that subsection come from
+    them. Keep them.
+  - `figures/dashboard/gentelella/fig{1..4}_*.png` — the Gentelella re-skin,
+    captured 2026-08-12 (profiling 108.8 s; queries 741 ms / 910 ms). Not yet
+    referenced by any chapter.
+
+  Adopting the new set means editing four `\includegraphics` paths **and**
+  updating the two query timings in the §5.7.2 prose to match, since those
+  numbers are read off the figures.
+
+  The capture is fully scripted (headless Edge via Playwright):
+  `analysis/capture_dashboard_figures.py [--out DIR] [--force]`. It writes to
+  `figures/dashboard/gentelella/` by default and **refuses to overwrite an
+  existing PNG** unless `--force` is passed, so earlier captures survive a
+  re-run. Run it against a freshly restarted server — the profiling wall-clock
+  in the figures is a cold-start number (~100 s; a warm process does ~55 s).
+- Runtime-verified 2026-08-12 (post-Gentelella): all six tabs render without a
+  Streamlit exception, live inference runs from Panel 4, switching the priority
+  metric re-queries without re-profiling, and the theme tokens resolve to the
+  Gentelella values in the browser (`.stApp` → `rgb(15,22,35)`, topbar and
+  sidebar → `rgb(26,35,50)`, accent → `rgb(26,187,156)`).
