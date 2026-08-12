@@ -5,6 +5,21 @@ Quantifies how much the TML-versus-DL paradigm choice actually costs on the 17
 held-out evaluation datasets, and whether the framework discriminates between
 the two paradigms at all.
 
+DO NOT QUOTE THE "corpus_excluded" SCENARIO AS LEAVE-ONE-CORPUS-OUT
+-------------------------------------------------------------------
+The ``corpus_excluded`` scenario below drops the held-out corpus from the k-NN
+candidate pool only.  It reuses the single FeatureStratifier fitted on all 17
+corpora, so the PCA coordinate system still carries knowledge of the "excluded"
+corpus.  It is therefore NOT a clean leave-one-corpus-out estimate and must not
+be reported as one.  The clean estimate refits the stratifier per fold and lives
+in ``analysis/corpus_exclusion_refit.py``; it is what ``reporting_measures.py``
+reads for condition C, and it is the artifact of record for any LOO claim.
+
+The LaTeX table this script emits (``paradigm_regret_table.tex``, embedded in
+Chapter 5) is unaffected: the per-paradigm best scores are read straight off the
+benchmark performance matrix and involve neither the recommender nor the PCA
+projection.
+
 WHY THIS EXISTS
 ---------------
 Chapter 1 frames the research question as mapping operational context to the
@@ -227,7 +242,7 @@ def main() -> None:
         "\\label{tab:paradigm_regret}",
         "\\begin{tabular}{|l|c|c|c|c|}",
         "\\hline",
-        "\\textbf{Evaluation dataset} & \\textbf{Best TML} & \\textbf{Best DL} & "
+        "\\textbf{Evaluation dataset} & \\textbf{Best TML} & \\textbf{Best neural} & "
         "\\textbf{Gap} & \\textbf{Best paradigm} \\\\",
         "\\hline",
     ]
@@ -235,14 +250,15 @@ def main() -> None:
         name = r["dataset"].replace("_", "\\_")
         lines.append(
             f"{name} & {r['best_tml']:.4f} & {r['best_dl']:.4f} & "
-            f"{r['paradigm_gap']:.5f} & {r['gt_paradigm']} \\\\"
+            f"{r['paradigm_gap']:.5f} & "
+            f"{'Neural' if r['gt_paradigm'] == 'DL' else r['gt_paradigm']} \\\\"
         )
         lines.append("\\hline")
     lines += [
-        f"\\textbf{{Mean cost of always choosing DL}} & \\multicolumn{{4}}{{c|}}"
+        f"\\textbf{{Mean cost of always choosing neural}} & \\multicolumn{{4}}{{c|}}"
         f"{{{st.mean(costs):.5f}}} \\\\",
         "\\hline",
-        f"\\textbf{{Maximum cost of always choosing DL}} & \\multicolumn{{4}}{{c|}}"
+        f"\\textbf{{Maximum cost of always choosing neural}} & \\multicolumn{{4}}{{c|}}"
         f"{{{max(costs):.5f}}} \\\\",
         "\\hline",
         "\\end{tabular}",

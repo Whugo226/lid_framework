@@ -1,0 +1,359 @@
+{
+  "generated": "2026-08-05",
+  "priority_metric": "f1_weighted",
+  "k": 3,
+  "seed": 7,
+  "question": "Why is the framework insensitive to stratum weighting? Tests three mechanisms: (a) collinear stratum distances, (b) self-match dominance in retrieval, (c) ceiling/tie structure in the candidate scores.",
+  "a_collinearity": {
+    "n_ordered_pairs": 272,
+    "correlation_matrix": {
+      "S1_morphological": {
+        "S1_morphological": 1.0,
+        "S2_lexical_diversity": 0.648,
+        "S3_structural": 0.764,
+        "S4_info_theoretic": 0.358,
+        "S5_cross_level": 0.425,
+        "cat": 0.325
+      },
+      "S2_lexical_diversity": {
+        "S1_morphological": 0.648,
+        "S2_lexical_diversity": 1.0,
+        "S3_structural": 0.908,
+        "S4_info_theoretic": 0.653,
+        "S5_cross_level": 0.491,
+        "cat": 0.184
+      },
+      "S3_structural": {
+        "S1_morphological": 0.764,
+        "S2_lexical_diversity": 0.908,
+        "S3_structural": 1.0,
+        "S4_info_theoretic": 0.467,
+        "S5_cross_level": 0.511,
+        "cat": 0.241
+      },
+      "S4_info_theoretic": {
+        "S1_morphological": 0.358,
+        "S2_lexical_diversity": 0.653,
+        "S3_structural": 0.467,
+        "S4_info_theoretic": 1.0,
+        "S5_cross_level": 0.593,
+        "cat": 0.043
+      },
+      "S5_cross_level": {
+        "S1_morphological": 0.425,
+        "S2_lexical_diversity": 0.491,
+        "S3_structural": 0.511,
+        "S4_info_theoretic": 0.593,
+        "S5_cross_level": 1.0,
+        "cat": 0.024
+      },
+      "cat": {
+        "S1_morphological": 0.325,
+        "S2_lexical_diversity": 0.184,
+        "S3_structural": 0.241,
+        "S4_info_theoretic": 0.043,
+        "S5_cross_level": 0.024,
+        "cat": 1.0
+      }
+    },
+    "mean_offdiagonal_correlation": 0.442,
+    "max_offdiagonal_correlation": 0.908,
+    "pc1_share_of_correlation_matrix": 0.569,
+    "interpretation_note": "pc1_share near 1.0 means the six stratum distances move together, so the composite is effectively one-dimensional and reweighting cannot reorder candidates. Near 1/6 = 0.167 means they are independent and weighting genuinely selects among them."
+  },
+  "b_retrieval_churn_under_reweighting": {
+    "n_draws": 150,
+    "query_draw_pairs": 2550,
+    "pct_top1_neighbour_changed": 17.4,
+    "pct_top3_set_changed": 50.0,
+    "pct_recommendation_changed": 12.2,
+    "mean_distinct_top1_neighbours_per_query": 2.06,
+    "mean_distinct_recommendations_per_query": 1.76
+  },
+  "b_self_match": {
+    "n_self_retrieved_first": "12/17",
+    "median_margin_ratio": 1.75,
+    "per_dataset": [
+      {
+        "dataset": "OpenLID-v2",
+        "self_rank": 1,
+        "self_distance": 18.2767,
+        "nearest_other_distance": 31.9854,
+        "margin_ratio": 1.75
+      },
+      {
+        "dataset": "amazon_reviews_multi",
+        "self_rank": 1,
+        "self_distance": 7.7332,
+        "nearest_other_distance": 23.7916,
+        "margin_ratio": 3.077
+      },
+      {
+        "dataset": "europarl",
+        "self_rank": 1,
+        "self_distance": 9.2599,
+        "nearest_other_distance": 27.6658,
+        "margin_ratio": 2.988
+      },
+      {
+        "dataset": "exorde-social-media-december-2024-week1",
+        "self_rank": 1,
+        "self_distance": 12.2204,
+        "nearest_other_distance": 24.3357,
+        "margin_ratio": 1.991
+      },
+      {
+        "dataset": "flores_plus",
+        "self_rank": 1,
+        "self_distance": 7.3683,
+        "nearest_other_distance": 25.9091,
+        "margin_ratio": 3.516
+      },
+      {
+        "dataset": "language-identification",
+        "self_rank": 1,
+        "self_distance": 8.0696,
+        "nearest_other_distance": 18.9107,
+        "margin_ratio": 2.343
+      },
+      {
+        "dataset": "massive",
+        "self_rank": 1,
+        "self_distance": 30.9241,
+        "nearest_other_distance": 35.0999,
+        "margin_ratio": 1.135
+      },
+      {
+        "dataset": "mmarco",
+        "self_rank": 5,
+        "self_distance": 72.3893,
+        "nearest_other_distance": 64.3938,
+        "margin_ratio": 0.89
+      },
+      {
+        "dataset": "multi_eurlex",
+        "self_rank": 1,
+        "self_distance": 47.5431,
+        "nearest_other_distance": 73.3809,
+        "margin_ratio": 1.543
+      },
+      {
+        "dataset": "multilingual_cc_news",
+        "self_rank": 1,
+        "self_distance": 31.7321,
+        "nearest_other_distance": 40.5157,
+        "margin_ratio": 1.277
+      },
+      {
+        "dataset": "multilingual_toxicity_dataset",
+        "self_rank": 4,
+        "self_distance": 54.5509,
+        "nearest_other_distance": 47.1329,
+        "margin_ratio": 0.864
+      },
+      {
+        "dataset": "stsb_multi_mt",
+        "self_rank": 3,
+        "self_distance": 168.0174,
+        "nearest_other_distance": 163.2972,
+        "margin_ratio": 0.972
+      },
+      {
+        "dataset": "tweet_sentiment_multilingual",
+        "self_rank": 2,
+        "self_distance": 41.8981,
+        "nearest_other_distance": 41.1951,
+        "margin_ratio": 0.983
+      },
+      {
+        "dataset": "tydiqa",
+        "self_rank": 1,
+        "self_distance": 20.7834,
+        "nearest_other_distance": 44.5616,
+        "margin_ratio": 2.144
+      },
+      {
+        "dataset": "wikipedia",
+        "self_rank": 1,
+        "self_distance": 9.8478,
+        "nearest_other_distance": 41.523,
+        "margin_ratio": 4.216
+      },
+      {
+        "dataset": "xlsum",
+        "self_rank": 1,
+        "self_distance": 7.3571,
+        "nearest_other_distance": 18.5246,
+        "margin_ratio": 2.518
+      },
+      {
+        "dataset": "xnli",
+        "self_rank": 7,
+        "self_distance": 71.413,
+        "nearest_other_distance": 63.5601,
+        "margin_ratio": 0.89
+      }
+    ]
+  },
+  "c_score_dispersion": {
+    "median_best_minus_second": 0.000696,
+    "median_best_minus_worst": 0.877411,
+    "median_n_within_0.001_of_best": 2,
+    "median_n_within_0.01_of_best": 6,
+    "per_dataset": [
+      {
+        "dataset": "OpenLID-v2",
+        "n_candidates": 105,
+        "best": 0.994018,
+        "best_minus_second": 0.010309,
+        "best_minus_worst": 0.932012,
+        "n_within_0.001_of_best": 1,
+        "n_within_0.01_of_best": 1
+      },
+      {
+        "dataset": "amazon_reviews_multi",
+        "n_candidates": 105,
+        "best": 0.999844,
+        "best_minus_second": 0.000696,
+        "best_minus_worst": 0.822765,
+        "n_within_0.001_of_best": 4,
+        "n_within_0.01_of_best": 16
+      },
+      {
+        "dataset": "europarl",
+        "n_candidates": 105,
+        "best": 0.999548,
+        "best_minus_second": 7e-06,
+        "best_minus_worst": 0.951616,
+        "n_within_0.001_of_best": 10,
+        "n_within_0.01_of_best": 35
+      },
+      {
+        "dataset": "exorde-social-media-december-2024-week1",
+        "n_candidates": 105,
+        "best": 0.977907,
+        "best_minus_second": 0.009143,
+        "best_minus_worst": 0.843884,
+        "n_within_0.001_of_best": 1,
+        "n_within_0.01_of_best": 2
+      },
+      {
+        "dataset": "flores_plus",
+        "n_candidates": 105,
+        "best": 0.995213,
+        "best_minus_second": 0.000102,
+        "best_minus_worst": 0.93441,
+        "n_within_0.001_of_best": 2,
+        "n_within_0.01_of_best": 4
+      },
+      {
+        "dataset": "language-identification",
+        "n_candidates": 105,
+        "best": 0.997867,
+        "best_minus_second": 2e-06,
+        "best_minus_worst": 0.861926,
+        "n_within_0.001_of_best": 3,
+        "n_within_0.01_of_best": 7
+      },
+      {
+        "dataset": "massive",
+        "n_candidates": 105,
+        "best": 0.997419,
+        "best_minus_second": 0.007271,
+        "best_minus_worst": 0.877411,
+        "n_within_0.001_of_best": 1,
+        "n_within_0.01_of_best": 5
+      },
+      {
+        "dataset": "mmarco",
+        "n_candidates": 105,
+        "best": 0.997489,
+        "best_minus_second": 0.009809,
+        "best_minus_worst": 0.833829,
+        "n_within_0.001_of_best": 1,
+        "n_within_0.01_of_best": 2
+      },
+      {
+        "dataset": "multi_eurlex",
+        "n_candidates": 105,
+        "best": 0.999814,
+        "best_minus_second": 9e-06,
+        "best_minus_worst": 0.962818,
+        "n_within_0.001_of_best": 9,
+        "n_within_0.01_of_best": 21
+      },
+      {
+        "dataset": "multilingual_cc_news",
+        "n_candidates": 105,
+        "best": 0.997135,
+        "best_minus_second": 0.011184,
+        "best_minus_worst": 0.93579,
+        "n_within_0.001_of_best": 1,
+        "n_within_0.01_of_best": 1
+      },
+      {
+        "dataset": "multilingual_toxicity_dataset",
+        "n_candidates": 105,
+        "best": 0.993651,
+        "best_minus_second": 0.003745,
+        "best_minus_worst": 0.816138,
+        "n_within_0.001_of_best": 1,
+        "n_within_0.01_of_best": 4
+      },
+      {
+        "dataset": "stsb_multi_mt",
+        "n_candidates": 105,
+        "best": 0.994159,
+        "best_minus_second": 0.000141,
+        "best_minus_worst": 0.876996,
+        "n_within_0.001_of_best": 3,
+        "n_within_0.01_of_best": 8
+      },
+      {
+        "dataset": "tweet_sentiment_multilingual",
+        "n_candidates": 105,
+        "best": 0.998077,
+        "best_minus_second": 0.0,
+        "best_minus_worst": 0.943678,
+        "n_within_0.001_of_best": 2,
+        "n_within_0.01_of_best": 9
+      },
+      {
+        "dataset": "tydiqa",
+        "n_candidates": 105,
+        "best": 0.999896,
+        "best_minus_second": 0.000836,
+        "best_minus_worst": 0.911132,
+        "n_within_0.001_of_best": 2,
+        "n_within_0.01_of_best": 9
+      },
+      {
+        "dataset": "wikipedia",
+        "n_candidates": 105,
+        "best": 0.996368,
+        "best_minus_second": 0.011294,
+        "best_minus_worst": 0.931822,
+        "n_within_0.001_of_best": 1,
+        "n_within_0.01_of_best": 1
+      },
+      {
+        "dataset": "xlsum",
+        "n_candidates": 105,
+        "best": 0.998858,
+        "best_minus_second": 0.000127,
+        "best_minus_worst": 0.593636,
+        "n_within_0.001_of_best": 4,
+        "n_within_0.01_of_best": 6
+      },
+      {
+        "dataset": "xnli",
+        "n_candidates": 105,
+        "best": 0.999633,
+        "best_minus_second": 0.000172,
+        "best_minus_worst": 0.803363,
+        "n_within_0.001_of_best": 5,
+        "n_within_0.01_of_best": 15
+      }
+    ]
+  }
+}

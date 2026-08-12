@@ -1,0 +1,13 @@
+{
+  "init_seconds": 0.22837170003913343,
+  "profile_seconds": 69.10271279979497,
+  "languages": [
+    "de",
+    "en",
+    "es",
+    "fi",
+    "nl"
+  ],
+  "n_features": 2726,
+  "n_segments": 500
+}

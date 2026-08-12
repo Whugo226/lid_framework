@@ -1,0 +1,22 @@
+{
+  "generated": "2026-07-31",
+  "n_datasets": 17,
+  "n_ordered_pairs": 272,
+  "composite": {
+    "relative_contrast_mean": 1.549583628345098,
+    "relative_contrast_min": 0.6238384477552933,
+    "relative_contrast_max": 3.164490246739292,
+    "cv_mean": 0.24692220707566392,
+    "distance_mean": 43.1492773344116,
+    "distance_min": 16.04627795317373,
+    "distance_max": 73.27678570424241
+  },
+  "per_stratum_relative_contrast_mean": {
+    "S1_morphological": 1.4548750889074957,
+    "S2_lexical_diversity": 2.181337880877759,
+    "S3_structural": 1.6781184388593702,
+    "S4_info_theoretic": 3.0399683159478985,
+    "S5_cross_level": 3.947980149028117,
+    "cat": 2.7141025641025642
+  }
+}

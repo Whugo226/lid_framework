@@ -1,0 +1,217 @@
+{
+  "generated": "2026-07-20",
+  "basis_note": "Metric sweep and latency come from mkb.pkl (knowledge-benchmarking split, the only source carrying all metrics). The eval-split block comes from validation_report.json (f1_weighted only) and is the basis for the thesis's 13-of-17 paradigm figure.",
+  "hardware_note": "XLM-V Base benchmarked on GPU (Quadro RTX 4000, per model_benchmarking_knowledge/xlm_v_base/benchmark_run.log). FastText, MNB, LR and CLD3 are CPU-native with no GPU references in the benchmarking tree. Latency margins against the transformer are therefore lower bounds.",
+  "n_corpora": 17,
+  "metric_sweep_mkb_basis": {
+    "accuracy": {
+      "lower_is_better": false,
+      "wins_by_family": {
+        "FastText lid.176 (shallow neural, zero-shot)": 1,
+        "FastText (shallow neural, trained)": 11,
+        "TML (char n-gram, MNB)": 4,
+        "TML (char n-gram, LR)": 1
+      },
+      "wins_by_paradigm": {
+        "DL": 12,
+        "TML": 5
+      }
+    },
+    "f1_macro": {
+      "lower_is_better": false,
+      "wins_by_family": {
+        "FastText (shallow neural, trained)": 12,
+        "TML (char n-gram, MNB)": 3,
+        "TML (char n-gram, LR)": 2
+      },
+      "wins_by_paradigm": {
+        "DL": 12,
+        "TML": 5
+      }
+    },
+    "f1_weighted": {
+      "lower_is_better": false,
+      "wins_by_family": {
+        "FastText lid.176 (shallow neural, zero-shot)": 1,
+        "FastText (shallow neural, trained)": 11,
+        "TML (char n-gram, MNB)": 4,
+        "TML (char n-gram, LR)": 1
+      },
+      "wins_by_paradigm": {
+        "DL": 12,
+        "TML": 5
+      }
+    },
+    "inference_time_ms_per_sample": {
+      "lower_is_better": true,
+      "wins_by_family": {
+        "FastText lid.176 (shallow neural, zero-shot)": 6,
+        "FastText (shallow neural, trained)": 11
+      },
+      "wins_by_paradigm": {
+        "DL": 17
+      }
+    },
+    "inference_time_total_s": {
+      "lower_is_better": true,
+      "wins_by_family": {
+        "FastText lid.176 (shallow neural, zero-shot)": 6,
+        "FastText (shallow neural, trained)": 11
+      },
+      "wins_by_paradigm": {
+        "DL": 17
+      }
+    },
+    "precision_macro": {
+      "lower_is_better": false,
+      "wins_by_family": {
+        "FastText (shallow neural, trained)": 12,
+        "TML (char n-gram, MNB)": 3,
+        "TML (char n-gram, LR)": 2
+      },
+      "wins_by_paradigm": {
+        "DL": 12,
+        "TML": 5
+      }
+    },
+    "precision_weighted": {
+      "lower_is_better": false,
+      "wins_by_family": {
+        "FastText lid.176 (shallow neural, zero-shot)": 1,
+        "XLM-V Base (transformer, zero-shot)": 10,
+        "FastText (shallow neural, trained)": 4,
+        "TML (char n-gram, MNB)": 2
+      },
+      "wins_by_paradigm": {
+        "DL": 15,
+        "TML": 2
+      }
+    },
+    "recall_macro": {
+      "lower_is_better": false,
+      "wins_by_family": {
+        "FastText (shallow neural, trained)": 12,
+        "TML (char n-gram, MNB)": 4,
+        "TML (char n-gram, LR)": 1
+      },
+      "wins_by_paradigm": {
+        "DL": 12,
+        "TML": 5
+      }
+    },
+    "recall_weighted": {
+      "lower_is_better": false,
+      "wins_by_family": {
+        "FastText lid.176 (shallow neural, zero-shot)": 1,
+        "FastText (shallow neural, trained)": 11,
+        "TML (char n-gram, MNB)": 4,
+        "TML (char n-gram, LR)": 1
+      },
+      "wins_by_paradigm": {
+        "DL": 12,
+        "TML": 5
+      }
+    },
+    "throughput_samples_per_sec": {
+      "lower_is_better": false,
+      "wins_by_family": {
+        "FastText lid.176 (shallow neural, zero-shot)": 6,
+        "FastText (shallow neural, trained)": 11
+      },
+      "wins_by_paradigm": {
+        "DL": 17
+      }
+    }
+  },
+  "inference_cost_by_architecture_mkb_basis": {
+    "lid.176": {
+      "median_ms_per_sample": 0.0284,
+      "relative_to_fastest": 1.0,
+      "paradigm": "DL",
+      "family": "FastText lid.176 (shallow neural, zero-shot)"
+    },
+    "fasttext_word": {
+      "median_ms_per_sample": 0.0596,
+      "relative_to_fastest": 2.1,
+      "paradigm": "DL",
+      "family": "FastText (shallow neural, trained)"
+    },
+    "cld3": {
+      "median_ms_per_sample": 0.1007,
+      "relative_to_fastest": 3.6,
+      "paradigm": "DL",
+      "family": "CLD3 (neural n-gram, zero-shot)"
+    },
+    "fasttext_subword": {
+      "median_ms_per_sample": 0.1836,
+      "relative_to_fastest": 6.5,
+      "paradigm": "DL",
+      "family": "FastText (shallow neural, trained)"
+    },
+    "bow_char_ngram_3_5": {
+      "median_ms_per_sample": 0.2203,
+      "relative_to_fastest": 7.8,
+      "paradigm": "TML",
+      "family": "TML (char n-gram, MNB)"
+    },
+    "tfidf_char_ngram_3_5": {
+      "median_ms_per_sample": 0.2245,
+      "relative_to_fastest": 7.9,
+      "paradigm": "TML",
+      "family": "TML (char n-gram, MNB)"
+    },
+    "tfidf_lr_char_ngram_3_5": {
+      "median_ms_per_sample": 0.3645,
+      "relative_to_fastest": 12.8,
+      "paradigm": "TML",
+      "family": "TML (char n-gram, LR)"
+    },
+    "bow_maxabs_lr_char_ngram_3_5": {
+      "median_ms_per_sample": 0.3709,
+      "relative_to_fastest": 13.1,
+      "paradigm": "TML",
+      "family": "TML (char n-gram, LR)"
+    },
+    "xlm_v_base_language_id": {
+      "median_ms_per_sample": 9.2475,
+      "relative_to_fastest": 325.9,
+      "paradigm": "DL",
+      "family": "XLM-V Base (transformer, zero-shot)"
+    }
+  },
+  "evaluation_split_f1_weighted": {
+    "wins_by_family": {
+      "FastText (shallow neural, trained)": 11,
+      "TML (char n-gram, MNB)": 2,
+      "FastText lid.176 (shallow neural, zero-shot)": 1,
+      "XLM-V Base (transformer, zero-shot)": 1,
+      "TML (char n-gram, LR)": 2
+    },
+    "wins_by_paradigm": {
+      "DL": 13,
+      "TML": 4
+    },
+    "xlm_v_rank_per_corpus": [
+      6,
+      14,
+      11,
+      5,
+      1,
+      7,
+      8,
+      8,
+      13,
+      9,
+      6,
+      6,
+      50,
+      5,
+      7,
+      4,
+      13
+    ],
+    "xlm_v_best_rank": 1,
+    "xlm_v_median_rank": 7,
+    "n_candidates": 105
+  }
+}

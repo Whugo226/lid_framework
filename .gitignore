@@ -228,5 +228,9 @@ models/
 !fingerprints.json
 !config.json
 
+# Analysis artifacts are evidence for thesis claims — they must be committable.
+# (Only *.json here; the directory itself is not ignored, so this negation works.)
+!analysis/*.json
+
 # VS Code Settings (Personal workspace settings)
 .vscode/

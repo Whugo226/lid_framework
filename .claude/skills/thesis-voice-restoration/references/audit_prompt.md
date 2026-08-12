@@ -45,8 +45,9 @@ colon-led dramatic sentences; inline-header bold bullets
 (`\item \textbf{Label.}`); italic mini-headers used as pseudo-bullets inside
 paragraphs; self-conscious meta-commentary ("deserves to be stated",
 "should be read as"); paragraphs longer than 6 sentences; generic upbeat
-closers. For each, give the count and up to 2 verbatim examples WITH the line
-number.
+closers; **every hit from the banned flowery-vocabulary list in SKILL.md §5a**
+(name each banned word found, with count and line numbers). For each, give the
+count and up to 2 verbatim examples WITH the line number.
 
 Do NOT include rows for Title Case headings, Oxford commas, American
 spellings, or section structure. Headings and structure are frozen by user

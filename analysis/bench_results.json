@@ -1,0 +1,104 @@
+{
+  "spacy": {
+    "en": {
+      "seconds": 0.41483219992369413,
+      "tokens": 1816,
+      "tok_per_s": 4377.67367223191,
+      "components": [
+        "tok2vec",
+        "tagger",
+        "parser",
+        "senter",
+        "attribute_ruler",
+        "lemmatizer"
+      ]
+    },
+    "nl": {
+      "seconds": 0.2055683999788016,
+      "tokens": 1797,
+      "tok_per_s": 8741.61593019797,
+      "components": [
+        "tok2vec",
+        "morphologizer",
+        "tagger",
+        "parser",
+        "lemmatizer",
+        "senter",
+        "attribute_ruler"
+      ]
+    },
+    "de": {
+      "seconds": 0.23538399999961257,
+      "tokens": 1681,
+      "tok_per_s": 7141.521938631202,
+      "components": [
+        "tok2vec",
+        "tagger",
+        "morphologizer",
+        "parser",
+        "lemmatizer",
+        "senter",
+        "attribute_ruler"
+      ]
+    },
+    "es": {
+      "seconds": 0.4429608997888863,
+      "tokens": 1833,
+      "tok_per_s": 4138.062751980145,
+      "components": [
+        "tok2vec",
+        "morphologizer",
+        "parser",
+        "senter",
+        "attribute_ruler",
+        "lemmatizer"
+      ]
+    },
+    "fi": {
+      "seconds": 0.21410429989919066,
+      "tokens": 1300,
+      "tok_per_s": 6071.807061381274,
+      "components": [
+        "tok2vec",
+        "tagger",
+        "morphologizer",
+        "parser",
+        "lemmatizer",
+        "senter",
+        "attribute_ruler"
+      ]
+    }
+  },
+  "stanza": {
+    "en": {
+      "seconds": 4.835933299968019,
+      "tokens": 1812,
+      "tok_per_s": 374.69499424485093,
+      "components": "tokenize,mwt,pos,lemma"
+    },
+    "nl": {
+      "seconds": 6.347693999996409,
+      "tokens": 1797,
+      "tok_per_s": 283.0949317974396,
+      "components": "tokenize,mwt,pos,lemma"
+    },
+    "de": {
+      "seconds": 6.6882199998945,
+      "tokens": 1691,
+      "tok_per_s": 252.83259223331078,
+      "components": "tokenize,mwt,pos,lemma"
+    },
+    "es": {
+      "seconds": 5.661077100085095,
+      "tokens": 1833,
+      "tok_per_s": 323.7899727549104,
+      "components": "tokenize,mwt,pos,lemma"
+    },
+    "fi": {
+      "seconds": 5.6677327998913825,
+      "tokens": 1293,
+      "tok_per_s": 228.1335492782545,
+      "components": "tokenize,mwt,pos,lemma"
+    }
+  }
+}

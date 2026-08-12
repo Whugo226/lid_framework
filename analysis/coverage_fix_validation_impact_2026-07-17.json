@@ -1,0 +1,44 @@
+{
+  "generated": "2026-07-17",
+  "priority_metric": "f1_weighted",
+  "isolation": "same cached eval_profiles; only the coverage-inventory fix differs",
+  "scenarios": {
+    "OLD_buggy_coverage_guard_on": {
+      "top1": "3/17",
+      "top1_acc": 0.1765,
+      "mean_regret": 0.007803,
+      "max_regret": 0.048862,
+      "confidence_split": "2/2 correct at non-zero conf vs 1/15 at zero conf",
+      "confidence_p": 0.0221,
+      "note": "as reported in committed validation_report.json (buggy zero-shot coverage)"
+    },
+    "corrected_coverage_guard_on": {
+      "top1": "2/17",
+      "top1_acc": 0.1176,
+      "mean_regret": 0.007287,
+      "max_regret": 0.025948,
+      "confidence_split": "1/13 correct at non-zero conf vs 1/4 at zero conf",
+      "confidence_p": 0.9558823529411765
+    },
+    "corrected_coverage_guard_off": {
+      "top1": "2/17",
+      "top1_acc": 0.1176,
+      "mean_regret": 0.007287,
+      "max_regret": 0.025948,
+      "confidence_split": "1/1 correct at non-zero conf vs 1/16 at zero conf",
+      "confidence_p": 0.11764705882352941
+    }
+  },
+  "changed_recommendations_guard_on": [
+    {
+      "dataset": "OpenLID-v2",
+      "old": "fasttext_subword_OpenLID-v2",
+      "new": "xlm_v_base_language_id"
+    },
+    {
+      "dataset": "tweet_sentiment_multilingual",
+      "old": "xlm_v_base_language_id",
+      "new": "fasttext_subword_exorde-social-media-december-2024-week1"
+    }
+  ]
+}

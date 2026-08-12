@@ -54,20 +54,30 @@ def main() -> None:
                         if (m := re.match(r"^([a-z]{2,3})_", f.stem))})
         n_rows = sum(pq.read_metadata(f).num_rows for f in files)
 
-        tokens = []
+        # Characters are tracked alongside whitespace tokens because
+        # str.split() does not segment unsegmented scripts: a 40-character
+        # Chinese or Japanese document counts as one or two tokens, which
+        # depresses the token statistics of every corpus carrying zh/ja.
+        # Characters are script-neutral and are the quantity the ingestion
+        # pipeline actually caps (120 alphabetic / 40 CJK).
+        tokens, chars = [], []
         for f in files:
             col = pd.read_parquet(f, columns=["text"])["text"].dropna().astype(str)
             if len(col) > SAMPLE_PER_LANG:
                 col = col.sample(SAMPLE_PER_LANG, random_state=SEED)
             tokens.extend(col.str.split().str.len().tolist())
+            chars.extend(col.str.len().tolist())
         arr = np.array(tokens)
+        carr = np.array(chars)
         rows.append({
             "label": label, "langs": len(langs), "rows": n_rows,
             "q1": float(np.percentile(arr, 25)),
             "med": float(np.median(arr)),
             "q3": float(np.percentile(arr, 75)),
+            "cmed": float(np.median(carr)),
         })
         print(f"done {label:26s} rows={n_rows:>8,d} langs={len(langs):2d} "
+              f"chars median={np.median(carr):.0f}  "
               f"tokens median={np.median(arr):.0f} IQR=[{rows[-1]['q1']:.0f},{rows[-1]['q3']:.0f}]")
 
     rows.sort(key=lambda r: r["med"])
@@ -96,7 +106,7 @@ def main() -> None:
     # ── LaTeX table rows ──────────────────────────────────────────────────────
     print("\n% tab:corpus_summary rows (sorted by median tokens/document):")
     for r in rows:
-        print(f"{r['label']} & {r['langs']} & {r['rows']:,} & "
+        print(f"{r['label']} & {r['langs']} & {r['rows']:,} & {r['cmed']:.0f} & "
               f"{r['med']:.0f} & [{r['q1']:.0f}, {r['q3']:.0f}] \\\\ \\hline")
 
 

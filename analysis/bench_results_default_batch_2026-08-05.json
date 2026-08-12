@@ -1,0 +1,167 @@
+{
+  "meta": {
+    "date": "2026-08-05",
+    "purpose": "fairness re-run: stanza at library-default batch sizes",
+    "spacy_version": "3.8.11",
+    "stanza_version": "1.11.1",
+    "platform": "Intel64 Family 6 Model 126 Stepping 5, GenuineIntel",
+    "n_segments_per_lang": 100,
+    "seed": 42,
+    "langs": [
+      "en",
+      "nl",
+      "de",
+      "es",
+      "fi"
+    ],
+    "spacy_total_seconds": 1.287072200095281,
+    "spacy_total_tokens": 8427,
+    "spacy_tok_per_s": 6547.418240698661,
+    "stanza_total_seconds": 16.602065000100993,
+    "stanza_total_tokens": 8426,
+    "stanza_tok_per_s": 507.5272262787035,
+    "speedup": 12.899093771796139
+  },
+  "spacy": {
+    "en": {
+      "seconds": 0.34341530001256615,
+      "tokens": 1816,
+      "tok_per_s": 5288.057928501,
+      "components": [
+        "tok2vec",
+        "tagger",
+        "parser",
+        "senter",
+        "attribute_ruler",
+        "lemmatizer"
+      ],
+      "batch_size": 256
+    },
+    "nl": {
+      "seconds": 0.278322400059551,
+      "tokens": 1797,
+      "tok_per_s": 6456.541045979435,
+      "components": [
+        "tok2vec",
+        "morphologizer",
+        "tagger",
+        "parser",
+        "lemmatizer",
+        "senter",
+        "attribute_ruler"
+      ],
+      "batch_size": 256
+    },
+    "de": {
+      "seconds": 0.20736420003231615,
+      "tokens": 1681,
+      "tok_per_s": 8106.510187091257,
+      "components": [
+        "tok2vec",
+        "tagger",
+        "morphologizer",
+        "parser",
+        "lemmatizer",
+        "senter",
+        "attribute_ruler"
+      ],
+      "batch_size": 256
+    },
+    "es": {
+      "seconds": 0.2826856999890879,
+      "tokens": 1833,
+      "tok_per_s": 6484.233196340518,
+      "components": [
+        "tok2vec",
+        "morphologizer",
+        "parser",
+        "senter",
+        "attribute_ruler",
+        "lemmatizer"
+      ],
+      "batch_size": 256
+    },
+    "fi": {
+      "seconds": 0.17528460000175983,
+      "tokens": 1300,
+      "tok_per_s": 7416.510064129697,
+      "components": [
+        "tok2vec",
+        "tagger",
+        "morphologizer",
+        "parser",
+        "lemmatizer",
+        "senter",
+        "attribute_ruler"
+      ],
+      "batch_size": 256
+    }
+  },
+  "stanza_default_batch": {
+    "en": {
+      "seconds": 2.926119099953212,
+      "tokens": 1812,
+      "words_after_mwt": 1816,
+      "tok_per_s": 619.2502554079134,
+      "components": "tokenize,mwt,pos,lemma",
+      "effective_batch_sizes": {
+        "tokenize": 32,
+        "mwt": 50,
+        "pos": 250,
+        "lemma": 50
+      }
+    },
+    "nl": {
+      "seconds": 3.303791100042872,
+      "tokens": 1797,
+      "words_after_mwt": 1797,
+      "tok_per_s": 543.9205886766512,
+      "components": "tokenize,mwt,pos,lemma",
+      "effective_batch_sizes": {
+        "tokenize": 32,
+        "mwt": 50,
+        "pos": 250,
+        "lemma": 50
+      }
+    },
+    "de": {
+      "seconds": 3.3506127999862656,
+      "tokens": 1691,
+      "words_after_mwt": 1709,
+      "tok_per_s": 504.68379993263665,
+      "components": "tokenize,mwt,pos,lemma",
+      "effective_batch_sizes": {
+        "tokenize": 32,
+        "mwt": 50,
+        "pos": 250,
+        "lemma": 50
+      }
+    },
+    "es": {
+      "seconds": 3.298121300060302,
+      "tokens": 1833,
+      "words_after_mwt": 1858,
+      "tok_per_s": 555.7709475289723,
+      "components": "tokenize,mwt,pos,lemma",
+      "effective_batch_sizes": {
+        "tokenize": 32,
+        "mwt": 50,
+        "pos": 250,
+        "lemma": 50
+      }
+    },
+    "fi": {
+      "seconds": 3.723420700058341,
+      "tokens": 1293,
+      "words_after_mwt": 1295,
+      "tok_per_s": 347.26132343297667,
+      "components": "tokenize,mwt,pos,lemma",
+      "effective_batch_sizes": {
+        "tokenize": 32,
+        "mwt": 50,
+        "pos": 250,
+        "lemma": 50
+      }
+    }
+  }
+}

@@ -663,12 +663,18 @@ class SimilarityEngine:
             total_inv_d += inv_d
             nb_record: dict = {"dataset": nb.dataset_name, "inv_d": inv_d, "per_model": {}}
             for model, perfs in nb.performances.items():
-                raw_score = perfs.get(priority_metric, 0.0)
-                # Invert lower-is-better metrics so higher scores always win
-                if lower_is_better:
-                    score = 1.0 / (raw_score + 1e-9) if raw_score > 0 else 1e9
+                # A model this neighbour never benchmarked contributes nothing
+                # to its term.  Checked by key presence, not by value: a stored
+                # 0.0 is a genuine score, and for a lower-is-better metric it is
+                # the *best* possible one, so it must not be conflated with an
+                # absent record (which previously scored 1e9 and dominated).
+                if priority_metric not in perfs:
+                    score = 0.0
+                elif lower_is_better:
+                    # Invert lower-is-better metrics so higher scores always win
+                    score = 1.0 / (perfs[priority_metric] + 1e-9)
                 else:
-                    score = raw_score
+                    score = perfs[priority_metric]
 
                 # Coverage factor cov(m, q) — see docstring for the two modes.
                 if user_iso_codes and n_user_langs > 0:
