@@ -1,0 +1,122 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Visual identity for the LID Framework explainer.
+#
+# Design brief: the artefact is an analytical instrument, not a consumer SaaS
+# landing page. The theme is built deliberately AGAINST the defaults that make
+# generated interfaces recognisable at a glance:
+#
+#   * Surfaces are a WARM neutral charcoal (#17181A) — not pure black, and not
+#     the cool blue-slate (#0b0f19 / #030712) that generated dark modes default
+#     to. Text is a warm off-white (#E4E1DC), never #FFFFFF.
+#   * The one interactive accent is a desaturated steel blue (#5E8CA8). The warm
+#     base against a cool accent is what gives the palette its character; there
+#     are no saturated violets or cyans, no gradients, and no glows anywhere.
+#   * Colour is reserved for MEANING, never decoration: amber marks a coverage
+#     warning, sage marks full coverage or the recommended candidate, clay marks
+#     an error. Every structural element is neutral, so a coloured pixel on the
+#     screen always means something.
+#   * Corner radius is small — not the uniform 16px pill that flattens hierarchy.
+#   * The typeface is IBM Plex: an engineering-documentation family with real
+#     tabular figures, self-hosted so the app renders identically with no
+#     network (the oral defence may be offline). Explicitly not Inter or Geist.
+#
+# Font files live in src/lid_toolkit/explainer/static/fonts/ — Streamlit resolves
+# the static directory relative to the SCRIPT, not the working directory, so they
+# sit beside dashboard.py. Latin subset only. IBM Plex Sans ships as a variable
+# file, so it is declared once per weight actually used.
+#
+# This file is discovered relative to the WORKING directory, so the app must be
+# launched from the repo root for the theme to apply (which is already required
+# for the profiler's ./fasttext_cache).
+# ─────────────────────────────────────────────────────────────────────────────
+
+[server]
+enableStaticServing = true
+
+# ── Typeface ─────────────────────────────────────────────────────────────────
+[[theme.fontFaces]]
+family = "IBM Plex Sans"
+url = "app/static/fonts/IBMPlexSans.woff2"
+style = "normal"
+weight = 400
+
+[[theme.fontFaces]]
+family = "IBM Plex Sans"
+url = "app/static/fonts/IBMPlexSans.woff2"
+style = "normal"
+weight = 500
+
+[[theme.fontFaces]]
+family = "IBM Plex Sans"
+url = "app/static/fonts/IBMPlexSans.woff2"
+style = "normal"
+weight = 600
+
+[[theme.fontFaces]]
+family = "IBM Plex Mono"
+url = "app/static/fonts/IBMPlexMono-400.woff2"
+style = "normal"
+weight = 400
+
+[[theme.fontFaces]]
+family = "IBM Plex Mono"
+url = "app/static/fonts/IBMPlexMono-500.woff2"
+style = "normal"
+weight = 500
+
+# ── Theme ────────────────────────────────────────────────────────────────────
+[theme]
+base = "dark"
+
+font        = "IBM Plex Sans"
+headingFont = "IBM Plex Sans"
+codeFont    = "IBM Plex Mono"
+baseFontSize   = 15
+baseFontWeight = 400
+# Three working levels of hierarchy, carried by size and weight rather than by
+# colour; the h1 is deliberately modest — no hero type on an instrument panel.
+headingFontSizes   = ["1.5rem", "1.15rem", "1.0rem", "0.92rem", "0.88rem", "0.85rem"]
+headingFontWeights = [600, 600, 600, 500, 500, 500]
+
+primaryColor             = "#5E8CA8"   # desaturated steel — interactive only
+backgroundColor          = "#17181A"
+secondaryBackgroundColor = "#1E2023"
+textColor                = "#E4E1DC"
+linkColor                = "#7FA8C2"
+codeBackgroundColor      = "#212327"
+codeTextColor            = "#CBC6BF"
+
+borderColor                    = "#32353B"
+dataframeBorderColor           = "#32353B"
+dataframeHeaderBackgroundColor = "#212327"
+showWidgetBorder  = true
+showSidebarBorder = true
+baseRadius   = "small"
+buttonRadius = "small"
+
+# Note: Streamlit 1.58 has no per-hue palette keys (red/green/...), so the
+# semantic colours used by st.warning / st.error / st.info come from its dark
+# base theme. The tokens the app draws itself live in dashboard.py so charts,
+# tables and alerts stay in one family.
+
+# Chart series, ordered by legibility on charcoal. Muted throughout so that a
+# saturated cell in a table or an alert still outranks any chart for attention.
+chartCategoricalColors = [
+  "#8FA9C4",  # steel
+  "#C8A15A",  # amber
+  "#7FA981",  # sage
+  "#C08A6B",  # clay tan
+  "#6FA0A0",  # slate teal
+  "#9B8AA6",  # muted plum
+  "#B58193",  # dusty rose
+  "#7E8894",  # cool grey
+]
+chartSequentialColors = [
+  "#20232A", "#28303A", "#313C4B", "#3B4A5D", "#465970",
+  "#546983", "#647996", "#7789A6", "#8D9BB5", "#A6B1C4",
+]
+
+[theme.sidebar]
+backgroundColor          = "#141517"
+secondaryBackgroundColor = "#1E2023"
+borderColor              = "#2C2F34"

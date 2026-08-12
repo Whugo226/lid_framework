@@ -1,8 +1,20 @@
 """
-LID Toolkit — Interactive Dashboard
+LID Framework — Interactive Dashboard
 =====================================
-Five-panel Streamlit app for exploring, explaining, and running LID model
-recommendations produced by the LID Toolkit.
+Six-panel Streamlit app for exploring, explaining, and running LID model
+recommendations produced by the LID recommendation framework.
+
+Visual identity is defined in ``.streamlit/config.toml`` (surfaces, typeface,
+semantic palette) and in the token block below (Plotly, which the Streamlit
+theme cannot reach). Both are deliberately built against generated-interface
+defaults: warm charcoal rather than blue-slate, one desaturated accent, colour
+reserved for meaning, small radii, IBM Plex rather than Inter, and no gradients,
+glows or decorative iconography.
+
+The corpus is profiled **once** (the expensive phase).  The priority metric is
+a live control in the main pane: changing it re-queries the Meta-Knowledge Base
+from the cached fingerprint, which is a nearest-neighbour lookup over the stored
+dataset fingerprints and costs milliseconds rather than a second profiling pass.
 
 Run from the project root:
     streamlit run src/lid_toolkit/explainer/dashboard.py
@@ -27,11 +39,93 @@ import streamlit as st
 
 # ── Page config ────────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="LID Toolkit",
-    page_icon="🌐",
+    page_title="LID Framework",
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+
+# ── Visual identity ────────────────────────────────────────────────────────────
+# Palette and chart styling live here so every panel draws from one source.
+# Surfaces and typography come from .streamlit/config.toml; these are the tokens
+# Plotly needs, which Streamlit's theme cannot reach. Colour carries meaning
+# only: amber = coverage warning, sage = covered / recommended, clay = error,
+# steel = interactive. Everything structural stays neutral.
+_INK      = "#E4E1DC"   # warm off-white — never pure white
+_MUTED    = "#948F88"
+_FAINT    = "#3A3D43"   # gridlines, axis rules
+_NEUTRAL  = "#565A61"   # non-highlighted series
+# The interactive accent (#5E8CA8) is set as primaryColor in config.toml, which
+# is what Streamlit's own widgets read; _STEEL is its lighter chart-safe tint.
+_STEEL    = "#8FA9C4"   # first chart series
+_AMBER    = "#C8A15A"   # warning / coverage gap
+_SAGE     = "#7FA981"   # covered / recommended
+_CLAY     = "#D4674E"   # error / uncoverable
+_SERIES   = ["#8FA9C4", "#C8A15A", "#7FA981", "#C08A6B",
+             "#6FA0A0", "#9B8AA6", "#B58193", "#7E8894"]
+
+_CSS = """
+<style>
+  /* Tighten the default hero gap — an instrument panel, not a landing page. */
+  .block-container { padding-top: 2.4rem; padding-bottom: 3rem; }
+
+  /* Figures are read as data: lock the numerals to tabular so columns align. */
+  [data-testid="stMetricValue"], [data-testid="stDataFrame"],
+  .stDataFrame, code, pre { font-variant-numeric: tabular-nums; }
+  [data-testid="stMetricValue"] { font-weight: 500; letter-spacing: -0.01em; }
+  [data-testid="stMetricLabel"] p {
+      font-size: 0.78rem; letter-spacing: 0.04em;
+      text-transform: uppercase; color: #948F88;
+  }
+
+  /* Identity band: a title, one attribution line, one rule. No badge, no glow. */
+  .lidf-title {
+      font-size: 1.5rem; font-weight: 600; letter-spacing: -0.015em;
+      color: #E4E1DC; margin: 0 0 0.3rem 0;
+  }
+  .lidf-sub {
+      font-size: 0.82rem; color: #948F88; margin: 0; letter-spacing: 0.02em;
+  }
+  .lidf-rule {
+      height: 2px; width: 3.5rem; background: #5E8CA8;
+      margin: 0.85rem 0 1.15rem 0;
+  }
+
+  /* Section rules sit closer to the content they separate. */
+  hr { margin: 1.4rem 0 1.1rem 0; border-color: #2A2D32; }
+</style>
+"""
+
+
+def _style_fig(fig, height: int, *, showlegend: bool | None = None):
+    """Apply the one chart style used everywhere.
+
+    Charts carry no titles — the surrounding subheader and caption name them,
+    which is also what the department's figure checklist asks for. Backgrounds
+    are transparent so a chart reads as part of the panel rather than as a
+    pasted-in card.
+    """
+    fig.update_layout(
+        height=height,
+        # title_text="" clears the title; title=None leaves an empty title object
+        # that plotly.js renders as the literal string "undefined".
+        title_text="",
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(family="IBM Plex Sans, sans-serif", size=12, color=_MUTED),
+        margin=dict(t=8, b=8, l=8, r=8),
+        colorway=_SERIES,
+        hoverlabel=dict(font_family="IBM Plex Sans, sans-serif"),
+        legend=dict(font=dict(size=11, color=_MUTED)),
+    )
+    if showlegend is not None:
+        fig.update_layout(showlegend=showlegend)
+    axis = dict(gridcolor=_FAINT, zerolinecolor=_FAINT, linecolor=_FAINT,
+                tickfont=dict(size=11, color=_MUTED),
+                title_font=dict(size=11, color=_MUTED))
+    fig.update_xaxes(**axis)
+    fig.update_yaxes(**axis)
+    return fig
 
 # ── Defaults from environment ──────────────────────────────────────────────────
 _ROOT = Path(__file__).resolve().parents[3]   # project root (toolkit_dev/lid_toolkit/)
@@ -66,13 +160,27 @@ _STRATUM_LABELS: dict[str, str] = {
     "cat":                  "Typological Flags (S6)",
 }
 
+_CONFIDENCE_NOTE = (
+    "Consensus confidence is the fraction of retrieved neighbours whose own "
+    "best model agrees with the recommendation. It measures neighbourhood "
+    "agreement, not the probability that the recommendation is optimal."
+)
+
 
 # ── Cached resources ───────────────────────────────────────────────────────────
 
 @st.cache_resource(show_spinner="Loading Meta-Knowledge Base…")
-def _load_store(store_path: str):
-    from lid_toolkit.recommender.mkb_store import MKBStore
-    return MKBStore.load(store_path)
+def _load_recommender(store_path: str):
+    """Load the recommendation engine once per MKB path (survives reruns)."""
+    from lid_toolkit import LID_Recommender
+    return LID_Recommender(store_path)
+
+
+@st.cache_resource(show_spinner=False)
+def _load_runner(experiments_dir: str, datasets: tuple[str, ...]):
+    """Cache the ModelRunner so a loaded model survives across reruns."""
+    from lid_toolkit.explainer.model_runner import ModelRunner
+    return ModelRunner(experiments_dir, list(datasets))
 
 
 # ── Small helpers ──────────────────────────────────────────────────────────────
@@ -86,11 +194,12 @@ def _strip_dataset(variant: str, datasets: list[str]) -> str:
 
 
 def _family_label(arch: str) -> str:
+    """Map an architecture string to the model family names used in the thesis."""
     if arch.startswith("fasttext"):
-        return "FastText (custom)"
-    if arch.startswith("lid."):
-        return "FastText (off-the-shelf)"
-    if "lr" in arch:
+        return "FastText (trained)"
+    if arch.startswith(("lid.", "cld3", "xlm")):
+        return "Zero-shot (off-the-shelf)"
+    if "lr" in arch.split("_"):
         return "Logistic Regression"
     return "Naïve Bayes"
 
@@ -100,51 +209,255 @@ def _short(name: str, n: int = 35) -> str:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Panel 1 — Recommendation Overview
+# Panel 1 — Corpus Profile (Phase 1 output: raw text → structured fingerprint)
 # ══════════════════════════════════════════════════════════════════════════════
 
-def _tab_overview(result, config, profiling_time: float, store_datasets: list[str]):
+def _tab_corpus(config, profile, texts: pd.Series | None, profiling_time: float, store):
+    st.markdown(
+        "The framework's first phase turns **raw, unlabelled text** into a "
+        "structured corpus fingerprint. Everything below is derived from the "
+        "uploaded file alone — no language labels are supplied by the user."
+    )
+
+    in_scope = sorted(config.query_iso_codes)
+    counts: dict[str, int] = dict(profile.attrs.get("detected_language_counts", {}))
+    n_docs = len(texts) if texts is not None else 0
+
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Documents Profiled", f"{n_docs:,}")
+    c2.metric("Languages in Census", len(counts) if counts else len(in_scope))
+    c3.metric("In-Scope Languages", len(in_scope))
+    c4.metric("Profiling Time", f"{profiling_time:.1f} s")
+
+    st.caption(
+        "The census is the profiler's `lid.176` language survey over every "
+        f"document; {sum(counts.values()):,} of the {n_docs:,} documents "
+        "received a high-confidence assignment. *In-scope* languages are the "
+        "subset the annotation pipelines can characterise — out-of-scope "
+        "segments are excluded from the fingerprint rather than characterised "
+        "unreliably."
+        if counts else
+        "In-scope languages are the subset the annotation pipelines can "
+        "characterise; out-of-scope segments are excluded from the fingerprint."
+    )
+    st.divider()
+
+    # ── Detected-language census ──────────────────────────────────────────────
+    st.subheader("Detected-Language Census")
+    if counts:
+        census_df = pd.DataFrame(
+            [{"Language": code,
+              "Documents": n,
+              "Status": "Profiled (in scope)" if code in in_scope else "Detected, out of scope"}
+             for code, n in sorted(counts.items(), key=lambda kv: -kv[1])]
+        )
+        st.caption(
+            f"High-confidence detections per language, top 40 of {len(census_df)}."
+        )
+        fig_census = px.bar(
+            census_df.head(40), x="Language", y="Documents", color="Status",
+            color_discrete_map={"Profiled (in scope)": _STEEL,
+                                "Detected, out of scope": "#3E434A"},
+        )
+        _style_fig(fig_census, 330)
+        fig_census.update_layout(
+            legend_title_text="",
+            legend=dict(orientation="h", y=1.14, x=0),
+            bargap=0.25,
+        )
+        st.plotly_chart(fig_census, width='stretch')
+    else:
+        st.info("No census counts were attached to this profile.")
+
+    st.markdown(
+        "**In-scope languages profiled:** "
+        + "  ".join(f"`{c}`" for c in in_scope)
+    )
+
+    st.divider()
+
+    # ── Document-length summary ───────────────────────────────────────────────
+    st.subheader("Document-Length Summary")
+    if texts is not None and len(texts):
+        lengths = texts.astype(str).str.len()
+        l1, l2, l3, l4 = st.columns(4)
+        l1.metric("Median Characters", f"{int(lengths.median()):,}")
+        l2.metric("Mean Characters", f"{int(lengths.mean()):,}")
+        l3.metric("Shortest", f"{int(lengths.min()):,}")
+        l4.metric("Longest", f"{int(lengths.max()):,}")
+        st.caption("Distribution of document length, in characters.")
+        fig_len = px.histogram(
+            pd.DataFrame({"Characters": lengths}), x="Characters", nbins=50,
+            color_discrete_sequence=[_STEEL],
+        )
+        _style_fig(fig_len, 270)
+        fig_len.update_layout(bargap=0.06)
+        st.plotly_chart(fig_len, width='stretch')
+    else:
+        st.info("Upload a corpus to see the length distribution.")
+
+    st.divider()
+
+    # ── Fingerprint composition ───────────────────────────────────────────────
+    st.subheader("Resulting Fingerprint Composition")
+    try:
+        strat = store.stratifier.stratum_summary()
+        comp = pd.DataFrame([
+            {"Stratum": _STRATUM_LABELS.get(s, s),
+             "Raw Features": int(row.n_raw_features),
+             "PCA Components": int(row.n_pcs),
+             "Variance Retained (%)": float(row.var_explained_pct)}
+            for s, row in strat.iterrows()
+        ]).sort_values("Stratum")
+        st.dataframe(comp.set_index("Stratum"), width='stretch')
+        st.caption(
+            f"{int(strat.n_raw_features.sum()):,} raw features per language are "
+            f"compressed to {int(strat.n_pcs.sum())} principal components across "
+            "the five continuous strata; the typological stratum (S6) contributes "
+            "binary flags directly and is not reduced."
+        )
+    except Exception as exc:            # pragma: no cover — diagnostic path
+        st.info(f"Stratifier summary unavailable: {exc}")
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Panel 2 — Recommendation Overview
+# ══════════════════════════════════════════════════════════════════════════════
+
+def _render_advisories(result, config, *, coverage: bool = True, typology: bool = False):
+    """Surface the recommender's own warnings in the UI, not just in the text
+    explanation. ``coverage`` renders the language-coverage guard; ``typology``
+    renders the S6 script/tonality advisories."""
+    shown = False
+    if coverage:
+        rec = result.recommended_model
+        gap: frozenset[str] = frozenset()
+        for nb in config.neighbours:
+            if rec in nb.per_model_gaps:
+                gap = nb.per_model_gaps[rec]
+                break
+        if gap:
+            st.warning(
+                f"**COVERAGE WARNING** — `{rec}` was not trained on "
+                f"{len(gap)} of your {len(config.query_iso_codes)} languages: "
+                f"`{', '.join(sorted(gap))}`. These languages will be silently "
+                "misclassified. Fully-covering alternatives appear further down "
+                "the ranked shortlist."
+            )
+            shown = True
+        if result.uncoverable_languages:
+            st.error(
+                "**UNCOVERABLE LANGUAGES** — "
+                f"`{', '.join(sorted(result.uncoverable_languages))}` appear in "
+                "your corpus but in none of the historical benchmark datasets. "
+                "No reliable recommendation can be made for them."
+            )
+            shown = True
+
+    if typology:
+        fp = config.trace.get("query_fingerprint", {}) or {}
+        n_tonal = int(fp.get("cat__n_tonal", 0))
+        has_cjk = int(fp.get("cat__has_cjk", 0))
+        notes = []
+        if n_tonal:
+            notes.append(
+                f"**{n_tonal} tonal language(s) detected** — character-aware "
+                "models generally perform better on tonal languages."
+            )
+        if has_cjk:
+            notes.append(
+                "**CJK script detected** — check that the chosen model was "
+                "trained on CJK data."
+            )
+        if notes:
+            st.info("Typological advisories (stratum S6)\n\n- " + "\n- ".join(notes))
+            shown = True
+    return shown
+
+
+def _tab_overview(result, config, query_ms: float, store_datasets: list[str]):
     rec = result.recommended_model
     conf = result.confidence
     iso_codes = config.query_iso_codes
 
     # ── Top metric strip ──────────────────────────────────────────────────────
-    c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Recommended Model", _short(rec, 40))
-    c2.metric("Confidence", f"{conf:.0%}")
-    c3.metric("Languages Detected", len(iso_codes))
-    c4.metric("Profiling Time", f"{profiling_time:.1f} s")
+    arch = _strip_dataset(rec, store_datasets)
+    train_ds = rec[len(arch) + 1:] if rec.startswith(f"{arch}_") else ""
+
+    c1, c2, c3, c4 = st.columns([2.4, 1, 1, 1])
+    c1.metric("Recommended Architecture", arch)
+    c1.caption(f"trained on `{train_ds}`" if train_ds
+               else "zero-shot / off-the-shelf")
+    c2.metric("Consensus Confidence", f"{conf:.0%}")
+    c3.metric("Languages Covered", len(iso_codes))
+    c4.metric("Query Time", f"{query_ms:.0f} ms")
 
     st.caption(f"Metric optimised: **{config.priority_metric}**  ·  "
-               f"Detected: {', '.join(sorted(iso_codes))}")
+               f"Query languages: {', '.join(sorted(iso_codes))}  ·  "
+               "Query time excludes the one-off profiling pass.")
+
+    _render_advisories(result, config, coverage=True)
+    st.divider()
+
+    # ── Ranked shortlist ──────────────────────────────────────────────────────
+    st.subheader("Ranked Shortlist")
+    st.caption(
+        "The framework returns a ranked candidate list with scores, not a single "
+        "opaque answer. When consensus is low, the practitioner evaluates the top "
+        "few candidates rather than committing to rank 1."
+    )
+    agreeing = Counter(nb.best_model for nb in config.neighbours)
+    ranked = sorted(result.all_model_scores.items(), key=lambda kv: -kv[1])
+    shortlist_rows = []
+    for i, (model, score) in enumerate(ranked[:5], 1):
+        gap_sizes = [len(nb.per_model_gaps.get(model, frozenset()))
+                     for nb in config.neighbours if nb.per_model_gaps]
+        worst_gap = max(gap_sizes) if gap_sizes else 0
+        shortlist_rows.append({
+            "Rank": i,
+            "Model": model,
+            "IDW Score": round(score, 4),
+            "Neighbours Backing": f"{agreeing.get(model, 0)}/{len(config.neighbours)}",
+            "Coverage": "full" if worst_gap == 0 else f"{worst_gap}-language gap",
+            "": "recommended" if model == rec else "",
+        })
+    st.dataframe(pd.DataFrame(shortlist_rows).set_index("Rank"), width='stretch')
+
     st.divider()
 
     # ── Confidence gauge + paradigm pie ───────────────────────────────────────
     left, right = st.columns(2)
 
     with left:
-        st.subheader("Confidence Gauge")
-        colour = "#2ecc71" if conf >= 0.67 else ("#f39c12" if conf >= 0.34 else "#e74c3c")
+        st.subheader("Consensus Confidence")
+        colour = _SAGE if conf >= 0.67 else (_AMBER if conf >= 0.34 else _CLAY)
         fig_gauge = go.Figure(go.Indicator(
             mode="gauge+number",
             value=conf * 100,
-            number={"suffix": "%", "font": {"size": 32}},
+            number={"suffix": "%", "font": {"size": 34, "color": _INK}},
             gauge={
-                "axis": {"range": [0, 100], "ticksuffix": "%"},
-                "bar": {"color": colour},
+                "axis": {"range": [0, 100], "ticksuffix": "%",
+                         "tickcolor": _FAINT, "tickwidth": 1,
+                         "tickfont": {"size": 11, "color": _MUTED}},
+                "bar": {"color": colour, "thickness": 0.34},
+                "bgcolor": "rgba(0,0,0,0)",
+                "borderwidth": 0,
+                # Bands are structural, not semantic: keep them near-invisible so
+                # the reading itself is the only thing carrying colour.
                 "steps": [
-                    {"range": [0,  34], "color": "#fdecea"},
-                    {"range": [34, 67], "color": "#fef9e7"},
-                    {"range": [67, 100], "color": "#eafaf1"},
+                    {"range": [0, 34], "color": "#212327"},
+                    {"range": [34, 67], "color": "#25272C"},
+                    {"range": [67, 100], "color": "#292C31"},
                 ],
-                "threshold": {"line": {"color": "black", "width": 2}, "value": conf * 100},
             },
         ))
-        fig_gauge.update_layout(height=240, margin=dict(t=10, b=0, l=20, r=20))
+        _style_fig(fig_gauge, 290)
+        fig_gauge.update_layout(margin=dict(t=24, b=16, l=58, r=58))
         st.plotly_chart(fig_gauge, width='stretch')
+        st.caption(_CONFIDENCE_NOTE)
 
     with right:
-        st.subheader("Paradigm Breakdown (Top-k Neighbours)")
+        st.subheader("Winning Model Family (Top-k Neighbours)")
         archs = [_strip_dataset(nb.best_model, store_datasets) for nb in config.neighbours]
         families = [_family_label(a) for a in archs]
         counts = Counter(families)
@@ -152,13 +465,21 @@ def _tab_overview(result, config, profiling_time: float, store_datasets: list[st
             fig_pie = px.pie(
                 names=list(counts.keys()),
                 values=list(counts.values()),
-                color_discrete_sequence=px.colors.qualitative.Set2,
-                hole=0.45,
+                color_discrete_sequence=_SERIES,
+                hole=0.62,
             )
-            fig_pie.update_traces(textinfo="label+percent")
-            fig_pie.update_layout(height=240, margin=dict(t=10, b=0, l=0, r=0),
-                                  showlegend=False)
+            fig_pie.update_traces(
+                textinfo="label+value", textposition="outside",
+                textfont=dict(size=11, color=_MUTED),
+                marker=dict(line=dict(color="#17181A", width=2)),
+            )
+            _style_fig(fig_pie, 290, showlegend=False)
+            fig_pie.update_layout(margin=dict(t=34, b=34, l=44, r=44))
             st.plotly_chart(fig_pie, width='stretch')
+            st.caption(
+                "Family of each retrieved neighbour's own best-performing model. "
+                "A split ring is what a consensus confidence below 1.0 looks like."
+            )
         else:
             st.info("No neighbour data available.")
 
@@ -175,7 +496,7 @@ def _tab_overview(result, config, profiling_time: float, store_datasets: list[st
             "Best Model": _short(nb.best_model),
             config.priority_metric: f"{nb.best_score:.4f}",
             "Coverage Gap": (", ".join(sorted(nb.coverage_gap))
-                             if nb.coverage_gap else "✓ Full coverage"),
+                             if nb.coverage_gap else "full coverage"),
         })
     st.dataframe(pd.DataFrame(nb_rows).set_index("Rank"), width='stretch')
 
@@ -186,25 +507,27 @@ def _tab_overview(result, config, profiling_time: float, store_datasets: list[st
     scores = result.all_model_scores
     score_df = pd.DataFrame([
         {"Model": _short(m, 50), "IDW Score": s,
-         "Winner": "✓ Recommended" if m == rec else ""}
+         "Winner": "Recommended" if m == rec else "Other candidate"}
         for m, s in sorted(scores.items(), key=lambda x: -x[1])
     ])
     fig_scores = px.bar(
         score_df, x="IDW Score", y="Model", orientation="h",
         color="Winner",
-        color_discrete_map={"✓ Recommended": "#2ecc71", "": "#95a5a6"},
+        color_discrete_map={"Recommended": _SAGE, "Other candidate": _NEUTRAL},
         labels={"IDW Score": f"IDW {config.priority_metric}"},
     )
-    fig_scores.update_layout(
-        showlegend=False,
-        height=max(220, len(score_df) * 26 + 60),
-    )
-    fig_scores.update_yaxes(categoryorder="total ascending")
+    _style_fig(fig_scores, max(220, len(score_df) * 24 + 60), showlegend=False)
+    fig_scores.update_layout(margin=dict(t=8, b=8, l=8, r=8), bargap=0.32)
+    fig_scores.update_yaxes(categoryorder="total ascending",
+                            tickfont=dict(size=10, color=_MUTED))
     st.plotly_chart(fig_scores, width='stretch')
+
+    with st.expander("Full text explanation (as returned by the API)"):
+        st.code(result.explanation, language="text")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Panel 2 — Mathematical Interpretability Walkthrough
+# Panel 3 — Mathematical Interpretability Walkthrough
 # ══════════════════════════════════════════════════════════════════════════════
 
 def _tab_walkthrough(result, config, store):
@@ -247,12 +570,14 @@ def _tab_walkthrough(result, config, store):
                 {"Stratum": _STRATUM_LABELS.get(s, s), "Weight": round(w, 4)}
                 for s, w in weights.items()
             ])
+            st.caption("Stratum weights — higher means more influential in the "
+                       "composite distance.")
             fig_w = px.bar(
                 w_df, x="Weight", y="Stratum", orientation="h",
-                color="Weight", color_continuous_scale="Blues",
-                title="Stratum Weights (higher = more influential in distance calculation)",
+                color_discrete_sequence=[_STEEL],
             )
-            fig_w.update_layout(height=280, coloraxis_showscale=False)
+            _style_fig(fig_w, 260, showlegend=False)
+            fig_w.update_layout(coloraxis_showscale=False, bargap=0.35)
             st.plotly_chart(fig_w, width='stretch')
 
     # ── Step 2: Fingerprint space ─────────────────────────────────────────────
@@ -265,8 +590,9 @@ $$D(q,\,c) = \frac{\displaystyle\sum_s w_s \cdot \|\mathbf{v}_q^s - \mathbf{v}_c
 
 where $\mathbf{v}^s$ is the PCA-projected vector for stratum $s$ and $w_s$ is its learned weight.
 
-The scatter plot below shows a 2D projection (UMAP if available, else PCA) of the full
-fingerprint space. **★ = your dataset**, red dots = selected top-k neighbours.
+The scatter below is a 2-D projection (UMAP if available, else PCA) of the full
+fingerprint space. The ringed marker is your corpus; the highlighted points are the
+retrieved top-k neighbours.
 """)
         _render_fingerprint_scatter(config, store)
 
@@ -277,7 +603,24 @@ fingerprint space. **★ = your dataset**, red dots = selected top-k neighbours.
             "Each bar shows the Euclidean distance between your corpus and a top-k neighbour "
             "within that stratum's PCA subspace. **Lower = more similar in that dimension.**"
         )
+        if config.neighbours:
+            nn = config.neighbours[0]
+            st.markdown(
+                f"**Nearest neighbour — `{nn.dataset_name}` "
+                f"({nn.similarity_pct:.1f}% similarity):**"
+            )
+            nn_df = pd.DataFrame(
+                [{"Stratum": _STRATUM_LABELS.get(s, s), "Distance": round(d, 4)}
+                 for s, d in sorted(nn.per_stratum_distances.items(), key=lambda kv: kv[1])]
+            ).set_index("Stratum")
+            st.dataframe(nn_df, width='stretch')
+            st.caption(
+                "Read top-down: the strata the query shares with its nearest "
+                "neighbour, then the strata that separate them. This is the "
+                "decomposition the stratified PCA design exists to provide."
+            )
         _render_stratum_distances(config.neighbours)
+        _render_advisories(result, config, coverage=False, typology=True)
 
     # ── Step 4: IDW voting ────────────────────────────────────────────────────
     with st.expander("**Step 4 — Inverse-Distance-Weighted (IDW) Voting**", expanded=False):
@@ -294,7 +637,7 @@ $c_n^m \in [0,1]$ is the language coverage factor
         _render_idw_breakdown(trace)
 
     # ── Step 5: Confidence ────────────────────────────────────────────────────
-    with st.expander("**Step 5 — Confidence Calculation**", expanded=False):
+    with st.expander("**Step 5 — Consensus Confidence**", expanded=False):
         conf_info = trace.get("confidence", {})
         n_agree = conf_info.get("n_agreeing", 0)
         k_total = conf_info.get("k", len(config.neighbours))
@@ -311,12 +654,18 @@ $$\text{Confidence} = \frac{\left|\left\{n \in \text{top-}k : \text{best\_model}
         cols = st.columns(max(1, k_total))
         for i, (col, nb) in enumerate(zip(cols, config.neighbours)):
             agrees = nb.best_model == result.recommended_model
-            col.metric(
-                label=f"Neighbour {i+1}",
-                value="✅ Agrees" if agrees else "❌ Differs",
-                delta=_short(nb.best_model, 25),
-                delta_color="normal" if agrees else "off",
+            col.markdown(
+                f"<div style='font-size:0.78rem;letter-spacing:0.04em;"
+                f"text-transform:uppercase;color:{_MUTED}'>Neighbour {i + 1}</div>"
+                f"<div style='font-size:1.05rem;font-weight:500;"
+                f"color:{_SAGE if agrees else _MUTED}'>"
+                f"{'Agrees' if agrees else 'Differs'}</div>"
+                f"<div style='font-size:0.78rem;color:{_MUTED};"
+                f"font-family:\"IBM Plex Mono\",monospace'>"
+                f"{_short(nb.best_model, 26)}</div>",
+                unsafe_allow_html=True,
             )
+        st.caption(_CONFIDENCE_NOTE)
 
 
 def _render_fingerprint_scatter(config, store):
@@ -381,40 +730,45 @@ def _render_fingerprint_scatter(config, store):
             ],
         })
 
+        st.caption(f"Fingerprint space, {method} projection to two dimensions.")
         fig = px.scatter(
             plot_df, x="x", y="y", color="Type", text="Dataset",
             color_discrete_map={
-                "Top-k Neighbour":  "#e74c3c",
-                "Historical Dataset": "#bdc3c7",
+                "Top-k Neighbour": _STEEL,
+                "Historical Dataset": _NEUTRAL,
             },
-            labels={"x": f"{method} Dim 1", "y": f"{method} Dim 2"},
-            title=f"Fingerprint Space ({method} projection)",
+            labels={"x": f"{method} dim 1", "y": f"{method} dim 2"},
         )
         fig.update_traces(
             selector={"name": "Historical Dataset"},
-            textposition="top center",
-            marker_size=9,
+            textposition="top center", marker_size=8,
+            textfont=dict(size=10, color=_MUTED),
         )
         fig.update_traces(
             selector={"name": "Top-k Neighbour"},
-            textposition="top center",
-            marker_size=14,
-            marker_line_width=2,
-            marker_line_color="#c0392b",
+            textposition="top center", marker_size=13,
+            marker_line_width=1.5, marker_line_color=_INK,
+            textfont=dict(size=10, color=_INK),
         )
 
-        # Query point as gold star
+        # The query itself: a ringed marker, distinguished by form rather than
+        # by another hue.
         fig.add_trace(go.Scatter(
             x=[q_xy[0]], y=[q_xy[1]],
             mode="markers+text",
-            marker=dict(symbol="star", size=22, color="#f39c12",
-                        line=dict(width=1.5, color="#d68910")),
-            text=["★ Your Dataset"],
+            marker=dict(symbol="circle-open-dot", size=20, color=_AMBER,
+                        line=dict(width=2.5, color=_AMBER)),
+            text=["your corpus"],
             textposition="top center",
-            name="Your Dataset",
+            textfont=dict(size=11, color=_AMBER),
+            name="Your corpus",
             showlegend=True,
         ))
-        fig.update_layout(height=480, legend_title_text="")
+        _style_fig(fig, 470)
+        fig.update_layout(
+            legend_title_text="",
+            legend=dict(orientation="h", y=1.1, x=0),
+        )
         st.plotly_chart(fig, width='stretch')
 
     except Exception as exc:
@@ -434,13 +788,18 @@ def _render_stratum_distances(neighbours):
         st.info("Stratum distances not available.")
         return
     df = pd.DataFrame(rows)
+    st.caption("Per-stratum Euclidean distance, query against each top-k neighbour.")
     fig = px.bar(
         df, x="Distance", y="Stratum", color="Neighbour",
         orientation="h", barmode="group",
-        color_discrete_sequence=px.colors.qualitative.Set2,
-        title="Per-Stratum Euclidean Distance (query vs each top-k neighbour)",
+        color_discrete_sequence=_SERIES,
     )
-    fig.update_layout(height=360)
+    _style_fig(fig, 350)
+    fig.update_layout(
+        legend_title_text="",
+        legend=dict(orientation="h", y=1.16, x=0),
+        bargap=0.28, bargroupgap=0.06,
+    )
     st.plotly_chart(fig, width='stretch')
 
 
@@ -466,14 +825,19 @@ def _render_idw_breakdown(trace):
 
     if contrib_rows:
         df_c = pd.DataFrame(contrib_rows)
+        st.caption("Each neighbour's weighted contribution to every candidate's score.")
         fig_stack = px.bar(
             df_c, x="Neighbour", y="Contribution", color="Model",
             barmode="stack",
-            color_discrete_sequence=px.colors.qualitative.Set3,
-            title="IDW Contributions per Neighbour",
-            labels={"Contribution": f"Contribution to Score"},
+            color_discrete_sequence=_SERIES,
+            labels={"Contribution": "Contribution to score"},
         )
-        fig_stack.update_layout(height=370)
+        _style_fig(fig_stack, 380)
+        fig_stack.update_layout(
+            legend_title_text="",
+            legend=dict(font=dict(size=10)),
+            bargap=0.45,
+        )
         st.plotly_chart(fig_stack, width='stretch')
 
         with st.expander("Detailed contribution table"):
@@ -495,10 +859,10 @@ def _render_idw_breakdown(trace):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Panel 3 — Run Model (Live Inference)
+# Panel 4 — Run Model (Live Inference)
 # ══════════════════════════════════════════════════════════════════════════════
 
-def _tab_run_model(result, config, texts: pd.Series | None, experiments_dir: str):
+def _tab_run_model(result, config, texts: pd.Series | None, experiments_dir: str, store):
     if texts is None or len(texts) == 0:
         st.info("Upload a corpus CSV in the sidebar to enable live model inference.")
         return
@@ -527,7 +891,7 @@ def _tab_run_model(result, config, texts: pd.Series | None, experiments_dir: str
             format_func=lambda m: (
                 f"{_short(m, 50)}  "
                 f"[IDW: {result.all_model_scores[m]:.4f}]"
-                + ("  ← recommended" if m == rec else "")
+                + ("   · recommended" if m == rec else "")
             ),
         )
     with col_n:
@@ -540,10 +904,7 @@ def _tab_run_model(result, config, texts: pd.Series | None, experiments_dir: str
         )
 
     # Availability check
-    from lid_toolkit.recommender.mkb_store import MKBStore
-    store = MKBStore.load(config.store_path)
-    from lid_toolkit.explainer.model_runner import ModelRunner
-    runner = ModelRunner(experiments_dir, store.datasets)
+    runner = _load_runner(experiments_dir, tuple(store.datasets))
 
     available = runner.is_available(selected)
     if not available:
@@ -554,7 +915,7 @@ def _tab_run_model(result, config, texts: pd.Series | None, experiments_dir: str
             st.error(str(e))
 
     run_btn = st.button(
-        "▶  Run Model on Dataset",
+        "Run model on dataset",
         type="primary",
         disabled=not available,
     )
@@ -595,14 +956,13 @@ def _tab_run_model(result, config, texts: pd.Series | None, experiments_dir: str
             .rename(columns={"index": "Language", 0: "Count"})
         )
         pred_counts.columns = ["Language", "Count"]
+        st.caption(f"Predicted language distribution over {len(preds):,} samples.")
         fig_dist = px.bar(
-            pred_counts.head(30),
-            x="Language", y="Count",
-            color="Count",
-            color_continuous_scale="Blues",
-            title=f"Predicted Language Distribution  ({len(preds)} samples)",
+            pred_counts.head(30), x="Language", y="Count",
+            color_discrete_sequence=[_STEEL],
         )
-        fig_dist.update_layout(height=350, coloraxis_showscale=False)
+        _style_fig(fig_dist, 330, showlegend=False)
+        fig_dist.update_layout(coloraxis_showscale=False, bargap=0.3)
         st.plotly_chart(fig_dist, width='stretch')
 
         # Sample predictions table
@@ -616,7 +976,7 @@ def _tab_run_model(result, config, texts: pd.Series | None, experiments_dir: str
         # Download button
         full_df = pd.DataFrame({"text": sample_texts, "predicted_lang": preds})
         st.download_button(
-            label="⬇  Download full predictions as CSV",
+            label="Download full predictions as CSV",
             data=full_df.to_csv(index=False).encode("utf-8"),
             file_name=f"predictions_{selected[:40]}.csv",
             mime="text/csv",
@@ -624,14 +984,14 @@ def _tab_run_model(result, config, texts: pd.Series | None, experiments_dir: str
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Panel 4 — Baseline Comparison
+# Panel 5 — Baseline Comparison
 # ══════════════════════════════════════════════════════════════════════════════
 
 def _tab_baseline(result, config, store):
     st.markdown(
-        "Compare the toolkit's recommendation against naive baselines — all measured "
+        "Compare the framework's recommendation against naive baselines — all measured "
         "as IDW-weighted scores on **your specific query**. "
-        "A positive delta means the toolkit outperforms the baseline for this corpus."
+        "A positive delta means the framework outperforms the baseline for this corpus."
     )
 
     all_scores = result.all_model_scores
@@ -658,24 +1018,28 @@ def _tab_baseline(result, config, store):
 
     comp_df = pd.DataFrame({
         "Strategy": [
-            f"LID Toolkit  →  {_short(rec, 40)}",
-            f"Always-best Default  ({default_wins} wins)",
-            "Random Selection (mean)",
+            f"LID Framework  ·  {_short(rec, 40)}",
+            f"Always-best default  ({default_wins} wins)",
+            "Random selection (mean)",
         ],
         "IDW Score": [rec_score, default_score, random_score],
-        "Category": ["Toolkit", "Baseline", "Baseline"],
+        "Category": ["Framework", "Baseline", "Baseline"],
     })
 
+    st.caption("Framework recommendation against the two naive selection policies, "
+               "scored on this query.")
     fig_comp = px.bar(
         comp_df, x="IDW Score", y="Strategy", orientation="h",
         color="Category",
-        color_discrete_map={"Toolkit": "#2ecc71", "Baseline": "#95a5a6"},
+        color_discrete_map={"Framework": _SAGE, "Baseline": _NEUTRAL},
         labels={"IDW Score": f"IDW {config.priority_metric}"},
-        title="Toolkit vs Baseline Strategies",
         text="IDW Score",
     )
-    fig_comp.update_traces(texttemplate="%{text:.4f}", textposition="outside")
-    fig_comp.update_layout(height=260, showlegend=False, xaxis_range=[0, None])
+    fig_comp.update_traces(texttemplate="%{text:.4f}", textposition="outside",
+                           textfont=dict(size=11, color=_MUTED), cliponaxis=False)
+    _style_fig(fig_comp, 250, showlegend=False)
+    fig_comp.update_layout(xaxis_range=[0, None], bargap=0.42,
+                           margin=dict(t=8, b=8, l=8, r=44))
     fig_comp.update_yaxes(categoryorder="total ascending")
     st.plotly_chart(fig_comp, width='stretch')
 
@@ -697,12 +1061,12 @@ def _tab_baseline(result, config, store):
 
     st.markdown("""
 **How to interpret:**
-- *LID Toolkit* selects the model with the highest expected performance for **this specific corpus**.
-- *Always-best Default* picks whichever model wins the most historical datasets globally — a strong zero-effort baseline.
-- *Random Selection* establishes the floor: expected score if a model were picked at random.
+- *LID Framework* selects the model with the highest expected performance for **this specific corpus**.
+- *Always-best default* picks whichever model wins the most historical datasets globally — a strong zero-effort baseline.
+- *Random selection* establishes the floor: the expected score if a model were picked at random.
 
-A positive delta against the default confirms the meta-learning approach adds value over simply
-always recommending the globally best model.
+A positive delta against the default indicates that the meta-learning approach adds value over
+simply always recommending the globally best model.
 """)
 
     if win_counts:
@@ -716,7 +1080,7 @@ always recommending the globally best model.
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Panel 5 — Coverage & Scope
+# Panel 6 — Coverage & Scope
 # ══════════════════════════════════════════════════════════════════════════════
 
 def _tab_coverage(result, config):
@@ -752,40 +1116,48 @@ def _tab_coverage(result, config):
         for model in top_models:
             cov = _is_covered(lang, model)
             if cov is True:
-                z_row.append(1.0);  t_row.append("✓")
+                z_row.append(1.0);  t_row.append("●")
             elif cov is False:
-                z_row.append(0.0);  t_row.append("✗")
+                z_row.append(0.0);  t_row.append("○")
             else:
-                z_row.append(0.5);  t_row.append("?")
+                z_row.append(0.5);  t_row.append("–")
         z_vals.append(z_row)
         text_vals.append(t_row)
 
     model_labels = [_short(m, 32) for m in top_models]
 
+    st.caption(
+        "Language coverage matrix — filled = covered, hollow = gap, dash = unknown. "
+        "Models are ordered by IDW score, best on the left."
+    )
     fig_heat = go.Figure(go.Heatmap(
         z=z_vals,
         x=model_labels,
         y=iso_codes,
         text=text_vals,
         texttemplate="%{text}",
+        textfont=dict(size=12, color=_INK),
+        # Muted fills on charcoal: a gap is the only cell that carries a warm
+        # hue, so the eye lands on the problem rather than on the wall of ticks.
         colorscale=[
-            [0.0,  "#fdecea"],   # gap     → red tint
-            [0.45, "#fdecea"],
-            [0.5,  "#fef9e7"],   # unknown → yellow tint
-            [0.55, "#fef9e7"],
-            [1.0,  "#d5f5e3"],   # covered → green tint
+            [0.0,  "#4A2E2A"],   # gap
+            [0.45, "#4A2E2A"],
+            [0.5,  "#2A2D32"],   # unknown
+            [0.55, "#2A2D32"],
+            [1.0,  "#2C3A33"],   # covered
         ],
         zmin=0, zmax=1,
         showscale=False,
-        xgap=2, ygap=2,
+        xgap=3, ygap=3,
     ))
+    _style_fig(fig_heat, max(300, len(iso_codes) * 26 + 110), showlegend=False)
     fig_heat.update_layout(
-        title="Language Coverage Matrix (✓ = covered · ✗ = gap · ? = unknown)",
-        height=max(300, len(iso_codes) * 28 + 100),
-        xaxis_title="Model (sorted by IDW score, best = leftmost)",
-        yaxis_title="Detected Language",
+        xaxis_title="Model", yaxis_title="Detected language",
         xaxis_tickangle=-30,
+        margin=dict(t=8, b=8, l=8, r=8),
     )
+    fig_heat.update_xaxes(showgrid=False)
+    fig_heat.update_yaxes(showgrid=False)
     st.plotly_chart(fig_heat, width='stretch')
 
     st.caption(
@@ -799,13 +1171,13 @@ def _tab_coverage(result, config):
     for lang in iso_codes:
         rec_cov = _is_covered(lang, rec)
         if lang in result.uncoverable_languages:
-            status = "⚠️ Uncoverable (absent from all MKB datasets)"
+            status = "Uncoverable — absent from all MKB datasets"
         elif rec_cov is False:
-            status = "⚠️ Gap in recommended model"
+            status = "Gap in the recommended model"
         elif rec_cov is True:
-            status = "✓ Covered by recommended model"
+            status = "Covered by the recommended model"
         else:
-            status = "? Coverage unknown"
+            status = "Coverage unknown"
         summary_rows.append({"ISO Code": lang, "Status": status})
     st.dataframe(pd.DataFrame(summary_rows).set_index("ISO Code"), width='stretch')
 
@@ -821,7 +1193,7 @@ def _tab_coverage(result, config):
         st.success("All detected languages are fully covered by the recommended model.")
 
     # Scope note
-    with st.expander("Note on toolkit scope"):
+    with st.expander("Note on framework scope"):
         st.markdown("""
 The current MKB covers **24 languages** (ca, da, de, el, en, es, fi, fr, hr, it, ja, ko,
 lt, mk, nb, nl, pl, pt, ro, ru, sl, sv, uk, zh) across European, East Asian, and Slavic
@@ -830,7 +1202,7 @@ language families.
 Languages outside this set — including low-resource African, Indigenous American, and
 South/Southeast Asian languages — are not represented in the benchmark datasets and
 **will not receive reliable recommendations**. This is a known limitation of the current
-benchmark scope, discussed in the thesis (§ 4.5).
+benchmark scope, discussed in the thesis.
 """)
 
 
@@ -839,15 +1211,19 @@ benchmark scope, discussed in the thesis (§ 4.5).
 # ══════════════════════════════════════════════════════════════════════════════
 
 def main():
-    st.title("🌐  LID Toolkit — Interactive Dashboard")
-    st.caption(
-        "Language Identification Model Recommender  ·  Werner Hugo  ·  MEng Thesis  "
-        "·  Stellenbosch University"
+    st.markdown(_CSS, unsafe_allow_html=True)
+    st.markdown(
+        '<div class="lidf-title">LID Framework — Interactive Dashboard</div>'
+        '<div class="lidf-sub">Language identification model recommendation '
+        'from corpus fingerprints &nbsp;·&nbsp; Werner Hugo &nbsp;·&nbsp; '
+        'MEng thesis, Stellenbosch University</div>'
+        '<div class="lidf-rule"></div>',
+        unsafe_allow_html=True,
     )
 
     # ── Sidebar ────────────────────────────────────────────────────────────────
     with st.sidebar:
-        st.header("⚙️  Configuration")
+        st.subheader("Configuration")
         store_path = st.text_input(
             "MKB path (mkb.pkl)",
             value=_DEFAULT_STORE,
@@ -858,18 +1234,9 @@ def main():
             value=_DEFAULT_EXPERIMENTS,
             help="Root of the LID_experiments/ folder (used for live model inference).",
         )
-        metric = st.selectbox(
-            "Optimisation metric",
-            _METRICS,
-            index=0,
-            help=(
-                "Metric to optimise: accuracy/F1/precision/recall (higher=better) or "
-                "inference_time_* (lower=better) or throughput (higher=better)."
-            ),
-        )
 
         st.divider()
-        st.header("📂  Upload Corpus")
+        st.subheader("Corpus")
         uploaded = st.file_uploader(
             "Upload CSV file",
             type=["csv", "tsv"],
@@ -882,16 +1249,20 @@ def main():
         )
 
         st.divider()
-        analyse = st.button("🔍  Analyse Corpus", type="primary", width='stretch')
+        analyse = st.button("Profile corpus", type="primary", width='stretch')
+        st.caption(
+            "Profiling runs once. The priority metric is then a live control in "
+            "the main pane — re-querying does not re-profile."
+        )
 
-        if "result" in st.session_state:
-            if st.button("🗑  Clear Results", width='stretch'):
-                for key in ["result", "config", "texts", "profiling_time",
+        if "profile" in st.session_state:
+            if st.button("Clear session", width='stretch'):
+                for key in ["profile", "texts", "profiling_time",
                             "run_preds", "run_texts", "run_model"]:
                     st.session_state.pop(key, None)
                 st.rerun()
 
-    # ── Run analysis ───────────────────────────────────────────────────────────
+    # ── Phase 1: profile the corpus (expensive, run once) ──────────────────────
     if analyse:
         if not uploaded:
             st.sidebar.error("Please upload a CSV file first.")
@@ -923,15 +1294,13 @@ def main():
             f"Profiling corpus ({len(texts):,} samples)…  "
             "This may take several minutes for large corpora."
         ):
-            from lid_toolkit import LID_Recommender
-            lid = LID_Recommender(store_path)
+            lid = _load_recommender(store_path)
             t0 = time.perf_counter()
-            result, config = lid.recommend(texts, metric=metric, mode="explain")
+            profile = lid.profile(texts)
             elapsed = time.perf_counter() - t0
 
         st.session_state.update({
-            "result": result,
-            "config": config,
+            "profile": profile,
             "texts": texts,
             "profiling_time": elapsed,
         })
@@ -940,52 +1309,89 @@ def main():
             st.session_state.pop(k, None)
         st.rerun()
 
-    # ── Show results ───────────────────────────────────────────────────────────
-    if "result" not in st.session_state:
+    # ── Landing state ──────────────────────────────────────────────────────────
+    if "profile" not in st.session_state:
         st.info(
-            "Upload a corpus CSV in the sidebar and click **Analyse Corpus** "
+            "Upload a corpus CSV in the sidebar and click **Profile corpus** "
             "to get a recommendation."
         )
         with st.expander("How to use this dashboard"):
             st.markdown("""
 1. **Configure** — set the paths to `mkb.pkl` and the `LID_experiments/` folder.
 2. **Upload** — provide a CSV file with a column of text samples.
-3. **Analyse** — click the button; DeepProfiler will profile your corpus
+3. **Profile** — click the button; DeepProfiler characterises your corpus once
    (a few minutes for large corpora).
-4. **Explore** five panels:
-   - **Recommendation** — model, confidence, top-k neighbours, all model scores.
+4. **Query** — set the priority metric in the main pane. Each change re-queries
+   the Meta-Knowledge Base from the cached fingerprint in milliseconds.
+5. **Explore** six panels:
+   - **Corpus Profile** — language census, document lengths, fingerprint composition.
+   - **Recommendation** — model, consensus confidence, ranked shortlist, all model scores.
    - **How It Works** — step-by-step mathematical walkthrough with interactive charts.
    - **Run Model** — load and run the recommended model directly on your dataset.
-   - **Baseline** — compare the toolkit against naive strategies.
+   - **Baselines** — compare the framework against naive selection policies.
    - **Coverage** — language × model support matrix and scope warnings.
 """)
         return
 
-    result = st.session_state["result"]
-    config = st.session_state["config"]
+    profile = st.session_state["profile"]
     texts = st.session_state.get("texts")
     profiling_time = st.session_state.get("profiling_time", 0.0)
 
-    store = _load_store(store_path)
+    # ── Phase 2: live query controls (cheap, re-run on every interaction) ──────
+    ctrl_l, ctrl_r = st.columns([2, 3])
+    with ctrl_l:
+        metric = st.selectbox(
+            "Priority metric",
+            _METRICS,
+            index=0,
+            help=(
+                "Metric to optimise: accuracy/F1/precision/recall (higher=better), "
+                "inference_time_* (lower=better) or throughput (higher=better). "
+                "Changing this re-queries the knowledge base immediately."
+            ),
+        )
 
-    # ── 5 Tabs ─────────────────────────────────────────────────────────────────
-    tab1, tab2, tab3, tab4, tab5 = st.tabs([
-        "📊  Recommendation",
-        "🔍  How It Works",
-        "▶  Run Model",
-        "📈  Baseline",
-        "🌍  Coverage",
+    lid = _load_recommender(store_path)
+    store = lid.store
+    try:
+        t0 = time.perf_counter()
+        result, config = lid.explain_from_profile(profile, metric=metric)
+        query_ms = (time.perf_counter() - t0) * 1000
+    except Exception as exc:
+        st.error(f"Query failed for metric `{metric}`: {exc}")
+        return
+
+    with ctrl_r:
+        st.markdown(
+            f"<div style='padding-top:2.0rem;color:{_MUTED};font-size:0.86rem'>"
+            f"Corpus profiled in <b style='color:{_INK}'>{profiling_time:.1f}&nbsp;s</b>"
+            f" (once) &nbsp;·&nbsp; this query answered in "
+            f"<b style='color:{_INK}'>{query_ms:.0f}&nbsp;ms</b> from the cached "
+            f"fingerprint</div>",
+            unsafe_allow_html=True,
+        )
+
+    # ── 6 Tabs ─────────────────────────────────────────────────────────────────
+    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+        "Corpus profile",
+        "Recommendation",
+        "How it works",
+        "Run model",
+        "Baselines",
+        "Coverage",
     ])
 
     with tab1:
-        _tab_overview(result, config, profiling_time, store.datasets)
+        _tab_corpus(config, profile, texts, profiling_time, store)
     with tab2:
-        _tab_walkthrough(result, config, store)
+        _tab_overview(result, config, query_ms, store.datasets)
     with tab3:
-        _tab_run_model(result, config, texts, experiments_dir)
+        _tab_walkthrough(result, config, store)
     with tab4:
-        _tab_baseline(result, config, store)
+        _tab_run_model(result, config, texts, experiments_dir, store)
     with tab5:
+        _tab_baseline(result, config, store)
+    with tab6:
         _tab_coverage(result, config)
 
 
