@@ -62,9 +62,26 @@ class DeepProfiler:
         'Verbal adjective':'Verbal adjective',
     }
 
-    def __init__(self):
+    def __init__(self, seed: int | None = None):
+        """Construct the profiler.
+
+        Parameters
+        ----------
+        seed : int, optional
+            Makes document sampling reproducible. Both profiling paths draw a
+            bounded sample of the available texts per language (``MAX_SAMPLES``
+            in each of ``_profile_user_mode`` and ``_profile_building_mode``,
+            plus the ``SNAPSHOT_SIZE`` census snapshot in user mode). Left as
+            ``None`` those draws are stochastic, so two passes over one corpus
+            return slightly different fingerprints — fine in normal use, but it
+            prevents a recorded session from being reproduced exactly. Pass a
+            seed when a profile must be repeatable, for example when a captured
+            figure and its transcript have to agree.
+        """
         print("⏳ Initializing DeepProfiler (Lingualyzer Implementation)...")
-        
+
+        self.seed = seed
+
         # 1. Dynamically find the path to the model relative to this python script
         # __file__ is profiler.py. We go up one level to 'lid_toolkit', then into 'resources'
         base_dir = Path(__file__).parent.parent 
@@ -2091,8 +2108,9 @@ class DeepProfiler:
 
         final_report: dict = {}
         MAX_SAMPLES = 100
+        shuffler = random.Random(self.seed) if self.seed is not None else random
         for lang, texts in lang_texts.items():
-            random.shuffle(texts)          # stochastic, no fixed seed
+            shuffler.shuffle(texts)        # stochastic unless self.seed is set
             subset_txt = texts[:MAX_SAMPLES]
             print(f"📊 Building '{lang}' ({len(subset_txt)}/{len(texts)} texts)...")
             result = self._profile_language_group(lang, subset_txt)
@@ -2116,7 +2134,8 @@ class DeepProfiler:
         SNAPSHOT_SIZE = 10_000
 
         print(f"🔍 Phase 1: Snapshot Census ({min(len(clean), SNAPSHOT_SIZE)} rows)...")
-        snapshot = clean.sample(n=min(len(clean), SNAPSHOT_SIZE), random_state=None)
+        snapshot = clean.sample(n=min(len(clean), SNAPSHOT_SIZE),
+                                random_state=self.seed)
         cleaned_texts = [t.replace('\n', ' ') for t in snapshot.values]
 
         CONF_THRESHOLD = 0.0          # CRITICAL: profile as-is, no confidence filtering
@@ -2137,7 +2156,8 @@ class DeepProfiler:
                 print(f"⏭️  Skipping '{lang}' (unsupported spaCy language).")
                 continue
             subset_txt = (
-                subset.sample(n=min(len(subset), MAX_SAMPLES), random_state=None)
+                subset.sample(n=min(len(subset), MAX_SAMPLES),
+                              random_state=self.seed)
                 .values.tolist()
             )
             print(f"📊 Profiling '{spacy_lang}' ({len(subset_txt)} texts)...")

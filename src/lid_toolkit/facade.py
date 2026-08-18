@@ -18,10 +18,12 @@ class LID_Recommender:
         store_path: str | Path,
         stratum_weights: dict[str, float] | None = None,
         k: int = 3,
+        seed: int | None = None,
     ):
         self.store_path = Path(store_path)
         self._rec = Recommender.from_store(self.store_path, stratum_weights=stratum_weights, k=k)
         self._k = k
+        self._seed = seed
         self._profiler = None
 
     @property
@@ -38,10 +40,13 @@ class LID_Recommender:
         once and pass the result to :meth:`explain_from_profile`, which is a
         nearest-neighbour lookup over the Meta-Knowledge Base and costs
         milliseconds.
+
+        Profiling samples documents per language, so it is reproducible only if
+        this recommender was constructed with a ``seed``.
         """
         if self._profiler is None:
             from lid_toolkit.logic.profiler_knowledge_base import DeepProfiler
-            self._profiler = DeepProfiler()
+            self._profiler = DeepProfiler(seed=self._seed)
         profile = self._profiler.get_multilingual_profile(texts)
         if profile.empty:
             raise ValueError(

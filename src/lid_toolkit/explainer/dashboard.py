@@ -368,11 +368,17 @@ _CONFIDENCE_NOTE = (
 
 # ── Cached resources ───────────────────────────────────────────────────────────
 
+# Fixed profiling seed. Document sampling is otherwise stochastic, so the same
+# upload would return a slightly different fingerprint on every run and a
+# captured figure could not be reproduced. Overridable for ad-hoc exploration.
+PROFILE_SEED = int(os.environ.get("LID_PROFILE_SEED", 42))
+
+
 @st.cache_resource(show_spinner="Loading Meta-Knowledge Base…")
 def _load_recommender(store_path: str):
     """Load the recommendation engine once per MKB path (survives reruns)."""
     from lid_toolkit import LID_Recommender
-    return LID_Recommender(store_path)
+    return LID_Recommender(store_path, seed=PROFILE_SEED)
 
 
 @st.cache_resource(show_spinner=False)

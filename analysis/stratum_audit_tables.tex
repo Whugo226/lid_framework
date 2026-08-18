@@ -24,6 +24,35 @@
     \end{tabular}
 \end{table}
 
+\begin{table}[H]
+    \centering
+    \caption{Segment-level composition of the core schema, extracted from the same fitted \texttt{FeatureStratifier}. A base measure is instantiated only at the levels at which it is defined; at sentence and paragraph level it is summarised across the constituent segments by four aggregate statistics, whereas at document level it is emitted as a single value. Counts are those of the fixed core, that is, after the fitting step's validity filter has removed the conditional paragraph-level variants that not every corpus populates.}
+    \label{tab:stratum_audit_levels}
+    \begin{tabular}{|l|r|r|r|}
+        \hline
+        \textbf{Segment level} & \textbf{Base measures} & \textbf{Statistics} & \textbf{Core features} \\
+        \hline
+        Sentence & 281 & 4 & 1{,}124 \\
+        \hline
+        Paragraph & 269 & 4 & 1{,}076 \\
+        \hline
+        Document & 266 & 1 & 266 \\
+        \hline
+        Sentence--sentence & 13 & 4 & 52 \\
+        \hline
+        Sentence--paragraph & 13 & 4 & 52 \\
+        \hline
+        Sentence--document & 13 & 4 & 52 \\
+        \hline
+        Paragraph--paragraph & 13 & 4 & 52 \\
+        \hline
+        Paragraph--document & 13 & 4 & 52 \\
+        \hline
+        \textbf{Total} & --- & --- & \textbf{2{,}726} \\
+        \hline
+    \end{tabular}
+\end{table}
+
 \begin{small}
 \begin{longtable}{|l|r||l|r|}
 \caption{S1 --- Morphological Richness: complete base-measure family enumeration (108 families, 813 core features). Var.\ is the number of level--statistic variants of the family assigned to this stratum.}

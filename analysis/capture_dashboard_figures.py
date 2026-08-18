@@ -59,6 +59,11 @@ FIGROOT = Path(r"c:/Users/User/OneDrive/Masters/Thesis/Thesis Template Legit/fig
 OUT = FIGROOT / "gentelella"
 FORCE = False
 
+# Profiling wall-clock scales with the number of IN-SCOPE documents, not the
+# upload size: the 600-document draw profiles ~237, the 10k draw ~3,795. Raise
+# this with --profile-timeout when uploading a larger corpus.
+PROFILE_TIMEOUT_MS = 720_000
+
 WIDTH = 1200
 
 HIDE_CHROME = """
@@ -155,8 +160,9 @@ def main():
         log("clicking Profile Corpus")
         page.get_by_role("button", name="Profile Corpus").click()
 
-        log("waiting for profiling (up to 12 min)…")
-        page.get_by_role("tab", name="Corpus profile").wait_for(timeout=720_000)
+        log(f"waiting for profiling (up to {PROFILE_TIMEOUT_MS // 60_000} min)…")
+        page.get_by_role("tab", name="Corpus profile").wait_for(
+            timeout=PROFILE_TIMEOUT_MS)
         page.wait_for_timeout(4000)
         settle(page)
 
@@ -219,18 +225,26 @@ def main():
 
 
 def _cli():
-    global OUT, FORCE
+    global OUT, FORCE, CSV, PROFILE_TIMEOUT_MS
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--out", type=Path, default=OUT,
                     help="directory to write fig1..fig4 into "
                          f"(default: {OUT})")
+    ap.add_argument("--csv", type=Path, default=CSV,
+                    help=f"corpus to upload (default: {CSV.name})")
+    ap.add_argument("--profile-timeout", type=int,
+                    default=PROFILE_TIMEOUT_MS // 60_000,
+                    help="minutes to wait for the profiling pass "
+                         f"(default: {PROFILE_TIMEOUT_MS // 60_000})")
     ap.add_argument("--force", action="store_true",
                     help="replace captures that already exist in --out "
                          "(off by default, so earlier figures are kept)")
     args = ap.parse_args()
-    OUT, FORCE = args.out, args.force
+    OUT, FORCE, CSV = args.out, args.force, args.csv
+    PROFILE_TIMEOUT_MS = args.profile_timeout * 60_000
     OUT.mkdir(parents=True, exist_ok=True)
     log(f"writing to {OUT}  (force={FORCE})")
+    log(f"corpus: {CSV}")
     return main()
 
 

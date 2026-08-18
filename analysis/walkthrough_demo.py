@@ -8,6 +8,7 @@ Three queries against one profile:
   3. explicit language requirement including a language that exposes
      coverage gaps (detected set + extras), to exercise the coverage guard
 """
+import argparse
 import json
 import sys
 import time
@@ -17,19 +18,35 @@ import pandas as pd
 
 TK = Path(r"c:/Users/User/OneDrive/Masters/Python/toolkit_dev/lid_toolkit")
 sys.path.insert(0, str(TK / "src"))
-OUT = Path(__file__).parent / "walkthrough_results.json"
 
-lines = [l.strip() for l in
-         (TK / "test_examples" / "wili2018_test.txt").read_text(encoding="utf-8").splitlines()
-         if len(l.strip()) > 30]
-texts = pd.Series(lines[:600])
-print(f"loaded {len(texts)} lines from wili2018_test.txt")
+_ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+_ap.add_argument("--csv", type=Path, default=None,
+                 help="corpus CSV with a 'text' column; default is the "
+                      "legacy first-600-lines slice of wili2018_test.txt")
+_ap.add_argument("--out", type=Path, default=None,
+                 help="output JSON (default: walkthrough_results.json)")
+_args = _ap.parse_args()
+
+OUT = _args.out or (Path(__file__).parent / "walkthrough_results.json")
+
+if _args.csv:
+    texts = pd.read_csv(_args.csv)["text"].dropna().astype(str)
+    print(f"loaded {len(texts)} rows from {_args.csv.name}")
+else:
+    lines = [l.strip() for l in
+             (TK / "test_examples" / "wili2018_test.txt").read_text(encoding="utf-8").splitlines()
+             if len(l.strip()) > 30]
+    texts = pd.Series(lines[:600])
+    print(f"loaded {len(texts)} lines from wili2018_test.txt")
 
 from lid_toolkit.recommender import Recommender
 rec = Recommender.from_store(TK / "mkb.pkl", k=3)
 
 from lid_toolkit.logic.profiler_knowledge_base import DeepProfiler
-prof = DeepProfiler()
+# Same seed the dashboard uses, so the transcript and the captured panels
+# describe one fingerprint rather than two near-identical ones.
+PROFILE_SEED = 42
+prof = DeepProfiler(seed=PROFILE_SEED)
 t0 = time.perf_counter()
 profile = prof.run_profile("user", text_series=texts)
 t_prof = time.perf_counter() - t0

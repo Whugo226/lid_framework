@@ -1,0 +1,197 @@
+{
+  "generated": "2026-08-17",
+  "priority_metric": "f1_weighted",
+  "question": "What is the full distribution of fixed-model (constant policy) choices across the 17 evaluation datasets, and how does the framework sit within it?",
+  "sources": {
+    "benchmark_scores": "validation_report.json",
+    "framework_regret": "analysis\\reporting_measures_2026-07-21.json :: A_evaluation_splits_full_mkb"
+  },
+  "n_datasets": 17,
+  "n_candidates": 105,
+  "n_candidates_sharing_portable_key": 103,
+  "framework_mean_gap": 0.007287,
+  "distribution_of_constant_policies": {
+    "mean": 0.383249,
+    "sd": 0.223845,
+    "p0": 0.012727,
+    "p5": 0.057578,
+    "p10": 0.097096,
+    "p25": 0.149994,
+    "p50": 0.387197,
+    "p75": 0.589939,
+    "p90": 0.648165,
+    "p95": 0.771555,
+    "p100": 0.811033
+  },
+  "n_beating_framework": 0,
+  "n_at_or_below_threshold": {
+    "0.02": 2,
+    "0.05": 5,
+    "0.10": 13,
+    "0.20": 32
+  },
+  "best_constants": [
+    {
+      "model": "fasttext_subword_exorde-social-media-december-2024-week1",
+      "mean_gap": 0.012727
+    },
+    {
+      "model": "xlm_v_base_language_id",
+      "mean_gap": 0.017515
+    },
+    {
+      "model": "lid.176",
+      "mean_gap": 0.020674
+    },
+    {
+      "model": "cld3",
+      "mean_gap": 0.030456
+    },
+    {
+      "model": "fasttext_subword_wikipedia",
+      "mean_gap": 0.040513
+    },
+    {
+      "model": "tfidf_lr_char_ngram_3_5_exorde-social-media-december-2024-week1",
+      "mean_gap": 0.056859
+    },
+    {
+      "model": "bow_maxabs_lr_char_ngram_3_5_exorde-social-media-december-2024-week1",
+      "mean_gap": 0.060455
+    },
+    {
+      "model": "tfidf_char_ngram_3_5_exorde-social-media-december-2024-week1",
+      "mean_gap": 0.068929
+    }
+  ],
+  "worst_constants": [
+    {
+      "model": "fasttext_word_tydiqa",
+      "mean_gap": 0.799196
+    },
+    {
+      "model": "tfidf_lr_char_ngram_3_5_tydiqa",
+      "mean_gap": 0.800113
+    },
+    {
+      "model": "bow_maxabs_lr_char_ngram_3_5_tydiqa",
+      "mean_gap": 0.811033
+    }
+  ],
+  "per_dataset_candidates_beating_framework": {
+    "mean": 6.1,
+    "max": 22,
+    "n_datasets_with_at_least_one": 15,
+    "n_datasets_framework_outright_best": 2,
+    "per_dataset": [
+      {
+        "dataset": "OpenLID-v2",
+        "framework_regret": 0.024746,
+        "n_candidates_better": 6,
+        "framework_is_outright_best": false
+      },
+      {
+        "dataset": "amazon_reviews_multi",
+        "framework_regret": 0.000874,
+        "n_candidates_better": 4,
+        "framework_is_outright_best": false
+      },
+      {
+        "dataset": "europarl",
+        "framework_regret": 0.001123,
+        "n_candidates_better": 11,
+        "framework_is_outright_best": false
+      },
+      {
+        "dataset": "exorde-social-media-december-2024-week1",
+        "framework_regret": 0.009143,
+        "n_candidates_better": 1,
+        "framework_is_outright_best": false
+      },
+      {
+        "dataset": "flores_plus",
+        "framework_regret": 0.0,
+        "n_candidates_better": 0,
+        "framework_is_outright_best": true
+      },
+      {
+        "dataset": "language-identification",
+        "framework_regret": 0.002077,
+        "n_candidates_better": 5,
+        "framework_is_outright_best": false
+      },
+      {
+        "dataset": "massive",
+        "framework_regret": 0.019229,
+        "n_candidates_better": 8,
+        "framework_is_outright_best": false
+      },
+      {
+        "dataset": "mmarco",
+        "framework_regret": 0.025948,
+        "n_candidates_better": 8,
+        "framework_is_outright_best": false
+      },
+      {
+        "dataset": "multi_eurlex",
+        "framework_regret": 0.003902,
+        "n_candidates_better": 16,
+        "framework_is_outright_best": false
+      },
+      {
+        "dataset": "multilingual_cc_news",
+        "framework_regret": 0.011184,
+        "n_candidates_better": 2,
+        "framework_is_outright_best": false
+      },
+      {
+        "dataset": "multilingual_toxicity_dataset",
+        "framework_regret": 0.003745,
+        "n_candidates_better": 2,
+        "framework_is_outright_best": false
+      },
+      {
+        "dataset": "stsb_multi_mt",
+        "framework_regret": 0.00291,
+        "n_candidates_better": 6,
+        "framework_is_outright_best": false
+      },
+      {
+        "dataset": "tweet_sentiment_multilingual",
+        "framework_regret": 0.015351,
+        "n_candidates_better": 22,
+        "framework_is_outright_best": false
+      },
+      {
+        "dataset": "tydiqa",
+        "framework_regret": 0.001256,
+        "n_candidates_better": 4,
+        "framework_is_outright_best": false
+      },
+      {
+        "dataset": "wikipedia",
+        "framework_regret": 0.0,
+        "n_candidates_better": 0,
+        "framework_is_outright_best": true
+      },
+      {
+        "dataset": "xlsum",
+        "framework_regret": 0.00023,
+        "n_candidates_better": 2,
+        "framework_is_outright_best": false
+      },
+      {
+        "dataset": "xnli",
+        "framework_regret": 0.002165,
+        "n_candidates_better": 6,
+        "framework_is_outright_best": false
+      }
+    ]
+  },
+  "fubini_identity": {
+    "note": "Blind constant pick and random per-corpus selection are the grand mean of the same regret matrix summed in different orders, so their expectations are equal by construction.",
+    "blind_constant_mean_over_105": 0.383249,
+    "random_selection_analytic_mean": 0.383249,
+    "superseded_mean_over_103_shared_keys": 0.390194
+  }
+}

@@ -1,0 +1,2100 @@
+{
+  "generated": "2026-08-15",
+  "source_artifact": "mkb.pkl",
+  "n_datasets": 17,
+  "n_pairs": 136,
+  "weights": "equal (w_s = 1.0 for all six terms)",
+  "note": "The five continuous terms are unbounded Euclidean norms over fingerprint slices of 25-80 dimensions; the S6 term is a bounded fraction of differing categorical flags. Under equal weights the categorical term is therefore a negligible share of the composite.",
+  "per_stratum_distance": {
+    "S4_info_theoretic": {
+      "min": 3.409075,
+      "median": 17.733972,
+      "mean": 17.536282,
+      "max": 31.374611
+    },
+    "S5_cross_level": {
+      "min": 9.000249,
+      "median": 52.863979,
+      "mean": 59.978164,
+      "max": 135.650139
+    },
+    "S1_morphological": {
+      "min": 18.259845,
+      "median": 42.202836,
+      "mean": 43.415784,
+      "max": 76.512387
+    },
+    "S2_lexical_diversity": {
+      "min": 21.516569,
+      "median": 55.989483,
+      "mean": 58.659425,
+      "max": 110.652666
+    },
+    "S3_structural": {
+      "min": 36.847796,
+      "median": 74.859926,
+      "mean": 78.864399,
+      "max": 144.887747
+    },
+    "cat": {
+      "min": 0.0,
+      "median": 0.470588,
+      "mean": 0.441609,
+      "max": 0.764706
+    }
+  },
+  "continuous_terms_pooled": {
+    "min": 3.409075,
+    "median": 48.200793,
+    "mean": 51.690811,
+    "max": 144.887747
+  },
+  "cat_share_of_numerator_pct": {
+    "min": 0.0,
+    "median": 0.171267,
+    "mean": 0.181693,
+    "max": 0.427685
+  },
+  "pairs": [
+    {
+      "a": "exorde-social-media-december-2024-week1",
+      "b": "amazon_reviews_multi",
+      "terms": {
+        "S4_info_theoretic": 17.864624,
+        "S5_cross_level": 41.01841,
+        "S1_morphological": 38.870647,
+        "S2_lexical_diversity": 54.438569,
+        "S3_structural": 61.268375,
+        "cat": 0.470588
+      },
+      "numerator": 213.931213,
+      "composite_D": 35.655202,
+      "cat_share_pct": 0.219972
+    },
+    {
+      "a": "exorde-social-media-december-2024-week1",
+      "b": "tydiqa",
+      "terms": {
+        "S4_info_theoretic": 20.721946,
+        "S5_cross_level": 101.936787,
+        "S1_morphological": 65.015581,
+        "S2_lexical_diversity": 58.592629,
+        "S3_structural": 78.814857,
+        "cat": 0.470588
+      },
+      "numerator": 325.552388,
+      "composite_D": 54.258731,
+      "cat_share_pct": 0.144551
+    },
+    {
+      "a": "exorde-social-media-december-2024-week1",
+      "b": "mmarco",
+      "terms": {
+        "S4_info_theoretic": 18.975508,
+        "S5_cross_level": 70.390277,
+        "S1_morphological": 60.408547,
+        "S2_lexical_diversity": 59.097905,
+        "S3_structural": 76.377904,
+        "cat": 0.411765
+      },
+      "numerator": 285.661906,
+      "composite_D": 47.610318,
+      "cat_share_pct": 0.144144
+    },
+    {
+      "a": "exorde-social-media-december-2024-week1",
+      "b": "xnli",
+      "terms": {
+        "S4_info_theoretic": 17.951362,
+        "S5_cross_level": 53.408323,
+        "S1_morphological": 41.757193,
+        "S2_lexical_diversity": 55.075379,
+        "S3_structural": 77.297994,
+        "cat": 0.352941
+      },
+      "numerator": 245.843192,
+      "composite_D": 40.973865,
+      "cat_share_pct": 0.143564
+    },
+    {
+      "a": "exorde-social-media-december-2024-week1",
+      "b": "wikipedia",
+      "terms": {
+        "S4_info_theoretic": 15.961588,
+        "S5_cross_level": 68.59474,
+        "S1_morphological": 45.28394,
+        "S2_lexical_diversity": 53.80687,
+        "S3_structural": 75.487161,
+        "cat": 0.0
+      },
+      "numerator": 259.1343,
+      "composite_D": 43.18905,
+      "cat_share_pct": 0.0
+    },
+    {
+      "a": "exorde-social-media-december-2024-week1",
+      "b": "OpenLID-v2",
+      "terms": {
+        "S4_info_theoretic": 17.376939,
+        "S5_cross_level": 47.214719,
+        "S1_morphological": 36.052746,
+        "S2_lexical_diversity": 48.59701,
+        "S3_structural": 62.034721,
+        "cat": 0.294118
+      },
+      "numerator": 211.570253,
+      "composite_D": 35.261709,
+      "cat_share_pct": 0.139017
+    },
+    {
+      "a": "exorde-social-media-december-2024-week1",
+      "b": "europarl",
+      "terms": {
+        "S4_info_theoretic": 15.223036,
+        "S5_cross_level": 56.262951,
+        "S1_morphological": 52.115281,
+        "S2_lexical_diversity": 57.327479,
+        "S3_structural": 88.260633,
+        "cat": 0.647059
+      },
+      "numerator": 269.836439,
+      "composite_D": 44.97274,
+      "cat_share_pct": 0.239797
+    },
+    {
+      "a": "exorde-social-media-december-2024-week1",
+      "b": "multilingual_toxicity_dataset",
+      "terms": {
+        "S4_info_theoretic": 14.428156,
+        "S5_cross_level": 40.947018,
+        "S1_morphological": 37.79213,
+        "S2_lexical_diversity": 41.956847,
+        "S3_structural": 50.681294,
+        "cat": 0.411765
+      },
+      "numerator": 186.21721,
+      "composite_D": 31.036202,
+      "cat_share_pct": 0.221121
+    },
+    {
+      "a": "exorde-social-media-december-2024-week1",
+      "b": "multilingual_cc_news",
+      "terms": {
+        "S4_info_theoretic": 15.984283,
+        "S5_cross_level": 33.138272,
+        "S1_morphological": 30.353708,
+        "S2_lexical_diversity": 34.534968,
+        "S3_structural": 52.361349,
+        "cat": 0.117647
+      },
+      "numerator": 166.490227,
+      "composite_D": 27.748371,
+      "cat_share_pct": 0.070663
+    },
+    {
+      "a": "exorde-social-media-december-2024-week1",
+      "b": "multi_eurlex",
+      "terms": {
+        "S4_info_theoretic": 16.378765,
+        "S5_cross_level": 44.443914,
+        "S1_morphological": 66.949295,
+        "S2_lexical_diversity": 83.411316,
+        "S3_structural": 116.10609,
+        "cat": 0.647059
+      },
+      "numerator": 327.936439,
+      "composite_D": 54.656073,
+      "cat_share_pct": 0.197312
+    },
+    {
+      "a": "exorde-social-media-december-2024-week1",
+      "b": "massive",
+      "terms": {
+        "S4_info_theoretic": 17.240957,
+        "S5_cross_level": 66.302304,
+        "S1_morphological": 51.108427,
+        "S2_lexical_diversity": 57.721027,
+        "S3_structural": 69.880835,
+        "cat": 0.176471
+      },
+      "numerator": 262.430021,
+      "composite_D": 43.738337,
+      "cat_share_pct": 0.067245
+    },
+    {
+      "a": "exorde-social-media-december-2024-week1",
+      "b": "flores_plus",
+      "terms": {
+        "S4_info_theoretic": 22.225598,
+        "S5_cross_level": 57.092366,
+        "S1_morphological": 40.735497,
+        "S2_lexical_diversity": 54.538773,
+        "S3_structural": 71.921544,
+        "cat": 0.294118
+      },
+      "numerator": 246.807895,
+      "composite_D": 41.134649,
+      "cat_share_pct": 0.119169
+    },
+    {
+      "a": "exorde-social-media-december-2024-week1",
+      "b": "language-identification",
+      "terms": {
+        "S4_info_theoretic": 14.045987,
+        "S5_cross_level": 36.851272,
+        "S1_morphological": 31.309016,
+        "S2_lexical_diversity": 39.479079,
+        "S3_structural": 48.092076,
+        "cat": 0.352941
+      },
+      "numerator": 170.130371,
+      "composite_D": 28.355062,
+      "cat_share_pct": 0.207453
+    },
+    {
+      "a": "exorde-social-media-december-2024-week1",
+      "b": "xlsum",
+      "terms": {
+        "S4_info_theoretic": 21.693185,
+        "S5_cross_level": 39.026058,
+        "S1_morphological": 43.433868,
+        "S2_lexical_diversity": 32.507701,
+        "S3_structural": 51.271962,
+        "cat": 0.352941
+      },
+      "numerator": 188.285715,
+      "composite_D": 31.380953,
+      "cat_share_pct": 0.18745
+    },
+    {
+      "a": "exorde-social-media-december-2024-week1",
+      "b": "stsb_multi_mt",
+      "terms": {
+        "S4_info_theoretic": 18.299547,
+        "S5_cross_level": 81.970668,
+        "S1_morphological": 61.113249,
+        "S2_lexical_diversity": 56.218318,
+        "S3_structural": 83.150046,
+        "cat": 0.411765
+      },
+      "numerator": 301.163593,
+      "composite_D": 50.193932,
+      "cat_share_pct": 0.136725
+    },
+    {
+      "a": "exorde-social-media-december-2024-week1",
+      "b": "tweet_sentiment_multilingual",
+      "terms": {
+        "S4_info_theoretic": 11.309858,
+        "S5_cross_level": 41.704526,
+        "S1_morphological": 51.528042,
+        "S2_lexical_diversity": 43.202025,
+        "S3_structural": 65.450796,
+        "cat": 0.705882
+      },
+      "numerator": 213.901128,
+      "composite_D": 35.650188,
+      "cat_share_pct": 0.330004
+    },
+    {
+      "a": "amazon_reviews_multi",
+      "b": "tydiqa",
+      "terms": {
+        "S4_info_theoretic": 27.322252,
+        "S5_cross_level": 105.38391,
+        "S1_morphological": 59.134916,
+        "S2_lexical_diversity": 85.545073,
+        "S3_structural": 99.86761,
+        "cat": 0.529412
+      },
+      "numerator": 377.783172,
+      "composite_D": 62.963862,
+      "cat_share_pct": 0.140136
+    },
+    {
+      "a": "amazon_reviews_multi",
+      "b": "mmarco",
+      "terms": {
+        "S4_info_theoretic": 24.992596,
+        "S5_cross_level": 71.20946,
+        "S1_morphological": 55.651359,
+        "S2_lexical_diversity": 75.626075,
+        "S3_structural": 90.732854,
+        "cat": 0.294118
+      },
+      "numerator": 318.506461,
+      "composite_D": 53.08441,
+      "cat_share_pct": 0.092343
+    },
+    {
+      "a": "amazon_reviews_multi",
+      "b": "xnli",
+      "terms": {
+        "S4_info_theoretic": 12.590027,
+        "S5_cross_level": 48.898913,
+        "S1_morphological": 32.293526,
+        "S2_lexical_diversity": 43.284194,
+        "S3_structural": 76.498803,
+        "cat": 0.411765
+      },
+      "numerator": 213.977227,
+      "composite_D": 35.662871,
+      "cat_share_pct": 0.192434
+    },
+    {
+      "a": "amazon_reviews_multi",
+      "b": "wikipedia",
+      "terms": {
+        "S4_info_theoretic": 19.486542,
+        "S5_cross_level": 100.081634,
+        "S1_morphological": 61.358158,
+        "S2_lexical_diversity": 86.146588,
+        "S3_structural": 118.057974,
+        "cat": 0.470588
+      },
+      "numerator": 385.601483,
+      "composite_D": 64.266914,
+      "cat_share_pct": 0.12204
+    },
+    {
+      "a": "amazon_reviews_multi",
+      "b": "OpenLID-v2",
+      "terms": {
+        "S4_info_theoretic": 21.636443,
+        "S5_cross_level": 60.859019,
+        "S1_morphological": 41.932546,
+        "S2_lexical_diversity": 83.882069,
+        "S3_structural": 91.155069,
+        "cat": 0.647059
+      },
+      "numerator": 300.112205,
+      "composite_D": 50.018701,
+      "cat_share_pct": 0.215606
+    },
+    {
+      "a": "amazon_reviews_multi",
+      "b": "europarl",
+      "terms": {
+        "S4_info_theoretic": 11.708577,
+        "S5_cross_level": 53.998338,
+        "S1_morphological": 56.326158,
+        "S2_lexical_diversity": 51.46407,
+        "S3_structural": 89.84982,
+        "cat": 0.470588
+      },
+      "numerator": 263.817551,
+      "composite_D": 43.969592,
+      "cat_share_pct": 0.178376
+    },
+    {
+      "a": "amazon_reviews_multi",
+      "b": "multilingual_toxicity_dataset",
+      "terms": {
+        "S4_info_theoretic": 10.152315,
+        "S5_cross_level": 38.110856,
+        "S1_morphological": 31.927228,
+        "S2_lexical_diversity": 40.346516,
+        "S3_structural": 43.428333,
+        "cat": 0.294118
+      },
+      "numerator": 164.259365,
+      "composite_D": 27.376561,
+      "cat_share_pct": 0.179057
+    },
+    {
+      "a": "amazon_reviews_multi",
+      "b": "multilingual_cc_news",
+      "terms": {
+        "S4_info_theoretic": 9.079695,
+        "S5_cross_level": 32.006828,
+        "S1_morphological": 38.253329,
+        "S2_lexical_diversity": 58.160879,
+        "S3_structural": 76.463187,
+        "cat": 0.470588
+      },
+      "numerator": 214.434506,
+      "composite_D": 35.739084,
+      "cat_share_pct": 0.219455
+    },
+    {
+      "a": "amazon_reviews_multi",
+      "b": "multi_eurlex",
+      "terms": {
+        "S4_info_theoretic": 15.791767,
+        "S5_cross_level": 43.650548,
+        "S1_morphological": 76.512387,
+        "S2_lexical_diversity": 96.283103,
+        "S3_structural": 137.915313,
+        "cat": 0.470588
+      },
+      "numerator": 370.623707,
+      "composite_D": 61.770618,
+      "cat_share_pct": 0.126972
+    },
+    {
+      "a": "amazon_reviews_multi",
+      "b": "massive",
+      "terms": {
+        "S4_info_theoretic": 25.267191,
+        "S5_cross_level": 68.446105,
+        "S1_morphological": 52.512355,
+        "S2_lexical_diversity": 74.196238,
+        "S3_structural": 87.886426,
+        "cat": 0.470588
+      },
+      "numerator": 308.778903,
+      "composite_D": 51.46315,
+      "cat_share_pct": 0.152403
+    },
+    {
+      "a": "amazon_reviews_multi",
+      "b": "flores_plus",
+      "terms": {
+        "S4_info_theoretic": 15.658041,
+        "S5_cross_level": 59.789559,
+        "S1_morphological": 47.790967,
+        "S2_lexical_diversity": 60.240771,
+        "S3_structural": 82.813105,
+        "cat": 0.647059
+      },
+      "numerator": 266.939502,
+      "composite_D": 44.489917,
+      "cat_share_pct": 0.242399
+    },
+    {
+      "a": "amazon_reviews_multi",
+      "b": "language-identification",
+      "terms": {
+        "S4_info_theoretic": 11.509553,
+        "S5_cross_level": 38.950617,
+        "S1_morphological": 23.286624,
+        "S2_lexical_diversity": 31.173458,
+        "S3_structural": 43.473169,
+        "cat": 0.352941
+      },
+      "numerator": 148.746363,
+      "composite_D": 24.791061,
+      "cat_share_pct": 0.237277
+    },
+    {
+      "a": "amazon_reviews_multi",
+      "b": "xlsum",
+      "terms": {
+        "S4_info_theoretic": 8.147114,
+        "S5_cross_level": 29.00844,
+        "S1_morphological": 39.029072,
+        "S2_lexical_diversity": 47.048879,
+        "S3_structural": 66.355087,
+        "cat": 0.411765
+      },
+      "numerator": 190.000357,
+      "composite_D": 31.666726,
+      "cat_share_pct": 0.216718
+    },
+    {
+      "a": "amazon_reviews_multi",
+      "b": "stsb_multi_mt",
+      "terms": {
+        "S4_info_theoretic": 20.308108,
+        "S5_cross_level": 85.58713,
+        "S1_morphological": 57.034813,
+        "S2_lexical_diversity": 63.99759,
+        "S3_structural": 96.277884,
+        "cat": 0.294118
+      },
+      "numerator": 323.499642,
+      "composite_D": 53.916607,
+      "cat_share_pct": 0.090917
+    },
+    {
+      "a": "amazon_reviews_multi",
+      "b": "tweet_sentiment_multilingual",
+      "terms": {
+        "S4_info_theoretic": 16.09328,
+        "S5_cross_level": 41.175538,
+        "S1_morphological": 42.274916,
+        "S2_lexical_diversity": 51.319965,
+        "S3_structural": 81.027844,
+        "cat": 0.470588
+      },
+      "numerator": 232.362131,
+      "composite_D": 38.727022,
+      "cat_share_pct": 0.202524
+    },
+    {
+      "a": "tydiqa",
+      "b": "mmarco",
+      "terms": {
+        "S4_info_theoretic": 4.422601,
+        "S5_cross_level": 93.474192,
+        "S1_morphological": 28.912115,
+        "S2_lexical_diversity": 33.146524,
+        "S3_structural": 46.069289,
+        "cat": 0.470588
+      },
+      "numerator": 206.49531,
+      "composite_D": 34.415885,
+      "cat_share_pct": 0.227893
+    },
+    {
+      "a": "tydiqa",
+      "b": "xnli",
+      "terms": {
+        "S4_info_theoretic": 21.360732,
+        "S5_cross_level": 87.045785,
+        "S1_morphological": 43.906783,
+        "S2_lexical_diversity": 66.956752,
+        "S3_structural": 85.283009,
+        "cat": 0.529412
+      },
+      "numerator": 305.082472,
+      "composite_D": 50.847079,
+      "cat_share_pct": 0.173531
+    },
+    {
+      "a": "tydiqa",
+      "b": "wikipedia",
+      "terms": {
+        "S4_info_theoretic": 30.210562,
+        "S5_cross_level": 135.650139,
+        "S1_morphological": 57.861357,
+        "S2_lexical_diversity": 84.943314,
+        "S3_structural": 111.656281,
+        "cat": 0.470588
+      },
+      "numerator": 420.79224,
+      "composite_D": 70.13204,
+      "cat_share_pct": 0.111834
+    },
+    {
+      "a": "tydiqa",
+      "b": "OpenLID-v2",
+      "terms": {
+        "S4_info_theoretic": 20.95319,
+        "S5_cross_level": 86.764917,
+        "S1_morphological": 40.211742,
+        "S2_lexical_diversity": 46.682074,
+        "S3_structural": 65.42894,
+        "cat": 0.294118
+      },
+      "numerator": 260.334981,
+      "composite_D": 43.389163,
+      "cat_share_pct": 0.112977
+    },
+    {
+      "a": "tydiqa",
+      "b": "europarl",
+      "terms": {
+        "S4_info_theoretic": 19.58898,
+        "S5_cross_level": 99.166148,
+        "S1_morphological": 60.96675,
+        "S2_lexical_diversity": 65.391733,
+        "S3_structural": 92.773814,
+        "cat": 0.529412
+      },
+      "numerator": 338.416837,
+      "composite_D": 56.402806,
+      "cat_share_pct": 0.156438
+    },
+    {
+      "a": "tydiqa",
+      "b": "multilingual_toxicity_dataset",
+      "terms": {
+        "S4_info_theoretic": 21.473591,
+        "S5_cross_level": 94.476223,
+        "S1_morphological": 46.547499,
+        "S2_lexical_diversity": 57.671969,
+        "S3_structural": 73.103231,
+        "cat": 0.470588
+      },
+      "numerator": 293.743101,
+      "composite_D": 48.957183,
+      "cat_share_pct": 0.160204
+    },
+    {
+      "a": "tydiqa",
+      "b": "multilingual_cc_news",
+      "terms": {
+        "S4_info_theoretic": 26.700221,
+        "S5_cross_level": 102.208695,
+        "S1_morphological": 46.680056,
+        "S2_lexical_diversity": 65.904243,
+        "S3_structural": 84.458187,
+        "cat": 0.470588
+      },
+      "numerator": 326.421989,
+      "composite_D": 54.403665,
+      "cat_share_pct": 0.144166
+    },
+    {
+      "a": "tydiqa",
+      "b": "multi_eurlex",
+      "terms": {
+        "S4_info_theoretic": 31.374611,
+        "S5_cross_level": 109.166223,
+        "S1_morphological": 54.109867,
+        "S2_lexical_diversity": 108.987431,
+        "S3_structural": 135.434347,
+        "cat": 0.588235
+      },
+      "numerator": 439.660714,
+      "composite_D": 73.276786,
+      "cat_share_pct": 0.133793
+    },
+    {
+      "a": "tydiqa",
+      "b": "massive",
+      "terms": {
+        "S4_info_theoretic": 5.202621,
+        "S5_cross_level": 89.241498,
+        "S1_morphological": 32.690984,
+        "S2_lexical_diversity": 33.927005,
+        "S3_structural": 58.97911,
+        "cat": 0.470588
+      },
+      "numerator": 220.511805,
+      "composite_D": 36.751968,
+      "cat_share_pct": 0.213407
+    },
+    {
+      "a": "tydiqa",
+      "b": "flores_plus",
+      "terms": {
+        "S4_info_theoretic": 23.279631,
+        "S5_cross_level": 85.201904,
+        "S1_morphological": 44.125223,
+        "S2_lexical_diversity": 56.727985,
+        "S3_structural": 70.318028,
+        "cat": 0.294118
+      },
+      "numerator": 279.94689,
+      "composite_D": 46.657815,
+      "cat_share_pct": 0.105062
+    },
+    {
+      "a": "tydiqa",
+      "b": "language-identification",
+      "terms": {
+        "S4_info_theoretic": 22.864665,
+        "S5_cross_level": 89.357065,
+        "S1_morphological": 57.055455,
+        "S2_lexical_diversity": 66.157944,
+        "S3_structural": 82.795608,
+        "cat": 0.588235
+      },
+      "numerator": 318.818972,
+      "composite_D": 53.136495,
+      "cat_share_pct": 0.184504
+    },
+    {
+      "a": "tydiqa",
+      "b": "xlsum",
+      "terms": {
+        "S4_info_theoretic": 29.721702,
+        "S5_cross_level": 98.312716,
+        "S1_morphological": 40.655404,
+        "S2_lexical_diversity": 63.344149,
+        "S3_structural": 77.974025,
+        "cat": 0.411765
+      },
+      "numerator": 310.419762,
+      "composite_D": 51.736627,
+      "cat_share_pct": 0.132648
+    },
+    {
+      "a": "tydiqa",
+      "b": "stsb_multi_mt",
+      "terms": {
+        "S4_info_theoretic": 10.847032,
+        "S5_cross_level": 46.926019,
+        "S1_morphological": 27.542215,
+        "S2_lexical_diversity": 49.965645,
+        "S3_structural": 70.170618,
+        "cat": 0.588235
+      },
+      "numerator": 206.039765,
+      "composite_D": 34.339961,
+      "cat_share_pct": 0.285496
+    },
+    {
+      "a": "tydiqa",
+      "b": "tweet_sentiment_multilingual",
+      "terms": {
+        "S4_info_theoretic": 25.007344,
+        "S5_cross_level": 108.567366,
+        "S1_morphological": 46.22445,
+        "S2_lexical_diversity": 67.071097,
+        "S3_structural": 92.352392,
+        "cat": 0.588235
+      },
+      "numerator": 339.810883,
+      "composite_D": 56.635147,
+      "cat_share_pct": 0.173107
+    },
+    {
+      "a": "mmarco",
+      "b": "xnli",
+      "terms": {
+        "S4_info_theoretic": 18.091782,
+        "S5_cross_level": 47.118193,
+        "S1_morphological": 41.033352,
+        "S2_lexical_diversity": 55.413532,
+        "S3_structural": 68.201768,
+        "cat": 0.294118
+      },
+      "numerator": 230.152746,
+      "composite_D": 38.358791,
+      "cat_share_pct": 0.127792
+    },
+    {
+      "a": "mmarco",
+      "b": "wikipedia",
+      "terms": {
+        "S4_info_theoretic": 27.950901,
+        "S5_cross_level": 121.17876,
+        "S1_morphological": 51.116695,
+        "S2_lexical_diversity": 86.671892,
+        "S3_structural": 113.617396,
+        "cat": 0.411765
+      },
+      "numerator": 400.947408,
+      "composite_D": 66.824568,
+      "cat_share_pct": 0.102698
+    },
+    {
+      "a": "mmarco",
+      "b": "OpenLID-v2",
+      "terms": {
+        "S4_info_theoretic": 20.079648,
+        "S5_cross_level": 41.212351,
+        "S1_morphological": 39.907433,
+        "S2_lexical_diversity": 54.569063,
+        "S3_structural": 51.383401,
+        "cat": 0.588235
+      },
+      "numerator": 207.740131,
+      "composite_D": 34.623355,
+      "cat_share_pct": 0.283159
+    },
+    {
+      "a": "mmarco",
+      "b": "europarl",
+      "terms": {
+        "S4_info_theoretic": 16.620039,
+        "S5_cross_level": 44.368012,
+        "S1_morphological": 57.418109,
+        "S2_lexical_diversity": 52.309382,
+        "S3_structural": 78.686501,
+        "cat": 0.529412
+      },
+      "numerator": 249.931455,
+      "composite_D": 41.655243,
+      "cat_share_pct": 0.211823
+    },
+    {
+      "a": "mmarco",
+      "b": "multilingual_toxicity_dataset",
+      "terms": {
+        "S4_info_theoretic": 18.878809,
+        "S5_cross_level": 46.11156,
+        "S1_morphological": 40.185042,
+        "S2_lexical_diversity": 48.688459,
+        "S3_structural": 60.33516,
+        "cat": 0.117647
+      },
+      "numerator": 214.316676,
+      "composite_D": 35.719446,
+      "cat_share_pct": 0.054894
+    },
+    {
+      "a": "mmarco",
+      "b": "multilingual_cc_news",
+      "terms": {
+        "S4_info_theoretic": 24.08925,
+        "S5_cross_level": 65.45867,
+        "S1_morphological": 42.130757,
+        "S2_lexical_diversity": 66.992113,
+        "S3_structural": 81.916792,
+        "cat": 0.411765
+      },
+      "numerator": 280.999347,
+      "composite_D": 46.833225,
+      "cat_share_pct": 0.146536
+    },
+    {
+      "a": "mmarco",
+      "b": "multi_eurlex",
+      "terms": {
+        "S4_info_theoretic": 28.383771,
+        "S5_cross_level": 80.736795,
+        "S1_morphological": 53.224098,
+        "S2_lexical_diversity": 108.225705,
+        "S3_structural": 129.520828,
+        "cat": 0.588235
+      },
+      "numerator": 400.679432,
+      "composite_D": 66.779905,
+      "cat_share_pct": 0.146809
+    },
+    {
+      "a": "mmarco",
+      "b": "massive",
+      "terms": {
+        "S4_info_theoretic": 3.409075,
+        "S5_cross_level": 9.000249,
+        "S1_morphological": 22.652494,
+        "S2_lexical_diversity": 23.956288,
+        "S3_structural": 36.847796,
+        "cat": 0.411765
+      },
+      "numerator": 96.277668,
+      "composite_D": 16.046278,
+      "cat_share_pct": 0.427685
+    },
+    {
+      "a": "mmarco",
+      "b": "flores_plus",
+      "terms": {
+        "S4_info_theoretic": 21.926462,
+        "S5_cross_level": 48.309509,
+        "S1_morphological": 44.710736,
+        "S2_lexical_diversity": 49.930076,
+        "S3_structural": 56.794226,
+        "cat": 0.588235
+      },
+      "numerator": 222.259244,
+      "composite_D": 37.043207,
+      "cat_share_pct": 0.264662
+    },
+    {
+      "a": "mmarco",
+      "b": "language-identification",
+      "terms": {
+        "S4_info_theoretic": 20.829048,
+        "S5_cross_level": 53.367641,
+        "S1_morphological": 53.846186,
+        "S2_lexical_diversity": 61.263339,
+        "S3_structural": 72.879134,
+        "cat": 0.294118
+      },
+      "numerator": 262.479465,
+      "composite_D": 43.746577,
+      "cat_share_pct": 0.112054
+    },
+    {
+      "a": "mmarco",
+      "b": "xlsum",
+      "terms": {
+        "S4_info_theoretic": 27.582748,
+        "S5_cross_level": 58.166486,
+        "S1_morphological": 41.187524,
+        "S2_lexical_diversity": 61.790481,
+        "S3_structural": 76.262558,
+        "cat": 0.352941
+      },
+      "numerator": 265.342739,
+      "composite_D": 44.22379,
+      "cat_share_pct": 0.133013
+    },
+    {
+      "a": "mmarco",
+      "b": "stsb_multi_mt",
+      "terms": {
+        "S4_info_theoretic": 7.422077,
+        "S5_cross_level": 72.380789,
+        "S1_morphological": 21.002352,
+        "S2_lexical_diversity": 35.238451,
+        "S3_structural": 49.450488,
+        "cat": 0.117647
+      },
+      "numerator": 185.611803,
+      "composite_D": 30.9353,
+      "cat_share_pct": 0.063383
+    },
+    {
+      "a": "mmarco",
+      "b": "tweet_sentiment_multilingual",
+      "terms": {
+        "S4_info_theoretic": 22.413215,
+        "S5_cross_level": 72.997598,
+        "S1_morphological": 44.599724,
+        "S2_lexical_diversity": 61.821173,
+        "S3_structural": 90.041501,
+        "cat": 0.588235
+      },
+      "numerator": 292.461446,
+      "composite_D": 48.743574,
+      "cat_share_pct": 0.201133
+    },
+    {
+      "a": "xnli",
+      "b": "wikipedia",
+      "terms": {
+        "S4_info_theoretic": 20.318455,
+        "S5_cross_level": 106.480944,
+        "S1_morphological": 51.191677,
+        "S2_lexical_diversity": 85.024065,
+        "S3_structural": 124.383328,
+        "cat": 0.352941
+      },
+      "numerator": 387.751411,
+      "composite_D": 64.625235,
+      "cat_share_pct": 0.091023
+    },
+    {
+      "a": "xnli",
+      "b": "OpenLID-v2",
+      "terms": {
+        "S4_info_theoretic": 21.592123,
+        "S5_cross_level": 41.497135,
+        "S1_morphological": 27.835132,
+        "S2_lexical_diversity": 68.553724,
+        "S3_structural": 64.817252,
+        "cat": 0.529412
+      },
+      "numerator": 224.824778,
+      "composite_D": 37.470796,
+      "cat_share_pct": 0.235477
+    },
+    {
+      "a": "xnli",
+      "b": "europarl",
+      "terms": {
+        "S4_info_theoretic": 4.735114,
+        "S5_cross_level": 31.727124,
+        "S1_morphological": 47.06014,
+        "S2_lexical_diversity": 21.516569,
+        "S3_structural": 54.876934,
+        "cat": 0.529412
+      },
+      "numerator": 160.445293,
+      "composite_D": 26.740882,
+      "cat_share_pct": 0.329964
+    },
+    {
+      "a": "xnli",
+      "b": "multilingual_toxicity_dataset",
+      "terms": {
+        "S4_info_theoretic": 7.515733,
+        "S5_cross_level": 27.458619,
+        "S1_morphological": 22.498818,
+        "S2_lexical_diversity": 26.040881,
+        "S3_structural": 51.278897,
+        "cat": 0.294118
+      },
+      "numerator": 135.087066,
+      "composite_D": 22.514511,
+      "cat_share_pct": 0.217725
+    },
+    {
+      "a": "xnli",
+      "b": "multilingual_cc_news",
+      "terms": {
+        "S4_info_theoretic": 12.33067,
+        "S5_cross_level": 44.805264,
+        "S1_morphological": 28.340494,
+        "S2_lexical_diversity": 55.328762,
+        "S3_structural": 83.587335,
+        "cat": 0.352941
+      },
+      "numerator": 224.745466,
+      "composite_D": 37.457578,
+      "cat_share_pct": 0.15704
+    },
+    {
+      "a": "xnli",
+      "b": "multi_eurlex",
+      "terms": {
+        "S4_info_theoretic": 16.431292,
+        "S5_cross_level": 57.218042,
+        "S1_morphological": 60.74913,
+        "S2_lexical_diversity": 98.049932,
+        "S3_structural": 137.350548,
+        "cat": 0.588235
+      },
+      "numerator": 370.387179,
+      "composite_D": 61.731196,
+      "cat_share_pct": 0.158816
+    },
+    {
+      "a": "xnli",
+      "b": "massive",
+      "terms": {
+        "S4_info_theoretic": 18.722447,
+        "S5_cross_level": 43.740715,
+        "S1_morphological": 35.984112,
+        "S2_lexical_diversity": 53.77745,
+        "S3_structural": 63.651103,
+        "cat": 0.352941
+      },
+      "numerator": 216.228769,
+      "composite_D": 36.038128,
+      "cat_share_pct": 0.163226
+    },
+    {
+      "a": "xnli",
+      "b": "flores_plus",
+      "terms": {
+        "S4_info_theoretic": 15.15182,
+        "S5_cross_level": 29.722824,
+        "S1_morphological": 28.258774,
+        "S2_lexical_diversity": 34.601764,
+        "S3_structural": 49.51525,
+        "cat": 0.529412
+      },
+      "numerator": 157.779842,
+      "composite_D": 26.29664,
+      "cat_share_pct": 0.335538
+    },
+    {
+      "a": "xnli",
+      "b": "language-identification",
+      "terms": {
+        "S4_info_theoretic": 11.281112,
+        "S5_cross_level": 35.448605,
+        "S1_morphological": 29.600268,
+        "S2_lexical_diversity": 39.705082,
+        "S3_structural": 63.799406,
+        "cat": 0.235294
+      },
+      "numerator": 180.069768,
+      "composite_D": 30.011628,
+      "cat_share_pct": 0.130668
+    },
+    {
+      "a": "xnli",
+      "b": "xlsum",
+      "terms": {
+        "S4_info_theoretic": 14.831354,
+        "S5_cross_level": 36.033447,
+        "S1_morphological": 25.607282,
+        "S2_lexical_diversity": 43.284364,
+        "S3_structural": 71.396766,
+        "cat": 0.352941
+      },
+      "numerator": 191.506154,
+      "composite_D": 31.917692,
+      "cat_share_pct": 0.184298
+    },
+    {
+      "a": "xnli",
+      "b": "stsb_multi_mt",
+      "terms": {
+        "S4_info_theoretic": 11.840484,
+        "S5_cross_level": 57.754612,
+        "S1_morphological": 35.828176,
+        "S2_lexical_diversity": 38.252338,
+        "S3_structural": 57.059966,
+        "cat": 0.294118
+      },
+      "numerator": 201.029693,
+      "composite_D": 33.504949,
+      "cat_share_pct": 0.146306
+    },
+    {
+      "a": "xnli",
+      "b": "tweet_sentiment_multilingual",
+      "terms": {
+        "S4_info_theoretic": 15.92627,
+        "S5_cross_level": 62.509941,
+        "S1_morphological": 37.490752,
+        "S2_lexical_diversity": 48.981576,
+        "S3_structural": 80.322595,
+        "cat": 0.529412
+      },
+      "numerator": 245.760546,
+      "composite_D": 40.960091,
+      "cat_share_pct": 0.215418
+    },
+    {
+      "a": "wikipedia",
+      "b": "OpenLID-v2",
+      "terms": {
+        "S4_info_theoretic": 23.688214,
+        "S5_cross_level": 99.67296,
+        "S1_morphological": 44.465721,
+        "S2_lexical_diversity": 72.90831,
+        "S3_structural": 96.816217,
+        "cat": 0.294118
+      },
+      "numerator": 337.84554,
+      "composite_D": 56.30759,
+      "cat_share_pct": 0.087057
+    },
+    {
+      "a": "wikipedia",
+      "b": "europarl",
+      "terms": {
+        "S4_info_theoretic": 19.663905,
+        "S5_cross_level": 110.701733,
+        "S1_morphological": 61.008383,
+        "S2_lexical_diversity": 86.693854,
+        "S3_structural": 130.13733,
+        "cat": 0.647059
+      },
+      "numerator": 408.852265,
+      "composite_D": 68.142044,
+      "cat_share_pct": 0.158262
+    },
+    {
+      "a": "wikipedia",
+      "b": "multilingual_toxicity_dataset",
+      "terms": {
+        "S4_info_theoretic": 18.263052,
+        "S5_cross_level": 100.242975,
+        "S1_morphological": 52.547289,
+        "S2_lexical_diversity": 76.158457,
+        "S3_structural": 105.721647,
+        "cat": 0.411765
+      },
+      "numerator": 353.345185,
+      "composite_D": 58.890864,
+      "cat_share_pct": 0.116533
+    },
+    {
+      "a": "wikipedia",
+      "b": "multilingual_cc_news",
+      "terms": {
+        "S4_info_theoretic": 17.323622,
+        "S5_cross_level": 94.34824,
+        "S1_morphological": 39.31532,
+        "S2_lexical_diversity": 56.830847,
+        "S3_structural": 74.232691,
+        "cat": 0.117647
+      },
+      "numerator": 282.168366,
+      "composite_D": 47.028061,
+      "cat_share_pct": 0.041694
+    },
+    {
+      "a": "wikipedia",
+      "b": "multi_eurlex",
+      "terms": {
+        "S4_info_theoretic": 18.218933,
+        "S5_cross_level": 97.728086,
+        "S1_morphological": 58.318055,
+        "S2_lexical_diversity": 69.70664,
+        "S3_structural": 102.758355,
+        "cat": 0.647059
+      },
+      "numerator": 347.377127,
+      "composite_D": 57.896188,
+      "cat_share_pct": 0.18627
+    },
+    {
+      "a": "wikipedia",
+      "b": "massive",
+      "terms": {
+        "S4_info_theoretic": 27.47883,
+        "S5_cross_level": 117.392668,
+        "S1_morphological": 43.965781,
+        "S2_lexical_diversity": 88.702364,
+        "S3_structural": 117.507497,
+        "cat": 0.176471
+      },
+      "numerator": 395.22361,
+      "composite_D": 65.870602,
+      "cat_share_pct": 0.044651
+    },
+    {
+      "a": "wikipedia",
+      "b": "flores_plus",
+      "terms": {
+        "S4_info_theoretic": 24.219708,
+        "S5_cross_level": 106.045357,
+        "S1_morphological": 46.365804,
+        "S2_lexical_diversity": 82.578067,
+        "S3_structural": 111.833431,
+        "cat": 0.294118
+      },
+      "numerator": 371.336484,
+      "composite_D": 61.889414,
+      "cat_share_pct": 0.079205
+    },
+    {
+      "a": "wikipedia",
+      "b": "language-identification",
+      "terms": {
+        "S4_info_theoretic": 17.603319,
+        "S5_cross_level": 96.786716,
+        "S1_morphological": 56.683572,
+        "S2_lexical_diversity": 76.156331,
+        "S3_structural": 108.268399,
+        "cat": 0.352941
+      },
+      "numerator": 355.85128,
+      "composite_D": 59.308547,
+      "cat_share_pct": 0.099182
+    },
+    {
+      "a": "wikipedia",
+      "b": "xlsum",
+      "terms": {
+        "S4_info_theoretic": 20.466657,
+        "S5_cross_level": 101.641787,
+        "S1_morphological": 47.890522,
+        "S2_lexical_diversity": 62.337787,
+        "S3_structural": 84.944676,
+        "cat": 0.352941
+      },
+      "numerator": 317.63437,
+      "composite_D": 52.939062,
+      "cat_share_pct": 0.111116
+    },
+    {
+      "a": "wikipedia",
+      "b": "stsb_multi_mt",
+      "terms": {
+        "S4_info_theoretic": 24.797343,
+        "S5_cross_level": 122.664798,
+        "S1_morphological": 52.305319,
+        "S2_lexical_diversity": 82.002728,
+        "S3_structural": 108.458217,
+        "cat": 0.411765
+      },
+      "numerator": 390.640169,
+      "composite_D": 65.106695,
+      "cat_share_pct": 0.105408
+    },
+    {
+      "a": "wikipedia",
+      "b": "tweet_sentiment_multilingual",
+      "terms": {
+        "S4_info_theoretic": 19.030166,
+        "S5_cross_level": 99.77664,
+        "S1_morphological": 59.163094,
+        "S2_lexical_diversity": 72.934008,
+        "S3_structural": 101.682516,
+        "cat": 0.705882
+      },
+      "numerator": 353.292307,
+      "composite_D": 58.882051,
+      "cat_share_pct": 0.199801
+    },
+    {
+      "a": "OpenLID-v2",
+      "b": "europarl",
+      "terms": {
+        "S4_info_theoretic": 18.964978,
+        "S5_cross_level": 36.175754,
+        "S1_morphological": 39.781837,
+        "S2_lexical_diversity": 67.404311,
+        "S3_structural": 72.741031,
+        "cat": 0.470588
+      },
+      "numerator": 235.538499,
+      "composite_D": 39.256416,
+      "cat_share_pct": 0.199792
+    },
+    {
+      "a": "OpenLID-v2",
+      "b": "multilingual_toxicity_dataset",
+      "terms": {
+        "S4_info_theoretic": 16.63447,
+        "S5_cross_level": 32.598247,
+        "S1_morphological": 26.52204,
+        "S2_lexical_diversity": 60.276043,
+        "S3_structural": 62.989075,
+        "cat": 0.588235
+      },
+      "numerator": 199.608111,
+      "composite_D": 33.268018,
+      "cat_share_pct": 0.294695
+    },
+    {
+      "a": "OpenLID-v2",
+      "b": "multilingual_cc_news",
+      "terms": {
+        "S4_info_theoretic": 17.316128,
+        "S5_cross_level": 43.520091,
+        "S1_morphological": 24.596878,
+        "S2_lexical_diversity": 60.1287,
+        "S3_structural": 62.400341,
+        "cat": 0.352941
+      },
+      "numerator": 208.315079,
+      "composite_D": 34.71918,
+      "cat_share_pct": 0.169427
+    },
+    {
+      "a": "OpenLID-v2",
+      "b": "multi_eurlex",
+      "terms": {
+        "S4_info_theoretic": 25.22156,
+        "S5_cross_level": 53.56592,
+        "S1_morphological": 53.25638,
+        "S2_lexical_diversity": 99.199072,
+        "S3_structural": 104.756563,
+        "cat": 0.470588
+      },
+      "numerator": 336.470083,
+      "composite_D": 56.078347,
+      "cat_share_pct": 0.13986
+    },
+    {
+      "a": "OpenLID-v2",
+      "b": "massive",
+      "terms": {
+        "S4_info_theoretic": 19.050762,
+        "S5_cross_level": 37.056875,
+        "S1_morphological": 29.259174,
+        "S2_lexical_diversity": 49.300304,
+        "S3_structural": 47.12934,
+        "cat": 0.294118
+      },
+      "numerator": 182.090572,
+      "composite_D": 30.348429,
+      "cat_share_pct": 0.161523
+    },
+    {
+      "a": "OpenLID-v2",
+      "b": "flores_plus",
+      "terms": {
+        "S4_info_theoretic": 18.406655,
+        "S5_cross_level": 34.389574,
+        "S1_morphological": 18.259845,
+        "S2_lexical_diversity": 55.760647,
+        "S3_structural": 45.944839,
+        "cat": 0.0
+      },
+      "numerator": 172.76156,
+      "composite_D": 28.793593,
+      "cat_share_pct": 0.0
+    },
+    {
+      "a": "OpenLID-v2",
+      "b": "language-identification",
+      "terms": {
+        "S4_info_theoretic": 15.461899,
+        "S5_cross_level": 33.600264,
+        "S1_morphological": 32.205975,
+        "S2_lexical_diversity": 64.651401,
+        "S3_structural": 66.270967,
+        "cat": 0.529412
+      },
+      "numerator": 212.719918,
+      "composite_D": 35.45332,
+      "cat_share_pct": 0.248877
+    },
+    {
+      "a": "OpenLID-v2",
+      "b": "xlsum",
+      "terms": {
+        "S4_info_theoretic": 21.065775,
+        "S5_cross_level": 44.316565,
+        "S1_morphological": 32.379615,
+        "S2_lexical_diversity": 58.401011,
+        "S3_structural": 61.235213,
+        "cat": 0.529412
+      },
+      "numerator": 217.927591,
+      "composite_D": 36.321265,
+      "cat_share_pct": 0.24293
+    },
+    {
+      "a": "OpenLID-v2",
+      "b": "stsb_multi_mt",
+      "terms": {
+        "S4_info_theoretic": 19.602314,
+        "S5_cross_level": 64.01126,
+        "S1_morphological": 36.721716,
+        "S2_lexical_diversity": 61.015175,
+        "S3_structural": 52.019606,
+        "cat": 0.588235
+      },
+      "numerator": 233.958306,
+      "composite_D": 38.993051,
+      "cat_share_pct": 0.251427
+    },
+    {
+      "a": "OpenLID-v2",
+      "b": "tweet_sentiment_multilingual",
+      "terms": {
+        "S4_info_theoretic": 22.241487,
+        "S5_cross_level": 50.838953,
+        "S1_morphological": 34.815722,
+        "S2_lexical_diversity": 69.052004,
+        "S3_structural": 81.189731,
+        "cat": 0.529412
+      },
+      "numerator": 258.667309,
+      "composite_D": 43.111218,
+      "cat_share_pct": 0.204669
+    },
+    {
+      "a": "europarl",
+      "b": "multilingual_toxicity_dataset",
+      "terms": {
+        "S4_info_theoretic": 5.572089,
+        "S5_cross_level": 33.269729,
+        "S1_morphological": 45.502072,
+        "S2_lexical_diversity": 26.59465,
+        "S3_structural": 64.542669,
+        "cat": 0.529412
+      },
+      "numerator": 176.010621,
+      "composite_D": 29.335104,
+      "cat_share_pct": 0.300784
+    },
+    {
+      "a": "europarl",
+      "b": "multilingual_cc_news",
+      "terms": {
+        "S4_info_theoretic": 10.870865,
+        "S5_cross_level": 45.856449,
+        "S1_morphological": 46.347929,
+        "S2_lexical_diversity": 55.744006,
+        "S3_structural": 90.083396,
+        "cat": 0.647059
+      },
+      "numerator": 249.549703,
+      "composite_D": 41.591617,
+      "cat_share_pct": 0.259291
+    },
+    {
+      "a": "europarl",
+      "b": "multi_eurlex",
+      "terms": {
+        "S4_info_theoretic": 16.520138,
+        "S5_cross_level": 49.897929,
+        "S1_morphological": 63.73736,
+        "S2_lexical_diversity": 102.546709,
+        "S3_structural": 144.887747,
+        "cat": 0.176471
+      },
+      "numerator": 377.766353,
+      "composite_D": 62.961059,
+      "cat_share_pct": 0.046714
+    },
+    {
+      "a": "europarl",
+      "b": "massive",
+      "terms": {
+        "S4_info_theoretic": 16.88851,
+        "S5_cross_level": 40.67191,
+        "S1_morphological": 49.94371,
+        "S2_lexical_diversity": 51.946361,
+        "S3_structural": 73.687245,
+        "cat": 0.647059
+      },
+      "numerator": 233.784794,
+      "composite_D": 38.964132,
+      "cat_share_pct": 0.276775
+    },
+    {
+      "a": "europarl",
+      "b": "flores_plus",
+      "terms": {
+        "S4_info_theoretic": 12.866972,
+        "S5_cross_level": 27.164145,
+        "S1_morphological": 40.967222,
+        "S2_lexical_diversity": 32.677641,
+        "S3_structural": 51.885197,
+        "cat": 0.470588
+      },
+      "numerator": 166.031766,
+      "composite_D": 27.671961,
+      "cat_share_pct": 0.283433
+    },
+    {
+      "a": "europarl",
+      "b": "language-identification",
+      "terms": {
+        "S4_info_theoretic": 9.171815,
+        "S5_cross_level": 39.575822,
+        "S1_morphological": 49.306283,
+        "S2_lexical_diversity": 46.457217,
+        "S3_structural": 77.901361,
+        "cat": 0.529412
+      },
+      "numerator": 222.941911,
+      "composite_D": 37.156985,
+      "cat_share_pct": 0.237466
+    },
+    {
+      "a": "europarl",
+      "b": "xlsum",
+      "terms": {
+        "S4_info_theoretic": 14.15161,
+        "S5_cross_level": 38.878673,
+        "S1_morphological": 53.354805,
+        "S2_lexical_diversity": 46.435685,
+        "S3_structural": 76.478797,
+        "cat": 0.705882
+      },
+      "numerator": 230.005452,
+      "composite_D": 38.334242,
+      "cat_share_pct": 0.306898
+    },
+    {
+      "a": "europarl",
+      "b": "stsb_multi_mt",
+      "terms": {
+        "S4_info_theoretic": 10.834617,
+        "S5_cross_level": 73.477616,
+        "S1_morphological": 55.511458,
+        "S2_lexical_diversity": 35.531666,
+        "S3_structural": 69.111078,
+        "cat": 0.647059
+      },
+      "numerator": 245.113493,
+      "composite_D": 40.852249,
+      "cat_share_pct": 0.263983
+    },
+    {
+      "a": "europarl",
+      "b": "tweet_sentiment_multilingual",
+      "terms": {
+        "S4_info_theoretic": 14.876255,
+        "S5_cross_level": 52.360316,
+        "S1_morphological": 34.644299,
+        "S2_lexical_diversity": 46.835253,
+        "S3_structural": 67.139883,
+        "cat": 0.352941
+      },
+      "numerator": 216.208947,
+      "composite_D": 36.034825,
+      "cat_share_pct": 0.163241
+    },
+    {
+      "a": "multilingual_toxicity_dataset",
+      "b": "multilingual_cc_news",
+      "terms": {
+        "S4_info_theoretic": 7.846449,
+        "S5_cross_level": 26.247686,
+        "S1_morphological": 31.742774,
+        "S2_lexical_diversity": 46.689445,
+        "S3_structural": 68.54998,
+        "cat": 0.411765
+      },
+      "numerator": 181.4881,
+      "composite_D": 30.248017,
+      "cat_share_pct": 0.226882
+    },
+    {
+      "a": "multilingual_toxicity_dataset",
+      "b": "multi_eurlex",
+      "terms": {
+        "S4_info_theoretic": 14.987185,
+        "S5_cross_level": 44.966505,
+        "S1_morphological": 62.807657,
+        "S2_lexical_diversity": 94.077155,
+        "S3_structural": 133.339642,
+        "cat": 0.588235
+      },
+      "numerator": 350.766379,
+      "composite_D": 58.461063,
+      "cat_share_pct": 0.1677
+    },
+    {
+      "a": "multilingual_toxicity_dataset",
+      "b": "massive",
+      "terms": {
+        "S4_info_theoretic": 18.719012,
+        "S5_cross_level": 43.956119,
+        "S1_morphological": 34.620567,
+        "S2_lexical_diversity": 48.788216,
+        "S3_structural": 59.031777,
+        "cat": 0.411765
+      },
+      "numerator": 205.527455,
+      "composite_D": 34.254576,
+      "cat_share_pct": 0.200345
+    },
+    {
+      "a": "multilingual_toxicity_dataset",
+      "b": "flores_plus",
+      "terms": {
+        "S4_info_theoretic": 12.20294,
+        "S5_cross_level": 38.686181,
+        "S1_morphological": 33.406582,
+        "S2_lexical_diversity": 37.684378,
+        "S3_structural": 53.19772,
+        "cat": 0.588235
+      },
+      "numerator": 175.766035,
+      "composite_D": 29.294339,
+      "cat_share_pct": 0.334669
+    },
+    {
+      "a": "multilingual_toxicity_dataset",
+      "b": "language-identification",
+      "terms": {
+        "S4_info_theoretic": 4.713984,
+        "S5_cross_level": 20.064976,
+        "S1_morphological": 29.610309,
+        "S2_lexical_diversity": 30.071043,
+        "S3_structural": 39.961901,
+        "cat": 0.294118
+      },
+      "numerator": 124.71633,
+      "composite_D": 20.786055,
+      "cat_share_pct": 0.235829
+    },
+    {
+      "a": "multilingual_toxicity_dataset",
+      "b": "xlsum",
+      "terms": {
+        "S4_info_theoretic": 11.455158,
+        "S5_cross_level": 22.197271,
+        "S1_morphological": 31.510769,
+        "S2_lexical_diversity": 37.958903,
+        "S3_structural": 55.734465,
+        "cat": 0.235294
+      },
+      "numerator": 159.09186,
+      "composite_D": 26.51531,
+      "cat_share_pct": 0.147898
+    },
+    {
+      "a": "multilingual_toxicity_dataset",
+      "b": "stsb_multi_mt",
+      "terms": {
+        "S4_info_theoretic": 14.137367,
+        "S5_cross_level": 69.38184,
+        "S1_morphological": 39.70313,
+        "S2_lexical_diversity": 40.329751,
+        "S3_structural": 68.810165,
+        "cat": 0.235294
+      },
+      "numerator": 232.597549,
+      "composite_D": 38.766258,
+      "cat_share_pct": 0.101159
+    },
+    {
+      "a": "multilingual_toxicity_dataset",
+      "b": "tweet_sentiment_multilingual",
+      "terms": {
+        "S4_info_theoretic": 13.531637,
+        "S5_cross_level": 45.673507,
+        "S1_morphological": 35.663748,
+        "S2_lexical_diversity": 39.479009,
+        "S3_structural": 68.65227,
+        "cat": 0.588235
+      },
+      "numerator": 203.588406,
+      "composite_D": 33.931401,
+      "cat_share_pct": 0.288934
+    },
+    {
+      "a": "multilingual_cc_news",
+      "b": "multi_eurlex",
+      "terms": {
+        "S4_info_theoretic": 14.334049,
+        "S5_cross_level": 28.976938,
+        "S1_morphological": 54.174314,
+        "S2_lexical_diversity": 66.852624,
+        "S3_structural": 87.122665,
+        "cat": 0.647059
+      },
+      "numerator": 252.10765,
+      "composite_D": 42.017942,
+      "cat_share_pct": 0.25666
+    },
+    {
+      "a": "multilingual_cc_news",
+      "b": "massive",
+      "terms": {
+        "S4_info_theoretic": 23.770677,
+        "S5_cross_level": 61.999541,
+        "S1_morphological": 36.871884,
+        "S2_lexical_diversity": 68.141026,
+        "S3_structural": 84.930949,
+        "cat": 0.176471
+      },
+      "numerator": 275.890547,
+      "composite_D": 45.981758,
+      "cat_share_pct": 0.063964
+    },
+    {
+      "a": "multilingual_cc_news",
+      "b": "flores_plus",
+      "terms": {
+        "S4_info_theoretic": 15.713205,
+        "S5_cross_level": 50.752672,
+        "S1_morphological": 25.247668,
+        "S2_lexical_diversity": 52.334021,
+        "S3_structural": 69.839382,
+        "cat": 0.352941
+      },
+      "numerator": 214.239889,
+      "composite_D": 35.706648,
+      "cat_share_pct": 0.164741
+    },
+    {
+      "a": "multilingual_cc_news",
+      "b": "language-identification",
+      "terms": {
+        "S4_info_theoretic": 8.85624,
+        "S5_cross_level": 22.844707,
+        "S1_morphological": 32.076768,
+        "S2_lexical_diversity": 46.563697,
+        "S3_structural": 62.849398,
+        "cat": 0.352941
+      },
+      "numerator": 173.54375,
+      "composite_D": 28.923958,
+      "cat_share_pct": 0.203373
+    },
+    {
+      "a": "multilingual_cc_news",
+      "b": "xlsum",
+      "terms": {
+        "S4_info_theoretic": 8.289311,
+        "S5_cross_level": 19.257461,
+        "S1_morphological": 23.8789,
+        "S2_lexical_diversity": 22.738235,
+        "S3_structural": 38.167236,
+        "cat": 0.352941
+      },
+      "numerator": 112.684083,
+      "composite_D": 18.78068,
+      "cat_share_pct": 0.313213
+    },
+    {
+      "a": "multilingual_cc_news",
+      "b": "stsb_multi_mt",
+      "terms": {
+        "S4_info_theoretic": 19.596675,
+        "S5_cross_level": 78.537168,
+        "S1_morphological": 39.549786,
+        "S2_lexical_diversity": 56.591575,
+        "S3_structural": 70.923015,
+        "cat": 0.411765
+      },
+      "numerator": 265.609983,
+      "composite_D": 44.26833,
+      "cat_share_pct": 0.155026
+    },
+    {
+      "a": "multilingual_cc_news",
+      "b": "tweet_sentiment_multilingual",
+      "terms": {
+        "S4_info_theoretic": 14.504405,
+        "S5_cross_level": 33.298129,
+        "S1_morphological": 41.135513,
+        "S2_lexical_diversity": 46.422654,
+        "S3_structural": 70.422991,
+        "cat": 0.764706
+      },
+      "numerator": 206.548396,
+      "composite_D": 34.424733,
+      "cat_share_pct": 0.370231
+    },
+    {
+      "a": "multi_eurlex",
+      "b": "massive",
+      "terms": {
+        "S4_info_theoretic": 27.579533,
+        "S5_cross_level": 76.469478,
+        "S1_morphological": 51.902699,
+        "S2_lexical_diversity": 110.652666,
+        "S3_structural": 131.824581,
+        "cat": 0.647059
+      },
+      "numerator": 399.076015,
+      "composite_D": 66.512669,
+      "cat_share_pct": 0.162139
+    },
+    {
+      "a": "multi_eurlex",
+      "b": "flores_plus",
+      "terms": {
+        "S4_info_theoretic": 25.521993,
+        "S5_cross_level": 58.981045,
+        "S1_morphological": 53.126132,
+        "S2_lexical_diversity": 100.868475,
+        "S3_structural": 125.639912,
+        "cat": 0.470588
+      },
+      "numerator": 364.608146,
+      "composite_D": 60.768024,
+      "cat_share_pct": 0.129067
+    },
+    {
+      "a": "multi_eurlex",
+      "b": "language-identification",
+      "terms": {
+        "S4_info_theoretic": 14.806881,
+        "S5_cross_level": 38.995482,
+        "S1_morphological": 71.216036,
+        "S2_lexical_diversity": 89.253821,
+        "S3_structural": 124.956969,
+        "cat": 0.470588
+      },
+      "numerator": 339.699777,
+      "composite_D": 56.616629,
+      "cat_share_pct": 0.138531
+    },
+    {
+      "a": "multi_eurlex",
+      "b": "xlsum",
+      "terms": {
+        "S4_info_theoretic": 19.976565,
+        "S5_cross_level": 35.880488,
+        "S1_morphological": 59.028741,
+        "S2_lexical_diversity": 77.202549,
+        "S3_structural": 105.303975,
+        "cat": 0.647059
+      },
+      "numerator": 298.039376,
+      "composite_D": 49.673229,
+      "cat_share_pct": 0.217105
+    },
+    {
+      "a": "multi_eurlex",
+      "b": "stsb_multi_mt",
+      "terms": {
+        "S4_info_theoretic": 24.59223,
+        "S5_cross_level": 85.835716,
+        "S1_morphological": 53.800894,
+        "S2_lexical_diversity": 99.887255,
+        "S3_structural": 118.51071,
+        "cat": 0.647059
+      },
+      "numerator": 383.273864,
+      "composite_D": 63.878977,
+      "cat_share_pct": 0.168824
+    },
+    {
+      "a": "multi_eurlex",
+      "b": "tweet_sentiment_multilingual",
+      "terms": {
+        "S4_info_theoretic": 9.997051,
+        "S5_cross_level": 30.849814,
+        "S1_morphological": 61.855024,
+        "S2_lexical_diversity": 92.200465,
+        "S3_structural": 126.267844,
+        "cat": 0.352941
+      },
+      "numerator": 321.523139,
+      "composite_D": 53.58719,
+      "cat_share_pct": 0.109772
+    },
+    {
+      "a": "massive",
+      "b": "flores_plus",
+      "terms": {
+        "S4_info_theoretic": 22.651122,
+        "S5_cross_level": 43.482188,
+        "S1_morphological": 33.847398,
+        "S2_lexical_diversity": 49.000817,
+        "S3_structural": 55.279149,
+        "cat": 0.294118
+      },
+      "numerator": 204.554792,
+      "composite_D": 34.092465,
+      "cat_share_pct": 0.143784
+    },
+    {
+      "a": "massive",
+      "b": "language-identification",
+      "terms": {
+        "S4_info_theoretic": 20.28732,
+        "S5_cross_level": 49.487486,
+        "S1_morphological": 46.647516,
+        "S2_lexical_diversity": 59.271849,
+        "S3_structural": 64.495132,
+        "cat": 0.352941
+      },
+      "numerator": 240.542244,
+      "composite_D": 40.090374,
+      "cat_share_pct": 0.146727
+    },
+    {
+      "a": "massive",
+      "b": "xlsum",
+      "terms": {
+        "S4_info_theoretic": 27.868862,
+        "S5_cross_level": 54.942293,
+        "S1_morphological": 39.430264,
+        "S2_lexical_diversity": 61.587003,
+        "S3_structural": 76.400254,
+        "cat": 0.352941
+      },
+      "numerator": 260.581618,
+      "composite_D": 43.43027,
+      "cat_share_pct": 0.135444
+    },
+    {
+      "a": "massive",
+      "b": "stsb_multi_mt",
+      "terms": {
+        "S4_info_theoretic": 8.942549,
+        "S5_cross_level": 67.670253,
+        "S1_morphological": 23.560243,
+        "S2_lexical_diversity": 37.142467,
+        "S3_structural": 61.046827,
+        "cat": 0.411765
+      },
+      "numerator": 198.774103,
+      "composite_D": 33.129017,
+      "cat_share_pct": 0.207152
+    },
+    {
+      "a": "massive",
+      "b": "tweet_sentiment_multilingual",
+      "terms": {
+        "S4_info_theoretic": 21.230965,
+        "S5_cross_level": 69.256849,
+        "S1_morphological": 42.669536,
+        "S2_lexical_diversity": 63.066662,
+        "S3_structural": 86.134777,
+        "cat": 0.705882
+      },
+      "numerator": 283.064671,
+      "composite_D": 47.177445,
+      "cat_share_pct": 0.249371
+    },
+    {
+      "a": "flores_plus",
+      "b": "language-identification",
+      "terms": {
+        "S4_info_theoretic": 12.699005,
+        "S5_cross_level": 41.544955,
+        "S1_morphological": 37.614148,
+        "S2_lexical_diversity": 44.925866,
+        "S3_structural": 62.579065,
+        "cat": 0.529412
+      },
+      "numerator": 199.892452,
+      "composite_D": 33.315409,
+      "cat_share_pct": 0.264848
+    },
+    {
+      "a": "flores_plus",
+      "b": "xlsum",
+      "terms": {
+        "S4_info_theoretic": 13.864457,
+        "S5_cross_level": 46.276927,
+        "S1_morphological": 31.089171,
+        "S2_lexical_diversity": 40.78222,
+        "S3_structural": 60.827311,
+        "cat": 0.529412
+      },
+      "numerator": 193.369497,
+      "composite_D": 32.22825,
+      "cat_share_pct": 0.273782
+    },
+    {
+      "a": "flores_plus",
+      "b": "stsb_multi_mt",
+      "terms": {
+        "S4_info_theoretic": 17.507087,
+        "S5_cross_level": 61.057952,
+        "S1_morphological": 38.735091,
+        "S2_lexical_diversity": 34.962228,
+        "S3_structural": 50.945311,
+        "cat": 0.588235
+      },
+      "numerator": 203.795903,
+      "composite_D": 33.965984,
+      "cat_share_pct": 0.288639
+    },
+    {
+      "a": "flores_plus",
+      "b": "tweet_sentiment_multilingual",
+      "terms": {
+        "S4_info_theoretic": 24.618939,
+        "S5_cross_level": 62.14016,
+        "S1_morphological": 42.589533,
+        "S2_lexical_diversity": 60.034779,
+        "S3_structural": 79.286276,
+        "cat": 0.529412
+      },
+      "numerator": 269.1991,
+      "composite_D": 44.866517,
+      "cat_share_pct": 0.196662
+    },
+    {
+      "a": "language-identification",
+      "b": "xlsum",
+      "terms": {
+        "S4_info_theoretic": 12.328189,
+        "S5_cross_level": 18.18347,
+        "S1_morphological": 39.254247,
+        "S2_lexical_diversity": 35.186033,
+        "S3_structural": 54.424202,
+        "cat": 0.294118
+      },
+      "numerator": 159.670259,
+      "composite_D": 26.61171,
+      "cat_share_pct": 0.184203
+    },
+    {
+      "a": "language-identification",
+      "b": "stsb_multi_mt",
+      "terms": {
+        "S4_info_theoretic": 16.929608,
+        "S5_cross_level": 65.915654,
+        "S1_morphological": 54.280175,
+        "S2_lexical_diversity": 51.812767,
+        "S3_structural": 77.668268,
+        "cat": 0.352941
+      },
+      "numerator": 266.959414,
+      "composite_D": 44.493236,
+      "cat_share_pct": 0.132208
+    },
+    {
+      "a": "language-identification",
+      "b": "tweet_sentiment_multilingual",
+      "terms": {
+        "S4_info_theoretic": 13.785216,
+        "S5_cross_level": 41.81136,
+        "S1_morphological": 39.700326,
+        "S2_lexical_diversity": 47.478453,
+        "S3_structural": 78.450667,
+        "cat": 0.647059
+      },
+      "numerator": 221.873081,
+      "composite_D": 36.978847,
+      "cat_share_pct": 0.291635
+    },
+    {
+      "a": "xlsum",
+      "b": "stsb_multi_mt",
+      "terms": {
+        "S4_info_theoretic": 22.536773,
+        "S5_cross_level": 73.417053,
+        "S1_morphological": 35.876093,
+        "S2_lexical_diversity": 46.399835,
+        "S3_structural": 63.638851,
+        "cat": 0.352941
+      },
+      "numerator": 242.221544,
+      "composite_D": 40.370257,
+      "cat_share_pct": 0.14571
+    },
+    {
+      "a": "xlsum",
+      "b": "tweet_sentiment_multilingual",
+      "terms": {
+        "S4_info_theoretic": 20.731142,
+        "S5_cross_level": 40.092868,
+        "S1_morphological": 43.547063,
+        "S2_lexical_diversity": 44.712263,
+        "S3_structural": 65.567468,
+        "cat": 0.647059
+      },
+      "numerator": 215.297862,
+      "composite_D": 35.882977,
+      "cat_share_pct": 0.300541
+    },
+    {
+      "a": "stsb_multi_mt",
+      "b": "tweet_sentiment_multilingual",
+      "terms": {
+        "S4_info_theoretic": 20.561961,
+        "S5_cross_level": 91.847811,
+        "S1_morphological": 43.538091,
+        "S2_lexical_diversity": 53.478718,
+        "S3_structural": 84.988159,
+        "cat": 0.529412
+      },
+      "numerator": 294.944152,
+      "composite_D": 49.157359,
+      "cat_share_pct": 0.179496
+    }
+  ]
+}

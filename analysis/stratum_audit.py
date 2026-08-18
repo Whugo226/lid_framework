@@ -2,13 +2,20 @@
 Feature-to-stratum assignment audit table generator.
 
 Loads the fitted FeatureStratifier from mkb.pkl and emits the complete
-per-stratum base-measure-family enumeration as LaTeX (a summary table plus
-one longtable per stratum), so the thesis appendix is machine-generated
-from the deployed artifact rather than hand-transcribed.
+per-stratum base-measure-family enumeration as LaTeX (a summary table, a
+segment-level composition table, and one longtable per stratum), so the
+thesis appendix is machine-generated from the deployed artifact rather than
+hand-transcribed.
 
 A "base-measure family" is a Lingualyzer base measure with its level-
 statistic suffix stripped: e.g. "Word length (Par SD)" and
 "Word length (Doc)" both belong to the family "Word length".
+
+The same suffix carries the segment level: the token before the space names
+the level ("Sent", "Par", "Doc") or the pairing for an inter-segment measure
+("Sent-Doc"), and the remainder names the aggregate statistic. Counting
+distinct families per level token decomposes the core schema by level, which
+is the arithmetic Chapter 4 states for the fixed 2,726 dimensions.
 
 Usage::
 
@@ -36,10 +43,37 @@ _ORDER = ["S1_morphological", "S2_lexical_diversity", "S3_structural",
           "S4_info_theoretic", "S5_cross_level"]
 
 _SUFFIX_RE = re.compile(r"\s*\((Sent|Par|Doc)[^)]*\)\s*$")
+_SUFFIX_PARTS_RE = re.compile(r"\s*\(([^)]*)\)\s*$")
+
+# Level tokens in presentation order; anything else is reported as-is.
+_LEVEL_LABELS = {
+    "Sent":      "Sentence",
+    "Par":       "Paragraph",
+    "Doc":       "Document",
+    "Sent-Sent": "Sentence--sentence",
+    "Sent-Par":  "Sentence--paragraph",
+    "Sent-Doc":  "Sentence--document",
+    "Par-Par":   "Paragraph--paragraph",
+    "Par-Doc":   "Paragraph--document",
+}
 
 
 def base_family(feature_name: str) -> str:
     return _SUFFIX_RE.sub("", feature_name).strip()
+
+
+def level_and_stat(feature_name: str) -> tuple[str, str]:
+    """Split the trailing suffix into its level token and aggregate statistic.
+
+    "Word length (Par SD)"       -> ("Par", "SD")
+    "Word count (Doc)"           -> ("Doc", "value")
+    "Lemma overlap ratio (Sent-Doc Max)" -> ("Sent-Doc", "Max")
+    """
+    m = _SUFFIX_PARTS_RE.search(feature_name)
+    if not m:
+        return ("", "")
+    parts = m.group(1).split()
+    return (parts[0], " ".join(parts[1:]) or "value")
 
 
 def tex_escape(s: str) -> str:
@@ -104,6 +138,47 @@ def main() -> None:
     lines.append(r"\end{table}")
     lines.append("")
 
+    # ── Segment-level composition table ──────────────────────────────────
+    all_features = [f for fit in strat._fits.values() for f in fit.feature_names]
+    per_level: dict[str, dict] = {}
+    for feat in all_features:
+        token, stat = level_and_stat(feat)
+        rec = per_level.setdefault(token, {"families": set(), "stats": set(), "n": 0})
+        rec["families"].add(base_family(feat))
+        rec["stats"].add(stat)
+        rec["n"] += 1
+    ordered = [t for t in _LEVEL_LABELS if t in per_level] + \
+              [t for t in sorted(per_level) if t not in _LEVEL_LABELS]
+
+    lines.append(r"\begin{table}[H]")
+    lines.append(r"    \centering")
+    lines.append(r"    \caption{Segment-level composition of the core schema, extracted from the "
+                 r"same fitted \texttt{FeatureStratifier}. A base measure is instantiated only at "
+                 r"the levels at which it is defined; at sentence and paragraph level it is "
+                 r"summarised across the constituent segments by four aggregate statistics, "
+                 r"whereas at document level it is emitted as a single value. Counts are those "
+                 r"of the fixed core, that is, after the fitting step's validity filter has "
+                 r"removed the conditional paragraph-level variants that not every corpus "
+                 r"populates.}")
+    lines.append(r"    \label{tab:stratum_audit_levels}")
+    lines.append(r"    \begin{tabular}{|l|r|r|r|}")
+    lines.append(r"        \hline")
+    lines.append(r"        \textbf{Segment level} & \textbf{Base measures} & "
+                 r"\textbf{Statistics} & \textbf{Core features} \\")
+    lines.append(r"        \hline")
+    for token in ordered:
+        rec = per_level[token]
+        label = _LEVEL_LABELS.get(token, tex_escape(token))
+        lines.append(f"        {label} & {len(rec['families'])} & {len(rec['stats'])} & "
+                     f"{fmt_int(rec['n'])} \\\\")
+        lines.append(r"        \hline")
+    lines.append(f"        \\textbf{{Total}} & --- & --- & "
+                 f"\\textbf{{{fmt_int(len(all_features))}}} \\\\")
+    lines.append(r"        \hline")
+    lines.append(r"    \end{tabular}")
+    lines.append(r"\end{table}")
+    lines.append("")
+
     # ── One longtable per stratum ────────────────────────────────────────
     for key in _ORDER:
         fit = strat._fits[key]
@@ -154,6 +229,24 @@ def main() -> None:
         print(f"  {sid} {sname:26s} {len(fams_per[key]):3d} families  "
               f"{len(strat._fits[key].feature_names):4d} features  "
               f"{strat._fits[key].n_components:2d} PCs")
+
+    print("\nSegment-level composition:")
+    for token in ordered:
+        rec = per_level[token]
+        label = _LEVEL_LABELS.get(token, token).replace("--", "-")
+        print(f"  {label:22s} {len(rec['families']):4d} measures x "
+              f"{len(rec['stats'])} stat(s) = {rec['n']:5d} features")
+    print(f"  {'Total':22s} {'':4s}                {len(all_features):5d} features")
+
+    # Post- vs pre-filter, per level: how many families the validity filter drops.
+    pre: dict[str, set] = {}
+    for feat in strat._feature_to_stratum:
+        pre.setdefault(level_and_stat(feat)[0], set()).add(base_family(feat))
+    dropped = {t: len(pre.get(t, set())) - len(per_level[t]["families"]) for t in ordered}
+    if any(dropped.values()):
+        print("  families dropped by the validity filter (pooled union -> fixed core): "
+              + ", ".join(f"{_LEVEL_LABELS.get(t, t).replace('--', '-')} {d}"
+                          for t, d in dropped.items() if d))
 
 
 if __name__ == "__main__":

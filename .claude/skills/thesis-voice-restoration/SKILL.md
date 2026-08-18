@@ -44,7 +44,7 @@ reading — it is a scanned-layout PDF and the raw text is unusable).
 | `methodology_chapter.tex` (CH3) | 15 | **70** | Done, full coverage, proofread |
 | `design_and_implementation.tex` (CH4) | 22 | **60** after sweep 1 | Sweep 2 applied, **not re-scored** |
 | `scoping_review_chapter.tex` (CH2) | 28 | — | **Not started.** 1178 lines. `minor-changes-only` under change control — a voice pass qualifies, but do not restructure |
-| `demonstration_and_evaluation.tex` (CH5) | 25 | **74** | Done 2026-08-10, full coverage, proofread. Now 1258 lines |
+| `demonstration_and_evaluation.tex` (CH5) | 25 | **78** | Second pass 2026-08-18 after the chapter grew to 1411 lines. Full coverage, proofread, overcorrection-checked |
 | `conclusion.tex` (CH6) | 18 | — | **Not started.** 247 lines, worst tell density of any chapter |
 | `frontmatter/abstract.tex` | 10 | — | **Not started.** Do LAST, after the chapters, so it matches finished text |
 | `frontmatter/acknowledgements.tex` | n/a | — | **Empty template stub — must be WRITTEN, not edited.** Every line commented out |
@@ -444,7 +444,7 @@ Re-score after each pass and record the delta here.
 | `chapters/methodology_chapter.tex` | 15 | **70** (2026-08-03, full coverage) | 14 inline-header bold lists; 8–12 sentence paragraphs; mean 35–40 words |
 | `chapters/conclusion.tex` | 18 | — | 29 em dashes, 21 bold bullets, "lays a foundation" closer |
 | `chapters/design_and_implementation.tex` | 22 | **60** after sweep 1 (2026-08-03); sweep 2 applied, not re-scored | Zero connectors in 800 lines; mean 35–45 words |
-| `chapters/demonstration_and_evaluation.tex` | 25 | **74** (2026-08-10, full coverage) | 42 em dashes; essayistic "not X, it is Y" argumentation |
+| `chapters/demonstration_and_evaluation.tex` | 25 | **78** (2026-08-18, second pass) | 42 em dashes; essayistic "not X, it is Y" argumentation |
 | `chapters/scoping_review_chapter.tex` | 28 | — | 70-word sentences with stacked participial tails; drift worsens late |
 | `chapters/introduction_chapter.tex` | 48 | **66** (2026-08-03, full coverage) | Partially hand-edited already; AI drafts visible in `%` comments |
 | `frontmatter/acknowledgements.tex` | n/a | — | **Empty template stub. Nothing written.** |
@@ -638,6 +638,62 @@ problem". The intensifier was load-bearing.
 `new_textit.txt` and `old_textit.txt` in the thesis root (scratch from its own
 integrity diff). Harmless, deleted. `git status` after every thesis subagent
 call, as the standing rule says.
+
+### CH5 second pass (2026-08-18) — three lessons
+
+The chapter had grown 1258 → 1411 lines since the 2026-08-10 pass (reworked
+walkthrough, LLM baseline, blind-baseline correction), so the new material had
+never had a voice pass and the connector density had diluted from 36 back to 30.
+74 → **78** over three sweeps: 32 edits from a three-agent audit swarm, 20 more
+covering the paragraphs sweep 1 left byte-identical, then 15 fixing what an
+overcorrection check and a proofread agent found. Connectors 30 → 40. Coverage
+65 of 129 prose paragraphs rewritten; the other 64 each carry an explicit CLEAN
+verdict from a named auditor. Integrity clean: all `\cite`/`\ref`/`\label`/
+`\textbf`/`\item`/`\mysection`/`\mysubsection`/table/figure/`\textit`/`\emph`/
+`\candidatetodo`/`\caption` counts identical, all 803 numeric tokens byte-
+identical in the same order, braces and `$` balanced, no environment counts
+changed. New backup at `backups/pre_voice_ch5_2026-08-18/`.
+
+1. **Never re-wrap a paragraph that contains a `%` line.** The edit helper
+   normalised whitespace across a blank-line-delimited block and merged a
+   `% \candidatetodo{...}` line into the prose that followed it, commenting out
+   the entire Chapter Summary opening paragraph. It survived a structural-count
+   check (comment lines were still 105) and was caught only by a numeric-token
+   comparison that strips comments, because one `17` vanished. **Run the numeric
+   token check after every sweep, not just at the end** — it is the only cheap
+   probe that sees text disappearing into a comment.
+2. **CRLF.** The chapter is CRLF. Writing it back as LF makes the whole file one
+   diff hunk and hides every real change. Read with universal newlines, write
+   with `newline="\r\n"`.
+3. **The overcorrection check earns its place every time.** It caught two real
+   fidelity regressions this pass, both mine: a provenance hedge ("the overlap
+   is not claimed to be absent") flattened into a flat assertion that the overlap
+   is present, and "and should not be overstated" deleted as rhetorical when it
+   was guarding the example that follows it. Feed the reviewer an OLD/NEW
+   paragraph-pair report rather than a diff — reflowed paragraphs make `diff`
+   unreadable, and the pair report is what surfaced both findings.
+
+Judgement call recorded: a proofread agent flagged "rather than" (46 uses) as the
+chapter's clearest surviving anti-fingerprint signature. Not acted on beyond a
+few incidental cases. It is not on the §5 target list, most instances are
+claim-scoping ("a measured finding rather than a precaution", "the prerequisite
+rather than an alternative"), and mass-editing them would risk exactly the claim
+drift §8 keeps warning about. Flagged to the user instead.
+
+**Subagents wrote files again**, for the third pass log running. A read-only
+agent added two section-roadmap paragraphs to `chapters/methodology_chapter.tex`
+(CH3, not even the chapter under edit), written with LF endings, and something
+compiled the thesis. `git status` after every thesis subagent call, always —
+that check is what surfaced it.
+
+**But the outcome here was not a revert.** The two CH3 paragraphs were shown to
+the user and he chose to KEEP them, so they are restored and live in the working
+tree (before `\mysubsection{Why Meta-Learning}` and
+`\mysubsection{Dataset Selection Criteria}`; the `Section~\ref{sec:sr_synthesis}`
+cross-reference in the first one is valid, the label is at CH3 L84). Do not
+"clean them up" in a later session. The lesson is about *process*, not about the
+prose: an out-of-scope write must be surfaced to the user and their call taken,
+not silently reverted and not silently kept.
 
 ### Proofread results (2026-08-03)
 
