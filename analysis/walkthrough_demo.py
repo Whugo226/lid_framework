@@ -43,8 +43,8 @@ from lid_toolkit.recommender import Recommender
 rec = Recommender.from_store(TK / "mkb.pkl", k=3)
 
 from lid_toolkit.logic.profiler_knowledge_base import DeepProfiler
-# Same seed the dashboard uses, so the transcript and the captured panels
-# describe one fingerprint rather than two near-identical ones.
+# Seeded so the transcript and the captured panels describe one fingerprint
+# rather than two near-identical ones; the dashboard itself is unseeded.
 PROFILE_SEED = 42
 prof = DeepProfiler(seed=PROFILE_SEED)
 t0 = time.perf_counter()

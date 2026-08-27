@@ -195,7 +195,9 @@ def main() -> None:
              r"draws; self-consistency is the proportion of draws agreeing with it; "
              r"the gap is the mean over the draws.}")
     L.append(r"    \label{tab:llm_per_corpus}")
-    L.append(r"    \scriptsize")
+    # Escape tier 1: at the house \small this 17-row table overruns its page
+    # box, so it drops one step. \resizebox is deliberately not used.
+    L.append(r"    \footnotesize")
     # \raggedright on the wrapping columns: justified text plus \allowbreak in
     # 55-character identifiers produces badness-10000 underfull lines.
     L.append(r"    \begin{tabular}{|>{\raggedright\arraybackslash}p{0.26\textwidth}"

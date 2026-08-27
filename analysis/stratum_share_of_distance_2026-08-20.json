@@ -1,0 +1,3883 @@
+{
+  "generated": "2026-08-20",
+  "panel_finding": "M1 (equal nominal stratum weights are not equal influence)",
+  "source_artifact": "mkb.pkl",
+  "basis": "17 evaluation-split queries against the 17-corpus MKB, equal weights",
+  "priority_metric": "f1_weighted",
+  "k": 3,
+  "n_pairs_all": 289,
+  "n_pairs_retrieved": 51,
+  "retained_components": {
+    "S4_info_theoretic": 5,
+    "S5_cross_level": 11,
+    "S1_morphological": 16,
+    "S2_lexical_diversity": 15,
+    "S3_structural": 16,
+    "cat": null
+  },
+  "equal_nominal_share_pct": 16.67,
+  "share_all_pairs": {
+    "S4_info_theoretic": {
+      "label": "S4 Information-theoretic",
+      "mean_share_pct": 7.99,
+      "median_share_pct": 6.91,
+      "min_share_pct": 0.98,
+      "max_share_pct": 20.7,
+      "mean_distance": 28.723
+    },
+    "S5_cross_level": {
+      "label": "S5 Cross-level cohesion",
+      "mean_share_pct": 26.25,
+      "median_share_pct": 24.53,
+      "min_share_pct": 8.87,
+      "max_share_pct": 61.77,
+      "mean_distance": 106.3279
+    },
+    "S1_morphological": {
+      "label": "S1 Morphological richness",
+      "mean_share_pct": 13.97,
+      "median_share_pct": 13.67,
+      "min_share_pct": 3.05,
+      "max_share_pct": 29.47,
+      "mean_distance": 41.8235
+    },
+    "S2_lexical_diversity": {
+      "label": "S2 Lexical diversity",
+      "mean_share_pct": 24.53,
+      "median_share_pct": 23.54,
+      "min_share_pct": 11.59,
+      "max_share_pct": 39.52,
+      "mean_distance": 87.232
+    },
+    "S3_structural": {
+      "label": "S3 Structural / syntactic",
+      "mean_share_pct": 27.12,
+      "median_share_pct": 28.68,
+      "min_share_pct": 6.24,
+      "max_share_pct": 44.14,
+      "mean_distance": 85.0008
+    },
+    "cat": {
+      "label": "S6 Typological flags",
+      "mean_share_pct": 0.14,
+      "median_share_pct": 0.13,
+      "min_share_pct": 0.0,
+      "max_share_pct": 0.37,
+      "mean_distance": 0.4085
+    }
+  },
+  "share_retrieved_only": {
+    "S4_info_theoretic": {
+      "label": "S4 Information-theoretic",
+      "mean_share_pct": 8.08,
+      "median_share_pct": 6.91,
+      "min_share_pct": 0.98,
+      "max_share_pct": 20.7,
+      "mean_distance": 22.7385
+    },
+    "S5_cross_level": {
+      "label": "S5 Cross-level cohesion",
+      "mean_share_pct": 26.82,
+      "median_share_pct": 24.03,
+      "min_share_pct": 8.87,
+      "max_share_pct": 61.77,
+      "mean_distance": 86.5024
+    },
+    "S1_morphological": {
+      "label": "S1 Morphological richness",
+      "mean_share_pct": 14.54,
+      "median_share_pct": 12.6,
+      "min_share_pct": 3.33,
+      "max_share_pct": 29.47,
+      "mean_distance": 28.763
+    },
+    "S2_lexical_diversity": {
+      "label": "S2 Lexical diversity",
+      "mean_share_pct": 24.25,
+      "median_share_pct": 23.38,
+      "min_share_pct": 11.59,
+      "max_share_pct": 38.84,
+      "mean_distance": 66.7963
+    },
+    "S3_structural": {
+      "label": "S3 Structural / syntactic",
+      "mean_share_pct": 26.18,
+      "median_share_pct": 28.32,
+      "min_share_pct": 6.24,
+      "max_share_pct": 44.14,
+      "mean_distance": 57.2972
+    },
+    "cat": {
+      "label": "S6 Typological flags",
+      "mean_share_pct": 0.13,
+      "median_share_pct": 0.14,
+      "min_share_pct": 0.0,
+      "max_share_pct": 0.34,
+      "mean_distance": 0.3057
+    }
+  },
+  "dimensionality_correlation": {
+    "pearson_r_components_vs_share": 0.5951,
+    "note": "five continuous strata only; S6 is not PCA-projected"
+  },
+  "largest_over_smallest_continuous": 3.394,
+  "per_pair": [
+    {
+      "query": "OpenLID-v2",
+      "candidate": "exorde-social-media-december-2024-week1",
+      "composite_D": 39.1188,
+      "shares_pct": {
+        "S4_info_theoretic": 7.493,
+        "S5_cross_level": 31.263,
+        "S1_morphological": 15.429,
+        "S2_lexical_diversity": 19.454,
+        "S3_structural": 26.361,
+        "cat": 0.0
+      }
+    },
+    {
+      "query": "OpenLID-v2",
+      "candidate": "amazon_reviews_multi",
+      "composite_D": 53.2128,
+      "shares_pct": {
+        "S4_info_theoretic": 6.49,
+        "S5_cross_level": 25.612,
+        "S1_morphological": 13.394,
+        "S2_lexical_diversity": 25.698,
+        "S3_structural": 28.658,
+        "cat": 0.147
+      }
+    },
+    {
+      "query": "OpenLID-v2",
+      "candidate": "tydiqa",
+      "composite_D": 38.4622,
+      "shares_pct": {
+        "S4_info_theoretic": 8.63,
+        "S5_cross_level": 26.314,
+        "S1_morphological": 16.591,
+        "S2_lexical_diversity": 19.131,
+        "S3_structural": 29.13,
+        "cat": 0.204
+      }
+    },
+    {
+      "query": "OpenLID-v2",
+      "candidate": "mmarco",
+      "composite_D": 39.9394,
+      "shares_pct": {
+        "S4_info_theoretic": 7.833,
+        "S5_cross_level": 32.233,
+        "S1_morphological": 14.562,
+        "S2_lexical_diversity": 21.753,
+        "S3_structural": 23.447,
+        "cat": 0.172
+      }
+    },
+    {
+      "query": "OpenLID-v2",
+      "candidate": "xnli",
+      "composite_D": 40.7481,
+      "shares_pct": {
+        "S4_info_theoretic": 8.232,
+        "S5_cross_level": 25.74,
+        "S1_morphological": 11.098,
+        "S2_lexical_diversity": 27.186,
+        "S3_structural": 27.6,
+        "cat": 0.144
+      }
+    },
+    {
+      "query": "OpenLID-v2",
+      "candidate": "wikipedia",
+      "composite_D": 57.1924,
+      "shares_pct": {
+        "S4_info_theoretic": 6.75,
+        "S5_cross_level": 32.731,
+        "S1_morphological": 12.275,
+        "S2_lexical_diversity": 20.693,
+        "S3_structural": 27.551,
+        "cat": 0.0
+      }
+    },
+    {
+      "query": "OpenLID-v2",
+      "candidate": "OpenLID-v2",
+      "composite_D": 18.2767,
+      "shares_pct": {
+        "S4_info_theoretic": 3.23,
+        "S5_cross_level": 55.235,
+        "S1_morphological": 13.876,
+        "S2_lexical_diversity": 11.588,
+        "S3_structural": 15.803,
+        "cat": 0.268
+      }
+    },
+    {
+      "query": "OpenLID-v2",
+      "candidate": "europarl",
+      "composite_D": 47.6596,
+      "shares_pct": {
+        "S4_info_theoretic": 6.182,
+        "S5_cross_level": 26.68,
+        "S1_morphological": 15.31,
+        "S2_lexical_diversity": 22.909,
+        "S3_structural": 28.692,
+        "cat": 0.226
+      }
+    },
+    {
+      "query": "OpenLID-v2",
+      "candidate": "multilingual_toxicity_dataset",
+      "composite_D": 39.0099,
+      "shares_pct": {
+        "S4_info_theoretic": 6.708,
+        "S5_cross_level": 29.054,
+        "S1_morphological": 10.669,
+        "S2_lexical_diversity": 25.169,
+        "S3_structural": 28.224,
+        "cat": 0.176
+      }
+    },
+    {
+      "query": "OpenLID-v2",
+      "candidate": "multilingual_cc_news",
+      "composite_D": 37.5107,
+      "shares_pct": {
+        "S4_info_theoretic": 7.215,
+        "S5_cross_level": 31.558,
+        "S1_morphological": 10.269,
+        "S2_lexical_diversity": 25.12,
+        "S3_structural": 25.786,
+        "cat": 0.052
+      }
+    },
+    {
+      "query": "OpenLID-v2",
+      "candidate": "multi_eurlex",
+      "composite_D": 58.7359,
+      "shares_pct": {
+        "S4_info_theoretic": 7.19,
+        "S5_cross_level": 22.12,
+        "S1_morphological": 14.064,
+        "S2_lexical_diversity": 27.731,
+        "S3_structural": 28.711,
+        "cat": 0.184
+      }
+    },
+    {
+      "query": "OpenLID-v2",
+      "candidate": "massive",
+      "composite_D": 35.9571,
+      "shares_pct": {
+        "S4_info_theoretic": 8.376,
+        "S5_cross_level": 33.402,
+        "S1_morphological": 11.377,
+        "S2_lexical_diversity": 22.213,
+        "S3_structural": 24.55,
+        "cat": 0.082
+      }
+    },
+    {
+      "query": "OpenLID-v2",
+      "candidate": "flores_plus",
+      "composite_D": 34.4006,
+      "shares_pct": {
+        "S4_info_theoretic": 8.428,
+        "S5_cross_level": 31.294,
+        "S1_morphological": 10.376,
+        "S2_lexical_diversity": 24.781,
+        "S3_structural": 24.979,
+        "cat": 0.142
+      }
+    },
+    {
+      "query": "OpenLID-v2",
+      "candidate": "language-identification",
+      "composite_D": 40.002,
+      "shares_pct": {
+        "S4_info_theoretic": 6.397,
+        "S5_cross_level": 25.586,
+        "S1_morphological": 14.424,
+        "S2_lexical_diversity": 25.925,
+        "S3_structural": 27.52,
+        "cat": 0.147
+      }
+    },
+    {
+      "query": "OpenLID-v2",
+      "candidate": "xlsum",
+      "composite_D": 39.0804,
+      "shares_pct": {
+        "S4_info_theoretic": 8.433,
+        "S5_cross_level": 29.881,
+        "S1_morphological": 12.604,
+        "S2_lexical_diversity": 23.12,
+        "S3_structural": 25.812,
+        "cat": 0.151
+      }
+    },
+    {
+      "query": "OpenLID-v2",
+      "candidate": "stsb_multi_mt",
+      "composite_D": 31.9854,
+      "shares_pct": {
+        "S4_info_theoretic": 9.325,
+        "S5_cross_level": 16.101,
+        "S1_morphological": 17.023,
+        "S2_lexical_diversity": 29.913,
+        "S3_structural": 27.423,
+        "cat": 0.215
+      }
+    },
+    {
+      "query": "OpenLID-v2",
+      "candidate": "tweet_sentiment_multilingual",
+      "composite_D": 49.9185,
+      "shares_pct": {
+        "S4_info_theoretic": 7.402,
+        "S5_cross_level": 28.043,
+        "S1_morphological": 12.844,
+        "S2_lexical_diversity": 22.506,
+        "S3_structural": 28.97,
+        "cat": 0.236
+      }
+    },
+    {
+      "query": "amazon_reviews_multi",
+      "candidate": "exorde-social-media-december-2024-week1",
+      "composite_D": 35.5524,
+      "shares_pct": {
+        "S4_info_theoretic": 7.92,
+        "S5_cross_level": 19.852,
+        "S1_morphological": 18.318,
+        "S2_lexical_diversity": 25.18,
+        "S3_structural": 28.511,
+        "cat": 0.221
+      }
+    },
+    {
+      "query": "amazon_reviews_multi",
+      "candidate": "amazon_reviews_multi",
+      "composite_D": 7.7332,
+      "shares_pct": {
+        "S4_info_theoretic": 5.338,
+        "S5_cross_level": 21.526,
+        "S1_morphological": 22.638,
+        "S2_lexical_diversity": 20.38,
+        "S3_structural": 30.118,
+        "cat": 0.0
+      }
+    },
+    {
+      "query": "amazon_reviews_multi",
+      "candidate": "tydiqa",
+      "composite_D": 62.6295,
+      "shares_pct": {
+        "S4_info_theoretic": 6.853,
+        "S5_cross_level": 28.717,
+        "S1_morphological": 15.287,
+        "S2_lexical_diversity": 22.77,
+        "S3_structural": 26.233,
+        "cat": 0.141
+      }
+    },
+    {
+      "query": "amazon_reviews_multi",
+      "candidate": "mmarco",
+      "composite_D": 52.1191,
+      "shares_pct": {
+        "S4_info_theoretic": 7.546,
+        "S5_cross_level": 21.418,
+        "S1_morphological": 17.27,
+        "S2_lexical_diversity": 24.518,
+        "S3_structural": 29.154,
+        "cat": 0.094
+      }
+    },
+    {
+      "query": "amazon_reviews_multi",
+      "candidate": "xnli",
+      "composite_D": 36.216,
+      "shares_pct": {
+        "S4_info_theoretic": 5.574,
+        "S5_cross_level": 22.548,
+        "S1_morphological": 14.732,
+        "S2_lexical_diversity": 20.739,
+        "S3_structural": 36.217,
+        "cat": 0.189
+      }
+    },
+    {
+      "query": "amazon_reviews_multi",
+      "candidate": "wikipedia",
+      "composite_D": 64.7475,
+      "shares_pct": {
+        "S4_info_theoretic": 4.953,
+        "S5_cross_level": 26.258,
+        "S1_morphological": 15.878,
+        "S2_lexical_diversity": 22.18,
+        "S3_structural": 30.609,
+        "cat": 0.121
+      }
+    },
+    {
+      "query": "amazon_reviews_multi",
+      "candidate": "OpenLID-v2",
+      "composite_D": 49.0061,
+      "shares_pct": {
+        "S4_info_theoretic": 7.042,
+        "S5_cross_level": 20.021,
+        "S1_morphological": 13.432,
+        "S2_lexical_diversity": 28.395,
+        "S3_structural": 30.89,
+        "cat": 0.22
+      }
+    },
+    {
+      "query": "amazon_reviews_multi",
+      "candidate": "europarl",
+      "composite_D": 43.8379,
+      "shares_pct": {
+        "S4_info_theoretic": 4.024,
+        "S5_cross_level": 19.536,
+        "S1_morphological": 20.958,
+        "S2_lexical_diversity": 20.251,
+        "S3_structural": 35.051,
+        "cat": 0.179
+      }
+    },
+    {
+      "query": "amazon_reviews_multi",
+      "candidate": "multilingual_toxicity_dataset",
+      "composite_D": 27.1718,
+      "shares_pct": {
+        "S4_info_theoretic": 5.748,
+        "S5_cross_level": 22.725,
+        "S1_morphological": 17.736,
+        "S2_lexical_diversity": 25.686,
+        "S3_structural": 27.925,
+        "cat": 0.18
+      }
+    },
+    {
+      "query": "amazon_reviews_multi",
+      "candidate": "multilingual_cc_news",
+      "composite_D": 35.8605,
+      "shares_pct": {
+        "S4_info_theoretic": 4.285,
+        "S5_cross_level": 15.375,
+        "S1_morphological": 17.745,
+        "S2_lexical_diversity": 27.138,
+        "S3_structural": 35.239,
+        "cat": 0.219
+      }
+    },
+    {
+      "query": "amazon_reviews_multi",
+      "candidate": "multi_eurlex",
+      "composite_D": 62.3947,
+      "shares_pct": {
+        "S4_info_theoretic": 4.435,
+        "S5_cross_level": 12.3,
+        "S1_morphological": 20.383,
+        "S2_lexical_diversity": 25.981,
+        "S3_structural": 36.776,
+        "cat": 0.126
+      }
+    },
+    {
+      "query": "amazon_reviews_multi",
+      "candidate": "massive",
+      "composite_D": 50.396,
+      "shares_pct": {
+        "S4_info_theoretic": 7.888,
+        "S5_cross_level": 21.375,
+        "S1_morphological": 16.569,
+        "S2_lexical_diversity": 24.918,
+        "S3_structural": 29.094,
+        "cat": 0.156
+      }
+    },
+    {
+      "query": "amazon_reviews_multi",
+      "candidate": "flores_plus",
+      "composite_D": 43.7832,
+      "shares_pct": {
+        "S4_info_theoretic": 5.411,
+        "S5_cross_level": 22.156,
+        "S1_morphological": 17.723,
+        "S2_lexical_diversity": 22.967,
+        "S3_structural": 31.497,
+        "cat": 0.246
+      }
+    },
+    {
+      "query": "amazon_reviews_multi",
+      "candidate": "language-identification",
+      "composite_D": 23.7916,
+      "shares_pct": {
+        "S4_info_theoretic": 7.504,
+        "S5_cross_level": 28.206,
+        "S1_morphological": 14.805,
+        "S2_lexical_diversity": 21.205,
+        "S3_structural": 28.032,
+        "cat": 0.247
+      }
+    },
+    {
+      "query": "amazon_reviews_multi",
+      "candidate": "xlsum",
+      "composite_D": 31.6707,
+      "shares_pct": {
+        "S4_info_theoretic": 4.417,
+        "S5_cross_level": 15.859,
+        "S1_morphological": 20.161,
+        "S2_lexical_diversity": 24.884,
+        "S3_structural": 34.462,
+        "cat": 0.217
+      }
+    },
+    {
+      "query": "amazon_reviews_multi",
+      "candidate": "stsb_multi_mt",
+      "composite_D": 53.9983,
+      "shares_pct": {
+        "S4_info_theoretic": 5.846,
+        "S5_cross_level": 27.204,
+        "S1_morphological": 17.013,
+        "S2_lexical_diversity": 20.163,
+        "S3_structural": 29.685,
+        "cat": 0.091
+      }
+    },
+    {
+      "query": "amazon_reviews_multi",
+      "candidate": "tweet_sentiment_multilingual",
+      "composite_D": 38.5957,
+      "shares_pct": {
+        "S4_info_theoretic": 7.021,
+        "S5_cross_level": 17.349,
+        "S1_morphological": 17.012,
+        "S2_lexical_diversity": 22.533,
+        "S3_structural": 35.882,
+        "cat": 0.203
+      }
+    },
+    {
+      "query": "europarl",
+      "candidate": "exorde-social-media-december-2024-week1",
+      "composite_D": 42.9769,
+      "shares_pct": {
+        "S4_info_theoretic": 5.111,
+        "S5_cross_level": 20.629,
+        "S1_morphological": 20.06,
+        "S2_lexical_diversity": 20.805,
+        "S3_structural": 33.144,
+        "cat": 0.251
+      }
+    },
+    {
+      "query": "europarl",
+      "candidate": "amazon_reviews_multi",
+      "composite_D": 43.97,
+      "shares_pct": {
+        "S4_info_theoretic": 4.635,
+        "S5_cross_level": 20.17,
+        "S1_morphological": 21.904,
+        "S2_lexical_diversity": 18.919,
+        "S3_structural": 34.194,
+        "cat": 0.178
+      }
+    },
+    {
+      "query": "europarl",
+      "candidate": "tydiqa",
+      "composite_D": 56.0412,
+      "shares_pct": {
+        "S4_info_theoretic": 6.179,
+        "S5_cross_level": 29.825,
+        "S1_morphological": 18.741,
+        "S2_lexical_diversity": 18.263,
+        "S3_structural": 26.834,
+        "cat": 0.157
+      }
+    },
+    {
+      "query": "europarl",
+      "candidate": "mmarco",
+      "composite_D": 41.4649,
+      "shares_pct": {
+        "S4_info_theoretic": 7.18,
+        "S5_cross_level": 18.281,
+        "S1_morphological": 23.947,
+        "S2_lexical_diversity": 19.378,
+        "S3_structural": 31.001,
+        "cat": 0.213
+      }
+    },
+    {
+      "query": "europarl",
+      "candidate": "xnli",
+      "composite_D": 28.0845,
+      "shares_pct": {
+        "S4_info_theoretic": 4.144,
+        "S5_cross_level": 20.034,
+        "S1_morphological": 28.754,
+        "S2_lexical_diversity": 13.981,
+        "S3_structural": 32.773,
+        "cat": 0.314
+      }
+    },
+    {
+      "query": "europarl",
+      "candidate": "wikipedia",
+      "composite_D": 65.4732,
+      "shares_pct": {
+        "S4_info_theoretic": 4.579,
+        "S5_cross_level": 27.632,
+        "S1_morphological": 14.726,
+        "S2_lexical_diversity": 21.21,
+        "S3_structural": 31.688,
+        "cat": 0.165
+      }
+    },
+    {
+      "query": "europarl",
+      "candidate": "OpenLID-v2",
+      "composite_D": 38.0855,
+      "shares_pct": {
+        "S4_info_theoretic": 7.721,
+        "S5_cross_level": 14.895,
+        "S1_morphological": 17.726,
+        "S2_lexical_diversity": 28.32,
+        "S3_structural": 31.133,
+        "cat": 0.206
+      }
+    },
+    {
+      "query": "europarl",
+      "candidate": "europarl",
+      "composite_D": 9.2599,
+      "shares_pct": {
+        "S4_info_theoretic": 9.039,
+        "S5_cross_level": 21.429,
+        "S1_morphological": 24.193,
+        "S2_lexical_diversity": 19.646,
+        "S3_structural": 25.482,
+        "cat": 0.212
+      }
+    },
+    {
+      "query": "europarl",
+      "candidate": "multilingual_toxicity_dataset",
+      "composite_D": 28.5909,
+      "shares_pct": {
+        "S4_info_theoretic": 2.921,
+        "S5_cross_level": 17.886,
+        "S1_morphological": 27.809,
+        "S2_lexical_diversity": 13.629,
+        "S3_structural": 37.447,
+        "cat": 0.309
+      }
+    },
+    {
+      "query": "europarl",
+      "candidate": "multilingual_cc_news",
+      "composite_D": 39.721,
+      "shares_pct": {
+        "S4_info_theoretic": 3.905,
+        "S5_cross_level": 17.322,
+        "S1_morphological": 19.909,
+        "S2_lexical_diversity": 22.339,
+        "S3_structural": 36.253,
+        "cat": 0.272
+      }
+    },
+    {
+      "query": "europarl",
+      "candidate": "multi_eurlex",
+      "composite_D": 61.0023,
+      "shares_pct": {
+        "S4_info_theoretic": 3.76,
+        "S5_cross_level": 12.759,
+        "S1_morphological": 17.367,
+        "S2_lexical_diversity": 27.546,
+        "S3_structural": 38.52,
+        "cat": 0.048
+      }
+    },
+    {
+      "query": "europarl",
+      "candidate": "massive",
+      "composite_D": 38.7883,
+      "shares_pct": {
+        "S4_info_theoretic": 7.481,
+        "S5_cross_level": 18.094,
+        "S1_morphological": 21.377,
+        "S2_lexical_diversity": 21.212,
+        "S3_structural": 31.559,
+        "cat": 0.278
+      }
+    },
+    {
+      "query": "europarl",
+      "candidate": "flores_plus",
+      "composite_D": 27.6658,
+      "shares_pct": {
+        "S4_info_theoretic": 9.21,
+        "S5_cross_level": 17.379,
+        "S1_morphological": 24.698,
+        "S2_lexical_diversity": 18.627,
+        "S3_structural": 29.802,
+        "cat": 0.283
+      }
+    },
+    {
+      "query": "europarl",
+      "candidate": "language-identification",
+      "composite_D": 35.547,
+      "shares_pct": {
+        "S4_info_theoretic": 3.404,
+        "S5_cross_level": 16.51,
+        "S1_morphological": 23.677,
+        "S2_lexical_diversity": 19.825,
+        "S3_structural": 36.335,
+        "cat": 0.248
+      }
+    },
+    {
+      "query": "europarl",
+      "candidate": "xlsum",
+      "composite_D": 37.2638,
+      "shares_pct": {
+        "S4_info_theoretic": 6.45,
+        "S5_cross_level": 15.717,
+        "S1_morphological": 24.495,
+        "S2_lexical_diversity": 19.721,
+        "S3_structural": 33.3,
+        "cat": 0.316
+      }
+    },
+    {
+      "query": "europarl",
+      "candidate": "stsb_multi_mt",
+      "composite_D": 41.4625,
+      "shares_pct": {
+        "S4_info_theoretic": 5.291,
+        "S5_cross_level": 30.147,
+        "S1_morphological": 23.191,
+        "S2_lexical_diversity": 13.707,
+        "S3_structural": 27.404,
+        "cat": 0.26
+      }
+    },
+    {
+      "query": "europarl",
+      "candidate": "tweet_sentiment_multilingual",
+      "composite_D": 34.606,
+      "shares_pct": {
+        "S4_info_theoretic": 5.658,
+        "S5_cross_level": 23.409,
+        "S1_morphological": 18.833,
+        "S2_lexical_diversity": 21.052,
+        "S3_structural": 30.878,
+        "cat": 0.17
+      }
+    },
+    {
+      "query": "exorde-social-media-december-2024-week1",
+      "candidate": "exorde-social-media-december-2024-week1",
+      "composite_D": 12.2204,
+      "shares_pct": {
+        "S4_info_theoretic": 5.819,
+        "S5_cross_level": 17.652,
+        "S1_morphological": 27.821,
+        "S2_lexical_diversity": 16.297,
+        "S3_structural": 32.411,
+        "cat": 0.0
+      }
+    },
+    {
+      "query": "exorde-social-media-december-2024-week1",
+      "candidate": "amazon_reviews_multi",
+      "composite_D": 34.3278,
+      "shares_pct": {
+        "S4_info_theoretic": 7.805,
+        "S5_cross_level": 20.612,
+        "S1_morphological": 16.832,
+        "S2_lexical_diversity": 25.802,
+        "S3_structural": 28.721,
+        "cat": 0.228
+      }
+    },
+    {
+      "query": "exorde-social-media-december-2024-week1",
+      "candidate": "tydiqa",
+      "composite_D": 51.8217,
+      "shares_pct": {
+        "S4_info_theoretic": 6.396,
+        "S5_cross_level": 32.769,
+        "S1_morphological": 16.975,
+        "S2_lexical_diversity": 18.786,
+        "S3_structural": 24.923,
+        "cat": 0.151
+      }
+    },
+    {
+      "query": "exorde-social-media-december-2024-week1",
+      "candidate": "mmarco",
+      "composite_D": 43.2696,
+      "shares_pct": {
+        "S4_info_theoretic": 6.741,
+        "S5_cross_level": 26.557,
+        "S1_morphological": 17.929,
+        "S2_lexical_diversity": 21.896,
+        "S3_structural": 26.719,
+        "cat": 0.159
+      }
+    },
+    {
+      "query": "exorde-social-media-december-2024-week1",
+      "candidate": "xnli",
+      "composite_D": 37.8931,
+      "shares_pct": {
+        "S4_info_theoretic": 6.376,
+        "S5_cross_level": 24.424,
+        "S1_morphological": 13.585,
+        "S2_lexical_diversity": 22.649,
+        "S3_structural": 32.81,
+        "cat": 0.155
+      }
+    },
+    {
+      "query": "exorde-social-media-december-2024-week1",
+      "candidate": "wikipedia",
+      "composite_D": 41.8585,
+      "shares_pct": {
+        "S4_info_theoretic": 5.757,
+        "S5_cross_level": 27.514,
+        "S1_morphological": 14.652,
+        "S2_lexical_diversity": 21.214,
+        "S3_structural": 30.863,
+        "cat": 0.0
+      }
+    },
+    {
+      "query": "exorde-social-media-december-2024-week1",
+      "candidate": "OpenLID-v2",
+      "composite_D": 32.8621,
+      "shares_pct": {
+        "S4_info_theoretic": 8.697,
+        "S5_cross_level": 23.227,
+        "S1_morphological": 12.67,
+        "S2_lexical_diversity": 24.587,
+        "S3_structural": 30.67,
+        "cat": 0.149
+      }
+    },
+    {
+      "query": "exorde-social-media-december-2024-week1",
+      "candidate": "europarl",
+      "composite_D": 41.3603,
+      "shares_pct": {
+        "S4_info_theoretic": 4.915,
+        "S5_cross_level": 23.03,
+        "S1_morphological": 18.186,
+        "S2_lexical_diversity": 21.327,
+        "S3_structural": 32.281,
+        "cat": 0.261
+      }
+    },
+    {
+      "query": "exorde-social-media-december-2024-week1",
+      "candidate": "multilingual_toxicity_dataset",
+      "composite_D": 27.4598,
+      "shares_pct": {
+        "S4_info_theoretic": 7.108,
+        "S5_cross_level": 24.028,
+        "S1_morphological": 16.732,
+        "S2_lexical_diversity": 23.559,
+        "S3_structural": 28.323,
+        "cat": 0.25
+      }
+    },
+    {
+      "query": "exorde-social-media-december-2024-week1",
+      "candidate": "multilingual_cc_news",
+      "composite_D": 24.3357,
+      "shares_pct": {
+        "S4_info_theoretic": 9.266,
+        "S5_cross_level": 21.968,
+        "S1_morphological": 12.601,
+        "S2_lexical_diversity": 23.376,
+        "S3_structural": 32.708,
+        "cat": 0.081
+      }
+    },
+    {
+      "query": "exorde-social-media-december-2024-week1",
+      "candidate": "multi_eurlex",
+      "composite_D": 53.7332,
+      "shares_pct": {
+        "S4_info_theoretic": 4.509,
+        "S5_cross_level": 14.299,
+        "S1_morphological": 18.375,
+        "S2_lexical_diversity": 26.489,
+        "S3_structural": 36.127,
+        "cat": 0.201
+      }
+    },
+    {
+      "query": "exorde-social-media-december-2024-week1",
+      "candidate": "massive",
+      "composite_D": 40.8585,
+      "shares_pct": {
+        "S4_info_theoretic": 6.583,
+        "S5_cross_level": 26.578,
+        "S1_morphological": 15.63,
+        "S2_lexical_diversity": 22.948,
+        "S3_structural": 28.189,
+        "cat": 0.072
+      }
+    },
+    {
+      "query": "exorde-social-media-december-2024-week1",
+      "candidate": "flores_plus",
+      "composite_D": 38.1483,
+      "shares_pct": {
+        "S4_info_theoretic": 9.042,
+        "S5_cross_level": 25.098,
+        "S1_morphological": 13.561,
+        "S2_lexical_diversity": 22.664,
+        "S3_structural": 29.507,
+        "cat": 0.128
+      }
+    },
+    {
+      "query": "exorde-social-media-december-2024-week1",
+      "candidate": "language-identification",
+      "composite_D": 27.8908,
+      "shares_pct": {
+        "S4_info_theoretic": 7.233,
+        "S5_cross_level": 21.814,
+        "S1_morphological": 17.65,
+        "S2_lexical_diversity": 23.954,
+        "S3_structural": 29.138,
+        "cat": 0.211
+      }
+    },
+    {
+      "query": "exorde-social-media-december-2024-week1",
+      "candidate": "xlsum",
+      "composite_D": 28.0367,
+      "shares_pct": {
+        "S4_info_theoretic": 11.655,
+        "S5_cross_level": 24.04,
+        "S1_morphological": 19.3,
+        "S2_lexical_diversity": 18.702,
+        "S3_structural": 26.093,
+        "cat": 0.21
+      }
+    },
+    {
+      "query": "exorde-social-media-december-2024-week1",
+      "candidate": "stsb_multi_mt",
+      "composite_D": 45.0185,
+      "shares_pct": {
+        "S4_info_theoretic": 5.83,
+        "S5_cross_level": 30.826,
+        "S1_morphological": 16.982,
+        "S2_lexical_diversity": 19.205,
+        "S3_structural": 27.004,
+        "cat": 0.152
+      }
+    },
+    {
+      "query": "exorde-social-media-december-2024-week1",
+      "candidate": "tweet_sentiment_multilingual",
+      "composite_D": 31.6421,
+      "shares_pct": {
+        "S4_info_theoretic": 5.152,
+        "S5_cross_level": 21.3,
+        "S1_morphological": 21.229,
+        "S2_lexical_diversity": 20.881,
+        "S3_structural": 31.066,
+        "cat": 0.372
+      }
+    },
+    {
+      "query": "flores_plus",
+      "candidate": "exorde-social-media-december-2024-week1",
+      "composite_D": 39.7306,
+      "shares_pct": {
+        "S4_info_theoretic": 8.821,
+        "S5_cross_level": 23.562,
+        "S1_morphological": 15.817,
+        "S2_lexical_diversity": 22.22,
+        "S3_structural": 29.456,
+        "cat": 0.123
+      }
+    },
+    {
+      "query": "flores_plus",
+      "candidate": "amazon_reviews_multi",
+      "composite_D": 43.3536,
+      "shares_pct": {
+        "S4_info_theoretic": 5.66,
+        "S5_cross_level": 22.935,
+        "S1_morphological": 17.742,
+        "S2_lexical_diversity": 22.517,
+        "S3_structural": 30.897,
+        "cat": 0.249
+      }
+    },
+    {
+      "query": "flores_plus",
+      "candidate": "tydiqa",
+      "composite_D": 46.328,
+      "shares_pct": {
+        "S4_info_theoretic": 8.622,
+        "S5_cross_level": 29.521,
+        "S1_morphological": 16.584,
+        "S2_lexical_diversity": 20.081,
+        "S3_structural": 25.086,
+        "cat": 0.106
+      }
+    },
+    {
+      "query": "flores_plus",
+      "candidate": "mmarco",
+      "composite_D": 37.9508,
+      "shares_pct": {
+        "S4_info_theoretic": 9.856,
+        "S5_cross_level": 22.825,
+        "S1_morphological": 20.073,
+        "S2_lexical_diversity": 21.541,
+        "S3_structural": 25.447,
+        "cat": 0.258
+      }
+    },
+    {
+      "query": "flores_plus",
+      "candidate": "xnli",
+      "composite_D": 25.9091,
+      "shares_pct": {
+        "S4_info_theoretic": 9.313,
+        "S5_cross_level": 20.249,
+        "S1_morphological": 16.844,
+        "S2_lexical_diversity": 21.049,
+        "S3_structural": 32.205,
+        "cat": 0.341
+      }
+    },
+    {
+      "query": "flores_plus",
+      "candidate": "wikipedia",
+      "composite_D": 60.2621,
+      "shares_pct": {
+        "S4_info_theoretic": 6.245,
+        "S5_cross_level": 28.727,
+        "S1_morphological": 12.244,
+        "S2_lexical_diversity": 22.063,
+        "S3_structural": 30.64,
+        "cat": 0.081
+      }
+    },
+    {
+      "query": "flores_plus",
+      "candidate": "OpenLID-v2",
+      "composite_D": 29.3194,
+      "shares_pct": {
+        "S4_info_theoretic": 9.788,
+        "S5_cross_level": 19.899,
+        "S1_morphological": 10.01,
+        "S2_lexical_diversity": 32.525,
+        "S3_structural": 27.778,
+        "cat": 0.0
+      }
+    },
+    {
+      "query": "flores_plus",
+      "candidate": "europarl",
+      "composite_D": 27.1314,
+      "shares_pct": {
+        "S4_info_theoretic": 7.536,
+        "S5_cross_level": 18.664,
+        "S1_morphological": 24.739,
+        "S2_lexical_diversity": 18.853,
+        "S3_structural": 29.918,
+        "cat": 0.289
+      }
+    },
+    {
+      "query": "flores_plus",
+      "candidate": "multilingual_toxicity_dataset",
+      "composite_D": 27.756,
+      "shares_pct": {
+        "S4_info_theoretic": 6.378,
+        "S5_cross_level": 23.791,
+        "S1_morphological": 19.013,
+        "S2_lexical_diversity": 20.373,
+        "S3_structural": 30.092,
+        "cat": 0.353
+      }
+    },
+    {
+      "query": "flores_plus",
+      "candidate": "multilingual_cc_news",
+      "composite_D": 34.7224,
+      "shares_pct": {
+        "S4_info_theoretic": 6.621,
+        "S5_cross_level": 24.144,
+        "S1_morphological": 11.376,
+        "S2_lexical_diversity": 23.712,
+        "S3_structural": 33.977,
+        "cat": 0.169
+      }
+    },
+    {
+      "query": "flores_plus",
+      "candidate": "multi_eurlex",
+      "composite_D": 59.8252,
+      "shares_pct": {
+        "S4_info_theoretic": 6.571,
+        "S5_cross_level": 15.997,
+        "S1_morphological": 15.026,
+        "S2_lexical_diversity": 27.125,
+        "S3_structural": 35.15,
+        "cat": 0.131
+      }
+    },
+    {
+      "query": "flores_plus",
+      "candidate": "massive",
+      "composite_D": 34.7509,
+      "shares_pct": {
+        "S4_info_theoretic": 10.956,
+        "S5_cross_level": 22.484,
+        "S1_morphological": 16.553,
+        "S2_lexical_diversity": 23.536,
+        "S3_structural": 26.331,
+        "cat": 0.141
+      }
+    },
+    {
+      "query": "flores_plus",
+      "candidate": "flores_plus",
+      "composite_D": 7.3683,
+      "shares_pct": {
+        "S4_info_theoretic": 7.739,
+        "S5_cross_level": 20.188,
+        "S1_morphological": 18.589,
+        "S2_lexical_diversity": 24.16,
+        "S3_structural": 29.324,
+        "cat": 0.0
+      }
+    },
+    {
+      "query": "flores_plus",
+      "candidate": "language-identification",
+      "composite_D": 31.8697,
+      "shares_pct": {
+        "S4_info_theoretic": 5.457,
+        "S5_cross_level": 21.618,
+        "S1_morphological": 18.615,
+        "S2_lexical_diversity": 22.297,
+        "S3_structural": 31.737,
+        "cat": 0.277
+      }
+    },
+    {
+      "query": "flores_plus",
+      "candidate": "xlsum",
+      "composite_D": 31.7972,
+      "shares_pct": {
+        "S4_info_theoretic": 6.526,
+        "S5_cross_level": 24.533,
+        "S1_morphological": 15.68,
+        "S2_lexical_diversity": 20.931,
+        "S3_structural": 32.052,
+        "cat": 0.277
+      }
+    },
+    {
+      "query": "flores_plus",
+      "candidate": "stsb_multi_mt",
+      "composite_D": 34.4076,
+      "shares_pct": {
+        "S4_info_theoretic": 8.742,
+        "S5_cross_level": 28.491,
+        "S1_morphological": 19.262,
+        "S2_lexical_diversity": 16.863,
+        "S3_structural": 26.357,
+        "cat": 0.285
+      }
+    },
+    {
+      "query": "flores_plus",
+      "candidate": "tweet_sentiment_multilingual",
+      "composite_D": 43.3313,
+      "shares_pct": {
+        "S4_info_theoretic": 8.816,
+        "S5_cross_level": 23.591,
+        "S1_morphological": 16.184,
+        "S2_lexical_diversity": 21.911,
+        "S3_structural": 29.295,
+        "cat": 0.204
+      }
+    },
+    {
+      "query": "language-identification",
+      "candidate": "exorde-social-media-december-2024-week1",
+      "composite_D": 29.1709,
+      "shares_pct": {
+        "S4_info_theoretic": 8.237,
+        "S5_cross_level": 23.178,
+        "S1_morphological": 18.536,
+        "S2_lexical_diversity": 23.833,
+        "S3_structural": 26.014,
+        "cat": 0.202
+      }
+    },
+    {
+      "query": "language-identification",
+      "candidate": "amazon_reviews_multi",
+      "composite_D": 24.073,
+      "shares_pct": {
+        "S4_info_theoretic": 7.337,
+        "S5_cross_level": 26.486,
+        "S1_morphological": 16.6,
+        "S2_lexical_diversity": 20.301,
+        "S3_structural": 29.031,
+        "cat": 0.244
+      }
+    },
+    {
+      "query": "language-identification",
+      "candidate": "tydiqa",
+      "composite_D": 52.4443,
+      "shares_pct": {
+        "S4_info_theoretic": 7.105,
+        "S5_cross_level": 29.102,
+        "S1_morphological": 16.489,
+        "S2_lexical_diversity": 21.26,
+        "S3_structural": 25.857,
+        "cat": 0.187
+      }
+    },
+    {
+      "query": "language-identification",
+      "candidate": "mmarco",
+      "composite_D": 42.2724,
+      "shares_pct": {
+        "S4_info_theoretic": 7.942,
+        "S5_cross_level": 20.371,
+        "S1_morphological": 19.237,
+        "S2_lexical_diversity": 24.09,
+        "S3_structural": 28.244,
+        "cat": 0.116
+      }
+    },
+    {
+      "query": "language-identification",
+      "candidate": "xnli",
+      "composite_D": 28.0608,
+      "shares_pct": {
+        "S4_info_theoretic": 5.708,
+        "S5_cross_level": 19.284,
+        "S1_morphological": 13.674,
+        "S2_lexical_diversity": 23.005,
+        "S3_structural": 38.19,
+        "cat": 0.14
+      }
+    },
+    {
+      "query": "language-identification",
+      "candidate": "wikipedia",
+      "composite_D": 59.0523,
+      "shares_pct": {
+        "S4_info_theoretic": 5.039,
+        "S5_cross_level": 28.134,
+        "S1_morphological": 14.984,
+        "S2_lexical_diversity": 21.707,
+        "S3_structural": 30.036,
+        "cat": 0.1
+      }
+    },
+    {
+      "query": "language-identification",
+      "candidate": "OpenLID-v2",
+      "composite_D": 35.8014,
+      "shares_pct": {
+        "S4_info_theoretic": 7.521,
+        "S5_cross_level": 17.055,
+        "S1_morphological": 12.923,
+        "S2_lexical_diversity": 31.71,
+        "S3_structural": 30.544,
+        "cat": 0.246
+      }
+    },
+    {
+      "query": "language-identification",
+      "candidate": "europarl",
+      "composite_D": 35.6232,
+      "shares_pct": {
+        "S4_info_theoretic": 3.526,
+        "S5_cross_level": 17.26,
+        "S1_morphological": 22.06,
+        "S2_lexical_diversity": 21.126,
+        "S3_structural": 35.78,
+        "cat": 0.248
+      }
+    },
+    {
+      "query": "language-identification",
+      "candidate": "multilingual_toxicity_dataset",
+      "composite_D": 18.9107,
+      "shares_pct": {
+        "S4_info_theoretic": 2.85,
+        "S5_cross_level": 15.749,
+        "S1_morphological": 23.819,
+        "S2_lexical_diversity": 25.718,
+        "S3_structural": 31.605,
+        "cat": 0.259
+      }
+    },
+    {
+      "query": "language-identification",
+      "candidate": "multilingual_cc_news",
+      "composite_D": 28.2127,
+      "shares_pct": {
+        "S4_info_theoretic": 5.036,
+        "S5_cross_level": 14.326,
+        "S1_morphological": 16.517,
+        "S2_lexical_diversity": 27.87,
+        "S3_structural": 36.043,
+        "cat": 0.208
+      }
+    },
+    {
+      "query": "language-identification",
+      "candidate": "multi_eurlex",
+      "composite_D": 56.8011,
+      "shares_pct": {
+        "S4_info_theoretic": 4.338,
+        "S5_cross_level": 11.837,
+        "S1_morphological": 20.521,
+        "S2_lexical_diversity": 26.404,
+        "S3_structural": 36.761,
+        "cat": 0.138
+      }
+    },
+    {
+      "query": "language-identification",
+      "candidate": "massive",
+      "composite_D": 39.3253,
+      "shares_pct": {
+        "S4_info_theoretic": 8.404,
+        "S5_cross_level": 20.367,
+        "S1_morphological": 17.867,
+        "S2_lexical_diversity": 25.522,
+        "S3_structural": 27.689,
+        "cat": 0.15
+      }
+    },
+    {
+      "query": "language-identification",
+      "candidate": "flores_plus",
+      "composite_D": 32.264,
+      "shares_pct": {
+        "S4_info_theoretic": 6.179,
+        "S5_cross_level": 21.587,
+        "S1_morphological": 17.319,
+        "S2_lexical_diversity": 23.243,
+        "S3_structural": 31.398,
+        "cat": 0.273
+      }
+    },
+    {
+      "query": "language-identification",
+      "candidate": "language-identification",
+      "composite_D": 8.0696,
+      "shares_pct": {
+        "S4_info_theoretic": 4.104,
+        "S5_cross_level": 19.905,
+        "S1_morphological": 29.471,
+        "S2_lexical_diversity": 20.192,
+        "S3_structural": 26.329,
+        "cat": 0.0
+      }
+    },
+    {
+      "query": "language-identification",
+      "candidate": "xlsum",
+      "composite_D": 25.1998,
+      "shares_pct": {
+        "S4_info_theoretic": 7.774,
+        "S5_cross_level": 11.18,
+        "S1_morphological": 21.533,
+        "S2_lexical_diversity": 24.194,
+        "S3_structural": 35.125,
+        "cat": 0.195
+      }
+    },
+    {
+      "query": "language-identification",
+      "candidate": "stsb_multi_mt",
+      "composite_D": 43.3955,
+      "shares_pct": {
+        "S4_info_theoretic": 6.065,
+        "S5_cross_level": 25.616,
+        "S1_morphological": 18.354,
+        "S2_lexical_diversity": 19.995,
+        "S3_structural": 29.835,
+        "cat": 0.136
+      }
+    },
+    {
+      "query": "language-identification",
+      "candidate": "tweet_sentiment_multilingual",
+      "composite_D": 37.0798,
+      "shares_pct": {
+        "S4_info_theoretic": 6.234,
+        "S5_cross_level": 20.401,
+        "S1_morphological": 17.044,
+        "S2_lexical_diversity": 21.278,
+        "S3_structural": 34.752,
+        "cat": 0.291
+      }
+    },
+    {
+      "query": "massive",
+      "candidate": "exorde-social-media-december-2024-week1",
+      "composite_D": 42.3425,
+      "shares_pct": {
+        "S4_info_theoretic": 7.0,
+        "S5_cross_level": 29.473,
+        "S1_morphological": 18.792,
+        "S2_lexical_diversity": 20.587,
+        "S3_structural": 24.102,
+        "cat": 0.046
+      }
+    },
+    {
+      "query": "massive",
+      "candidate": "amazon_reviews_multi",
+      "composite_D": 55.9468,
+      "shares_pct": {
+        "S4_info_theoretic": 8.69,
+        "S5_cross_level": 24.394,
+        "S1_morphological": 14.938,
+        "S2_lexical_diversity": 24.042,
+        "S3_structural": 27.796,
+        "cat": 0.14
+      }
+    },
+    {
+      "query": "massive",
+      "candidate": "tydiqa",
+      "composite_D": 39.1921,
+      "shares_pct": {
+        "S4_info_theoretic": 10.67,
+        "S5_cross_level": 28.869,
+        "S1_morphological": 14.044,
+        "S2_lexical_diversity": 16.081,
+        "S3_structural": 30.137,
+        "cat": 0.2
+      }
+    },
+    {
+      "query": "massive",
+      "candidate": "mmarco",
+      "composite_D": 37.5022,
+      "shares_pct": {
+        "S4_info_theoretic": 10.597,
+        "S5_cross_level": 33.731,
+        "S1_morphological": 11.228,
+        "S2_lexical_diversity": 17.409,
+        "S3_structural": 26.852,
+        "cat": 0.183
+      }
+    },
+    {
+      "query": "massive",
+      "candidate": "xnli",
+      "composite_D": 46.4799,
+      "shares_pct": {
+        "S4_info_theoretic": 9.413,
+        "S5_cross_level": 23.177,
+        "S1_morphological": 13.084,
+        "S2_lexical_diversity": 24.445,
+        "S3_structural": 29.754,
+        "cat": 0.127
+      }
+    },
+    {
+      "query": "massive",
+      "candidate": "wikipedia",
+      "composite_D": 60.2718,
+      "shares_pct": {
+        "S4_info_theoretic": 7.239,
+        "S5_cross_level": 32.097,
+        "S1_morphological": 12.212,
+        "S2_lexical_diversity": 21.003,
+        "S3_structural": 27.416,
+        "cat": 0.033
+      }
+    },
+    {
+      "query": "massive",
+      "candidate": "OpenLID-v2",
+      "composite_D": 35.0999,
+      "shares_pct": {
+        "S4_info_theoretic": 9.874,
+        "S5_cross_level": 29.456,
+        "S1_morphological": 13.472,
+        "S2_lexical_diversity": 23.299,
+        "S3_structural": 23.732,
+        "cat": 0.168
+      }
+    },
+    {
+      "query": "massive",
+      "candidate": "europarl",
+      "composite_D": 51.4633,
+      "shares_pct": {
+        "S4_info_theoretic": 8.073,
+        "S5_cross_level": 24.989,
+        "S1_morphological": 15.79,
+        "S2_lexical_diversity": 21.12,
+        "S3_structural": 29.818,
+        "cat": 0.21
+      }
+    },
+    {
+      "query": "massive",
+      "candidate": "multilingual_toxicity_dataset",
+      "composite_D": 41.8769,
+      "shares_pct": {
+        "S4_info_theoretic": 9.164,
+        "S5_cross_level": 26.219,
+        "S1_morphological": 14.339,
+        "S2_lexical_diversity": 22.591,
+        "S3_structural": 27.523,
+        "cat": 0.164
+      }
+    },
+    {
+      "query": "massive",
+      "candidate": "multilingual_cc_news",
+      "composite_D": 45.0663,
+      "shares_pct": {
+        "S4_info_theoretic": 9.121,
+        "S5_cross_level": 25.758,
+        "S1_morphological": 12.781,
+        "S2_lexical_diversity": 23.78,
+        "S3_structural": 28.517,
+        "cat": 0.044
+      }
+    },
+    {
+      "query": "massive",
+      "candidate": "multi_eurlex",
+      "composite_D": 62.0654,
+      "shares_pct": {
+        "S4_info_theoretic": 6.483,
+        "S5_cross_level": 20.85,
+        "S1_morphological": 14.193,
+        "S2_lexical_diversity": 27.295,
+        "S3_structural": 31.005,
+        "cat": 0.174
+      }
+    },
+    {
+      "query": "massive",
+      "candidate": "massive",
+      "composite_D": 30.9241,
+      "shares_pct": {
+        "S4_info_theoretic": 11.506,
+        "S5_cross_level": 38.749,
+        "S1_morphological": 5.779,
+        "S2_lexical_diversity": 20.353,
+        "S3_structural": 23.517,
+        "cat": 0.095
+      }
+    },
+    {
+      "query": "massive",
+      "candidate": "flores_plus",
+      "composite_D": 44.321,
+      "shares_pct": {
+        "S4_info_theoretic": 11.734,
+        "S5_cross_level": 26.401,
+        "S1_morphological": 12.505,
+        "S2_lexical_diversity": 22.316,
+        "S3_structural": 26.911,
+        "cat": 0.133
+      }
+    },
+    {
+      "query": "massive",
+      "candidate": "language-identification",
+      "composite_D": 42.9739,
+      "shares_pct": {
+        "S4_info_theoretic": 8.49,
+        "S5_cross_level": 23.384,
+        "S1_morphological": 17.105,
+        "S2_lexical_diversity": 24.309,
+        "S3_structural": 26.576,
+        "cat": 0.137
+      }
+    },
+    {
+      "query": "massive",
+      "candidate": "xlsum",
+      "composite_D": 46.5678,
+      "shares_pct": {
+        "S4_info_theoretic": 11.001,
+        "S5_cross_level": 24.359,
+        "S1_morphological": 14.098,
+        "S2_lexical_diversity": 22.843,
+        "S3_structural": 27.573,
+        "cat": 0.126
+      }
+    },
+    {
+      "query": "massive",
+      "candidate": "stsb_multi_mt",
+      "composite_D": 37.4683,
+      "shares_pct": {
+        "S4_info_theoretic": 11.28,
+        "S5_cross_level": 17.248,
+        "S1_morphological": 11.807,
+        "S2_lexical_diversity": 24.88,
+        "S3_structural": 34.602,
+        "cat": 0.183
+      }
+    },
+    {
+      "query": "massive",
+      "candidate": "tweet_sentiment_multilingual",
+      "composite_D": 48.988,
+      "shares_pct": {
+        "S4_info_theoretic": 6.211,
+        "S5_cross_level": 28.257,
+        "S1_morphological": 14.301,
+        "S2_lexical_diversity": 21.529,
+        "S3_structural": 29.462,
+        "cat": 0.24
+      }
+    },
+    {
+      "query": "mmarco",
+      "candidate": "exorde-social-media-december-2024-week1",
+      "composite_D": 73.1692,
+      "shares_pct": {
+        "S4_info_theoretic": 5.052,
+        "S5_cross_level": 37.529,
+        "S1_morphological": 12.431,
+        "S2_lexical_diversity": 24.59,
+        "S3_structural": 20.317,
+        "cat": 0.08
+      }
+    },
+    {
+      "query": "mmarco",
+      "candidate": "amazon_reviews_multi",
+      "composite_D": 88.2636,
+      "shares_pct": {
+        "S4_info_theoretic": 6.474,
+        "S5_cross_level": 33.073,
+        "S1_morphological": 11.52,
+        "S2_lexical_diversity": 25.933,
+        "S3_structural": 22.933,
+        "cat": 0.067
+      }
+    },
+    {
+      "query": "mmarco",
+      "candidate": "tydiqa",
+      "composite_D": 65.3166,
+      "shares_pct": {
+        "S4_info_theoretic": 6.446,
+        "S5_cross_level": 36.556,
+        "S1_morphological": 12.138,
+        "S2_lexical_diversity": 25.567,
+        "S3_structural": 19.143,
+        "cat": 0.15
+      }
+    },
+    {
+      "query": "mmarco",
+      "candidate": "mmarco",
+      "composite_D": 72.3893,
+      "shares_pct": {
+        "S4_info_theoretic": 5.839,
+        "S5_cross_level": 42.747,
+        "S1_morphological": 7.93,
+        "S2_lexical_diversity": 25.828,
+        "S3_structural": 17.588,
+        "cat": 0.068
+      }
+    },
+    {
+      "query": "mmarco",
+      "candidate": "xnli",
+      "composite_D": 79.6183,
+      "shares_pct": {
+        "S4_info_theoretic": 6.77,
+        "S5_cross_level": 33.417,
+        "S1_morphological": 10.448,
+        "S2_lexical_diversity": 27.327,
+        "S3_structural": 21.988,
+        "cat": 0.049
+      }
+    },
+    {
+      "query": "mmarco",
+      "candidate": "wikipedia",
+      "composite_D": 78.8264,
+      "shares_pct": {
+        "S4_info_theoretic": 6.568,
+        "S5_cross_level": 35.619,
+        "S1_morphological": 8.345,
+        "S2_lexical_diversity": 23.704,
+        "S3_structural": 25.69,
+        "cat": 0.075
+      }
+    },
+    {
+      "query": "mmarco",
+      "candidate": "OpenLID-v2",
+      "composite_D": 64.3938,
+      "shares_pct": {
+        "S4_info_theoretic": 5.137,
+        "S5_cross_level": 41.951,
+        "S1_morphological": 11.682,
+        "S2_lexical_diversity": 20.918,
+        "S3_structural": 20.175,
+        "cat": 0.137
+      }
+    },
+    {
+      "query": "mmarco",
+      "candidate": "europarl",
+      "composite_D": 85.3892,
+      "shares_pct": {
+        "S4_info_theoretic": 5.815,
+        "S5_cross_level": 34.591,
+        "S1_morphological": 11.634,
+        "S2_lexical_diversity": 25.5,
+        "S3_structural": 22.368,
+        "cat": 0.092
+      }
+    },
+    {
+      "query": "mmarco",
+      "candidate": "multilingual_toxicity_dataset",
+      "composite_D": 77.5562,
+      "shares_pct": {
+        "S4_info_theoretic": 6.174,
+        "S5_cross_level": 35.979,
+        "S1_morphological": 10.888,
+        "S2_lexical_diversity": 26.042,
+        "S3_structural": 20.853,
+        "cat": 0.063
+      }
+    },
+    {
+      "query": "mmarco",
+      "candidate": "multilingual_cc_news",
+      "composite_D": 78.1752,
+      "shares_pct": {
+        "S4_info_theoretic": 6.601,
+        "S5_cross_level": 35.552,
+        "S1_morphological": 8.734,
+        "S2_lexical_diversity": 25.89,
+        "S3_structural": 23.148,
+        "cat": 0.075
+      }
+    },
+    {
+      "query": "mmarco",
+      "candidate": "multi_eurlex",
+      "composite_D": 87.6343,
+      "shares_pct": {
+        "S4_info_theoretic": 6.064,
+        "S5_cross_level": 31.492,
+        "S1_morphological": 9.664,
+        "S2_lexical_diversity": 25.791,
+        "S3_structural": 26.9,
+        "cat": 0.089
+      }
+    },
+    {
+      "query": "mmarco",
+      "candidate": "massive",
+      "composite_D": 69.1627,
+      "shares_pct": {
+        "S4_info_theoretic": 5.53,
+        "S5_cross_level": 43.681,
+        "S1_morphological": 8.158,
+        "S2_lexical_diversity": 26.445,
+        "S3_structural": 16.1,
+        "cat": 0.085
+      }
+    },
+    {
+      "query": "mmarco",
+      "candidate": "flores_plus",
+      "composite_D": 77.6373,
+      "shares_pct": {
+        "S4_info_theoretic": 7.119,
+        "S5_cross_level": 35.288,
+        "S1_morphological": 10.369,
+        "S2_lexical_diversity": 26.14,
+        "S3_structural": 20.97,
+        "cat": 0.114
+      }
+    },
+    {
+      "query": "mmarco",
+      "candidate": "language-identification",
+      "composite_D": 77.2969,
+      "shares_pct": {
+        "S4_info_theoretic": 5.847,
+        "S5_cross_level": 35.158,
+        "S1_morphological": 12.594,
+        "S2_lexical_diversity": 26.064,
+        "S3_structural": 20.312,
+        "cat": 0.025
+      }
+    },
+    {
+      "query": "mmarco",
+      "candidate": "xlsum",
+      "composite_D": 81.4324,
+      "shares_pct": {
+        "S4_info_theoretic": 7.379,
+        "S5_cross_level": 35.054,
+        "S1_morphological": 10.02,
+        "S2_lexical_diversity": 25.321,
+        "S3_structural": 22.166,
+        "cat": 0.06
+      }
+    },
+    {
+      "query": "mmarco",
+      "candidate": "stsb_multi_mt",
+      "composite_D": 72.3072,
+      "shares_pct": {
+        "S4_info_theoretic": 6.332,
+        "S5_cross_level": 31.638,
+        "S1_morphological": 9.592,
+        "S2_lexical_diversity": 29.621,
+        "S3_structural": 22.736,
+        "cat": 0.081
+      }
+    },
+    {
+      "query": "mmarco",
+      "candidate": "tweet_sentiment_multilingual",
+      "composite_D": 83.3478,
+      "shares_pct": {
+        "S4_info_theoretic": 5.545,
+        "S5_cross_level": 35.301,
+        "S1_morphological": 11.189,
+        "S2_lexical_diversity": 25.093,
+        "S3_structural": 22.743,
+        "cat": 0.129
+      }
+    },
+    {
+      "query": "multi_eurlex",
+      "candidate": "exorde-social-media-december-2024-week1",
+      "composite_D": 81.0302,
+      "shares_pct": {
+        "S4_info_theoretic": 11.871,
+        "S5_cross_level": 15.927,
+        "S1_morphological": 12.431,
+        "S2_lexical_diversity": 27.975,
+        "S3_structural": 31.675,
+        "cat": 0.121
+      }
+    },
+    {
+      "query": "multi_eurlex",
+      "candidate": "amazon_reviews_multi",
+      "composite_D": 89.9657,
+      "shares_pct": {
+        "S4_info_theoretic": 12.155,
+        "S5_cross_level": 14.928,
+        "S1_morphological": 13.206,
+        "S2_lexical_diversity": 27.184,
+        "S3_structural": 32.419,
+        "cat": 0.109
+      }
+    },
+    {
+      "query": "multi_eurlex",
+      "candidate": "tydiqa",
+      "composite_D": 92.3959,
+      "shares_pct": {
+        "S4_info_theoretic": 12.723,
+        "S5_cross_level": 17.162,
+        "S1_morphological": 9.404,
+        "S2_lexical_diversity": 28.986,
+        "S3_structural": 31.629,
+        "cat": 0.095
+      }
+    },
+    {
+      "query": "multi_eurlex",
+      "candidate": "mmarco",
+      "composite_D": 93.6244,
+      "shares_pct": {
+        "S4_info_theoretic": 12.371,
+        "S5_cross_level": 19.735,
+        "S1_morphological": 9.027,
+        "S2_lexical_diversity": 28.725,
+        "S3_structural": 30.059,
+        "cat": 0.084
+      }
+    },
+    {
+      "query": "multi_eurlex",
+      "candidate": "xnli",
+      "composite_D": 88.0033,
+      "shares_pct": {
+        "S4_info_theoretic": 12.656,
+        "S5_cross_level": 14.728,
+        "S1_morphological": 10.624,
+        "S2_lexical_diversity": 28.333,
+        "S3_structural": 33.558,
+        "cat": 0.1
+      }
+    },
+    {
+      "query": "multi_eurlex",
+      "candidate": "wikipedia",
+      "composite_D": 80.796,
+      "shares_pct": {
+        "S4_info_theoretic": 12.382,
+        "S5_cross_level": 23.144,
+        "S1_morphological": 11.446,
+        "S2_lexical_diversity": 24.903,
+        "S3_structural": 28.003,
+        "cat": 0.121
+      }
+    },
+    {
+      "query": "multi_eurlex",
+      "candidate": "OpenLID-v2",
+      "composite_D": 81.2831,
+      "shares_pct": {
+        "S4_info_theoretic": 12.726,
+        "S5_cross_level": 17.143,
+        "S1_morphological": 10.088,
+        "S2_lexical_diversity": 30.254,
+        "S3_structural": 29.705,
+        "cat": 0.084
+      }
+    },
+    {
+      "query": "multi_eurlex",
+      "candidate": "europarl",
+      "composite_D": 94.7563,
+      "shares_pct": {
+        "S4_info_theoretic": 11.508,
+        "S5_cross_level": 15.178,
+        "S1_morphological": 11.642,
+        "S2_lexical_diversity": 27.826,
+        "S3_structural": 33.794,
+        "cat": 0.052
+      }
+    },
+    {
+      "query": "multi_eurlex",
+      "candidate": "multilingual_toxicity_dataset",
+      "composite_D": 87.484,
+      "shares_pct": {
+        "S4_info_theoretic": 12.059,
+        "S5_cross_level": 15.139,
+        "S1_morphological": 11.096,
+        "S2_lexical_diversity": 28.525,
+        "S3_structural": 33.092,
+        "cat": 0.09
+      }
+    },
+    {
+      "query": "multi_eurlex",
+      "candidate": "multilingual_cc_news",
+      "composite_D": 73.3809,
+      "shares_pct": {
+        "S4_info_theoretic": 14.37,
+        "S5_cross_level": 15.995,
+        "S1_morphological": 11.107,
+        "S2_lexical_diversity": 28.633,
+        "S3_structural": 29.761,
+        "cat": 0.134
+      }
+    },
+    {
+      "query": "multi_eurlex",
+      "candidate": "multi_eurlex",
+      "composite_D": 47.5431,
+      "shares_pct": {
+        "S4_info_theoretic": 20.699,
+        "S5_cross_level": 21.723,
+        "S1_morphological": 5.564,
+        "S2_lexical_diversity": 28.017,
+        "S3_structural": 23.914,
+        "cat": 0.082
+      }
+    },
+    {
+      "query": "multi_eurlex",
+      "candidate": "massive",
+      "composite_D": 92.4136,
+      "shares_pct": {
+        "S4_info_theoretic": 12.133,
+        "S5_cross_level": 19.067,
+        "S1_morphological": 8.751,
+        "S2_lexical_diversity": 29.451,
+        "S3_structural": 30.502,
+        "cat": 0.095
+      }
+    },
+    {
+      "query": "multi_eurlex",
+      "candidate": "flores_plus",
+      "composite_D": 86.3693,
+      "shares_pct": {
+        "S4_info_theoretic": 13.164,
+        "S5_cross_level": 15.875,
+        "S1_morphological": 9.492,
+        "S2_lexical_diversity": 29.168,
+        "S3_structural": 32.222,
+        "cat": 0.079
+      }
+    },
+    {
+      "query": "multi_eurlex",
+      "candidate": "language-identification",
+      "composite_D": 83.6384,
+      "shares_pct": {
+        "S4_info_theoretic": 12.322,
+        "S5_cross_level": 14.471,
+        "S1_morphological": 13.099,
+        "S2_lexical_diversity": 27.724,
+        "S3_structural": 32.302,
+        "cat": 0.082
+      }
+    },
+    {
+      "query": "multi_eurlex",
+      "candidate": "xlsum",
+      "composite_D": 80.2694,
+      "shares_pct": {
+        "S4_info_theoretic": 13.898,
+        "S5_cross_level": 15.3,
+        "S1_morphological": 11.38,
+        "S2_lexical_diversity": 27.819,
+        "S3_structural": 31.481,
+        "cat": 0.122
+      }
+    },
+    {
+      "query": "multi_eurlex",
+      "candidate": "stsb_multi_mt",
+      "composite_D": 84.3591,
+      "shares_pct": {
+        "S4_info_theoretic": 13.489,
+        "S5_cross_level": 13.922,
+        "S1_morphological": 10.168,
+        "S2_lexical_diversity": 30.668,
+        "S3_structural": 31.648,
+        "cat": 0.105
+      }
+    },
+    {
+      "query": "multi_eurlex",
+      "candidate": "tweet_sentiment_multilingual",
+      "composite_D": 88.324,
+      "shares_pct": {
+        "S4_info_theoretic": 11.582,
+        "S5_cross_level": 15.339,
+        "S1_morphological": 11.797,
+        "S2_lexical_diversity": 28.339,
+        "S3_structural": 32.865,
+        "cat": 0.078
+      }
+    },
+    {
+      "query": "multilingual_cc_news",
+      "candidate": "exorde-social-media-december-2024-week1",
+      "composite_D": 42.7305,
+      "shares_pct": {
+        "S4_info_theoretic": 6.831,
+        "S5_cross_level": 28.417,
+        "S1_morphological": 12.59,
+        "S2_lexical_diversity": 22.199,
+        "S3_structural": 29.962,
+        "cat": 0.0
+      }
+    },
+    {
+      "query": "multilingual_cc_news",
+      "candidate": "amazon_reviews_multi",
+      "composite_D": 53.8511,
+      "shares_pct": {
+        "S4_info_theoretic": 4.718,
+        "S5_cross_level": 24.24,
+        "S1_morphological": 12.909,
+        "S2_lexical_diversity": 24.971,
+        "S3_structural": 33.017,
+        "cat": 0.146
+      }
+    },
+    {
+      "query": "multilingual_cc_news",
+      "candidate": "tydiqa",
+      "composite_D": 61.0576,
+      "shares_pct": {
+        "S4_info_theoretic": 8.606,
+        "S5_cross_level": 25.575,
+        "S1_morphological": 13.243,
+        "S2_lexical_diversity": 22.913,
+        "S3_structural": 29.535,
+        "cat": 0.128
+      }
+    },
+    {
+      "query": "multilingual_cc_news",
+      "candidate": "mmarco",
+      "composite_D": 64.769,
+      "shares_pct": {
+        "S4_info_theoretic": 7.485,
+        "S5_cross_level": 28.524,
+        "S1_morphological": 11.599,
+        "S2_lexical_diversity": 22.813,
+        "S3_structural": 29.473,
+        "cat": 0.106
+      }
+    },
+    {
+      "query": "multilingual_cc_news",
+      "candidate": "xnli",
+      "composite_D": 54.8039,
+      "shares_pct": {
+        "S4_info_theoretic": 5.536,
+        "S5_cross_level": 25.053,
+        "S1_morphological": 9.557,
+        "S2_lexical_diversity": 23.941,
+        "S3_structural": 35.805,
+        "cat": 0.107
+      }
+    },
+    {
+      "query": "multilingual_cc_news",
+      "candidate": "wikipedia",
+      "composite_D": 51.8038,
+      "shares_pct": {
+        "S4_info_theoretic": 5.738,
+        "S5_cross_level": 34.218,
+        "S1_morphological": 13.377,
+        "S2_lexical_diversity": 20.656,
+        "S3_structural": 26.011,
+        "cat": 0.0
+      }
+    },
+    {
+      "query": "multilingual_cc_news",
+      "candidate": "OpenLID-v2",
+      "composite_D": 49.9984,
+      "shares_pct": {
+        "S4_info_theoretic": 6.197,
+        "S5_cross_level": 27.419,
+        "S1_morphological": 10.33,
+        "S2_lexical_diversity": 26.583,
+        "S3_structural": 29.374,
+        "cat": 0.098
+      }
+    },
+    {
+      "query": "multilingual_cc_news",
+      "candidate": "europarl",
+      "composite_D": 60.9583,
+      "shares_pct": {
+        "S4_info_theoretic": 4.633,
+        "S5_cross_level": 25.731,
+        "S1_morphological": 13.936,
+        "S2_lexical_diversity": 21.744,
+        "S3_structural": 33.779,
+        "cat": 0.177
+      }
+    },
+    {
+      "query": "multilingual_cc_news",
+      "candidate": "multilingual_toxicity_dataset",
+      "composite_D": 50.0087,
+      "shares_pct": {
+        "S4_info_theoretic": 4.338,
+        "S5_cross_level": 26.055,
+        "S1_morphological": 12.082,
+        "S2_lexical_diversity": 23.403,
+        "S3_structural": 33.985,
+        "cat": 0.137
+      }
+    },
+    {
+      "query": "multilingual_cc_news",
+      "candidate": "multilingual_cc_news",
+      "composite_D": 31.7321,
+      "shares_pct": {
+        "S4_info_theoretic": 4.648,
+        "S5_cross_level": 35.126,
+        "S1_morphological": 8.292,
+        "S2_lexical_diversity": 21.483,
+        "S3_structural": 30.389,
+        "cat": 0.062
+      }
+    },
+    {
+      "query": "multilingual_cc_news",
+      "candidate": "multi_eurlex",
+      "composite_D": 47.8301,
+      "shares_pct": {
+        "S4_info_theoretic": 4.566,
+        "S5_cross_level": 23.462,
+        "S1_morphological": 17.82,
+        "S2_lexical_diversity": 21.824,
+        "S3_structural": 32.103,
+        "cat": 0.225
+      }
+    },
+    {
+      "query": "multilingual_cc_news",
+      "candidate": "massive",
+      "composite_D": 63.2069,
+      "shares_pct": {
+        "S4_info_theoretic": 7.402,
+        "S5_cross_level": 27.935,
+        "S1_morphological": 10.604,
+        "S2_lexical_diversity": 23.937,
+        "S3_structural": 30.075,
+        "cat": 0.047
+      }
+    },
+    {
+      "query": "multilingual_cc_news",
+      "candidate": "flores_plus",
+      "composite_D": 52.3047,
+      "shares_pct": {
+        "S4_info_theoretic": 6.636,
+        "S5_cross_level": 27.505,
+        "S1_morphological": 9.135,
+        "S2_lexical_diversity": 24.402,
+        "S3_structural": 32.228,
+        "cat": 0.094
+      }
+    },
+    {
+      "query": "multilingual_cc_news",
+      "candidate": "language-identification",
+      "composite_D": 46.7164,
+      "shares_pct": {
+        "S4_info_theoretic": 4.035,
+        "S5_cross_level": 25.154,
+        "S1_morphological": 13.096,
+        "S2_lexical_diversity": 24.619,
+        "S3_structural": 32.97,
+        "cat": 0.126
+      }
+    },
+    {
+      "query": "multilingual_cc_news",
+      "candidate": "xlsum",
+      "composite_D": 40.5157,
+      "shares_pct": {
+        "S4_info_theoretic": 5.887,
+        "S5_cross_level": 30.65,
+        "S1_morphological": 10.018,
+        "S2_lexical_diversity": 22.631,
+        "S3_structural": 30.669,
+        "cat": 0.145
+      }
+    },
+    {
+      "query": "multilingual_cc_news",
+      "candidate": "stsb_multi_mt",
+      "composite_D": 55.7445,
+      "shares_pct": {
+        "S4_info_theoretic": 7.551,
+        "S5_cross_level": 22.006,
+        "S1_morphological": 12.87,
+        "S2_lexical_diversity": 24.775,
+        "S3_structural": 32.674,
+        "cat": 0.123
+      }
+    },
+    {
+      "query": "multilingual_cc_news",
+      "candidate": "tweet_sentiment_multilingual",
+      "composite_D": 51.3388,
+      "shares_pct": {
+        "S4_info_theoretic": 5.082,
+        "S5_cross_level": 26.012,
+        "S1_morphological": 15.252,
+        "S2_lexical_diversity": 21.754,
+        "S3_structural": 31.672,
+        "cat": 0.229
+      }
+    },
+    {
+      "query": "multilingual_toxicity_dataset",
+      "candidate": "exorde-social-media-december-2024-week1",
+      "composite_D": 50.6407,
+      "shares_pct": {
+        "S4_info_theoretic": 11.518,
+        "S5_cross_level": 27.108,
+        "S1_morphological": 12.393,
+        "S2_lexical_diversity": 32.101,
+        "S3_structural": 16.764,
+        "cat": 0.116
+      }
+    },
+    {
+      "query": "multilingual_toxicity_dataset",
+      "candidate": "amazon_reviews_multi",
+      "composite_D": 65.2228,
+      "shares_pct": {
+        "S4_info_theoretic": 12.025,
+        "S5_cross_level": 24.664,
+        "S1_morphological": 9.967,
+        "S2_lexical_diversity": 31.543,
+        "S3_structural": 21.71,
+        "cat": 0.09
+      }
+    },
+    {
+      "query": "multilingual_toxicity_dataset",
+      "candidate": "tydiqa",
+      "composite_D": 55.2109,
+      "shares_pct": {
+        "S4_info_theoretic": 12.443,
+        "S5_cross_level": 19.923,
+        "S1_morphological": 15.166,
+        "S2_lexical_diversity": 29.839,
+        "S3_structural": 22.452,
+        "cat": 0.178
+      }
+    },
+    {
+      "query": "multilingual_toxicity_dataset",
+      "candidate": "mmarco",
+      "composite_D": 61.7669,
+      "shares_pct": {
+        "S4_info_theoretic": 11.415,
+        "S5_cross_level": 26.122,
+        "S1_morphological": 12.408,
+        "S2_lexical_diversity": 29.989,
+        "S3_structural": 19.987,
+        "cat": 0.079
+      }
+    },
+    {
+      "query": "multilingual_toxicity_dataset",
+      "candidate": "xnli",
+      "composite_D": 59.9322,
+      "shares_pct": {
+        "S4_info_theoretic": 13.236,
+        "S5_cross_level": 22.688,
+        "S1_morphological": 8.971,
+        "S2_lexical_diversity": 32.461,
+        "S3_structural": 22.578,
+        "cat": 0.065
+      }
+    },
+    {
+      "query": "multilingual_toxicity_dataset",
+      "candidate": "wikipedia",
+      "composite_D": 67.712,
+      "shares_pct": {
+        "S4_info_theoretic": 10.756,
+        "S5_cross_level": 28.182,
+        "S1_morphological": 13.805,
+        "S2_lexical_diversity": 24.585,
+        "S3_structural": 22.585,
+        "cat": 0.087
+      }
+    },
+    {
+      "query": "multilingual_toxicity_dataset",
+      "candidate": "OpenLID-v2",
+      "composite_D": 47.1329,
+      "shares_pct": {
+        "S4_info_theoretic": 12.508,
+        "S5_cross_level": 25.737,
+        "S1_morphological": 10.897,
+        "S2_lexical_diversity": 28.532,
+        "S3_structural": 22.139,
+        "cat": 0.187
+      }
+    },
+    {
+      "query": "multilingual_toxicity_dataset",
+      "candidate": "europarl",
+      "composite_D": 67.6343,
+      "shares_pct": {
+        "S4_info_theoretic": 11.0,
+        "S5_cross_level": 23.002,
+        "S1_morphological": 12.423,
+        "S2_lexical_diversity": 29.503,
+        "S3_structural": 23.942,
+        "cat": 0.13
+      }
+    },
+    {
+      "query": "multilingual_toxicity_dataset",
+      "candidate": "multilingual_toxicity_dataset",
+      "composite_D": 54.5509,
+      "shares_pct": {
+        "S4_info_theoretic": 13.157,
+        "S5_cross_level": 24.892,
+        "S1_morphological": 9.002,
+        "S2_lexical_diversity": 33.463,
+        "S3_structural": 19.396,
+        "cat": 0.09
+      }
+    },
+    {
+      "query": "multilingual_toxicity_dataset",
+      "candidate": "multilingual_cc_news",
+      "composite_D": 56.7508,
+      "shares_pct": {
+        "S4_info_theoretic": 13.304,
+        "S5_cross_level": 23.926,
+        "S1_morphological": 10.228,
+        "S2_lexical_diversity": 30.904,
+        "S3_structural": 21.534,
+        "cat": 0.104
+      }
+    },
+    {
+      "query": "multilingual_toxicity_dataset",
+      "candidate": "multi_eurlex",
+      "composite_D": 71.8044,
+      "shares_pct": {
+        "S4_info_theoretic": 10.249,
+        "S5_cross_level": 19.764,
+        "S1_morphological": 15.407,
+        "S2_lexical_diversity": 25.979,
+        "S3_structural": 28.491,
+        "cat": 0.109
+      }
+    },
+    {
+      "query": "multilingual_toxicity_dataset",
+      "candidate": "massive",
+      "composite_D": 57.0023,
+      "shares_pct": {
+        "S4_info_theoretic": 11.645,
+        "S5_cross_level": 26.989,
+        "S1_morphological": 11.522,
+        "S2_lexical_diversity": 31.454,
+        "S3_structural": 18.286,
+        "cat": 0.103
+      }
+    },
+    {
+      "query": "multilingual_toxicity_dataset",
+      "candidate": "flores_plus",
+      "composite_D": 59.1047,
+      "shares_pct": {
+        "S4_info_theoretic": 12.783,
+        "S5_cross_level": 23.482,
+        "S1_morphological": 9.964,
+        "S2_lexical_diversity": 31.936,
+        "S3_structural": 21.686,
+        "cat": 0.149
+      }
+    },
+    {
+      "query": "multilingual_toxicity_dataset",
+      "candidate": "language-identification",
+      "composite_D": 51.9512,
+      "shares_pct": {
+        "S4_info_theoretic": 12.984,
+        "S5_cross_level": 22.884,
+        "S1_morphological": 10.636,
+        "S2_lexical_diversity": 34.641,
+        "S3_structural": 18.855,
+        "cat": 0.0
+      }
+    },
+    {
+      "query": "multilingual_toxicity_dataset",
+      "candidate": "xlsum",
+      "composite_D": 58.467,
+      "shares_pct": {
+        "S4_info_theoretic": 14.044,
+        "S5_cross_level": 23.524,
+        "S1_morphological": 10.056,
+        "S2_lexical_diversity": 30.765,
+        "S3_structural": 21.527,
+        "cat": 0.084
+      }
+    },
+    {
+      "query": "multilingual_toxicity_dataset",
+      "candidate": "stsb_multi_mt",
+      "composite_D": 58.6379,
+      "shares_pct": {
+        "S4_info_theoretic": 12.558,
+        "S5_cross_level": 14.914,
+        "S1_morphological": 13.573,
+        "S2_lexical_diversity": 34.188,
+        "S3_structural": 24.667,
+        "cat": 0.1
+      }
+    },
+    {
+      "query": "multilingual_toxicity_dataset",
+      "candidate": "tweet_sentiment_multilingual",
+      "composite_D": 63.7368,
+      "shares_pct": {
+        "S4_info_theoretic": 10.997,
+        "S5_cross_level": 24.42,
+        "S1_morphological": 12.157,
+        "S2_lexical_diversity": 29.911,
+        "S3_structural": 22.345,
+        "cat": 0.169
+      }
+    },
+    {
+      "query": "stsb_multi_mt",
+      "candidate": "exorde-social-media-december-2024-week1",
+      "composite_D": 172.0929,
+      "shares_pct": {
+        "S4_info_theoretic": 5.981,
+        "S5_cross_level": 59.048,
+        "S1_morphological": 5.533,
+        "S2_lexical_diversity": 21.597,
+        "S3_structural": 7.806,
+        "cat": 0.034
+      }
+    },
+    {
+      "query": "stsb_multi_mt",
+      "candidate": "amazon_reviews_multi",
+      "composite_D": 183.8312,
+      "shares_pct": {
+        "S4_info_theoretic": 6.695,
+        "S5_cross_level": 56.378,
+        "S1_morphological": 5.105,
+        "S2_lexical_diversity": 21.686,
+        "S3_structural": 10.105,
+        "cat": 0.032
+      }
+    },
+    {
+      "query": "stsb_multi_mt",
+      "candidate": "tydiqa",
+      "composite_D": 163.2972,
+      "shares_pct": {
+        "S4_info_theoretic": 6.784,
+        "S5_cross_level": 58.145,
+        "S1_morphological": 3.332,
+        "S2_lexical_diversity": 23.85,
+        "S3_structural": 7.83,
+        "cat": 0.06
+      }
+    },
+    {
+      "query": "stsb_multi_mt",
+      "candidate": "mmarco",
+      "composite_D": 173.0758,
+      "shares_pct": {
+        "S4_info_theoretic": 6.504,
+        "S5_cross_level": 60.146,
+        "S1_morphological": 3.054,
+        "S2_lexical_diversity": 23.353,
+        "S3_structural": 6.915,
+        "cat": 0.028
+      }
+    },
+    {
+      "query": "stsb_multi_mt",
+      "candidate": "xnli",
+      "composite_D": 178.0091,
+      "shares_pct": {
+        "S4_info_theoretic": 6.91,
+        "S5_cross_level": 57.285,
+        "S1_morphological": 4.047,
+        "S2_lexical_diversity": 22.616,
+        "S3_structural": 9.121,
+        "cat": 0.022
+      }
+    },
+    {
+      "query": "stsb_multi_mt",
+      "candidate": "wikipedia",
+      "composite_D": 174.5231,
+      "shares_pct": {
+        "S4_info_theoretic": 6.657,
+        "S5_cross_level": 57.614,
+        "S1_morphological": 5.121,
+        "S2_lexical_diversity": 20.773,
+        "S3_structural": 9.801,
+        "cat": 0.034
+      }
+    },
+    {
+      "query": "stsb_multi_mt",
+      "candidate": "OpenLID-v2",
+      "composite_D": 164.8355,
+      "shares_pct": {
+        "S4_info_theoretic": 6.367,
+        "S5_cross_level": 61.767,
+        "S1_morphological": 4.336,
+        "S2_lexical_diversity": 21.239,
+        "S3_structural": 6.238,
+        "cat": 0.054
+      }
+    },
+    {
+      "query": "stsb_multi_mt",
+      "candidate": "europarl",
+      "composite_D": 185.0397,
+      "shares_pct": {
+        "S4_info_theoretic": 6.418,
+        "S5_cross_level": 55.953,
+        "S1_morphological": 5.446,
+        "S2_lexical_diversity": 22.396,
+        "S3_structural": 9.744,
+        "cat": 0.042
+      }
+    },
+    {
+      "query": "stsb_multi_mt",
+      "candidate": "multilingual_toxicity_dataset",
+      "composite_D": 176.4869,
+      "shares_pct": {
+        "S4_info_theoretic": 6.609,
+        "S5_cross_level": 58.341,
+        "S1_morphological": 4.073,
+        "S2_lexical_diversity": 22.558,
+        "S3_structural": 8.391,
+        "cat": 0.028
+      }
+    },
+    {
+      "query": "stsb_multi_mt",
+      "candidate": "multilingual_cc_news",
+      "composite_D": 173.6222,
+      "shares_pct": {
+        "S4_info_theoretic": 6.92,
+        "S5_cross_level": 59.055,
+        "S1_morphological": 4.069,
+        "S2_lexical_diversity": 22.229,
+        "S3_structural": 7.694,
+        "cat": 0.034
+      }
+    },
+    {
+      "query": "stsb_multi_mt",
+      "candidate": "multi_eurlex",
+      "composite_D": 176.8019,
+      "shares_pct": {
+        "S4_info_theoretic": 6.643,
+        "S5_cross_level": 57.602,
+        "S1_morphological": 4.875,
+        "S2_lexical_diversity": 20.35,
+        "S3_structural": 10.485,
+        "cat": 0.044
+      }
+    },
+    {
+      "query": "stsb_multi_mt",
+      "candidate": "massive",
+      "composite_D": 171.8739,
+      "shares_pct": {
+        "S4_info_theoretic": 6.313,
+        "S5_cross_level": 60.26,
+        "S1_morphological": 3.348,
+        "S2_lexical_diversity": 23.181,
+        "S3_structural": 6.864,
+        "cat": 0.034
+      }
+    },
+    {
+      "query": "stsb_multi_mt",
+      "candidate": "flores_plus",
+      "composite_D": 175.931,
+      "shares_pct": {
+        "S4_info_theoretic": 6.859,
+        "S5_cross_level": 58.098,
+        "S1_morphological": 4.376,
+        "S2_lexical_diversity": 22.836,
+        "S3_structural": 7.781,
+        "cat": 0.05
+      }
+    },
+    {
+      "query": "stsb_multi_mt",
+      "candidate": "language-identification",
+      "composite_D": 174.7454,
+      "shares_pct": {
+        "S4_info_theoretic": 6.515,
+        "S5_cross_level": 58.392,
+        "S1_morphological": 5.084,
+        "S2_lexical_diversity": 22.04,
+        "S3_structural": 7.958,
+        "cat": 0.011
+      }
+    },
+    {
+      "query": "stsb_multi_mt",
+      "candidate": "xlsum",
+      "composite_D": 175.0918,
+      "shares_pct": {
+        "S4_info_theoretic": 7.229,
+        "S5_cross_level": 58.625,
+        "S1_morphological": 3.733,
+        "S2_lexical_diversity": 22.167,
+        "S3_structural": 8.218,
+        "cat": 0.028
+      }
+    },
+    {
+      "query": "stsb_multi_mt",
+      "candidate": "stsb_multi_mt",
+      "composite_D": 168.0174,
+      "shares_pct": {
+        "S4_info_theoretic": 6.905,
+        "S5_cross_level": 57.042,
+        "S1_morphological": 3.341,
+        "S2_lexical_diversity": 24.719,
+        "S3_structural": 7.958,
+        "cat": 0.035
+      }
+    },
+    {
+      "query": "stsb_multi_mt",
+      "candidate": "tweet_sentiment_multilingual",
+      "composite_D": 180.6548,
+      "shares_pct": {
+        "S4_info_theoretic": 6.341,
+        "S5_cross_level": 57.464,
+        "S1_morphological": 4.382,
+        "S2_lexical_diversity": 22.361,
+        "S3_structural": 9.392,
+        "cat": 0.06
+      }
+    },
+    {
+      "query": "tweet_sentiment_multilingual",
+      "candidate": "exorde-social-media-december-2024-week1",
+      "composite_D": 43.6288,
+      "shares_pct": {
+        "S4_info_theoretic": 4.111,
+        "S5_cross_level": 26.525,
+        "S1_morphological": 18.914,
+        "S2_lexical_diversity": 24.265,
+        "S3_structural": 25.915,
+        "cat": 0.27
+      }
+    },
+    {
+      "query": "tweet_sentiment_multilingual",
+      "candidate": "amazon_reviews_multi",
+      "composite_D": 53.0881,
+      "shares_pct": {
+        "S4_info_theoretic": 6.726,
+        "S5_cross_level": 22.932,
+        "S1_morphological": 14.126,
+        "S2_lexical_diversity": 26.801,
+        "S3_structural": 29.249,
+        "cat": 0.166
+      }
+    },
+    {
+      "query": "tweet_sentiment_multilingual",
+      "candidate": "tydiqa",
+      "composite_D": 46.6777,
+      "shares_pct": {
+        "S4_info_theoretic": 7.773,
+        "S5_cross_level": 22.959,
+        "S1_morphological": 14.048,
+        "S2_lexical_diversity": 24.98,
+        "S3_structural": 30.03,
+        "cat": 0.21
+      }
+    },
+    {
+      "query": "tweet_sentiment_multilingual",
+      "candidate": "mmarco",
+      "composite_D": 50.5535,
+      "shares_pct": {
+        "S4_info_theoretic": 6.573,
+        "S5_cross_level": 29.68,
+        "S1_morphological": 11.64,
+        "S2_lexical_diversity": 23.207,
+        "S3_structural": 28.706,
+        "cat": 0.194
+      }
+    },
+    {
+      "query": "tweet_sentiment_multilingual",
+      "candidate": "xnli",
+      "composite_D": 47.9246,
+      "shares_pct": {
+        "S4_info_theoretic": 6.579,
+        "S5_cross_level": 23.871,
+        "S1_morphological": 11.278,
+        "S2_lexical_diversity": 26.681,
+        "S3_structural": 31.386,
+        "cat": 0.205
+      }
+    },
+    {
+      "query": "tweet_sentiment_multilingual",
+      "candidate": "wikipedia",
+      "composite_D": 59.372,
+      "shares_pct": {
+        "S4_info_theoretic": 5.965,
+        "S5_cross_level": 31.565,
+        "S1_morphological": 15.436,
+        "S2_lexical_diversity": 22.722,
+        "S3_structural": 24.114,
+        "cat": 0.198
+      }
+    },
+    {
+      "query": "tweet_sentiment_multilingual",
+      "candidate": "OpenLID-v2",
+      "composite_D": 41.1951,
+      "shares_pct": {
+        "S4_info_theoretic": 6.863,
+        "S5_cross_level": 28.109,
+        "S1_morphological": 12.444,
+        "S2_lexical_diversity": 22.45,
+        "S3_structural": 29.92,
+        "cat": 0.214
+      }
+    },
+    {
+      "query": "tweet_sentiment_multilingual",
+      "candidate": "europarl",
+      "composite_D": 49.8781,
+      "shares_pct": {
+        "S4_info_theoretic": 5.64,
+        "S5_cross_level": 26.791,
+        "S1_morphological": 14.395,
+        "S2_lexical_diversity": 24.186,
+        "S3_structural": 28.87,
+        "cat": 0.118
+      }
+    },
+    {
+      "query": "tweet_sentiment_multilingual",
+      "candidate": "multilingual_toxicity_dataset",
+      "composite_D": 43.2098,
+      "shares_pct": {
+        "S4_info_theoretic": 5.805,
+        "S5_cross_level": 26.356,
+        "S1_morphological": 12.949,
+        "S2_lexical_diversity": 25.415,
+        "S3_structural": 29.271,
+        "cat": 0.204
+      }
+    },
+    {
+      "query": "tweet_sentiment_multilingual",
+      "candidate": "multilingual_cc_news",
+      "composite_D": 44.3639,
+      "shares_pct": {
+        "S4_info_theoretic": 6.402,
+        "S5_cross_level": 24.308,
+        "S1_morphological": 13.412,
+        "S2_lexical_diversity": 27.45,
+        "S3_structural": 28.163,
+        "cat": 0.265
+      }
+    },
+    {
+      "query": "tweet_sentiment_multilingual",
+      "candidate": "multi_eurlex",
+      "composite_D": 60.6058,
+      "shares_pct": {
+        "S4_info_theoretic": 4.392,
+        "S5_cross_level": 18.692,
+        "S1_morphological": 14.75,
+        "S2_lexical_diversity": 28.936,
+        "S3_structural": 33.133,
+        "cat": 0.097
+      }
+    },
+    {
+      "query": "tweet_sentiment_multilingual",
+      "candidate": "massive",
+      "composite_D": 48.3849,
+      "shares_pct": {
+        "S4_info_theoretic": 6.108,
+        "S5_cross_level": 29.334,
+        "S1_morphological": 11.203,
+        "S2_lexical_diversity": 24.76,
+        "S3_structural": 28.352,
+        "cat": 0.243
+      }
+    },
+    {
+      "query": "tweet_sentiment_multilingual",
+      "candidate": "flores_plus",
+      "composite_D": 48.7422,
+      "shares_pct": {
+        "S4_info_theoretic": 8.427,
+        "S5_cross_level": 25.134,
+        "S1_morphological": 12.48,
+        "S2_lexical_diversity": 25.412,
+        "S3_structural": 28.366,
+        "cat": 0.181
+      }
+    },
+    {
+      "query": "tweet_sentiment_multilingual",
+      "candidate": "language-identification",
+      "composite_D": 44.8574,
+      "shares_pct": {
+        "S4_info_theoretic": 5.235,
+        "S5_cross_level": 22.338,
+        "S1_morphological": 14.88,
+        "S2_lexical_diversity": 27.412,
+        "S3_structural": 29.895,
+        "cat": 0.24
+      }
+    },
+    {
+      "query": "tweet_sentiment_multilingual",
+      "candidate": "xlsum",
+      "composite_D": 47.501,
+      "shares_pct": {
+        "S4_info_theoretic": 8.395,
+        "S5_cross_level": 23.038,
+        "S1_morphological": 14.761,
+        "S2_lexical_diversity": 26.023,
+        "S3_structural": 27.577,
+        "cat": 0.206
+      }
+    },
+    {
+      "query": "tweet_sentiment_multilingual",
+      "candidate": "stsb_multi_mt",
+      "composite_D": 44.8238,
+      "shares_pct": {
+        "S4_info_theoretic": 7.282,
+        "S5_cross_level": 18.059,
+        "S1_morphological": 13.155,
+        "S2_lexical_diversity": 29.036,
+        "S3_structural": 32.271,
+        "cat": 0.197
+      }
+    },
+    {
+      "query": "tweet_sentiment_multilingual",
+      "candidate": "tweet_sentiment_multilingual",
+      "composite_D": 41.8981,
+      "shares_pct": {
+        "S4_info_theoretic": 4.166,
+        "S5_cross_level": 28.755,
+        "S1_morphological": 12.464,
+        "S2_lexical_diversity": 27.021,
+        "S3_structural": 27.547,
+        "cat": 0.047
+      }
+    },
+    {
+      "query": "tydiqa",
+      "candidate": "exorde-social-media-december-2024-week1",
+      "composite_D": 58.1055,
+      "shares_pct": {
+        "S4_info_theoretic": 6.003,
+        "S5_cross_level": 29.334,
+        "S1_morphological": 18.827,
+        "S2_lexical_diversity": 20.441,
+        "S3_structural": 25.26,
+        "cat": 0.135
+      }
+    },
+    {
+      "query": "tydiqa",
+      "candidate": "amazon_reviews_multi",
+      "composite_D": 71.1015,
+      "shares_pct": {
+        "S4_info_theoretic": 6.506,
+        "S5_cross_level": 24.751,
+        "S1_morphological": 14.615,
+        "S2_lexical_diversity": 25.167,
+        "S3_structural": 28.837,
+        "cat": 0.124
+      }
+    },
+    {
+      "query": "tydiqa",
+      "candidate": "tydiqa",
+      "composite_D": 20.7834,
+      "shares_pct": {
+        "S4_info_theoretic": 0.978,
+        "S5_cross_level": 8.87,
+        "S1_morphological": 13.684,
+        "S2_lexical_diversity": 32.188,
+        "S3_structural": 44.14,
+        "cat": 0.142
+      }
+    },
+    {
+      "query": "tydiqa",
+      "candidate": "mmarco",
+      "composite_D": 46.3176,
+      "shares_pct": {
+        "S4_info_theoretic": 1.645,
+        "S5_cross_level": 33.896,
+        "S1_morphological": 12.286,
+        "S2_lexical_diversity": 23.304,
+        "S3_structural": 28.679,
+        "cat": 0.191
+      }
+    },
+    {
+      "query": "tydiqa",
+      "candidate": "xnli",
+      "composite_D": 60.4444,
+      "shares_pct": {
+        "S4_info_theoretic": 6.003,
+        "S5_cross_level": 24.305,
+        "S1_morphological": 12.73,
+        "S2_lexical_diversity": 25.452,
+        "S3_structural": 31.381,
+        "cat": 0.13
+      }
+    },
+    {
+      "query": "tydiqa",
+      "candidate": "wikipedia",
+      "composite_D": 69.5105,
+      "shares_pct": {
+        "S4_info_theoretic": 7.306,
+        "S5_cross_level": 32.841,
+        "S1_morphological": 14.326,
+        "S2_lexical_diversity": 20.636,
+        "S3_structural": 24.779,
+        "cat": 0.113
+      }
+    },
+    {
+      "query": "tydiqa",
+      "candidate": "OpenLID-v2",
+      "composite_D": 48.325,
+      "shares_pct": {
+        "S4_info_theoretic": 7.293,
+        "S5_cross_level": 30.24,
+        "S1_morphological": 14.773,
+        "S2_lexical_diversity": 19.692,
+        "S3_structural": 27.9,
+        "cat": 0.101
+      }
+    },
+    {
+      "query": "tydiqa",
+      "candidate": "europarl",
+      "composite_D": 65.4351,
+      "shares_pct": {
+        "S4_info_theoretic": 5.098,
+        "S5_cross_level": 25.533,
+        "S1_morphological": 16.236,
+        "S2_lexical_diversity": 22.844,
+        "S3_structural": 30.154,
+        "cat": 0.135
+      }
+    },
+    {
+      "query": "tydiqa",
+      "candidate": "multilingual_toxicity_dataset",
+      "composite_D": 57.1469,
+      "shares_pct": {
+        "S4_info_theoretic": 6.375,
+        "S5_cross_level": 27.68,
+        "S1_morphological": 14.057,
+        "S2_lexical_diversity": 23.44,
+        "S3_structural": 28.293,
+        "cat": 0.154
+      }
+    },
+    {
+      "query": "tydiqa",
+      "candidate": "multilingual_cc_news",
+      "composite_D": 58.9041,
+      "shares_pct": {
+        "S4_info_theoretic": 7.631,
+        "S5_cross_level": 29.197,
+        "S1_morphological": 14.027,
+        "S2_lexical_diversity": 22.408,
+        "S3_structural": 26.604,
+        "cat": 0.133
+      }
+    },
+    {
+      "query": "tydiqa",
+      "candidate": "multi_eurlex",
+      "composite_D": 74.317,
+      "shares_pct": {
+        "S4_info_theoretic": 7.101,
+        "S5_cross_level": 24.743,
+        "S1_morphological": 10.871,
+        "S2_lexical_diversity": 26.003,
+        "S3_structural": 31.177,
+        "cat": 0.106
+      }
+    },
+    {
+      "query": "tydiqa",
+      "candidate": "massive",
+      "composite_D": 47.0104,
+      "shares_pct": {
+        "S4_info_theoretic": 1.809,
+        "S5_cross_level": 31.954,
+        "S1_morphological": 12.454,
+        "S2_lexical_diversity": 23.209,
+        "S3_structural": 30.407,
+        "cat": 0.167
+      }
+    },
+    {
+      "query": "tydiqa",
+      "candidate": "flores_plus",
+      "composite_D": 55.1055,
+      "shares_pct": {
+        "S4_info_theoretic": 7.23,
+        "S5_cross_level": 26.377,
+        "S1_morphological": 14.038,
+        "S2_lexical_diversity": 23.51,
+        "S3_structural": 28.756,
+        "cat": 0.089
+      }
+    },
+    {
+      "query": "tydiqa",
+      "candidate": "language-identification",
+      "composite_D": 60.3336,
+      "shares_pct": {
+        "S4_info_theoretic": 6.431,
+        "S5_cross_level": 24.918,
+        "S1_morphological": 16.44,
+        "S2_lexical_diversity": 23.966,
+        "S3_structural": 28.115,
+        "cat": 0.13
+      }
+    },
+    {
+      "query": "tydiqa",
+      "candidate": "xlsum",
+      "composite_D": 58.2593,
+      "shares_pct": {
+        "S4_info_theoretic": 8.613,
+        "S5_cross_level": 28.356,
+        "S1_morphological": 12.456,
+        "S2_lexical_diversity": 23.24,
+        "S3_structural": 27.235,
+        "cat": 0.101
+      }
+    },
+    {
+      "query": "tydiqa",
+      "candidate": "stsb_multi_mt",
+      "composite_D": 44.5616,
+      "shares_pct": {
+        "S4_info_theoretic": 4.175,
+        "S5_cross_level": 18.718,
+        "S1_morphological": 12.408,
+        "S2_lexical_diversity": 28.877,
+        "S3_structural": 35.624,
+        "cat": 0.198
+      }
+    },
+    {
+      "query": "tydiqa",
+      "candidate": "tweet_sentiment_multilingual",
+      "composite_D": 61.7059,
+      "shares_pct": {
+        "S4_info_theoretic": 6.791,
+        "S5_cross_level": 29.361,
+        "S1_morphological": 13.651,
+        "S2_lexical_diversity": 22.399,
+        "S3_structural": 27.703,
+        "cat": 0.095
+      }
+    },
+    {
+      "query": "wikipedia",
+      "candidate": "exorde-social-media-december-2024-week1",
+      "composite_D": 41.523,
+      "shares_pct": {
+        "S4_info_theoretic": 5.996,
+        "S5_cross_level": 24.47,
+        "S1_morphological": 17.917,
+        "S2_lexical_diversity": 21.764,
+        "S3_structural": 29.853,
+        "cat": 0.0
+      }
+    },
+    {
+      "query": "wikipedia",
+      "candidate": "amazon_reviews_multi",
+      "composite_D": 61.9079,
+      "shares_pct": {
+        "S4_info_theoretic": 4.814,
+        "S5_cross_level": 24.891,
+        "S1_morphological": 16.296,
+        "S2_lexical_diversity": 22.886,
+        "S3_structural": 30.986,
+        "cat": 0.127
+      }
+    },
+    {
+      "query": "wikipedia",
+      "candidate": "tydiqa",
+      "composite_D": 69.101,
+      "shares_pct": {
+        "S4_info_theoretic": 7.175,
+        "S5_cross_level": 31.552,
+        "S1_morphological": 13.812,
+        "S2_lexical_diversity": 20.476,
+        "S3_structural": 26.871,
+        "cat": 0.114
+      }
+    },
+    {
+      "query": "wikipedia",
+      "candidate": "mmarco",
+      "composite_D": 65.2694,
+      "shares_pct": {
+        "S4_info_theoretic": 6.978,
+        "S5_cross_level": 29.282,
+        "S1_morphological": 13.192,
+        "S2_lexical_diversity": 21.931,
+        "S3_structural": 28.511,
+        "cat": 0.105
+      }
+    },
+    {
+      "query": "wikipedia",
+      "candidate": "xnli",
+      "composite_D": 62.5756,
+      "shares_pct": {
+        "S4_info_theoretic": 4.952,
+        "S5_cross_level": 26.544,
+        "S1_morphological": 13.336,
+        "S2_lexical_diversity": 22.217,
+        "S3_structural": 32.857,
+        "cat": 0.094
+      }
+    },
+    {
+      "query": "wikipedia",
+      "candidate": "wikipedia",
+      "composite_D": 9.8478,
+      "shares_pct": {
+        "S4_info_theoretic": 7.54,
+        "S5_cross_level": 27.746,
+        "S1_morphological": 16.385,
+        "S2_lexical_diversity": 19.585,
+        "S3_structural": 28.744,
+        "cat": 0.0
+      }
+    },
+    {
+      "query": "wikipedia",
+      "candidate": "OpenLID-v2",
+      "composite_D": 54.5369,
+      "shares_pct": {
+        "S4_info_theoretic": 6.888,
+        "S5_cross_level": 27.972,
+        "S1_morphological": 13.57,
+        "S2_lexical_diversity": 22.536,
+        "S3_structural": 28.943,
+        "cat": 0.09
+      }
+    },
+    {
+      "query": "wikipedia",
+      "candidate": "europarl",
+      "composite_D": 65.8859,
+      "shares_pct": {
+        "S4_info_theoretic": 4.546,
+        "S5_cross_level": 26.068,
+        "S1_morphological": 15.278,
+        "S2_lexical_diversity": 21.572,
+        "S3_structural": 32.372,
+        "cat": 0.164
+      }
+    },
+    {
+      "query": "wikipedia",
+      "candidate": "multilingual_toxicity_dataset",
+      "composite_D": 56.4127,
+      "shares_pct": {
+        "S4_info_theoretic": 4.73,
+        "S5_cross_level": 26.988,
+        "S1_morphological": 15.319,
+        "S2_lexical_diversity": 22.116,
+        "S3_structural": 30.725,
+        "cat": 0.122
+      }
+    },
+    {
+      "query": "wikipedia",
+      "candidate": "multilingual_cc_news",
+      "composite_D": 44.483,
+      "shares_pct": {
+        "S4_info_theoretic": 5.54,
+        "S5_cross_level": 32.002,
+        "S1_morphological": 14.768,
+        "S2_lexical_diversity": 20.755,
+        "S3_structural": 26.891,
+        "cat": 0.044
+      }
+    },
+    {
+      "query": "wikipedia",
+      "candidate": "multi_eurlex",
+      "composite_D": 55.4961,
+      "shares_pct": {
+        "S4_info_theoretic": 4.643,
+        "S5_cross_level": 26.705,
+        "S1_morphological": 17.654,
+        "S2_lexical_diversity": 20.424,
+        "S3_structural": 30.379,
+        "cat": 0.194
+      }
+    },
+    {
+      "query": "wikipedia",
+      "candidate": "massive",
+      "composite_D": 64.3925,
+      "shares_pct": {
+        "S4_info_theoretic": 6.914,
+        "S5_cross_level": 28.742,
+        "S1_morphological": 11.542,
+        "S2_lexical_diversity": 22.868,
+        "S3_structural": 29.89,
+        "cat": 0.046
+      }
+    },
+    {
+      "query": "wikipedia",
+      "candidate": "flores_plus",
+      "composite_D": 59.8009,
+      "shares_pct": {
+        "S4_info_theoretic": 6.473,
+        "S5_cross_level": 27.673,
+        "S1_morphological": 12.636,
+        "S2_lexical_diversity": 22.641,
+        "S3_structural": 30.496,
+        "cat": 0.082
+      }
+    },
+    {
+      "query": "wikipedia",
+      "candidate": "language-identification",
+      "composite_D": 56.6058,
+      "shares_pct": {
+        "S4_info_theoretic": 4.494,
+        "S5_cross_level": 26.037,
+        "S1_morphological": 16.189,
+        "S2_lexical_diversity": 22.232,
+        "S3_structural": 30.944,
+        "cat": 0.104
+      }
+    },
+    {
+      "query": "wikipedia",
+      "candidate": "xlsum",
+      "composite_D": 50.9458,
+      "shares_pct": {
+        "S4_info_theoretic": 6.119,
+        "S5_cross_level": 30.526,
+        "S1_morphological": 15.623,
+        "S2_lexical_diversity": 20.162,
+        "S3_structural": 27.455,
+        "cat": 0.115
+      }
+    },
+    {
+      "query": "wikipedia",
+      "candidate": "stsb_multi_mt",
+      "composite_D": 63.5444,
+      "shares_pct": {
+        "S4_info_theoretic": 6.308,
+        "S5_cross_level": 30.719,
+        "S1_morphological": 13.798,
+        "S2_lexical_diversity": 21.258,
+        "S3_structural": 27.81,
+        "cat": 0.108
+      }
+    },
+    {
+      "query": "wikipedia",
+      "candidate": "tweet_sentiment_multilingual",
+      "composite_D": 56.6665,
+      "shares_pct": {
+        "S4_info_theoretic": 4.807,
+        "S5_cross_level": 26.76,
+        "S1_morphological": 17.391,
+        "S2_lexical_diversity": 21.195,
+        "S3_structural": 29.64,
+        "cat": 0.208
+      }
+    },
+    {
+      "query": "xlsum",
+      "candidate": "exorde-social-media-december-2024-week1",
+      "composite_D": 32.9001,
+      "shares_pct": {
+        "S4_info_theoretic": 11.045,
+        "S5_cross_level": 19.256,
+        "S1_morphological": 23.474,
+        "S2_lexical_diversity": 18.642,
+        "S3_structural": 27.404,
+        "cat": 0.179
+      }
+    },
+    {
+      "query": "xlsum",
+      "candidate": "amazon_reviews_multi",
+      "composite_D": 33.0212,
+      "shares_pct": {
+        "S4_info_theoretic": 4.912,
+        "S5_cross_level": 15.621,
+        "S1_morphological": 20.59,
+        "S2_lexical_diversity": 24.5,
+        "S3_structural": 34.169,
+        "cat": 0.208
+      }
+    },
+    {
+      "query": "xlsum",
+      "candidate": "tydiqa",
+      "composite_D": 52.6378,
+      "shares_pct": {
+        "S4_info_theoretic": 9.463,
+        "S5_cross_level": 31.862,
+        "S1_morphological": 12.828,
+        "S2_lexical_diversity": 20.254,
+        "S3_structural": 25.463,
+        "cat": 0.13
+      }
+    },
+    {
+      "query": "xlsum",
+      "candidate": "mmarco",
+      "composite_D": 44.8471,
+      "shares_pct": {
+        "S4_info_theoretic": 10.322,
+        "S5_cross_level": 22.27,
+        "S1_morphological": 14.897,
+        "S2_lexical_diversity": 23.574,
+        "S3_structural": 28.806,
+        "cat": 0.131
+      }
+    },
+    {
+      "query": "xlsum",
+      "candidate": "xnli",
+      "composite_D": 31.8698,
+      "shares_pct": {
+        "S4_info_theoretic": 7.811,
+        "S5_cross_level": 18.098,
+        "S1_morphological": 13.961,
+        "S2_lexical_diversity": 23.597,
+        "S3_structural": 36.348,
+        "cat": 0.185
+      }
+    },
+    {
+      "query": "xlsum",
+      "candidate": "wikipedia",
+      "composite_D": 52.6235,
+      "shares_pct": {
+        "S4_info_theoretic": 6.561,
+        "S5_cross_level": 31.216,
+        "S1_morphological": 14.755,
+        "S2_lexical_diversity": 19.951,
+        "S3_structural": 27.404,
+        "cat": 0.112
+      }
+    },
+    {
+      "query": "xlsum",
+      "candidate": "OpenLID-v2",
+      "composite_D": 36.8485,
+      "shares_pct": {
+        "S4_info_theoretic": 9.365,
+        "S5_cross_level": 19.904,
+        "S1_morphological": 15.387,
+        "S2_lexical_diversity": 27.041,
+        "S3_structural": 28.064,
+        "cat": 0.239
+      }
+    },
+    {
+      "query": "xlsum",
+      "candidate": "europarl",
+      "composite_D": 38.3276,
+      "shares_pct": {
+        "S4_info_theoretic": 6.172,
+        "S5_cross_level": 16.304,
+        "S1_morphological": 23.937,
+        "S2_lexical_diversity": 20.563,
+        "S3_structural": 32.718,
+        "cat": 0.307
+      }
+    },
+    {
+      "query": "xlsum",
+      "candidate": "multilingual_toxicity_dataset",
+      "composite_D": 26.9478,
+      "shares_pct": {
+        "S4_info_theoretic": 6.771,
+        "S5_cross_level": 12.43,
+        "S1_morphological": 20.865,
+        "S2_lexical_diversity": 24.691,
+        "S3_structural": 35.098,
+        "cat": 0.146
+      }
+    },
+    {
+      "query": "xlsum",
+      "candidate": "multilingual_cc_news",
+      "composite_D": 18.5246,
+      "shares_pct": {
+        "S4_info_theoretic": 7.171,
+        "S5_cross_level": 15.922,
+        "S1_morphological": 22.674,
+        "S2_lexical_diversity": 19.751,
+        "S3_structural": 34.166,
+        "cat": 0.318
+      }
+    },
+    {
+      "query": "xlsum",
+      "candidate": "multi_eurlex",
+      "composite_D": 48.8754,
+      "shares_pct": {
+        "S4_info_theoretic": 6.743,
+        "S5_cross_level": 11.544,
+        "S1_morphological": 19.883,
+        "S2_lexical_diversity": 26.035,
+        "S3_structural": 35.575,
+        "cat": 0.221
+      }
+    },
+    {
+      "query": "xlsum",
+      "candidate": "massive",
+      "composite_D": 44.5495,
+      "shares_pct": {
+        "S4_info_theoretic": 10.449,
+        "S5_cross_level": 21.333,
+        "S1_morphological": 14.939,
+        "S2_lexical_diversity": 23.725,
+        "S3_structural": 29.423,
+        "cat": 0.132
+      }
+    },
+    {
+      "query": "xlsum",
+      "candidate": "flores_plus",
+      "composite_D": 32.0538,
+      "shares_pct": {
+        "S4_info_theoretic": 6.985,
+        "S5_cross_level": 23.41,
+        "S1_morphological": 17.342,
+        "S2_lexical_diversity": 21.382,
+        "S3_structural": 30.606,
+        "cat": 0.275
+      }
+    },
+    {
+      "query": "xlsum",
+      "candidate": "language-identification",
+      "composite_D": 27.9205,
+      "shares_pct": {
+        "S4_info_theoretic": 6.847,
+        "S5_cross_level": 12.103,
+        "S1_morphological": 25.413,
+        "S2_lexical_diversity": 21.882,
+        "S3_structural": 33.58,
+        "cat": 0.176
+      }
+    },
+    {
+      "query": "xlsum",
+      "candidate": "xlsum",
+      "composite_D": 7.3571,
+      "shares_pct": {
+        "S4_info_theoretic": 6.64,
+        "S5_cross_level": 24.233,
+        "S1_morphological": 21.492,
+        "S2_lexical_diversity": 21.208,
+        "S3_structural": 26.428,
+        "cat": 0.0
+      }
+    },
+    {
+      "query": "xlsum",
+      "candidate": "stsb_multi_mt",
+      "composite_D": 40.5113,
+      "shares_pct": {
+        "S4_info_theoretic": 9.384,
+        "S5_cross_level": 31.028,
+        "S1_morphological": 14.03,
+        "S2_lexical_diversity": 19.631,
+        "S3_structural": 25.782,
+        "cat": 0.145
+      }
+    },
+    {
+      "query": "xlsum",
+      "candidate": "tweet_sentiment_multilingual",
+      "composite_D": 36.3153,
+      "shares_pct": {
+        "S4_info_theoretic": 9.484,
+        "S5_cross_level": 18.378,
+        "S1_morphological": 20.371,
+        "S2_lexical_diversity": 21.148,
+        "S3_structural": 30.322,
+        "cat": 0.297
+      }
+    },
+    {
+      "query": "xnli",
+      "candidate": "exorde-social-media-december-2024-week1",
+      "composite_D": 64.9569,
+      "shares_pct": {
+        "S4_info_theoretic": 16.853,
+        "S5_cross_level": 21.524,
+        "S1_morphological": 8.087,
+        "S2_lexical_diversity": 37.702,
+        "S3_structural": 15.773,
+        "cat": 0.06
+      }
+    },
+    {
+      "query": "xnli",
+      "candidate": "amazon_reviews_multi",
+      "composite_D": 76.3038,
+      "shares_pct": {
+        "S4_info_theoretic": 16.795,
+        "S5_cross_level": 19.498,
+        "S1_morphological": 8.461,
+        "S2_lexical_diversity": 35.675,
+        "S3_structural": 19.481,
+        "cat": 0.09
+      }
+    },
+    {
+      "query": "xnli",
+      "candidate": "tydiqa",
+      "composite_D": 76.7147,
+      "shares_pct": {
+        "S4_info_theoretic": 16.502,
+        "S5_cross_level": 18.261,
+        "S1_morphological": 10.613,
+        "S2_lexical_diversity": 35.403,
+        "S3_structural": 19.106,
+        "cat": 0.115
+      }
+    },
+    {
+      "query": "xnli",
+      "candidate": "mmarco",
+      "composite_D": 78.6007,
+      "shares_pct": {
+        "S4_info_theoretic": 16.197,
+        "S5_cross_level": 21.155,
+        "S1_morphological": 9.212,
+        "S2_lexical_diversity": 35.922,
+        "S3_structural": 17.439,
+        "cat": 0.075
+      }
+    },
+    {
+      "query": "xnli",
+      "candidate": "xnli",
+      "composite_D": 71.413,
+      "shares_pct": {
+        "S4_info_theoretic": 18.329,
+        "S5_cross_level": 17.68,
+        "S1_morphological": 6.148,
+        "S2_lexical_diversity": 38.056,
+        "S3_structural": 19.704,
+        "cat": 0.082
+      }
+    },
+    {
+      "query": "xnli",
+      "candidate": "wikipedia",
+      "composite_D": 78.3795,
+      "shares_pct": {
+        "S4_info_theoretic": 15.175,
+        "S5_cross_level": 25.257,
+        "S1_morphological": 8.759,
+        "S2_lexical_diversity": 30.944,
+        "S3_structural": 19.815,
+        "cat": 0.05
+      }
+    },
+    {
+      "query": "xnli",
+      "candidate": "OpenLID-v2",
+      "composite_D": 63.5601,
+      "shares_pct": {
+        "S4_info_theoretic": 17.774,
+        "S5_cross_level": 20.726,
+        "S1_morphological": 6.803,
+        "S2_lexical_diversity": 36.374,
+        "S3_structural": 18.216,
+        "cat": 0.108
+      }
+    },
+    {
+      "query": "xnli",
+      "candidate": "europarl",
+      "composite_D": 80.703,
+      "shares_pct": {
+        "S4_info_theoretic": 15.771,
+        "S5_cross_level": 18.305,
+        "S1_morphological": 9.575,
+        "S2_lexical_diversity": 35.047,
+        "S3_structural": 21.18,
+        "cat": 0.121
+      }
+    },
+    {
+      "query": "xnli",
+      "candidate": "multilingual_toxicity_dataset",
+      "composite_D": 68.212,
+      "shares_pct": {
+        "S4_info_theoretic": 18.024,
+        "S5_cross_level": 18.809,
+        "S1_morphological": 7.415,
+        "S2_lexical_diversity": 39.169,
+        "S3_structural": 16.526,
+        "cat": 0.057
+      }
+    },
+    {
+      "query": "xnli",
+      "candidate": "multilingual_cc_news",
+      "composite_D": 67.2618,
+      "shares_pct": {
+        "S4_info_theoretic": 18.451,
+        "S5_cross_level": 19.377,
+        "S1_morphological": 5.344,
+        "S2_lexical_diversity": 38.343,
+        "S3_structural": 18.427,
+        "cat": 0.058
+      }
+    },
+    {
+      "query": "xnli",
+      "candidate": "multi_eurlex",
+      "composite_D": 79.3173,
+      "shares_pct": {
+        "S4_info_theoretic": 14.853,
+        "S5_cross_level": 16.701,
+        "S1_morphological": 12.266,
+        "S2_lexical_diversity": 30.971,
+        "S3_structural": 25.097,
+        "cat": 0.111
+      }
+    },
+    {
+      "query": "xnli",
+      "candidate": "massive",
+      "composite_D": 74.6081,
+      "shares_pct": {
+        "S4_info_theoretic": 16.439,
+        "S5_cross_level": 21.347,
+        "S1_morphological": 7.519,
+        "S2_lexical_diversity": 37.524,
+        "S3_structural": 17.119,
+        "cat": 0.053
+      }
+    },
+    {
+      "query": "xnli",
+      "candidate": "flores_plus",
+      "composite_D": 73.1206,
+      "shares_pct": {
+        "S4_info_theoretic": 17.831,
+        "S5_cross_level": 19.413,
+        "S1_morphological": 6.32,
+        "S2_lexical_diversity": 37.349,
+        "S3_structural": 18.993,
+        "cat": 0.094
+      }
+    },
+    {
+      "query": "xnli",
+      "candidate": "language-identification",
+      "composite_D": 67.0013,
+      "shares_pct": {
+        "S4_info_theoretic": 17.704,
+        "S5_cross_level": 17.727,
+        "S1_morphological": 8.25,
+        "S2_lexical_diversity": 38.838,
+        "S3_structural": 17.423,
+        "cat": 0.059
+      }
+    },
+    {
+      "query": "xnli",
+      "candidate": "xlsum",
+      "composite_D": 70.2727,
+      "shares_pct": {
+        "S4_info_theoretic": 18.625,
+        "S5_cross_level": 18.203,
+        "S1_morphological": 7.342,
+        "S2_lexical_diversity": 36.899,
+        "S3_structural": 18.889,
+        "cat": 0.042
+      }
+    },
+    {
+      "query": "xnli",
+      "candidate": "stsb_multi_mt",
+      "composite_D": 73.6964,
+      "shares_pct": {
+        "S4_info_theoretic": 17.552,
+        "S5_cross_level": 13.9,
+        "S1_morphological": 9.159,
+        "S2_lexical_diversity": 39.516,
+        "S3_structural": 19.78,
+        "cat": 0.093
+      }
+    },
+    {
+      "query": "xnli",
+      "candidate": "tweet_sentiment_multilingual",
+      "composite_D": 75.9973,
+      "shares_pct": {
+        "S4_info_theoretic": 15.412,
+        "S5_cross_level": 20.478,
+        "S1_morphological": 9.452,
+        "S2_lexical_diversity": 35.49,
+        "S3_structural": 19.013,
+        "cat": 0.155
+      }
+    }
+  ]
+}

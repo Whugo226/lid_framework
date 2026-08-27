@@ -1,0 +1,292 @@
+{
+  "generated": "2026-08-20",
+  "panel_finding": "M3 (table figures untraced to a saved artifact)",
+  "rule": "no numeric claim enters prose without a saved artifact behind it",
+  "tolerance": 5e-05,
+  "summary": {
+    "MATCH": 31,
+    "MISMATCH": 0,
+    "NO-ARTIFACT": 0
+  },
+  "claims": [
+    {
+      "id": "k1_exact_match",
+      "site": "demo:tab:k_ablation",
+      "claimed": "4/17",
+      "derived": "4/17",
+      "artifact": "re-derived live from mkb.pkl + eval_profiles (ablation_k.py saves no artifact)",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "k1_mean_gap",
+      "site": "demo:tab:k_ablation",
+      "claimed": 0.008,
+      "derived": 0.008,
+      "artifact": "re-derived live from mkb.pkl + eval_profiles (ablation_k.py saves no artifact)",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "k1_max_gap",
+      "site": "demo:tab:k_ablation",
+      "claimed": 0.0297,
+      "derived": 0.0297,
+      "artifact": "re-derived live from mkb.pkl + eval_profiles (ablation_k.py saves no artifact)",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "k3_exact_match",
+      "site": "demo:tab:k_ablation",
+      "claimed": "2/17",
+      "derived": "2/17",
+      "artifact": "analysis/reporting_measures_2026-08-04.json -> conditions/A",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "k3_mean_gap",
+      "site": "demo:tab:k_ablation",
+      "claimed": 0.0073,
+      "derived": 0.0073,
+      "artifact": "analysis/reporting_measures_2026-08-04.json -> conditions/A",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "k3_max_gap",
+      "site": "demo:tab:k_ablation",
+      "claimed": 0.0259,
+      "derived": 0.0259,
+      "artifact": "analysis/reporting_measures_2026-08-04.json -> conditions/A",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "before_top1",
+      "site": "demo:tab:coverage_guard",
+      "claimed": "3/17",
+      "derived": "3/17",
+      "artifact": "validation_report.json (2026-05-14; superseded for headline use)",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "before_mean_gap",
+      "site": "demo:tab:coverage_guard",
+      "claimed": 0.0078,
+      "derived": 0.0078,
+      "artifact": "validation_report.json (2026-05-14; superseded for headline use)",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "before_max_gap",
+      "site": "demo:tab:coverage_guard",
+      "claimed": 0.0489,
+      "derived": 0.0489,
+      "artifact": "validation_report.json (2026-05-14; superseded for headline use)",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "conf_nonzero_count",
+      "site": "demo:1099",
+      "claimed": "13 non-zero",
+      "derived": "13 non-zero",
+      "artifact": "re-derived live from mkb.pkl + eval_profiles",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "conf_zero_count",
+      "site": "demo:1099",
+      "claimed": "4 zero",
+      "derived": "4 zero",
+      "artifact": "re-derived live from mkb.pkl + eval_profiles",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "conf_split_after",
+      "site": "demo:tab:coverage_guard",
+      "claimed": "1/13 vs 1/4",
+      "derived": "1/13 vs 1/4",
+      "artifact": "re-derived live from mkb.pkl + eval_profiles",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "stratum_corr_mean",
+      "site": "appendix weight_insensitivity",
+      "claimed": 0.44,
+      "derived": 0.44,
+      "artifact": "analysis/weight_insensitivity_diagnosis_2026-08-05.json -> a_collinearity",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "stratum_corr_max",
+      "site": "appendix weight_insensitivity",
+      "claimed": 0.91,
+      "derived": 0.91,
+      "artifact": "analysis/weight_insensitivity_diagnosis_2026-08-05.json -> a_collinearity",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "learn_weights_min",
+      "site": "demo:1006",
+      "claimed": 0.92,
+      "derived": 0.92,
+      "artifact": "analysis/stratum_weight_search_2026-08-05.json -> learned_weights",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "learn_weights_max",
+      "site": "demo:1006",
+      "claimed": 1.17,
+      "derived": 1.17,
+      "artifact": "analysis/stratum_weight_search_2026-08-05.json -> learned_weights",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "in_sample_gain_pct",
+      "site": "demo:987",
+      "claimed": 8.7,
+      "derived": 8.7,
+      "artifact": "analysis/stratum_weight_search_2026-08-05.json -> policies (full precision, not the rounded 0.0073/0.0067)",
+      "verdict": "MATCH",
+      "note": "Panel M3 asked specifically whether 8.7% was computed at full precision or from rounded values; rounded would give 8.2%."
+    },
+    {
+      "id": "loo_selection_regret",
+      "site": "demo:987",
+      "claimed": 0.0094,
+      "derived": 0.0094,
+      "artifact": "analysis/stratum_weight_search_2026-08-05.json -> policies",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "loo_worse_than_equal_pct",
+      "site": "demo:987",
+      "claimed": 29,
+      "derived": 29,
+      "artifact": "analysis/stratum_weight_search_2026-08-05.json -> policies",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "median_best_vs_second",
+      "site": "demo:189",
+      "claimed": 0.0007,
+      "derived": 0.0007,
+      "artifact": "validation_report.json -> per_dataset/all_benchmark_scores",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "europarl_within_0.01",
+      "site": "demo:191",
+      "claimed": 35,
+      "derived": 35,
+      "artifact": "validation_report.json -> per_dataset/all_benchmark_scores",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "median_span",
+      "site": "demo:209",
+      "claimed": 0.877,
+      "derived": 0.877,
+      "artifact": "validation_report.json -> per_dataset/all_benchmark_scores",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "median_within_0.01",
+      "site": "demo:189",
+      "claimed": 6,
+      "derived": 6,
+      "artifact": "validation_report.json -> per_dataset/all_benchmark_scores",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "llm_mean_range_capture",
+      "site": "demo:388",
+      "claimed": 90.2,
+      "derived": 90.2,
+      "artifact": "llm_baseline_results.json + validation_report.json benchmark archive",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "llm_min_range_capture",
+      "site": "demo:389",
+      "claimed": 51.5,
+      "derived": 51.5,
+      "artifact": "llm_baseline_results.json + validation_report.json benchmark archive",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "validation_best_constant",
+      "site": "demo:1324",
+      "claimed": 0.0132,
+      "derived": 0.0132,
+      "artifact": "validation_confirmatory_report.json -> per_dataset/all_benchmark_scores",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "inference_fastext_word_ms",
+      "site": "demo:tab:inference_cost",
+      "claimed": 0.0218,
+      "derived": 0.0218,
+      "artifact": "LID_experiments/model_benchmarking_evaluation/**/benchmark_metadata.json -> metrics/inference_time_ms_per_sample (median per architecture)",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "inference_tml_min_multiple",
+      "site": "demo:642",
+      "claimed": 8.8,
+      "derived": 8.8,
+      "artifact": "LID_experiments/model_benchmarking_evaluation/**/benchmark_metadata.json -> metrics/inference_time_ms_per_sample (median per architecture)",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "inference_tml_max_multiple",
+      "site": "demo:642",
+      "claimed": 11.2,
+      "derived": 11.2,
+      "artifact": "LID_experiments/model_benchmarking_evaluation/**/benchmark_metadata.json -> metrics/inference_time_ms_per_sample (median per architecture)",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "inference_lr_tfidf_multiple",
+      "site": "demo:tab:inference_cost",
+      "claimed": 9.1,
+      "derived": 9.1,
+      "artifact": "LID_experiments/model_benchmarking_evaluation/**/benchmark_metadata.json -> metrics/inference_time_ms_per_sample (median per architecture)",
+      "verdict": "MATCH",
+      "note": ""
+    },
+    {
+      "id": "inference_xlmv_multiple",
+      "site": "demo:tab:inference_cost",
+      "claimed": 425.7,
+      "derived": 425.7,
+      "artifact": "LID_experiments/model_benchmarking_evaluation/**/benchmark_metadata.json -> metrics/inference_time_ms_per_sample (median per architecture)",
+      "verdict": "MATCH",
+      "note": ""
+    }
+  ]
+}

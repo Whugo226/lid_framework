@@ -1,0 +1,399 @@
+{
+  "generated": "2026-08-19",
+  "question": "Does the stratifier's PCA fit basis matter? MKBStore.finalise() deduplicates pooled language columns and so fits on 24 vectors, all from exorde-social-media-december-2024-week1. This refits on all 236 language-dataset observations and re-runs Condition A.",
+  "priority_metric": "f1_weighted",
+  "k": 3,
+  "basis": {
+    "original": {
+      "n_rows": 24,
+      "contributing_corpora": 1,
+      "total_pcs": 63,
+      "stratum_pcs": {
+        "S4_info_theoretic": 5,
+        "S5_cross_level": 11,
+        "S1_morphological": 16,
+        "S2_lexical_diversity": 15,
+        "S3_structural": 16
+      }
+    },
+    "refit": {
+      "n_rows": 236,
+      "contributing_corpora": 17,
+      "total_pcs": 76,
+      "stratum_pcs": {
+        "S4_info_theoretic": 5,
+        "S5_cross_level": 11,
+        "S1_morphological": 20,
+        "S2_lexical_diversity": 20,
+        "S3_structural": 20
+      },
+      "features_with_nan_dropped": 252
+    }
+  },
+  "conditions": {
+    "A_original_basis": {
+      "n": 17,
+      "top1_fraction": "2/17",
+      "top1_accuracy_pct": 11.8,
+      "mean_regret": 0.007287,
+      "median_regret": 0.00291,
+      "max_regret": 0.025948,
+      "mean_rank": 6.4,
+      "median_rank": 5,
+      "max_rank": 23,
+      "top3_hit": "6/17",
+      "top10_hit": "14/17",
+      "mean_range_capture_pct": 99.18,
+      "min_range_capture_pct": 96.89
+    },
+    "A_refit_basis": {
+      "n": 17,
+      "top1_fraction": "2/17",
+      "top1_accuracy_pct": 11.8,
+      "mean_regret": 0.008518,
+      "median_regret": 0.003023,
+      "max_regret": 0.025948,
+      "mean_rank": 7.3,
+      "median_rank": 5,
+      "max_rank": 23,
+      "top3_hit": "4/17",
+      "top10_hit": "13/17",
+      "mean_range_capture_pct": 99.03,
+      "min_range_capture_pct": 96.89
+    }
+  },
+  "retrieval_diagnostics": {
+    "A_original_basis": {
+      "nearest_neighbour_distribution": {
+        "OpenLID-v2": 5,
+        "tydiqa": 2,
+        "amazon_reviews_multi": 1,
+        "europarl": 1,
+        "exorde-social-media-december-2024-week1": 1,
+        "flores_plus": 1,
+        "language-identification": 1,
+        "massive": 1,
+        "multi_eurlex": 1,
+        "multilingual_cc_news": 1,
+        "wikipedia": 1,
+        "xlsum": 1
+      },
+      "self_retrieval_top1": "12/17",
+      "self_retrieval_top3": "14/17"
+    },
+    "A_refit_basis": {
+      "nearest_neighbour_distribution": {
+        "OpenLID-v2": 5,
+        "amazon_reviews_multi": 1,
+        "europarl": 1,
+        "exorde-social-media-december-2024-week1": 1,
+        "flores_plus": 1,
+        "language-identification": 1,
+        "massive": 1,
+        "multi_eurlex": 1,
+        "multilingual_cc_news": 1,
+        "tweet_sentiment_multilingual": 1,
+        "tydiqa": 1,
+        "wikipedia": 1,
+        "xlsum": 1
+      },
+      "self_retrieval_top1": "13/17",
+      "self_retrieval_top3": "15/17"
+    }
+  },
+  "reproduction_check": {
+    "of_record": {
+      "mean_regret": 0.007287,
+      "mean_range_capture_pct": 99.18,
+      "top1_fraction": "2/17"
+    },
+    "status": "EXACT",
+    "drift": {}
+  },
+  "paired_regret_test": {
+    "refit_better": 2,
+    "original_better": 4,
+    "ties": 11,
+    "informative_pairs": 6,
+    "mean_regret_difference": -0.00123,
+    "two_sided_p": 0.4688
+  },
+  "per_dataset": {
+    "A_original_basis": [
+      {
+        "dataset": "OpenLID-v2",
+        "recommended_model": "xlm_v_base_language_id",
+        "is_correct": false,
+        "regret": 0.024746,
+        "rank": 6,
+        "range_capture_pct": 97.3449
+      },
+      {
+        "dataset": "amazon_reviews_multi",
+        "recommended_model": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "is_correct": false,
+        "regret": 0.000874,
+        "rank": 4,
+        "range_capture_pct": 99.8938
+      },
+      {
+        "dataset": "europarl",
+        "recommended_model": "xlm_v_base_language_id",
+        "is_correct": false,
+        "regret": 0.001123,
+        "rank": 11,
+        "range_capture_pct": 99.882
+      },
+      {
+        "dataset": "exorde-social-media-december-2024-week1",
+        "recommended_model": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "is_correct": false,
+        "regret": 0.009143,
+        "rank": 2,
+        "range_capture_pct": 98.9166
+      },
+      {
+        "dataset": "flores_plus",
+        "recommended_model": "xlm_v_base_language_id",
+        "is_correct": true,
+        "regret": 0.0,
+        "rank": 1,
+        "range_capture_pct": 100.0
+      },
+      {
+        "dataset": "language-identification",
+        "recommended_model": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "is_correct": false,
+        "regret": 0.002077,
+        "rank": 5,
+        "range_capture_pct": 99.759
+      },
+      {
+        "dataset": "massive",
+        "recommended_model": "xlm_v_base_language_id",
+        "is_correct": false,
+        "regret": 0.019229,
+        "rank": 8,
+        "range_capture_pct": 97.8084
+      },
+      {
+        "dataset": "mmarco",
+        "recommended_model": "xlm_v_base_language_id",
+        "is_correct": false,
+        "regret": 0.025948,
+        "rank": 8,
+        "range_capture_pct": 96.8881
+      },
+      {
+        "dataset": "multi_eurlex",
+        "recommended_model": "fasttext_subword_wikipedia",
+        "is_correct": false,
+        "regret": 0.003902,
+        "rank": 16,
+        "range_capture_pct": 99.5947
+      },
+      {
+        "dataset": "multilingual_cc_news",
+        "recommended_model": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "is_correct": false,
+        "regret": 0.011184,
+        "rank": 2,
+        "range_capture_pct": 98.8049
+      },
+      {
+        "dataset": "multilingual_toxicity_dataset",
+        "recommended_model": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "is_correct": false,
+        "regret": 0.003745,
+        "rank": 2,
+        "range_capture_pct": 99.5411
+      },
+      {
+        "dataset": "stsb_multi_mt",
+        "recommended_model": "xlm_v_base_language_id",
+        "is_correct": false,
+        "regret": 0.00291,
+        "rank": 6,
+        "range_capture_pct": 99.6682
+      },
+      {
+        "dataset": "tweet_sentiment_multilingual",
+        "recommended_model": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "is_correct": false,
+        "regret": 0.015351,
+        "rank": 23,
+        "range_capture_pct": 98.3733
+      },
+      {
+        "dataset": "tydiqa",
+        "recommended_model": "xlm_v_base_language_id",
+        "is_correct": false,
+        "regret": 0.001256,
+        "rank": 5,
+        "range_capture_pct": 99.8621
+      },
+      {
+        "dataset": "wikipedia",
+        "recommended_model": "fasttext_subword_wikipedia",
+        "is_correct": true,
+        "regret": 0.0,
+        "rank": 1,
+        "range_capture_pct": 100.0
+      },
+      {
+        "dataset": "xlsum",
+        "recommended_model": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "is_correct": false,
+        "regret": 0.00023,
+        "rank": 3,
+        "range_capture_pct": 99.9613
+      },
+      {
+        "dataset": "xnli",
+        "recommended_model": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "is_correct": false,
+        "regret": 0.002165,
+        "rank": 6,
+        "range_capture_pct": 99.7305
+      }
+    ],
+    "A_refit_basis": [
+      {
+        "dataset": "OpenLID-v2",
+        "recommended_model": "xlm_v_base_language_id",
+        "is_correct": false,
+        "regret": 0.024746,
+        "rank": 6,
+        "range_capture_pct": 97.3449
+      },
+      {
+        "dataset": "amazon_reviews_multi",
+        "recommended_model": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "is_correct": false,
+        "regret": 0.000874,
+        "rank": 4,
+        "range_capture_pct": 99.8938
+      },
+      {
+        "dataset": "europarl",
+        "recommended_model": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "is_correct": false,
+        "regret": 0.001678,
+        "rank": 18,
+        "range_capture_pct": 99.8237
+      },
+      {
+        "dataset": "exorde-social-media-december-2024-week1",
+        "recommended_model": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "is_correct": false,
+        "regret": 0.009143,
+        "rank": 2,
+        "range_capture_pct": 98.9166
+      },
+      {
+        "dataset": "flores_plus",
+        "recommended_model": "xlm_v_base_language_id",
+        "is_correct": true,
+        "regret": 0.0,
+        "rank": 1,
+        "range_capture_pct": 100.0
+      },
+      {
+        "dataset": "language-identification",
+        "recommended_model": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "is_correct": false,
+        "regret": 0.002077,
+        "rank": 5,
+        "range_capture_pct": 99.759
+      },
+      {
+        "dataset": "massive",
+        "recommended_model": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "is_correct": false,
+        "regret": 0.009282,
+        "rank": 5,
+        "range_capture_pct": 98.9421
+      },
+      {
+        "dataset": "mmarco",
+        "recommended_model": "xlm_v_base_language_id",
+        "is_correct": false,
+        "regret": 0.025948,
+        "rank": 8,
+        "range_capture_pct": 96.8881
+      },
+      {
+        "dataset": "multi_eurlex",
+        "recommended_model": "xlm_v_base_language_id",
+        "is_correct": false,
+        "regret": 0.003023,
+        "rank": 13,
+        "range_capture_pct": 99.686
+      },
+      {
+        "dataset": "multilingual_cc_news",
+        "recommended_model": "fasttext_subword_wikipedia",
+        "is_correct": false,
+        "regret": 0.018459,
+        "rank": 5,
+        "range_capture_pct": 98.0274
+      },
+      {
+        "dataset": "multilingual_toxicity_dataset",
+        "recommended_model": "xlm_v_base_language_id",
+        "is_correct": false,
+        "regret": 0.021601,
+        "rank": 6,
+        "range_capture_pct": 97.3533
+      },
+      {
+        "dataset": "stsb_multi_mt",
+        "recommended_model": "xlm_v_base_language_id",
+        "is_correct": false,
+        "regret": 0.00291,
+        "rank": 6,
+        "range_capture_pct": 99.6682
+      },
+      {
+        "dataset": "tweet_sentiment_multilingual",
+        "recommended_model": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "is_correct": false,
+        "regret": 0.015351,
+        "rank": 23,
+        "range_capture_pct": 98.3733
+      },
+      {
+        "dataset": "tydiqa",
+        "recommended_model": "xlm_v_base_language_id",
+        "is_correct": false,
+        "regret": 0.001256,
+        "rank": 5,
+        "range_capture_pct": 99.8621
+      },
+      {
+        "dataset": "wikipedia",
+        "recommended_model": "fasttext_subword_wikipedia",
+        "is_correct": true,
+        "regret": 0.0,
+        "rank": 1,
+        "range_capture_pct": 100.0
+      },
+      {
+        "dataset": "xlsum",
+        "recommended_model": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "is_correct": false,
+        "regret": 0.00023,
+        "rank": 3,
+        "range_capture_pct": 99.9613
+      },
+      {
+        "dataset": "xnli",
+        "recommended_model": "xlm_v_base_language_id",
+        "is_correct": false,
+        "regret": 0.008221,
+        "rank": 13,
+        "range_capture_pct": 98.9767
+      }
+    ]
+  }
+}

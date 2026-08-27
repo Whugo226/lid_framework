@@ -2,7 +2,7 @@
 % Source artifact: mkb.pkl
 
 \begin{table}[H]
-    \centering
+    \mytable
     \caption{Per-stratum summary of the deterministic feature-to-stratum assignment, extracted from the fitted \texttt{FeatureStratifier} in the deployed Meta-Knowledge Base. Variance is the cumulative proportion explained by the retained principal components.}
     \label{tab:stratum_audit_summary}
     \begin{tabular}{|l|r|r|r|r|}
@@ -25,7 +25,7 @@
 \end{table}
 
 \begin{table}[H]
-    \centering
+    \mytable
     \caption{Segment-level composition of the core schema, extracted from the same fitted \texttt{FeatureStratifier}. A base measure is instantiated only at the levels at which it is defined; at sentence and paragraph level it is summarised across the constituent segments by four aggregate statistics, whereas at document level it is emitted as a single value. Counts are those of the fixed core, that is, after the fitting step's validity filter has removed the conditional paragraph-level variants that not every corpus populates.}
     \label{tab:stratum_audit_levels}
     \begin{tabular}{|l|r|r|r|}
@@ -53,7 +53,7 @@
     \end{tabular}
 \end{table}
 
-\begin{small}
+\begingroup\mylongtable
 \begin{longtable}{|l|r||l|r|}
 \caption{S1 --- Morphological Richness: complete base-measure family enumeration (108 families, 813 core features). Var.\ is the number of level--statistic variants of the family assigned to this stratum.}
 \label{tab:stratum_audit_s1}\\
@@ -125,9 +125,9 @@ Past tense avg position & 9 & Word types per lemma (nouns) & 4 \\
 Past tense burstiness & 5 & Word types per lemma (verbs) & 4 \\
 Past tense concentration & 9 & Word-lemma Levenshtein dist. & 9 \\
 \end{longtable}
-\end{small}
+\endgroup
 
-\begin{small}
+\begingroup\mylongtable
 \begin{longtable}{|l|r||l|r|}
 \caption{S2 --- Lexical Diversity: complete base-measure family enumeration (51 families, 433 core features). Var.\ is the number of level--statistic variants of the family assigned to this stratum.}
 \label{tab:stratum_audit_s2}\\
@@ -171,9 +171,9 @@ Hapax legomena count & 9 & Verb type count & 9 \\
 Hapax legomena incidence & 9 & Verb type-token ratio & 9 \\
 Hapax legomena position SD & 9 &  &  \\
 \end{longtable}
-\end{small}
+\endgroup
 
-\begin{small}
+\begingroup\mylongtable
 \begin{longtable}{|l|r||l|r|}
 \caption{S3 --- Structural/Syntactic: complete base-measure family enumeration (151 families, 1{,}200 core features). Var.\ is the number of level--statistic variants of the family assigned to this stratum.}
 \label{tab:stratum_audit_s3}\\
@@ -267,9 +267,9 @@ Letter count & 9 & Word count & 9 \\
 Lexical item avg position & 9 & Word length & 9 \\
 Lexical item burstiness & 5 &  &  \\
 \end{longtable}
-\end{small}
+\endgroup
 
-\begin{small}
+\begingroup\mylongtable
 \begin{longtable}{|l|r||l|r|}
 \caption{S4 --- Information-Theoretic: complete base-measure family enumeration (4 families, 20 core features). Var.\ is the number of level--statistic variants of the family assigned to this stratum.}
 \label{tab:stratum_audit_s4}\\
@@ -289,9 +289,9 @@ Lexical item burstiness & 5 &  &  \\
 Letter entropy & 9 & Zipf goodness of fit & 1 \\
 Word entropy & 9 & Zipf steepness of curve & 1 \\
 \end{longtable}
-\end{small}
+\endgroup
 
-\begin{small}
+\begingroup\mylongtable
 \begin{longtable}{|l|r||l|r|}
 \caption{S5 --- Cross-Level Cohesion: complete base-measure family enumeration (13 families, 260 core features). Var.\ is the number of level--statistic variants of the family assigned to this stratum.}
 \label{tab:stratum_audit_s5}\\
@@ -316,4 +316,4 @@ Lemma overlap ratio & 20 & Word overlap count & 20 \\
 Levenshtein PoS dist. & 20 & Word overlap ratio & 20 \\
 Levenshtein character dist. & 20 &  &  \\
 \end{longtable}
-\end{small}
+\endgroup

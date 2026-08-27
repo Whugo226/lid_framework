@@ -36,7 +36,8 @@ OUT = Path(__file__).parent / f"dashboard_session_{_dt.date.today():%Y-%m-%d}.js
 
 METRICS = ("f1_weighted", "inference_time_ms_per_sample")
 
-PROFILE_SEED = 42  # keep in sync with dashboard.PROFILE_SEED
+PROFILE_SEED = 42  # seed of the recorded walkthrough session; the dashboard
+                   # itself profiles unseeded, so only this replication is fixed
 
 
 def _group_sizes(texts) -> dict:
@@ -93,8 +94,8 @@ def main() -> int:
     texts = pd.read_csv(csv_path)["text"]
 
     from lid_toolkit import LID_Recommender
-    # Matches dashboard.PROFILE_SEED, so this scripted replication of the
-    # dashboard's code path yields the same fingerprint the captures show.
+    # Seeded so this scripted replication of the dashboard's code path yields
+    # the same fingerprint the captures show; the dashboard is unseeded.
     lid = LID_Recommender(TK / "mkb.pkl", seed=PROFILE_SEED)
 
     t0 = time.perf_counter()

@@ -112,7 +112,7 @@ def main() -> None:
     total_pcs = sum(f.n_components for f in strat._fits.values())
 
     lines.append(r"\begin{table}[H]")
-    lines.append(r"    \centering")
+    lines.append(r"    \mytable")
     lines.append(r"    \caption{Per-stratum summary of the deterministic feature-to-stratum "
                  r"assignment, extracted from the fitted \texttt{FeatureStratifier} in the "
                  r"deployed Meta-Knowledge Base. Variance is the cumulative proportion "
@@ -151,7 +151,7 @@ def main() -> None:
               [t for t in sorted(per_level) if t not in _LEVEL_LABELS]
 
     lines.append(r"\begin{table}[H]")
-    lines.append(r"    \centering")
+    lines.append(r"    \mytable")
     lines.append(r"    \caption{Segment-level composition of the core schema, extracted from the "
                  r"same fitted \texttt{FeatureStratifier}. A base measure is instantiated only at "
                  r"the levels at which it is defined; at sentence and paragraph level it is "
@@ -186,7 +186,7 @@ def main() -> None:
         fams = sorted(fams_per[key].items())
         n_feats = len(fit.feature_names)
 
-        lines.append(r"\begin{small}")
+        lines.append(r"\begingroup\mylongtable")
         lines.append(r"\begin{longtable}{|l|r||l|r|}")
         lines.append(f"\\caption{{{sid} --- {sname}: complete base-measure family "
                      f"enumeration ({len(fams)} families, {fmt_int(n_feats)} core "
@@ -215,7 +215,7 @@ def main() -> None:
             rcell = f"{tex_escape(right[0])} & {right[1]}" if right else " & "
             lines.append(f"{lcell} & {rcell} \\\\")
         lines.append(r"\end{longtable}")
-        lines.append(r"\end{small}")
+        lines.append(r"\endgroup")
         lines.append("")
 
     out = Path(args.out)
