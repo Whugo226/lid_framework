@@ -8,7 +8,7 @@ You can contribute in many ways:
 
 ### Report Bugs
 
-Report bugs at https://github.com/Whugo226/lid_toolkit/issues.
+Report bugs at https://github.com/Whugo226/lid_framework/issues.
 
 If you are reporting a bug, please include:
 
@@ -30,7 +30,7 @@ LID Toolkit could always use more documentation, whether as part of the official
 
 ### Submit Feedback
 
-The best way to send feedback is to file an issue at https://github.com/Whugo226/lid_toolkit/issues.
+The best way to send feedback is to file an issue at https://github.com/Whugo226/lid_framework/issues.
 
 If you are proposing a feature:
 

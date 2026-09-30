@@ -1,7 +1,7 @@
 [project]
 name = "lid_toolkit"
 version = "0.1.0"
-description = "A Python toolkit for language identification"
+description = "An interactive framework for recommending language identification models for short-text corpora"
 readme = "README.md"
 authors = [
   {name = "Werner Hugo", email = "wernerhugo2002@gmail.com"}
@@ -29,9 +29,9 @@ test = [
 ]
 
 [project.urls]
-bugs = "https://github.com/Whugo226/lid_toolkit/issues"
-changelog = "https://github.com/Whugo226/lid_toolkit/blob/master/changelog.md"
-homepage = "https://github.com/Whugo226/lid_toolkit"
+bugs = "https://github.com/Whugo226/lid_framework/issues"
+changelog = "https://github.com/Whugo226/lid_framework/blob/main/HISTORY.md"
+homepage = "https://github.com/Whugo226/lid_framework"
 
 [project.scripts]
 lid_toolkit = "lid_toolkit.cli:app"
