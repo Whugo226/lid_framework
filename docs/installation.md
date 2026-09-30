@@ -1,18 +1,7 @@
 # Installation
 
-## Stable release
-
-To install LID Toolkit, run this command in your terminal:
-
-```sh
-uv add lid_toolkit
-```
-
-Or if you prefer to use `pip`:
-
-```sh
-pip install lid_toolkit
-```
+The framework is not published on PyPI; install it from source. See the README
+for the conda route, which recreates the environment used for the thesis.
 
 ## From source
 
@@ -34,5 +23,5 @@ Once you have a copy of the source, you can install it with:
 
 ```sh
 cd lid_framework
-uv pip install .
+pip install ".[spacy-models]"
 ```

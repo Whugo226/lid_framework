@@ -82,16 +82,12 @@ class DeepProfiler:
 
         self.seed = seed
 
-        # 1. Dynamically find the path to the model relative to this python script
-        # __file__ is profiler.py. We go up one level to 'lid_toolkit', then into 'resources'
-        base_dir = Path(__file__).parent.parent 
-        model_path = base_dir / "models" / "fasttext" / "lid.176.bin"
-        
-        # 2. Check if it exists so we don't crash silently
-        if not model_path.exists():
-            raise FileNotFoundError(f"Missing FastText LID model at {model_path}")
-            
-        # 3. Load the lightning-fast model into memory!
+        # 1. Locate lid.176: a copy inside the package if present, otherwise
+        #    the cached download (fetched from the official fastText URL once).
+        from lid_toolkit.resources import lid176_path
+        model_path = lid176_path()
+
+        # 2. Load the lightning-fast model into memory!
         # (fasttext suppresses its own internal C++ warnings to keep the terminal clean)
         fasttext.FastText.eprint = lambda x: None 
         self.lid_model = fasttext.load_model(str(model_path))

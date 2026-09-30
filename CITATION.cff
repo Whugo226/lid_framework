@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "LID model selection framework"
+abstract: >-
+  An interactive framework that recommends a language identification model for
+  an unlabelled short-text corpus, by profiling its linguistic characteristics
+  and retrieving the most similar corpora from a knowledge base of benchmarked
+  candidate models.
+authors:
+  - family-names: Hugo
+    given-names: Werner
+    affiliation: Stellenbosch University
+repository-code: "https://github.com/Whugo226/lid_framework"
+license: MIT
+version: 1.0.0
+keywords:
+  - language identification
+  - model selection
+  - meta-learning
+  - short text
+references:
+  - type: thesis
+    title: "An Interactive Framework for Language Identification Model Recommendation"
+    authors:
+      - family-names: Hugo
+        given-names: Werner
+    institution:
+      name: Stellenbosch University
+    thesis-type: MEng thesis
+    year: 2026

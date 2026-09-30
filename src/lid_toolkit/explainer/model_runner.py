@@ -30,13 +30,13 @@ from __future__ import annotations
 
 import os
 import pickle
-import urllib.request
 import warnings
 from pathlib import Path
 from typing import Any
 
+from lid_toolkit.resources import lid176_is_local, lid176_path
+
 DEFAULT_MODELS_REPO = "werner1hugo/lid-framework-models"
-LID176_URL = "https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin"
 
 _LR_ARCHS: frozenset[str] = frozenset({
     "tfidf_lr_char_ngram_3_5",
@@ -75,11 +75,6 @@ def _family(arch: str) -> str:
     if arch in _NB_ARCHS:
         return "naive_bayes"
     raise ValueError(f"Unknown model architecture {arch!r}")
-
-
-def _default_cache_dir() -> Path:
-    base = os.environ.get("XDG_CACHE_HOME") or Path.home() / ".cache"
-    return Path(base) / "lid_toolkit"
 
 
 class ModelRunner:
@@ -174,7 +169,7 @@ class ModelRunner:
             return True
         _, _, family = self.resolve(variant)
         if family == "fasttext_ots":
-            return (_default_cache_dir() / "lid.176.bin").exists()
+            return lid176_is_local()
         from huggingface_hub import try_to_load_from_cache
         hit = try_to_load_from_cache(
             self.models_repo, self.relative_path(variant), revision=self.revision
@@ -195,13 +190,7 @@ class ModelRunner:
             return local
         _, _, family = self.resolve(variant)
         if family == "fasttext_ots":
-            target = _default_cache_dir() / "lid.176.bin"
-            if not target.exists():
-                target.parent.mkdir(parents=True, exist_ok=True)
-                tmp = target.with_suffix(".part")
-                urllib.request.urlretrieve(LID176_URL, tmp)
-                tmp.replace(target)
-            return target
+            return lid176_path()
         from huggingface_hub import hf_hub_download
         return Path(hf_hub_download(
             repo_id=self.models_repo,
