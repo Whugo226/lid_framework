@@ -234,3 +234,27 @@ models/
 
 # VS Code Settings (Personal workspace settings)
 .vscode/
+# --- Kept locally, excluded from the public release (2026-09-30) ---
+# Thesis workflow files
+.claude/
+.agents/
+.github/agents/
+latex/
+verify_claims_prompt.md
+project_context/SESSION_FACTS_LEDGER.md
+# Third-party documents (not ours to redistribute)
+project_context/*.pdf
+stellenbosch_hpc/
+# Development leftovers
+debug_*.txt
+debug_*.md
+validation_report_old_*.md
+check_gpu.py
+predict_fasttext_x_test.py
+mkb_testing/
+test_examples/*.zip
+fasttext_cache/
+# Stellenbosch HPC job scripts
+submit_job.sh
+hpc_build_mkb.py
+justfile

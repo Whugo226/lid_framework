@@ -1,12 +1,14 @@
 # =============================================================================
-# environment.yml — lid_toolkit conda environment (Stellenbosch HPC)
+# environment.yml — conda environment for the LID model selection framework
 #
-# Create:  conda env create -f environment.yml
-# Update:  conda env update -f environment.yml --prune
-# Activate: conda activate thesis_final
+# Run from the repository root:
+#   Create:   conda env create -f environment.yml
+#   Update:   conda env update -f environment.yml --prune
+#   Activate: conda activate thesis_final
 #
-# After creating the environment, download the spaCy language models with:
-#   python scripts/download_spacy_models.py
+# This installs the lid_toolkit package itself (editable) and the 24 spaCy
+# pipelines the DeepProfiler loads. Versions follow the environment that
+# produced the thesis results.
 # =============================================================================
 
 name: thesis_final
@@ -17,16 +19,16 @@ channels:
 
 dependencies:
   # ── Core scientific stack ────────────────────────────────────────────────
-  - python=3.11
+  - python=3.10
   - pip
   - numpy>=1.26
   - pandas>=2.1
   - scipy>=1.12
-  - scikit-learn>=1.4
+  - scikit-learn=1.7.2    # pinned: mkb.pkl and the NB/LR models are pickled with it
   - tqdm>=4.66
 
   # ── NLP / language tooling ────────────────────────────────────────────────
-  - spacy>=3.7            # language pipeline; models installed separately via pip
+  - spacy>=3.8,<3.9       # language pipeline; the 3.8.0 models below need spaCy 3.8
 
   # ── Utilities ────────────────────────────────────────────────────────────
   - pyyaml>=6.0           # config file parsing
@@ -51,6 +53,11 @@ dependencies:
 
     # CLI framework used by lid_toolkit entry point
     - typer>=0.12
+    - rich>=13
+
+    # Interactive dashboard
+    - streamlit>=1.58
+    - plotly>=6.0
 
     # spaCy language models — 24 languages supported by DeepProfiler
     # Install order: larger models first to surface any disk-space issues early.
@@ -63,7 +70,6 @@ dependencies:
     - https://github.com/explosion/spacy-models/releases/download/nl_core_news_sm-3.8.0/nl_core_news_sm-3.8.0-py3-none-any.whl
     - https://github.com/explosion/spacy-models/releases/download/ru_core_news_sm-3.8.0/ru_core_news_sm-3.8.0-py3-none-any.whl
     - https://github.com/explosion/spacy-models/releases/download/zh_core_web_sm-3.8.0/zh_core_web_sm-3.8.0-py3-none-any.whl
-    - https://github.com/explosion/spacy-models/releases/download/ja_core_news_sm-3.8.0/ja_core_news_sm-3.8.0-py3-none-any.whl
     - https://github.com/explosion/spacy-models/releases/download/ko_core_news_sm-3.8.0/ko_core_news_sm-3.8.0-py3-none-any.whl
     - https://github.com/explosion/spacy-models/releases/download/pl_core_news_sm-3.8.0/pl_core_news_sm-3.8.0-py3-none-any.whl
     - https://github.com/explosion/spacy-models/releases/download/sv_core_news_sm-3.8.0/sv_core_news_sm-3.8.0-py3-none-any.whl
@@ -78,5 +84,8 @@ dependencies:
     - https://github.com/explosion/spacy-models/releases/download/mk_core_news_sm-3.8.0/mk_core_news_sm-3.8.0-py3-none-any.whl
     - https://github.com/explosion/spacy-models/releases/download/sl_core_news_sm-3.8.0/sl_core_news_sm-3.8.0-py3-none-any.whl
     - https://github.com/explosion/spacy-models/releases/download/uk_core_news_sm-3.8.0/uk_core_news_sm-3.8.0-py3-none-any.whl
-    # Japanese: spaCy uses GiNZA (not the standard spaCy-models repo)
-    - ja-ginza
+    # Japanese: the profiler loads GiNZA (not the standard spaCy-models repo)
+    - ja-ginza>=5.2.0
+
+    # The framework itself, installed in editable mode from this repository
+    - -e .

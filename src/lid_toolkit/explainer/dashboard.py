@@ -21,7 +21,10 @@ Run from the project root:
 
 Environment variable overrides (optional):
     LID_STORE_PATH        Path to mkb.pkl  (default: ./mkb.pkl)
-    LID_EXPERIMENTS_DIR   Path to LID_experiments/ folder
+    LID_EXPERIMENTS_DIR   Optional local LID_experiments/ folder; models found there
+                          are used instead of downloading them
+    LID_MODELS_REPO       Hugging Face repo the trained models are downloaded from
+    LID_MODELS_REVISION   Branch, tag or commit of that repo (default: main)
 """
 from __future__ import annotations
 
@@ -335,12 +338,7 @@ _DEFAULT_STORE = str(
         _ROOT / "mkb.pkl",
     ))
 )
-_DEFAULT_EXPERIMENTS = str(
-    Path(os.environ.get(
-        "LID_EXPERIMENTS_DIR",
-        r"C:\Users\User\OneDrive\Masters\LID_experiments",
-    ))
-)
+_DEFAULT_EXPERIMENTS = os.environ.get("LID_EXPERIMENTS_DIR", "")
 
 _METRICS = [
     "f1_weighted", "f1_macro", "accuracy",
@@ -379,7 +377,7 @@ def _load_recommender(store_path: str):
 def _load_runner(experiments_dir: str, datasets: tuple[str, ...]):
     """Cache the ModelRunner so a loaded model survives across reruns."""
     from lid_toolkit.explainer.model_runner import ModelRunner
-    return ModelRunner(experiments_dir, list(datasets))
+    return ModelRunner(list(datasets), experiments_dir=experiments_dir or None)
 
 
 # ── Small helpers ──────────────────────────────────────────────────────────────
@@ -1076,19 +1074,20 @@ def _tab_run_model(result, config, texts: pd.Series | None, experiments_dir: str
         st.info("Upload a corpus CSV in the sidebar to enable live model inference.")
         return
 
-    if not Path(experiments_dir).exists():
-        st.error(
-            f"LID_experiments directory not found: `{experiments_dir}`  \n"
-            "Update the path in the sidebar."
+    if experiments_dir and not Path(experiments_dir).exists():
+        st.warning(
+            f"Local model folder not found: `{experiments_dir}`  \n"
+            "Models will be downloaded instead."
         )
-        return
+        experiments_dir = ""
 
     all_models = sorted(result.all_model_scores, key=lambda m: -result.all_model_scores[m])
     rec = result.recommended_model
 
     st.markdown(
         "Select a model from the ranked list below and run it directly on your uploaded dataset. "
-        "All models are loaded from `LID_experiments/` — no internet connection required."
+        "A model not yet on this machine is downloaded on first use and cached; "
+        "the FastText models can be up to about 2.3 GB."
     )
 
     col_sel, col_n = st.columns([3, 1])
@@ -1115,13 +1114,12 @@ def _tab_run_model(result, config, texts: pd.Series | None, experiments_dir: str
     # Availability check
     runner = _load_runner(experiments_dir, tuple(store.datasets))
 
-    available = runner.is_available(selected)
+    reason = runner.unsupported_reason(selected)
+    available = reason is None
     if not available:
-        try:
-            path = runner.model_path(selected)
-            st.warning(f"Model file not found on disk:\n\n`{path}`")
-        except ValueError as e:
-            st.error(str(e))
+        st.warning(reason)
+    elif not runner.is_cached(selected):
+        st.caption("This model is not on this machine yet; running it will download it first.")
 
     run_btn = st.button(
         "Run model on dataset",
@@ -1135,6 +1133,12 @@ def _tab_run_model(result, config, texts: pd.Series | None, experiments_dir: str
             .reset_index(drop=True)
             .tolist()
         )
+        try:
+            with st.spinner(f"Fetching `{_short(selected, 50)}`…"):
+                runner.fetch(selected)
+        except Exception as exc:  # network, missing file on the hub, etc.
+            st.error(f"Could not obtain the model file: {exc}")
+            return
         with st.spinner(f"Running `{_short(selected, 50)}` on {n_sample} samples…"):
             t0 = time.perf_counter()
             preds = runner.predict(selected, sample_texts)
@@ -1454,9 +1458,12 @@ def main():
             help="Path to the serialised Meta-Knowledge Base.",
         )
         experiments_dir = st.text_input(
-            "LID_experiments directory",
+            "Local model folder (optional)",
             value=_DEFAULT_EXPERIMENTS,
-            help="Root of the LID_experiments/ folder (used for live model inference).",
+            help=(
+                "Root of a local LID_experiments/ folder. Leave empty to download "
+                "trained models from Hugging Face when they are first run."
+            ),
         )
 
         st.divider()
@@ -1541,7 +1548,8 @@ def main():
         )
         with st.expander("How to use this dashboard"):
             st.markdown("""
-1. **Configure** — set the paths to `mkb.pkl` and the `LID_experiments/` folder.
+1. **Configure** — check the path to `mkb.pkl`. A local model folder is optional;
+   without one, trained models are downloaded when first run.
 2. **Upload** — provide a CSV file with a column of text samples.
 3. **Profile** — click the button; DeepProfiler characterises your corpus once
    (a few minutes for large corpora).
