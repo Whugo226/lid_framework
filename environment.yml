@@ -43,7 +43,7 @@ dependencies:
     - compress-fasttext>=0.1.4
 
     # Word frequency scoring (Zipf)
-    - wordfreq>=3.1.1
+    - wordfreq[cjk]>=3.1.1   # cjk: jieba and MeCab tokenisers for Chinese, Japanese, Korean
 
     # Fast Levenshtein distance
     - editdistance>=0.8.1
