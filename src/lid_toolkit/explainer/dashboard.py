@@ -360,7 +360,7 @@ _STRATUM_LABELS: dict[str, str] = {
 }
 
 _CONFIDENCE_NOTE = (
-    "Consensus confidence is the fraction of retrieved neighbours whose own "
+    "The consensus index is the fraction of retrieved neighbours whose own "
     "best model agrees with the recommendation. It measures neighbourhood "
     "agreement, not the probability that the recommendation is optimal."
 )
@@ -463,6 +463,12 @@ def _tab_corpus(config, profile, texts: pd.Series | None, profiling_time: float,
             legend_title_text="",
             legend=dict(orientation="h", y=1.14, x=0),
             bargap=0.25,
+            # color= splits the frame into one trace per Status, and a categorical
+            # x-axis otherwise follows trace order — drawing every in-scope bar
+            # before every out-of-scope one, so a taller grey bar can sit to the
+            # right of a shorter blue one. Order by value so the chart reads as
+            # the single descending ranking it appears to be.
+            xaxis=dict(categoryorder="total descending"),
         )
         st.plotly_chart(fig_census, width='stretch')
     else:
@@ -575,6 +581,8 @@ def _render_advisories(result, config, *, coverage: bool = True, typology: bool 
 
 
 def _tab_overview(result, config, query_ms: float, store_datasets: list[str]):
+    from lid_toolkit.recommender.paradigm import model_paradigm
+
     rec = result.recommended_model
     conf = result.confidence
     iso_codes = config.query_iso_codes
@@ -585,9 +593,10 @@ def _tab_overview(result, config, query_ms: float, store_datasets: list[str]):
 
     c1, c2, c3, c4 = st.columns([2.4, 1, 1, 1])
     c1.metric("Recommended Architecture", arch)
-    c1.caption(f"trained on `{train_ds}`" if train_ds
-               else "zero-shot / off-the-shelf")
-    c2.metric("Consensus Confidence", f"{conf:.0%}")
+    c1.caption((f"trained on `{train_ds}`" if train_ds
+                else "zero-shot / off-the-shelf")
+               + f"  ·  paradigm: **{model_paradigm(rec)}**")
+    c2.metric("Consensus Index", f"{conf:.0%}")
     c3.metric("Languages Covered", len(iso_codes))
     c4.metric("Query Time", f"{query_ms:.0f} ms")
 
@@ -615,6 +624,7 @@ def _tab_overview(result, config, query_ms: float, store_datasets: list[str]):
         shortlist_rows.append({
             "Rank": i,
             "Model": model,
+            "Paradigm": model_paradigm(model),
             "IDW Score": round(score, 4),
             "Neighbours Backing": f"{agreeing.get(model, 0)}/{len(config.neighbours)}",
             "Coverage": "full" if worst_gap == 0 else f"{worst_gap}-language gap",
@@ -628,7 +638,7 @@ def _tab_overview(result, config, query_ms: float, store_datasets: list[str]):
     left, right = st.columns(2)
 
     with left:
-        st.subheader("Consensus Confidence")
+        st.subheader("Consensus Index")
         colour = _SAGE if conf >= 0.67 else (_AMBER if conf >= 0.34 else _CLAY)
         fig_gauge = go.Figure(go.Indicator(
             mode="gauge+number",
@@ -677,7 +687,7 @@ def _tab_overview(result, config, query_ms: float, store_datasets: list[str]):
             st.plotly_chart(fig_pie, width='stretch')
             st.caption(
                 "Family of each retrieved neighbour's own best-performing model. "
-                "A split ring is what a consensus confidence below 1.0 looks like."
+                "A split ring is what a consensus index below 1.0 looks like."
             )
         else:
             st.info("No neighbour data available.")
@@ -836,19 +846,19 @@ $c_n^m \in [0,1]$ is the language coverage factor
         _render_idw_breakdown(trace)
 
     # ── Step 5: Confidence ────────────────────────────────────────────────────
-    with st.expander("**Step 5 — Consensus Confidence**", expanded=False):
+    with st.expander("**Step 5 — Consensus Index**", expanded=False):
         conf_info = trace.get("confidence", {})
         n_agree = conf_info.get("n_agreeing", 0)
         k_total = conf_info.get("k", len(config.neighbours))
         confidence = conf_info.get("confidence", result.confidence)
         st.markdown(r"""
-Confidence is the **fraction of top-k neighbours** that independently agree on the winning model:
+The consensus index is the **fraction of top-k neighbours** that independently agree on the winning model:
 
-$$\text{Confidence} = \frac{\left|\left\{n \in \text{top-}k : \text{best\_model}(n) = M^*\right\}\right|}{k}$$
+$$C =\frac{\left|\left\{n \in \text{top-}k : \text{best\_model}(n) = M^*\right\}\right|}{k}$$
 """)
         st.info(
             f"**{n_agree} of {k_total} neighbours** agree on `{result.recommended_model}` "
-            f"→ Confidence = {n_agree}/{k_total} = **{confidence:.0%}**"
+            f"→ Consensus index = {n_agree}/{k_total} = **{confidence:.0%}**"
         )
         cols = st.columns(max(1, k_total))
         for i, (col, nb) in enumerate(zip(cols, config.neighbours)):
@@ -1539,7 +1549,7 @@ def main():
    the Meta-Knowledge Base from the cached fingerprint in milliseconds.
 5. **Explore** six panels:
    - **Corpus Profile** — language census, document lengths, fingerprint composition.
-   - **Recommendation** — model, consensus confidence, ranked shortlist, all model scores.
+   - **Recommendation** — model, consensus index, ranked shortlist, all model scores.
    - **How It Works** — step-by-step mathematical walkthrough with interactive charts.
    - **Run Model** — load and run the recommended model directly on your dataset.
    - **Baselines** — compare the framework against naive selection policies.

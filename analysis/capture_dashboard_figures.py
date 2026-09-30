@@ -215,11 +215,19 @@ def main():
         log("  ", facts["latency_banner"])
         log("  ", facts["coverage_warning"])
         shot(page, "fig4_latency_coverage_guard.png", from_controls=True,
-             stop_before="Consensus Confidence")
+             stop_before="Consensus Index")
+
+        # ── Figure 5 — Coverage tab, same latency query ───────────────────────
+        log("FIG 5 — Coverage (inference_time_ms_per_sample)")
+        click_tab(page, "Coverage")
+        resize(page, 1500)
+        shot(page, "fig5_coverage.png", from_controls=True)
 
         browser.close()
 
-    Path(__file__).with_name("capture_facts.json").write_text(
+    # Facts are named after the output directory so a new capture never
+    # overwrites the facts recorded for an earlier set of figures.
+    Path(__file__).with_name(f"capture_facts_{OUT.name}.json").write_text(
         json.dumps(facts, indent=2, ensure_ascii=False), encoding="utf-8")
     log("done")
 

@@ -1,0 +1,487 @@
+{
+  "generated": "2026-09-13",
+  "top_n": 5,
+  "summary": {
+    "n_corpora": 17,
+    "gt_changes_between_splits": 4,
+    "gt_changes_datasets": [
+      "flores_plus",
+      "language-identification",
+      "multi_eurlex",
+      "tweet_sentiment_multilingual"
+    ],
+    "median_best_second_gap_eval": 0.000696,
+    "pooled_median_top5_abs_shift": 0.000207,
+    "corpora_gap_below_median_shift": 7,
+    "corpora_gap_below_median_shift_datasets": [
+      "europarl",
+      "flores_plus",
+      "language-identification",
+      "multi_eurlex",
+      "stsb_multi_mt",
+      "tweet_sentiment_multilingual",
+      "xlsum"
+    ],
+    "tml_win_corpora_eval": [
+      {
+        "dataset": "europarl",
+        "margin_eval": 0.000112,
+        "winner_val": "TML",
+        "margin_val": 0.000118,
+        "top5_max_abs_shift": 1.9e-05
+      },
+      {
+        "dataset": "multi_eurlex",
+        "margin_eval": 9e-06,
+        "winner_val": "TML",
+        "margin_val": 2.4e-05,
+        "top5_max_abs_shift": 7.4e-05
+      },
+      {
+        "dataset": "stsb_multi_mt",
+        "margin_eval": 0.000141,
+        "winner_val": "TML",
+        "margin_val": 0.000509,
+        "top5_max_abs_shift": 0.001125
+      },
+      {
+        "dataset": "tweet_sentiment_multilingual",
+        "margin_eval": 0.003851,
+        "winner_val": "TML",
+        "margin_val": 0.001148,
+        "top5_max_abs_shift": 0.003821
+      }
+    ],
+    "paradigm_winner_flips": 1,
+    "paradigm_winner_flips_datasets": [
+      "language-identification"
+    ]
+  },
+  "per_dataset": [
+    {
+      "dataset": "OpenLID-v2",
+      "n_common_candidates": 105,
+      "gt_eval": "fasttext_subword_OpenLID-v2",
+      "gt_val": "fasttext_subword_OpenLID-v2",
+      "gt_same": true,
+      "best_second_gap_eval": 0.010309,
+      "top5_median_abs_shift": 9.7e-05,
+      "top5_max_abs_shift": 0.00024,
+      "gap_below_median_shift": false,
+      "all_candidates_median_abs_shift": 0.000518,
+      "paradigm_eval": {
+        "best_tml": 0.983709,
+        "best_neural": 0.994018,
+        "winner": "neural",
+        "margin": 0.010309
+      },
+      "paradigm_val": {
+        "best_tml": 0.983826,
+        "best_neural": 0.993997,
+        "winner": "neural",
+        "margin": 0.010171
+      },
+      "paradigm_winner_same": true
+    },
+    {
+      "dataset": "amazon_reviews_multi",
+      "n_common_candidates": 105,
+      "gt_eval": "fasttext_subword_amazon_reviews_multi",
+      "gt_val": "fasttext_subword_amazon_reviews_multi",
+      "gt_same": true,
+      "best_second_gap_eval": 0.000696,
+      "top5_median_abs_shift": 9e-05,
+      "top5_max_abs_shift": 0.000135,
+      "gap_below_median_shift": false,
+      "all_candidates_median_abs_shift": 0.00098,
+      "paradigm_eval": {
+        "best_tml": 0.999148,
+        "best_neural": 0.999844,
+        "winner": "neural",
+        "margin": 0.000696
+      },
+      "paradigm_val": {
+        "best_tml": 0.999144,
+        "best_neural": 0.999805,
+        "winner": "neural",
+        "margin": 0.000661
+      },
+      "paradigm_winner_same": true
+    },
+    {
+      "dataset": "europarl",
+      "n_common_candidates": 105,
+      "gt_eval": "bow_char_ngram_3_5_europarl",
+      "gt_val": "bow_char_ngram_3_5_europarl",
+      "gt_same": true,
+      "best_second_gap_eval": 7e-06,
+      "top5_median_abs_shift": 1.1e-05,
+      "top5_max_abs_shift": 1.9e-05,
+      "gap_below_median_shift": true,
+      "all_candidates_median_abs_shift": 0.000242,
+      "paradigm_eval": {
+        "best_tml": 0.999548,
+        "best_neural": 0.999436,
+        "winner": "TML",
+        "margin": 0.000112
+      },
+      "paradigm_val": {
+        "best_tml": 0.999565,
+        "best_neural": 0.999447,
+        "winner": "TML",
+        "margin": 0.000118
+      },
+      "paradigm_winner_same": true
+    },
+    {
+      "dataset": "exorde-social-media-december-2024-week1",
+      "n_common_candidates": 105,
+      "gt_eval": "lid.176_exorde-social-media-december-2024-week1",
+      "gt_val": "lid.176_exorde-social-media-december-2024-week1",
+      "gt_same": true,
+      "best_second_gap_eval": 0.009143,
+      "top5_median_abs_shift": 0.000305,
+      "top5_max_abs_shift": 0.001109,
+      "gap_below_median_shift": false,
+      "all_candidates_median_abs_shift": 0.001026,
+      "paradigm_eval": {
+        "best_tml": 0.9223,
+        "best_neural": 0.977907,
+        "winner": "neural",
+        "margin": 0.055607
+      },
+      "paradigm_val": {
+        "best_tml": 0.923409,
+        "best_neural": 0.97781,
+        "winner": "neural",
+        "margin": 0.054401
+      },
+      "paradigm_winner_same": true
+    },
+    {
+      "dataset": "flores_plus",
+      "n_common_candidates": 105,
+      "gt_eval": "xlm_v_base_language_id",
+      "gt_val": "fasttext_subword_OpenLID-v2",
+      "gt_same": false,
+      "best_second_gap_eval": 0.000102,
+      "top5_median_abs_shift": 0.001337,
+      "top5_max_abs_shift": 0.002473,
+      "gap_below_median_shift": true,
+      "all_candidates_median_abs_shift": 0.008215,
+      "paradigm_eval": {
+        "best_tml": 0.982799,
+        "best_neural": 0.995213,
+        "winner": "neural",
+        "margin": 0.012414
+      },
+      "paradigm_val": {
+        "best_tml": 0.986883,
+        "best_neural": 0.996448,
+        "winner": "neural",
+        "margin": 0.009565
+      },
+      "paradigm_winner_same": true
+    },
+    {
+      "dataset": "language-identification",
+      "n_common_candidates": 105,
+      "gt_eval": "fasttext_subword_language-identification",
+      "gt_val": "tfidf_char_ngram_3_5_language-identification",
+      "gt_same": false,
+      "best_second_gap_eval": 2e-06,
+      "top5_median_abs_shift": 0.000377,
+      "top5_max_abs_shift": 0.001833,
+      "gap_below_median_shift": true,
+      "all_candidates_median_abs_shift": 0.003612,
+      "paradigm_eval": {
+        "best_tml": 0.997865,
+        "best_neural": 0.997867,
+        "winner": "neural",
+        "margin": 2e-06
+      },
+      "paradigm_val": {
+        "best_tml": 0.997488,
+        "best_neural": 0.996157,
+        "winner": "TML",
+        "margin": 0.001331
+      },
+      "paradigm_winner_same": false
+    },
+    {
+      "dataset": "massive",
+      "n_common_candidates": 105,
+      "gt_eval": "fasttext_subword_massive",
+      "gt_val": "fasttext_subword_massive",
+      "gt_same": true,
+      "best_second_gap_eval": 0.007271,
+      "top5_median_abs_shift": 0.000819,
+      "top5_max_abs_shift": 0.001004,
+      "gap_below_median_shift": false,
+      "all_candidates_median_abs_shift": 0.005399,
+      "paradigm_eval": {
+        "best_tml": 0.990148,
+        "best_neural": 0.997419,
+        "winner": "neural",
+        "margin": 0.007271
+      },
+      "paradigm_val": {
+        "best_tml": 0.991152,
+        "best_neural": 0.997814,
+        "winner": "neural",
+        "margin": 0.006662
+      },
+      "paradigm_winner_same": true
+    },
+    {
+      "dataset": "mmarco",
+      "n_common_candidates": 105,
+      "gt_eval": "fasttext_subword_mmarco",
+      "gt_val": "fasttext_subword_mmarco",
+      "gt_same": true,
+      "best_second_gap_eval": 0.009809,
+      "top5_median_abs_shift": 0.000176,
+      "top5_max_abs_shift": 0.000596,
+      "gap_below_median_shift": false,
+      "all_candidates_median_abs_shift": 0.000603,
+      "paradigm_eval": {
+        "best_tml": 0.98768,
+        "best_neural": 0.997489,
+        "winner": "neural",
+        "margin": 0.009809
+      },
+      "paradigm_val": {
+        "best_tml": 0.987504,
+        "best_neural": 0.997489,
+        "winner": "neural",
+        "margin": 0.009985
+      },
+      "paradigm_winner_same": true
+    },
+    {
+      "dataset": "multi_eurlex",
+      "n_common_candidates": 105,
+      "gt_eval": "bow_maxabs_lr_char_ngram_3_5_multi_eurlex",
+      "gt_val": "tfidf_lr_char_ngram_3_5_multi_eurlex",
+      "gt_same": false,
+      "best_second_gap_eval": 9e-06,
+      "top5_median_abs_shift": 1.8e-05,
+      "top5_max_abs_shift": 7.4e-05,
+      "gap_below_median_shift": true,
+      "all_candidates_median_abs_shift": 0.000854,
+      "paradigm_eval": {
+        "best_tml": 0.999814,
+        "best_neural": 0.999805,
+        "winner": "TML",
+        "margin": 9e-06
+      },
+      "paradigm_val": {
+        "best_tml": 0.999839,
+        "best_neural": 0.999815,
+        "winner": "TML",
+        "margin": 2.4e-05
+      },
+      "paradigm_winner_same": true
+    },
+    {
+      "dataset": "multilingual_cc_news",
+      "n_common_candidates": 105,
+      "gt_eval": "fasttext_subword_multilingual_cc_news",
+      "gt_val": "fasttext_subword_multilingual_cc_news",
+      "gt_same": true,
+      "best_second_gap_eval": 0.011184,
+      "top5_median_abs_shift": 4.1e-05,
+      "top5_max_abs_shift": 0.000294,
+      "gap_below_median_shift": false,
+      "all_candidates_median_abs_shift": 0.000709,
+      "paradigm_eval": {
+        "best_tml": 0.979412,
+        "best_neural": 0.997135,
+        "winner": "neural",
+        "margin": 0.017723
+      },
+      "paradigm_val": {
+        "best_tml": 0.979478,
+        "best_neural": 0.997123,
+        "winner": "neural",
+        "margin": 0.017645
+      },
+      "paradigm_winner_same": true
+    },
+    {
+      "dataset": "multilingual_toxicity_dataset",
+      "n_common_candidates": 105,
+      "gt_eval": "fasttext_subword_multilingual_toxicity_dataset",
+      "gt_val": "fasttext_subword_multilingual_toxicity_dataset",
+      "gt_same": true,
+      "best_second_gap_eval": 0.003745,
+      "top5_median_abs_shift": 0.000755,
+      "top5_max_abs_shift": 0.003961,
+      "gap_below_median_shift": false,
+      "all_candidates_median_abs_shift": 0.006183,
+      "paradigm_eval": {
+        "best_tml": 0.985016,
+        "best_neural": 0.993651,
+        "winner": "neural",
+        "margin": 0.008635
+      },
+      "paradigm_val": {
+        "best_tml": 0.981988,
+        "best_neural": 0.994406,
+        "winner": "neural",
+        "margin": 0.012418
+      },
+      "paradigm_winner_same": true
+    },
+    {
+      "dataset": "stsb_multi_mt",
+      "n_common_candidates": 105,
+      "gt_eval": "tfidf_lr_char_ngram_3_5_stsb_multi_mt",
+      "gt_val": "tfidf_lr_char_ngram_3_5_stsb_multi_mt",
+      "gt_same": true,
+      "best_second_gap_eval": 0.000141,
+      "top5_median_abs_shift": 0.000518,
+      "top5_max_abs_shift": 0.001125,
+      "gap_below_median_shift": true,
+      "all_candidates_median_abs_shift": 0.002141,
+      "paradigm_eval": {
+        "best_tml": 0.994159,
+        "best_neural": 0.994018,
+        "winner": "TML",
+        "margin": 0.000141
+      },
+      "paradigm_val": {
+        "best_tml": 0.994653,
+        "best_neural": 0.994144,
+        "winner": "TML",
+        "margin": 0.000509
+      },
+      "paradigm_winner_same": true
+    },
+    {
+      "dataset": "tweet_sentiment_multilingual",
+      "n_common_candidates": 105,
+      "gt_eval": "bow_char_ngram_3_5_tweet_sentiment_multilingual",
+      "gt_val": "bow_maxabs_lr_char_ngram_3_5_tweet_sentiment_multilingual",
+      "gt_same": false,
+      "best_second_gap_eval": 0.0,
+      "top5_median_abs_shift": 0.001119,
+      "top5_max_abs_shift": 0.003821,
+      "gap_below_median_shift": true,
+      "all_candidates_median_abs_shift": 0.003749,
+      "paradigm_eval": {
+        "best_tml": 0.998077,
+        "best_neural": 0.994226,
+        "winner": "TML",
+        "margin": 0.003851
+      },
+      "paradigm_val": {
+        "best_tml": 0.995031,
+        "best_neural": 0.993883,
+        "winner": "TML",
+        "margin": 0.001148
+      },
+      "paradigm_winner_same": true
+    },
+    {
+      "dataset": "tydiqa",
+      "n_common_candidates": 105,
+      "gt_eval": "fasttext_subword_tydiqa",
+      "gt_val": "fasttext_subword_tydiqa",
+      "gt_same": true,
+      "best_second_gap_eval": 0.000836,
+      "top5_median_abs_shift": 0.000289,
+      "top5_max_abs_shift": 0.000889,
+      "gap_below_median_shift": false,
+      "all_candidates_median_abs_shift": 0.007023,
+      "paradigm_eval": {
+        "best_tml": 0.998644,
+        "best_neural": 0.999896,
+        "winner": "neural",
+        "margin": 0.001252
+      },
+      "paradigm_val": {
+        "best_tml": 0.997955,
+        "best_neural": 0.999693,
+        "winner": "neural",
+        "margin": 0.001738
+      },
+      "paradigm_winner_same": true
+    },
+    {
+      "dataset": "wikipedia",
+      "n_common_candidates": 105,
+      "gt_eval": "fasttext_subword_wikipedia",
+      "gt_val": "fasttext_subword_wikipedia",
+      "gt_same": true,
+      "best_second_gap_eval": 0.011294,
+      "top5_median_abs_shift": 0.00019,
+      "top5_max_abs_shift": 0.000441,
+      "gap_below_median_shift": false,
+      "all_candidates_median_abs_shift": 0.000287,
+      "paradigm_eval": {
+        "best_tml": 0.985074,
+        "best_neural": 0.996368,
+        "winner": "neural",
+        "margin": 0.011294
+      },
+      "paradigm_val": {
+        "best_tml": 0.985081,
+        "best_neural": 0.996178,
+        "winner": "neural",
+        "margin": 0.011097
+      },
+      "paradigm_winner_same": true
+    },
+    {
+      "dataset": "xlsum",
+      "n_common_candidates": 105,
+      "gt_eval": "fasttext_subword_xlsum",
+      "gt_val": "fasttext_subword_xlsum",
+      "gt_same": true,
+      "best_second_gap_eval": 0.000127,
+      "top5_median_abs_shift": 0.000207,
+      "top5_max_abs_shift": 0.000444,
+      "gap_below_median_shift": true,
+      "all_candidates_median_abs_shift": 0.001789,
+      "paradigm_eval": {
+        "best_tml": 0.981609,
+        "best_neural": 0.998858,
+        "winner": "neural",
+        "margin": 0.017249
+      },
+      "paradigm_val": {
+        "best_tml": 0.982431,
+        "best_neural": 0.99866,
+        "winner": "neural",
+        "margin": 0.016229
+      },
+      "paradigm_winner_same": true
+    },
+    {
+      "dataset": "xnli",
+      "n_common_candidates": 105,
+      "gt_eval": "fasttext_subword_xnli",
+      "gt_val": "fasttext_subword_xnli",
+      "gt_same": true,
+      "best_second_gap_eval": 0.000172,
+      "top5_median_abs_shift": 4.4e-05,
+      "top5_max_abs_shift": 0.000118,
+      "gap_below_median_shift": false,
+      "all_candidates_median_abs_shift": 0.000671,
+      "paradigm_eval": {
+        "best_tml": 0.999461,
+        "best_neural": 0.999633,
+        "winner": "neural",
+        "margin": 0.000172
+      },
+      "paradigm_val": {
+        "best_tml": 0.99944,
+        "best_neural": 0.999544,
+        "winner": "neural",
+        "margin": 0.000104
+      },
+      "paradigm_winner_same": true
+    }
+  ]
+}

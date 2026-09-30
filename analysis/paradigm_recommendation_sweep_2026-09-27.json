@@ -1,0 +1,1658 @@
+{
+  "generated": "2026-09-27",
+  "k": 3,
+  "n_queries": 17,
+  "ground_truth_source": "C:\\Users\\User\\OneDrive\\Masters\\LID_experiments\\model_benchmarking_evaluation",
+  "per_metric": {
+    "accuracy": {
+      "n_TML_recommendations": 0,
+      "n_neural_recommendations": 17,
+      "gt_TML_corpora": 4,
+      "paradigm_agreement": 13,
+      "majority_baseline_agreement": 13,
+      "TML_recommendations_correct": 0,
+      "median_best_tml_rank": 4,
+      "min_best_tml_rank": 2,
+      "rows": [
+        {
+          "dataset": "amazon_reviews_multi",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_amazon_reviews_multi",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "europarl",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "bow_char_ngram_3_5_europarl",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "exorde-social-media-december-2024-week1",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "lid.176_exorde-social-media-december-2024-week1",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 2,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "flores_plus",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_OpenLID-v2",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 6,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "language-identification",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_language-identification",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 2,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "massive",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_massive",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "mmarco",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_mmarco",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 5,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multi_eurlex",
+          "recommended": "fasttext_subword_wikipedia",
+          "paradigm": "neural",
+          "gt_model": "bow_maxabs_lr_char_ngram_3_5_multi_eurlex",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multilingual_cc_news",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_multilingual_cc_news",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multilingual_toxicity_dataset",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_multilingual_toxicity_dataset",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "OpenLID-v2",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_OpenLID-v2",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "stsb_multi_mt",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "tfidf_lr_char_ngram_3_5_stsb_multi_mt",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "tweet_sentiment_multilingual",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "bow_char_ngram_3_5_tweet_sentiment_multilingual",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "tydiqa",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_tydiqa",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "wikipedia",
+          "recommended": "fasttext_subword_wikipedia",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_wikipedia",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "xlsum",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_xlsum",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "xnli",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_xnli",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        }
+      ]
+    },
+    "f1_macro": {
+      "n_TML_recommendations": 5,
+      "n_neural_recommendations": 12,
+      "gt_TML_corpora": 5,
+      "paradigm_agreement": 11,
+      "majority_baseline_agreement": 12,
+      "TML_recommendations_correct": 2,
+      "median_best_tml_rank": 3,
+      "min_best_tml_rank": 1,
+      "rows": [
+        {
+          "dataset": "amazon_reviews_multi",
+          "recommended": "tfidf_lr_char_ngram_3_5_multilingual_toxicity_dataset",
+          "paradigm": "TML",
+          "gt_model": "fasttext_subword_amazon_reviews_multi",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 1,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "europarl",
+          "recommended": "tfidf_lr_char_ngram_3_5_europarl",
+          "paradigm": "TML",
+          "gt_model": "bow_char_ngram_3_5_europarl",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 1,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "exorde-social-media-december-2024-week1",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 2,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "flores_plus",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_OpenLID-v2",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "language-identification",
+          "recommended": "tfidf_lr_char_ngram_3_5_language-identification",
+          "paradigm": "TML",
+          "gt_model": "tfidf_char_ngram_3_5_language-identification",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 1,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "massive",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_massive",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "mmarco",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_mmarco",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multi_eurlex",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "bow_maxabs_lr_char_ngram_3_5_multi_eurlex",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multilingual_cc_news",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_multilingual_cc_news",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multilingual_toxicity_dataset",
+          "recommended": "tfidf_lr_char_ngram_3_5_exorde-social-media-december-2024-week1",
+          "paradigm": "TML",
+          "gt_model": "fasttext_subword_multilingual_toxicity_dataset",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 1,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "OpenLID-v2",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_OpenLID-v2",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "stsb_multi_mt",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "tfidf_lr_char_ngram_3_5_stsb_multi_mt",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "tweet_sentiment_multilingual",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "bow_char_ngram_3_5_tweet_sentiment_multilingual",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 2,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "tydiqa",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_tydiqa",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "wikipedia",
+          "recommended": "fasttext_subword_wikipedia",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_wikipedia",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "xlsum",
+          "recommended": "fasttext_subword_xlsum",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_xlsum",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "xnli",
+          "recommended": "tfidf_lr_char_ngram_3_5_exorde-social-media-december-2024-week1",
+          "paradigm": "TML",
+          "gt_model": "fasttext_subword_xnli",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 1,
+          "shortlist_size": 109
+        }
+      ]
+    },
+    "f1_weighted": {
+      "n_TML_recommendations": 0,
+      "n_neural_recommendations": 17,
+      "gt_TML_corpora": 4,
+      "paradigm_agreement": 13,
+      "majority_baseline_agreement": 13,
+      "TML_recommendations_correct": 0,
+      "median_best_tml_rank": 4,
+      "min_best_tml_rank": 3,
+      "rows": [
+        {
+          "dataset": "amazon_reviews_multi",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_amazon_reviews_multi",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "europarl",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "bow_char_ngram_3_5_europarl",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "exorde-social-media-december-2024-week1",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "lid.176_exorde-social-media-december-2024-week1",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "flores_plus",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "xlm_v_base_language_id",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 6,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "language-identification",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_language-identification",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "massive",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_massive",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "mmarco",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_mmarco",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multi_eurlex",
+          "recommended": "fasttext_subword_wikipedia",
+          "paradigm": "neural",
+          "gt_model": "bow_maxabs_lr_char_ngram_3_5_multi_eurlex",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multilingual_cc_news",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_multilingual_cc_news",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multilingual_toxicity_dataset",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_multilingual_toxicity_dataset",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "OpenLID-v2",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_OpenLID-v2",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "stsb_multi_mt",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "tfidf_lr_char_ngram_3_5_stsb_multi_mt",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "tweet_sentiment_multilingual",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "bow_char_ngram_3_5_tweet_sentiment_multilingual",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "tydiqa",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_tydiqa",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "wikipedia",
+          "recommended": "fasttext_subword_wikipedia",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_wikipedia",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "xlsum",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_xlsum",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "xnli",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_xnli",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        }
+      ]
+    },
+    "precision_macro": {
+      "n_TML_recommendations": 4,
+      "n_neural_recommendations": 13,
+      "gt_TML_corpora": 5,
+      "paradigm_agreement": 12,
+      "majority_baseline_agreement": 12,
+      "TML_recommendations_correct": 2,
+      "median_best_tml_rank": 2,
+      "min_best_tml_rank": 1,
+      "rows": [
+        {
+          "dataset": "amazon_reviews_multi",
+          "recommended": "tfidf_lr_char_ngram_3_5_multilingual_toxicity_dataset",
+          "paradigm": "TML",
+          "gt_model": "fasttext_subword_amazon_reviews_multi",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 1,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "europarl",
+          "recommended": "tfidf_char_ngram_3_5_exorde-social-media-december-2024-week1",
+          "paradigm": "TML",
+          "gt_model": "bow_char_ngram_3_5_europarl",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 1,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "exorde-social-media-december-2024-week1",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "flores_plus",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_OpenLID-v2",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "language-identification",
+          "recommended": "tfidf_lr_char_ngram_3_5_language-identification",
+          "paradigm": "TML",
+          "gt_model": "tfidf_char_ngram_3_5_language-identification",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 1,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "massive",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_massive",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "mmarco",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_mmarco",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 2,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multi_eurlex",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "bow_maxabs_lr_char_ngram_3_5_multi_eurlex",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 2,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multilingual_cc_news",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_multilingual_cc_news",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multilingual_toxicity_dataset",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_multilingual_toxicity_dataset",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 2,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "OpenLID-v2",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_OpenLID-v2",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "stsb_multi_mt",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "tfidf_lr_char_ngram_3_5_stsb_multi_mt",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 2,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "tweet_sentiment_multilingual",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "bow_char_ngram_3_5_tweet_sentiment_multilingual",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 2,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "tydiqa",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_tydiqa",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "wikipedia",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_wikipedia",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "xlsum",
+          "recommended": "tfidf_char_ngram_3_5_xlsum",
+          "paradigm": "TML",
+          "gt_model": "fasttext_subword_xlsum",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 1,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "xnli",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_xnli",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 2,
+          "shortlist_size": 109
+        }
+      ]
+    },
+    "precision_weighted": {
+      "n_TML_recommendations": 0,
+      "n_neural_recommendations": 17,
+      "gt_TML_corpora": 1,
+      "paradigm_agreement": 16,
+      "majority_baseline_agreement": 16,
+      "TML_recommendations_correct": 0,
+      "median_best_tml_rank": 4,
+      "min_best_tml_rank": 3,
+      "rows": [
+        {
+          "dataset": "amazon_reviews_multi",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "xlm_v_base_language_id",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "europarl",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "xlm_v_base_language_id",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "exorde-social-media-december-2024-week1",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "lid.176_exorde-social-media-december-2024-week1",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "flores_plus",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "xlm_v_base_language_id",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "language-identification",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "xlm_v_base_language_id",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "massive",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "xlm_v_base_language_id",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "mmarco",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_mmarco",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multi_eurlex",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "xlm_v_base_language_id",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multilingual_cc_news",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_multilingual_cc_news",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multilingual_toxicity_dataset",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "xlm_v_base_language_id",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "OpenLID-v2",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_OpenLID-v2",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "stsb_multi_mt",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "xlm_v_base_language_id",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "tweet_sentiment_multilingual",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "tfidf_char_ngram_3_5_tweet_sentiment_multilingual",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "tydiqa",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "xlm_v_base_language_id",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "wikipedia",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_wikipedia",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "xlsum",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "xlm_v_base_language_id",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "xnli",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "xlm_v_base_language_id",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        }
+      ]
+    },
+    "recall_macro": {
+      "n_TML_recommendations": 3,
+      "n_neural_recommendations": 14,
+      "gt_TML_corpora": 5,
+      "paradigm_agreement": 13,
+      "majority_baseline_agreement": 12,
+      "TML_recommendations_correct": 2,
+      "median_best_tml_rank": 3,
+      "min_best_tml_rank": 1,
+      "rows": [
+        {
+          "dataset": "amazon_reviews_multi",
+          "recommended": "fasttext_subword_amazon_reviews_multi",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_amazon_reviews_multi",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 2,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "europarl",
+          "recommended": "tfidf_char_ngram_3_5_europarl",
+          "paradigm": "TML",
+          "gt_model": "bow_char_ngram_3_5_europarl",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 1,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "exorde-social-media-december-2024-week1",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 2,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "flores_plus",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_OpenLID-v2",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "language-identification",
+          "recommended": "tfidf_lr_char_ngram_3_5_language-identification",
+          "paradigm": "TML",
+          "gt_model": "tfidf_char_ngram_3_5_language-identification",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 1,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "massive",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_massive",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "mmarco",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_mmarco",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multi_eurlex",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "bow_maxabs_lr_char_ngram_3_5_multi_eurlex",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multilingual_cc_news",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_multilingual_cc_news",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multilingual_toxicity_dataset",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_multilingual_toxicity_dataset",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 2,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "OpenLID-v2",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_OpenLID-v2",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "stsb_multi_mt",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "tfidf_lr_char_ngram_3_5_stsb_multi_mt",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "tweet_sentiment_multilingual",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "bow_char_ngram_3_5_tweet_sentiment_multilingual",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 2,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "tydiqa",
+          "recommended": "bow_maxabs_lr_char_ngram_3_5_tydiqa",
+          "paradigm": "TML",
+          "gt_model": "fasttext_subword_tydiqa",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 1,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "wikipedia",
+          "recommended": "fasttext_subword_wikipedia",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_wikipedia",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "xlsum",
+          "recommended": "fasttext_subword_xlsum",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_xlsum",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "xnli",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_xnli",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 2,
+          "shortlist_size": 109
+        }
+      ]
+    },
+    "recall_weighted": {
+      "n_TML_recommendations": 0,
+      "n_neural_recommendations": 17,
+      "gt_TML_corpora": 4,
+      "paradigm_agreement": 13,
+      "majority_baseline_agreement": 13,
+      "TML_recommendations_correct": 0,
+      "median_best_tml_rank": 4,
+      "min_best_tml_rank": 2,
+      "rows": [
+        {
+          "dataset": "amazon_reviews_multi",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_amazon_reviews_multi",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "europarl",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "bow_char_ngram_3_5_europarl",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "exorde-social-media-december-2024-week1",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "lid.176_exorde-social-media-december-2024-week1",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 2,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "flores_plus",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_OpenLID-v2",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 6,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "language-identification",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_language-identification",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 2,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "massive",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_massive",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "mmarco",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_mmarco",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 5,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multi_eurlex",
+          "recommended": "fasttext_subword_wikipedia",
+          "paradigm": "neural",
+          "gt_model": "bow_maxabs_lr_char_ngram_3_5_multi_eurlex",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multilingual_cc_news",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_multilingual_cc_news",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multilingual_toxicity_dataset",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_multilingual_toxicity_dataset",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "OpenLID-v2",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_OpenLID-v2",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "stsb_multi_mt",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "tfidf_lr_char_ngram_3_5_stsb_multi_mt",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "tweet_sentiment_multilingual",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "bow_char_ngram_3_5_tweet_sentiment_multilingual",
+          "gt_paradigm": "TML",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "tydiqa",
+          "recommended": "xlm_v_base_language_id",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_tydiqa",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "wikipedia",
+          "recommended": "fasttext_subword_wikipedia",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_wikipedia",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "xlsum",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_xlsum",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 4,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "xnli",
+          "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_subword_xnli",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 3,
+          "shortlist_size": 109
+        }
+      ]
+    },
+    "inference_time_total_s": {
+      "n_TML_recommendations": 0,
+      "n_neural_recommendations": 17,
+      "gt_TML_corpora": 0,
+      "paradigm_agreement": 17,
+      "majority_baseline_agreement": 17,
+      "TML_recommendations_correct": 0,
+      "median_best_tml_rank": 20,
+      "min_best_tml_rank": 8,
+      "rows": [
+        {
+          "dataset": "amazon_reviews_multi",
+          "recommended": "fasttext_word_multilingual_toxicity_dataset",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_multilingual_toxicity_dataset",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 26,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "europarl",
+          "recommended": "fasttext_word_multi_eurlex",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_europarl",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 14,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "exorde-social-media-december-2024-week1",
+          "recommended": "fasttext_word_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_exorde-social-media-december-2024-week1",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 16,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "flores_plus",
+          "recommended": "fasttext_word_multi_eurlex",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_flores_plus",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 12,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "language-identification",
+          "recommended": "fasttext_word_OpenLID-v2",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_language-identification",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 23,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "massive",
+          "recommended": "fasttext_word_OpenLID-v2",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_massive",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 17,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "mmarco",
+          "recommended": "fasttext_word_flores_plus",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_mmarco",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 12,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multi_eurlex",
+          "recommended": "fasttext_word_multi_eurlex",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_multi_eurlex",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 20,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multilingual_cc_news",
+          "recommended": "fasttext_word_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_multilingual_cc_news",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 22,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multilingual_toxicity_dataset",
+          "recommended": "fasttext_word_OpenLID-v2",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_multilingual_toxicity_dataset",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 21,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "OpenLID-v2",
+          "recommended": "fasttext_word_flores_plus",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_OpenLID-v2",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 15,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "stsb_multi_mt",
+          "recommended": "fasttext_word_flores_plus",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_stsb_multi_mt",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 11,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "tweet_sentiment_multilingual",
+          "recommended": "lid.176_tweet_sentiment_multilingual",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_tweet_sentiment_multilingual",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 22,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "tydiqa",
+          "recommended": "fasttext_word_flores_plus",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_tydiqa",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 8,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "wikipedia",
+          "recommended": "fasttext_word_flores_plus",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_multi_eurlex",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 24,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "xlsum",
+          "recommended": "fasttext_word_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_xlsum",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 23,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "xnli",
+          "recommended": "fasttext_word_OpenLID-v2",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_stsb_multi_mt",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 22,
+          "shortlist_size": 109
+        }
+      ]
+    },
+    "inference_time_ms_per_sample": {
+      "n_TML_recommendations": 0,
+      "n_neural_recommendations": 17,
+      "gt_TML_corpora": 0,
+      "paradigm_agreement": 17,
+      "majority_baseline_agreement": 17,
+      "TML_recommendations_correct": 0,
+      "median_best_tml_rank": 22,
+      "min_best_tml_rank": 12,
+      "rows": [
+        {
+          "dataset": "amazon_reviews_multi",
+          "recommended": "fasttext_word_mmarco",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_multilingual_toxicity_dataset",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 26,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "europarl",
+          "recommended": "fasttext_word_OpenLID-v2",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_europarl",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 26,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "exorde-social-media-december-2024-week1",
+          "recommended": "fasttext_word_flores_plus",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_exorde-social-media-december-2024-week1",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 18,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "flores_plus",
+          "recommended": "fasttext_word_flores_plus",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_flores_plus",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 15,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "language-identification",
+          "recommended": "fasttext_word_OpenLID-v2",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_language-identification",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 24,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "massive",
+          "recommended": "fasttext_word_massive",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_massive",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 18,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "mmarco",
+          "recommended": "fasttext_word_massive",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_mmarco",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 22,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multi_eurlex",
+          "recommended": "fasttext_word_multi_eurlex",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_multi_eurlex",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 21,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multilingual_cc_news",
+          "recommended": "fasttext_word_flores_plus",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_multilingual_cc_news",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 22,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multilingual_toxicity_dataset",
+          "recommended": "fasttext_word_OpenLID-v2",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_multilingual_toxicity_dataset",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 26,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "OpenLID-v2",
+          "recommended": "fasttext_word_OpenLID-v2",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_OpenLID-v2",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 18,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "stsb_multi_mt",
+          "recommended": "fasttext_word_OpenLID-v2",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_stsb_multi_mt",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 16,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "tweet_sentiment_multilingual",
+          "recommended": "fasttext_word_mmarco",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_tweet_sentiment_multilingual",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 27,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "tydiqa",
+          "recommended": "fasttext_word_flores_plus",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_tydiqa",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 12,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "wikipedia",
+          "recommended": "fasttext_word_flores_plus",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_multi_eurlex",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 24,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "xlsum",
+          "recommended": "fasttext_word_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_xlsum",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 25,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "xnli",
+          "recommended": "fasttext_word_OpenLID-v2",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_stsb_multi_mt",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 25,
+          "shortlist_size": 109
+        }
+      ]
+    },
+    "throughput_samples_per_sec": {
+      "n_TML_recommendations": 0,
+      "n_neural_recommendations": 17,
+      "gt_TML_corpora": 0,
+      "paradigm_agreement": 17,
+      "majority_baseline_agreement": 17,
+      "TML_recommendations_correct": 0,
+      "median_best_tml_rank": 22,
+      "min_best_tml_rank": 12,
+      "rows": [
+        {
+          "dataset": "amazon_reviews_multi",
+          "recommended": "fasttext_word_mmarco",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_multilingual_toxicity_dataset",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 26,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "europarl",
+          "recommended": "fasttext_word_OpenLID-v2",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_europarl",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 26,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "exorde-social-media-december-2024-week1",
+          "recommended": "fasttext_word_flores_plus",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_exorde-social-media-december-2024-week1",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 18,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "flores_plus",
+          "recommended": "fasttext_word_flores_plus",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_flores_plus",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 15,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "language-identification",
+          "recommended": "fasttext_word_OpenLID-v2",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_language-identification",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 24,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "massive",
+          "recommended": "fasttext_word_massive",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_massive",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 18,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "mmarco",
+          "recommended": "fasttext_word_massive",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_mmarco",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 22,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multi_eurlex",
+          "recommended": "fasttext_word_multi_eurlex",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_multi_eurlex",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 21,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multilingual_cc_news",
+          "recommended": "fasttext_word_flores_plus",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_multilingual_cc_news",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 22,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "multilingual_toxicity_dataset",
+          "recommended": "fasttext_word_OpenLID-v2",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_multilingual_toxicity_dataset",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 26,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "OpenLID-v2",
+          "recommended": "fasttext_word_OpenLID-v2",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_OpenLID-v2",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 18,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "stsb_multi_mt",
+          "recommended": "fasttext_word_OpenLID-v2",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_stsb_multi_mt",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 16,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "tweet_sentiment_multilingual",
+          "recommended": "fasttext_word_mmarco",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_tweet_sentiment_multilingual",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 27,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "tydiqa",
+          "recommended": "fasttext_word_flores_plus",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_tydiqa",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 12,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "wikipedia",
+          "recommended": "fasttext_word_flores_plus",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_multi_eurlex",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 24,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "xlsum",
+          "recommended": "fasttext_word_exorde-social-media-december-2024-week1",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_xlsum",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 25,
+          "shortlist_size": 109
+        },
+        {
+          "dataset": "xnli",
+          "recommended": "fasttext_word_OpenLID-v2",
+          "paradigm": "neural",
+          "gt_model": "fasttext_word_stsb_multi_mt",
+          "gt_paradigm": "neural",
+          "best_tml_rank_in_shortlist": 25,
+          "shortlist_size": 109
+        }
+      ]
+    }
+  }
+}

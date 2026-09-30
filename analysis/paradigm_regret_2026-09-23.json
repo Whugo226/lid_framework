@@ -1,0 +1,546 @@
+{
+  "generated": "2026-09-23",
+  "priority_metric": "f1_weighted",
+  "n_datasets": 17,
+  "paradigm_assignment": {
+    "TML": [
+      "bow_char_ngram_3_5",
+      "bow_maxabs_lr_char_ngram_3_5",
+      "tfidf_char_ngram_3_5",
+      "tfidf_lr_char_ngram_3_5"
+    ],
+    "DL": [
+      "cld3",
+      "fasttext_subword",
+      "fasttext_word",
+      "lid.176",
+      "xlm_v_base_language_id"
+    ]
+  },
+  "ground_truth_paradigm_distribution": {
+    "DL": 13,
+    "TML": 4
+  },
+  "majority_class_baseline": {
+    "paradigm": "DL",
+    "correct": 13,
+    "accuracy": 0.7647
+  },
+  "cost_of_always_choosing_dl": {
+    "mean": 0.000242,
+    "max": 0.003851,
+    "n_datasets_where_tml_wins": 4,
+    "gaps_where_tml_wins": [
+      0.000112,
+      9e-06,
+      0.000141,
+      0.003851
+    ]
+  },
+  "scenarios": {
+    "as_published": {
+      "paradigm_correct": 13,
+      "family_correct": 8,
+      "exact_correct": 2,
+      "mean_regret": 0.007287,
+      "recommended_paradigm_distribution": {
+        "DL": 17
+      },
+      "tml_wins_caught": 0
+    },
+    "corpus_excluded": {
+      "paradigm_correct": 13,
+      "family_correct": 9,
+      "exact_correct": 0,
+      "mean_regret": 0.012772,
+      "recommended_paradigm_distribution": {
+        "DL": 17
+      },
+      "tml_wins_caught": 0
+    }
+  },
+  "per_dataset": [
+    {
+      "dataset": "OpenLID-v2",
+      "gt_paradigm": "DL",
+      "best_tml": 0.983709,
+      "best_dl": 0.994018,
+      "paradigm_gap": 0.010309,
+      "cost_of_always_dl": 0.0
+    },
+    {
+      "dataset": "amazon_reviews_multi",
+      "gt_paradigm": "DL",
+      "best_tml": 0.999148,
+      "best_dl": 0.999844,
+      "paradigm_gap": 0.000696,
+      "cost_of_always_dl": 0.0
+    },
+    {
+      "dataset": "europarl",
+      "gt_paradigm": "TML",
+      "best_tml": 0.999548,
+      "best_dl": 0.999436,
+      "paradigm_gap": 0.000112,
+      "cost_of_always_dl": 0.000112
+    },
+    {
+      "dataset": "exorde-social-media-december-2024-week1",
+      "gt_paradigm": "DL",
+      "best_tml": 0.9223,
+      "best_dl": 0.977907,
+      "paradigm_gap": 0.055607,
+      "cost_of_always_dl": 0.0
+    },
+    {
+      "dataset": "flores_plus",
+      "gt_paradigm": "DL",
+      "best_tml": 0.982799,
+      "best_dl": 0.995213,
+      "paradigm_gap": 0.012414,
+      "cost_of_always_dl": 0.0
+    },
+    {
+      "dataset": "language-identification",
+      "gt_paradigm": "DL",
+      "best_tml": 0.997865,
+      "best_dl": 0.997867,
+      "paradigm_gap": 2e-06,
+      "cost_of_always_dl": 0.0
+    },
+    {
+      "dataset": "massive",
+      "gt_paradigm": "DL",
+      "best_tml": 0.990148,
+      "best_dl": 0.997419,
+      "paradigm_gap": 0.007271,
+      "cost_of_always_dl": 0.0
+    },
+    {
+      "dataset": "mmarco",
+      "gt_paradigm": "DL",
+      "best_tml": 0.98768,
+      "best_dl": 0.997489,
+      "paradigm_gap": 0.009809,
+      "cost_of_always_dl": 0.0
+    },
+    {
+      "dataset": "multi_eurlex",
+      "gt_paradigm": "TML",
+      "best_tml": 0.999814,
+      "best_dl": 0.999805,
+      "paradigm_gap": 9e-06,
+      "cost_of_always_dl": 9e-06
+    },
+    {
+      "dataset": "multilingual_cc_news",
+      "gt_paradigm": "DL",
+      "best_tml": 0.979412,
+      "best_dl": 0.997135,
+      "paradigm_gap": 0.017723,
+      "cost_of_always_dl": 0.0
+    },
+    {
+      "dataset": "multilingual_toxicity_dataset",
+      "gt_paradigm": "DL",
+      "best_tml": 0.985016,
+      "best_dl": 0.993651,
+      "paradigm_gap": 0.008635,
+      "cost_of_always_dl": 0.0
+    },
+    {
+      "dataset": "stsb_multi_mt",
+      "gt_paradigm": "TML",
+      "best_tml": 0.994159,
+      "best_dl": 0.994018,
+      "paradigm_gap": 0.000141,
+      "cost_of_always_dl": 0.000141
+    },
+    {
+      "dataset": "tweet_sentiment_multilingual",
+      "gt_paradigm": "TML",
+      "best_tml": 0.998077,
+      "best_dl": 0.994226,
+      "paradigm_gap": 0.003851,
+      "cost_of_always_dl": 0.003851
+    },
+    {
+      "dataset": "tydiqa",
+      "gt_paradigm": "DL",
+      "best_tml": 0.998644,
+      "best_dl": 0.999896,
+      "paradigm_gap": 0.001252,
+      "cost_of_always_dl": 0.0
+    },
+    {
+      "dataset": "wikipedia",
+      "gt_paradigm": "DL",
+      "best_tml": 0.985074,
+      "best_dl": 0.996368,
+      "paradigm_gap": 0.011294,
+      "cost_of_always_dl": 0.0
+    },
+    {
+      "dataset": "xlsum",
+      "gt_paradigm": "DL",
+      "best_tml": 0.981609,
+      "best_dl": 0.998858,
+      "paradigm_gap": 0.017249,
+      "cost_of_always_dl": 0.0
+    },
+    {
+      "dataset": "xnli",
+      "gt_paradigm": "DL",
+      "best_tml": 0.999461,
+      "best_dl": 0.999633,
+      "paradigm_gap": 0.000172,
+      "cost_of_always_dl": 0.0
+    }
+  ],
+  "per_dataset_recommendations": {
+    "as_published": [
+      {
+        "dataset": "OpenLID-v2",
+        "recommended": "xlm_v_base_language_id",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": false,
+        "exact_correct": false,
+        "regret": 0.024746
+      },
+      {
+        "dataset": "amazon_reviews_multi",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": true,
+        "exact_correct": false,
+        "regret": 0.000874
+      },
+      {
+        "dataset": "europarl",
+        "recommended": "xlm_v_base_language_id",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "TML",
+        "paradigm_correct": false,
+        "family_correct": false,
+        "exact_correct": false,
+        "regret": 0.001123
+      },
+      {
+        "dataset": "exorde-social-media-december-2024-week1",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": false,
+        "exact_correct": false,
+        "regret": 0.009143
+      },
+      {
+        "dataset": "flores_plus",
+        "recommended": "xlm_v_base_language_id",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": true,
+        "exact_correct": true,
+        "regret": 0.0
+      },
+      {
+        "dataset": "language-identification",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": true,
+        "exact_correct": false,
+        "regret": 0.002077
+      },
+      {
+        "dataset": "massive",
+        "recommended": "xlm_v_base_language_id",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": false,
+        "exact_correct": false,
+        "regret": 0.019229
+      },
+      {
+        "dataset": "mmarco",
+        "recommended": "xlm_v_base_language_id",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": false,
+        "exact_correct": false,
+        "regret": 0.025948
+      },
+      {
+        "dataset": "multi_eurlex",
+        "recommended": "fasttext_subword_wikipedia",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "TML",
+        "paradigm_correct": false,
+        "family_correct": false,
+        "exact_correct": false,
+        "regret": 0.003902
+      },
+      {
+        "dataset": "multilingual_cc_news",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": true,
+        "exact_correct": false,
+        "regret": 0.011184
+      },
+      {
+        "dataset": "multilingual_toxicity_dataset",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": true,
+        "exact_correct": false,
+        "regret": 0.003745
+      },
+      {
+        "dataset": "stsb_multi_mt",
+        "recommended": "xlm_v_base_language_id",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "TML",
+        "paradigm_correct": false,
+        "family_correct": false,
+        "exact_correct": false,
+        "regret": 0.00291
+      },
+      {
+        "dataset": "tweet_sentiment_multilingual",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "TML",
+        "paradigm_correct": false,
+        "family_correct": false,
+        "exact_correct": false,
+        "regret": 0.015351
+      },
+      {
+        "dataset": "tydiqa",
+        "recommended": "xlm_v_base_language_id",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": false,
+        "exact_correct": false,
+        "regret": 0.001256
+      },
+      {
+        "dataset": "wikipedia",
+        "recommended": "fasttext_subword_wikipedia",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": true,
+        "exact_correct": true,
+        "regret": 0.0
+      },
+      {
+        "dataset": "xlsum",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": true,
+        "exact_correct": false,
+        "regret": 0.00023
+      },
+      {
+        "dataset": "xnli",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": true,
+        "exact_correct": false,
+        "regret": 0.002165
+      }
+    ],
+    "corpus_excluded": [
+      {
+        "dataset": "OpenLID-v2",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": true,
+        "exact_correct": false,
+        "regret": 0.062718
+      },
+      {
+        "dataset": "amazon_reviews_multi",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": true,
+        "exact_correct": false,
+        "regret": 0.000874
+      },
+      {
+        "dataset": "europarl",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "TML",
+        "paradigm_correct": false,
+        "family_correct": false,
+        "exact_correct": false,
+        "regret": 0.001678
+      },
+      {
+        "dataset": "exorde-social-media-december-2024-week1",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": false,
+        "exact_correct": false,
+        "regret": 0.009143
+      },
+      {
+        "dataset": "flores_plus",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": false,
+        "exact_correct": false,
+        "regret": 0.007677
+      },
+      {
+        "dataset": "language-identification",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": true,
+        "exact_correct": false,
+        "regret": 0.002077
+      },
+      {
+        "dataset": "massive",
+        "recommended": "xlm_v_base_language_id",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": false,
+        "exact_correct": false,
+        "regret": 0.019229
+      },
+      {
+        "dataset": "mmarco",
+        "recommended": "xlm_v_base_language_id",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": false,
+        "exact_correct": false,
+        "regret": 0.025948
+      },
+      {
+        "dataset": "multi_eurlex",
+        "recommended": "fasttext_subword_wikipedia",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "TML",
+        "paradigm_correct": false,
+        "family_correct": false,
+        "exact_correct": false,
+        "regret": 0.003902
+      },
+      {
+        "dataset": "multilingual_cc_news",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": true,
+        "exact_correct": false,
+        "regret": 0.011184
+      },
+      {
+        "dataset": "multilingual_toxicity_dataset",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": true,
+        "exact_correct": false,
+        "regret": 0.003745
+      },
+      {
+        "dataset": "stsb_multi_mt",
+        "recommended": "xlm_v_base_language_id",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "TML",
+        "paradigm_correct": false,
+        "family_correct": false,
+        "exact_correct": false,
+        "regret": 0.00291
+      },
+      {
+        "dataset": "tweet_sentiment_multilingual",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "TML",
+        "paradigm_correct": false,
+        "family_correct": false,
+        "exact_correct": false,
+        "regret": 0.015351
+      },
+      {
+        "dataset": "tydiqa",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": true,
+        "exact_correct": false,
+        "regret": 0.014321
+      },
+      {
+        "dataset": "wikipedia",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": true,
+        "exact_correct": false,
+        "regret": 0.03398
+      },
+      {
+        "dataset": "xlsum",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": true,
+        "exact_correct": false,
+        "regret": 0.00023
+      },
+      {
+        "dataset": "xnli",
+        "recommended": "fasttext_subword_exorde-social-media-december-2024-week1",
+        "recommended_paradigm": "DL",
+        "gt_paradigm": "DL",
+        "paradigm_correct": true,
+        "family_correct": true,
+        "exact_correct": false,
+        "regret": 0.002165
+      }
+    ]
+  }
+}

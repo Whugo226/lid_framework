@@ -38,6 +38,7 @@ import pandas as pd
 
 from .fingerprint_builder import FingerprintBuilder
 from .mkb_store import MKBStore, CORE_METRICS, LOWER_IS_BETTER_METRICS
+from .paradigm import model_paradigm
 from .model_language_coverage import zero_shot_inventory
 
 logger = logging.getLogger(__name__)
@@ -80,6 +81,11 @@ class Recommendation:
     explanation: str                           # human-readable explanation
     # Languages in the user's dataset that no recommended model covers
     uncoverable_languages: frozenset[str] = field(default_factory=frozenset)
+
+    @property
+    def recommended_paradigm(self) -> str:
+        """Architectural paradigm (TML or neural) of the recommended model."""
+        return model_paradigm(self.recommended_model)
 
 
 class SimilarityEngine:
@@ -740,9 +746,11 @@ class SimilarityEngine:
         """Generate a human-readable explanation string."""
         lines: list[str] = []
 
-        lines.append(f"Recommended model: {best_model}")
         lines.append(
-            f"Confidence: {confidence:.0%} ({sum(1 for nb in top_k if nb.best_model == best_model)}"
+            f"Recommended model: {best_model}  (paradigm: {model_paradigm(best_model)})"
+        )
+        lines.append(
+            f"Consensus index: {confidence:.0%} ({sum(1 for nb in top_k if nb.best_model == best_model)}"
             f"/{len(top_k)} neighbours agree)"
         )
 
@@ -805,7 +813,9 @@ class SimilarityEngine:
                 gap_info = f"  [avg gap: {avg_gap:.1f} langs]" if avg_gap > 0 else "  [full coverage]"
             else:
                 gap_info = ""
-            lines.append(f"  {model}: {score:.4f}{gap_info}{marker}")
+            lines.append(
+                f"  {model} [{model_paradigm(model)}]: {score:.4f}{gap_info}{marker}"
+            )
 
         # ── Categorical notes ─────────────────────────────────────────────────
         n_tonal = int(query_fp.get("cat__n_tonal", 0))

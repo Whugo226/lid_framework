@@ -12,6 +12,7 @@ distribution of whitespace tokens per document. Emits:
 Usage:  python analysis/corpus_eda.py
 """
 import re
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -22,25 +23,9 @@ FIG_OUT = Path(r"C:/Users/User/OneDrive/Masters/Thesis/Thesis Template Legit/fig
 SAMPLE_PER_LANG = 20_000
 SEED = 42
 
-DISPLAY = {
-    "OpenLID-v2": "OpenLID-v2",
-    "amazon_reviews_multi": "Amazon Reviews",
-    "europarl": "Europarl",
-    "exorde-social-media-december-2024-week1": "Exorde Social Media",
-    "flores_plus": "FLORES+",
-    "language-identification": "Language Identification",
-    "massive": "MASSIVE",
-    "mmarco": "MMARCO",
-    "multi_eurlex": "Multi EurLex",
-    "multilingual_cc_news": "Multilingual CC News",
-    "multilingual_toxicity_dataset": "Multilingual Toxicity",
-    "stsb_multi_mt": "STS-B Multi MT",
-    "tweet_sentiment_multilingual": "Tweet Sentiment",
-    "tydiqa": "TyDiQA",
-    "wikipedia": "Wikipedia",
-    "xlsum": "XLSum",
-    "xnli": "XNLI",
-}
+# Display names from tab:benchmark_datasets (shared with the other generators).
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from corpus_names import DISPLAY  # noqa: E402
 
 
 def main() -> None:
