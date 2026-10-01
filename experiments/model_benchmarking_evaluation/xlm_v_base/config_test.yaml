@@ -1,0 +1,57 @@
+# =============================================================================
+# config_test.yaml — xlm-v-base-language-id Evaluation Benchmark Config
+#
+# Benchmarks juliensimon/xlm-v-base-language-id against all 17 02_evaluation
+# datasets for use by validate_recommendations.py.
+#
+# The variant_name matches the key used in model_benchmarking_knowledge so
+# that validate_recommendations.py can resolve the recommended model's
+# ground-truth performance on the evaluation set.
+#
+# Output layout per dataset:
+#   model_benchmarking_evaluation/xlm_v_base/<dataset>/xlm_v_base_language_id/
+#       benchmark_metadata.json
+#       benchmark_report.txt
+#
+# Environment variable overrides:
+#   LID_BENCH_DIR   → paths.benchmark_data_dir
+#   LID_OUTPUT_DIR  → paths.output_dir
+# =============================================================================
+
+paths:
+  model_id:           "juliensimon/xlm-v-base-language-id"   # HuggingFace Hub ID
+  benchmark_data_dir: "datasets/02_evaluation_15_cleaned"
+  output_dir:         "model_benchmarking_evaluation/xlm_v_base"
+
+model:
+  # Must match the variant_name used in model_benchmarking_knowledge/xlm_v_base/
+  # so validate_recommendations.py can look up ground-truth scores by key.
+  variant_name: "xlm_v_base_language_id"
+
+datasets:
+  - "amazon_reviews_multi"
+  - "europarl"
+  - "exorde-social-media-december-2024-week1"
+  - "flores_plus"
+  - "language-identification"
+  - "massive"
+  - "mmarco"
+  - "multi_eurlex"
+  - "multilingual_cc_news"
+  - "multilingual_toxicity_dataset"
+  - "OpenLID-v2"
+  - "stsb_multi_mt"
+  - "tweet_sentiment_multilingual"
+  - "tydiqa"
+  - "wikipedia"
+  - "xlsum"
+  - "xnli"
+
+inference:
+  batch_size: 32
+  max_length: 128
+  device:     "auto"  # "auto" | "cuda" | "cpu"
+
+logging:
+  log_filename: "benchmark.log"
+  level:        "INFO"

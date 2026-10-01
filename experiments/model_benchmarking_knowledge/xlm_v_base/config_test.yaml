@@ -1,0 +1,55 @@
+# =============================================================================
+# config_test.yaml — xlm-v-base-language-id Knowledge Benchmark Config
+#
+# Benchmarks juliensimon/xlm-v-base-language-id against all 18 01b datasets.
+# Output goes into model_benchmarking_knowledge/xlm_v_base/ so that
+# hpc_build_mkb.py picks it up alongside the trained model cross-benchmarks.
+#
+# Output layout per dataset:
+#   model_benchmarking_knowledge/xlm_v_base/<dataset>/xlm_v_base_language_id/
+#       benchmark_metadata.json
+#       benchmark_report.txt
+#
+# Environment variable overrides:
+#   LID_BENCH_DIR   → paths.benchmark_data_dir
+#   LID_OUTPUT_DIR  → paths.output_dir
+# =============================================================================
+
+paths:
+  model_id:           "juliensimon/xlm-v-base-language-id"   # HuggingFace Hub ID
+  benchmark_data_dir: "datasets/01b_knowledge_benchmark_20_cleaned"
+  output_dir:         "model_benchmarking_knowledge/xlm_v_base"
+
+model:
+  # Directory name used as the variant key in mkb_store (mf.parent.name).
+  # Must be stable — changing this after the MKB is built will break lookups.
+  variant_name: "xlm_v_base_language_id"
+
+datasets:
+  - "amazon_reviews_multi"
+  - "europarl"
+  - "exorde-social-media-december-2024-week1"
+  - "flores_plus"
+  - "language-identification"
+  - "librispeech_asr"
+  - "massive"
+  - "mmarco"
+  - "multi_eurlex"
+  - "multilingual_cc_news"
+  - "multilingual_toxicity_dataset"
+  - "OpenLID-v2"
+  - "stsb_multi_mt"
+  - "tweet_sentiment_multilingual"
+  - "tydiqa"
+  - "wikipedia"
+  - "xlsum"
+  - "xnli"
+
+inference:
+  batch_size: 32      # increase on high-VRAM GPUs for throughput
+  max_length: 128
+  device:     "auto"  # "auto" | "cuda" | "cpu"
+
+logging:
+  log_filename: "benchmark.log"
+  level:        "INFO"

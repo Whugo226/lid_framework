@@ -1,0 +1,73 @@
+# =============================================================================
+# config_cross_benchmark_knowledge.yaml — Knowledge Base Cross-Benchmark Config
+#
+# Drives hpc_cross_benchmark.py to evaluate every trained LID model against
+# every 01b_knowledge_benchmark_20_cleaned dataset, producing the full N×M
+# cross-dataset benchmark matrix needed to populate the MKB with cross-dataset
+# performance data. This fixes IDW degeneracy in the recommender — each trained
+# model will appear in every neighbour's performance table rather than only
+# appearing in the one neighbour that matches its training dataset.
+#
+# All paths resolved relative to the LID_Experiments repo root unless absolute.
+# Override at HPC runtime via environment variables:
+#   LID_TRAINING_RESULTS_DIR  → paths.training_results_dir
+#   LID_EVAL_DATA_DIR         → paths.eval_data_dir
+#   LID_BENCHMARK_EVAL_DIR    → paths.benchmark_eval_dir
+# =============================================================================
+
+paths:
+  training_results_dir: "model_training_results"
+  eval_data_dir:        "datasets/01b_knowledge_benchmark_20_cleaned"
+  benchmark_eval_dir:   "model_benchmarking_knowledge"
+
+# ── Model families ────────────────────────────────────────────────────────────
+families:
+  fasttext:
+    results_subdir: "fasttext_results"
+    model_file:     "model.bin"
+    variants:
+      - "fasttext_word"
+      - "fasttext_subword"
+
+  logistic_regression:
+    results_subdir: "logistic_regression_results"
+    model_file:     "best_pipeline.pkl"
+    variants:
+      - "bow_maxabs_lr_char_ngram_3_5"
+      - "tfidf_lr_char_ngram_3_5"
+
+  naive_bayes:
+    results_subdir: "naive_bayes_results"
+    model_file:     "best_pipeline.pkl"
+    variants:
+      - "bow_char_ngram_3_5"
+      - "tfidf_char_ngram_3_5"
+
+# ── Evaluation datasets (all 01b datasets) ────────────────────────────────────
+# Training datasets are discovered dynamically by scanning the model dirs.
+# Scale: 18 training datasets × 3 families × 2 variants × 18 eval datasets
+#        = 1,944 benchmark pairs.
+eval_datasets:
+  - "amazon_reviews_multi"
+  - "europarl"
+  - "exorde-social-media-december-2024-week1"
+  - "flores_plus"
+  - "language-identification"
+  - "librispeech_asr"
+  - "massive"
+  - "mmarco"
+  - "multi_eurlex"
+  - "multilingual_cc_news"
+  - "multilingual_toxicity_dataset"
+  - "OpenLID-v2"
+  - "stsb_multi_mt"
+  - "tweet_sentiment_multilingual"
+  - "tydiqa"
+  - "wikipedia"
+  - "xlsum"
+  - "xnli"
+
+# ── Logging ───────────────────────────────────────────────────────────────────
+logging:
+  log_filename: "cross_benchmark_knowledge.log"
+  level:        "INFO"

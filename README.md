@@ -158,6 +158,7 @@ scikit-learn prints an `InconsistentVersionWarning` when they are loaded.
 | `mkb.pkl` | The Meta-Knowledge Base used in the thesis |
 | `analysis/` | Scripts that produced the thesis tables and figures, with their dated result files (`*.json`) |
 | `validate_recommendations*.py` | The held-out evaluation on the evaluation and validation splits |
+| `experiments/` | The scripts that split the corpora, trained the 102 models and ran the cross-benchmark (see its README) |
 | `tests/` | Profiler checks against the Lingualyzer reference values |
 | `docs/model_card.md` | Model card of the trained models |
 | `scripts/upload_models_to_hf.py` | Publishes the trained models to Hugging Face |
@@ -168,7 +169,8 @@ The dated JSON files in `analysis/` are the saved results behind the numbers in
 the thesis, and each script there regenerates one of them. Rerunning the
 evaluation needs the benchmark corpus splits and cross-benchmark records, which
 are not in this repository: the corpora come from the Hugging Face Hub (listed
-in `docs/model_card.md`) and are too large to redistribute. Several analysis
+in `docs/model_card.md`) and are too large to redistribute. The scripts that
+created the splits and records are in `experiments/`. Several analysis
 scripts still contain absolute paths from the author's machine that must be
 edited before they run elsewhere.
 

@@ -1,0 +1,49 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# config_test.yaml — FastText Off-the-Shelf Benchmark Evaluation Configuration
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Paths ─────────────────────────────────────────────────────────────────────
+# All paths are resolved relative to the repository root unless they are
+# already absolute. Override any path at runtime via environment variables:
+#   LID_MODEL_PATH        → overrides paths.model_path
+#   LID_BENCH_DIR         → overrides paths.benchmark_data_dir
+#   LID_OUTPUT_DIR        → overrides paths.output_dir
+#   MLFLOW_TRACKING_URI   → overrides paths.mlflow_tracking_uri
+paths:
+  model_path:           "off_the_shelf_models/fasttext/lid.176.bin"          # pre-trained FastText LID model
+  benchmark_data_dir:   "datasets/02_evaluation_15_cleaned"        # root containing {dataset}/*.parquet
+  output_dir:           "model_benchmarking_evaluation/fasttext_off_the_shelf"          # benchmark artifacts written here
+  mlflow_tracking_uri:  "model_benchmarking_evaluation/fasttext_off_the_shelf/mlruns"   # local MLflow tracking store
+
+# ── Experiment Metadata ────────────────────────────────────────────────────────
+mlflow:
+  experiment_name:        "FastText_OTS_LID_Benchmark"
+  benchmark_data_version: "02_evaluation_15_v1"   # tag written to every MLflow run
+
+# ── Datasets ───────────────────────────────────────────────────────────────────
+# List of benchmark datasets to evaluate on. Dataset directories must exist
+# under benchmark_data_dir. For each dataset, the script loads all parquet files
+# and runs benchmark inference.
+datasets:
+  - "amazon_reviews_multi"
+  - "europarl"
+  - "exorde-social-media-december-2024-week1"
+  - "flores_plus"
+  - "language-identification"
+  - "massive"
+  - "mmarco"
+  - "multi_eurlex"
+  - "multilingual_cc_news"
+  - "multilingual_toxicity_dataset"
+  - "OpenLID-v2"
+  - "stsb_multi_mt"
+  - "tweet_sentiment_multilingual"
+  - "tydiqa"
+  - "wikipedia"
+  - "xlsum"
+  - "xnli"
+
+# ── Logging ───────────────────────────────────────────────────────────────────
+logging:
+  log_filename: "benchmark.log"    # written to output_dir
+  level: "INFO"

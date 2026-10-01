@@ -1,0 +1,71 @@
+# =============================================================================
+# config_cross_benchmark.yaml — Cross-Dataset Benchmark Evaluation Configuration
+#
+# Drives hpc_cross_benchmark.py to evaluate every trained LID model against
+# every evaluation dataset, producing the full N×M benchmark matrix needed
+# for cross-dataset validation in validate_recommendations.py.
+#
+# All paths are resolved relative to the LID_Experiments repo root unless
+# already absolute. Override at HPC runtime via environment variables:
+#   LID_TRAINING_RESULTS_DIR  → paths.training_results_dir
+#   LID_EVAL_DATA_DIR         → paths.eval_data_dir
+#   LID_BENCHMARK_EVAL_DIR    → paths.benchmark_eval_dir
+# =============================================================================
+
+paths:
+  training_results_dir: "model_training_results"
+  eval_data_dir:        "datasets/02_evaluation_15_cleaned"
+  benchmark_eval_dir:   "model_benchmarking_evaluation"
+
+# ── Model families ────────────────────────────────────────────────────────────
+# results_subdir : subdirectory under training_results_dir
+# model_file     : filename of the serialised model artifact
+# variants       : subdirectory names under each training dataset dir
+families:
+  fasttext:
+    results_subdir: "fasttext_results"
+    model_file:     "model.bin"
+    variants:
+      - "fasttext_word"
+      - "fasttext_subword"
+
+  logistic_regression:
+    results_subdir: "logistic_regression_results"
+    model_file:     "best_pipeline.pkl"
+    variants:
+      - "bow_maxabs_lr_char_ngram_3_5"
+      - "tfidf_lr_char_ngram_3_5"
+
+  naive_bayes:
+    results_subdir: "naive_bayes_results"
+    model_file:     "best_pipeline.pkl"
+    variants:
+      - "bow_char_ngram_3_5"
+      - "tfidf_char_ngram_3_5"
+
+# ── Evaluation datasets ───────────────────────────────────────────────────────
+# Every trained model will be benchmarked against each of these datasets.
+# Training datasets are discovered dynamically by scanning the model dirs.
+eval_datasets:
+  - "amazon_reviews_multi"
+  - "europarl"
+  - "exorde-social-media-december-2024-week1"
+  - "flores_plus"
+  - "language-identification"
+  - "massive"
+  - "mmarco"
+  - "multi_eurlex"
+  - "multilingual_cc_news"
+  - "multilingual_toxicity_dataset"
+  - "OpenLID-v2"
+  - "stsb_multi_mt"
+  - "tweet_sentiment_multilingual"
+  - "tydiqa"
+  - "wikipedia"
+  - "xlsum"
+  - "xnli"
+
+# ── Logging ───────────────────────────────────────────────────────────────────
+logging:
+  log_filename: "cross_benchmark.log"
+  level:        "INFO"

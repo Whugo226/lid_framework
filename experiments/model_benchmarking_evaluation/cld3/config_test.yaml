@@ -1,0 +1,60 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# config_test.yaml — CLD3 Benchmark Evaluation Configuration
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Paths ─────────────────────────────────────────────────────────────────────
+# All paths are resolved relative to the repository root unless they are
+# already absolute. Override any path at runtime via environment variables:
+#   LID_BENCH_DIR         → overrides paths.benchmark_data_dir
+#   LID_OUTPUT_DIR        → overrides paths.output_dir
+#   MLFLOW_TRACKING_URI   → overrides paths.mlflow_tracking_uri
+#
+# Note: LID_MODEL_DIR is not applicable — CLD3 is a pre-trained neural network
+# bundled inside the gcld3 package. No external model file is required.
+paths:
+  benchmark_data_dir:   "datasets/02_evaluation_15_cleaned"  # root containing {dataset}/*.parquet
+  output_dir:           "model_benchmarking_evaluation/cld3"                      # benchmark artifacts written here
+  mlflow_tracking_uri:  "model_benchmarking_evaluation/cld3/mlruns"               # local MLflow tracking store
+
+# ── Experiment Metadata ────────────────────────────────────────────────────────
+mlflow:
+  experiment_name:        "CLD3_LID_Benchmark"
+  benchmark_data_version: "02_evaluation_15_v1"   # tag written to every MLflow run
+
+# ── Datasets ───────────────────────────────────────────────────────────────────
+# List of benchmark datasets to evaluate on. Dataset directories must exist
+# under benchmark_data_dir. For each dataset, the script loads all parquet files
+# and runs benchmark inference.
+datasets:
+  - "amazon_reviews_multi"
+  - "europarl"
+  - "exorde-social-media-december-2024-week1"
+  - "flores_plus"
+  - "language-identification"
+  - "massive"
+  - "mmarco"
+  - "multi_eurlex"
+  - "multilingual_cc_news"
+  - "multilingual_toxicity_dataset"
+  - "OpenLID-v2"
+  - "stsb_multi_mt"
+  - "tweet_sentiment_multilingual"
+  - "tydiqa"
+  - "wikipedia"
+  - "xlsum"
+  - "xnli"
+
+# ── Language Mapping ──────────────────────────────────────────────────────────
+# CLD3 outputs BCP-47 codes. The entries below list known cases where CLD3's
+# output does not directly match the ISO 639-1 codes used in our parquet files.
+# This section is for documentation; the actual mapping is applied in
+# test_cld3_benchmark.py (CLD3_LABEL_MAP constant).
+language_mapping:
+  zh-Hans: "zh"   # Simplified Chinese → our 'zh' label
+  zh-Hant: "zh"   # Traditional Chinese → our 'zh' label
+  no:      "nb"   # Norwegian (generic) → Norwegian Bokmål
+
+# ── Logging ───────────────────────────────────────────────────────────────────
+logging:
+  log_filename: "benchmark.log"    # written to output_dir
+  level: "INFO"
