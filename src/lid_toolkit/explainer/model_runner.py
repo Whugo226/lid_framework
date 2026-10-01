@@ -24,7 +24,8 @@ Where the model files come from, in order of preference:
 Environment variable overrides:
     LID_EXPERIMENTS_DIR    local experiments folder (optional)
     LID_MODELS_REPO        Hugging Face repo id (default below)
-    LID_MODELS_REVISION    branch, tag or commit to download from (default: main)
+    LID_MODELS_REVISION    branch, tag or commit to download from (default: the
+                           commit holding the models described in the thesis)
 """
 from __future__ import annotations
 
@@ -37,6 +38,9 @@ from typing import Any
 from lid_toolkit.resources import lid176_is_local, lid176_path
 
 DEFAULT_MODELS_REPO = "werner1hugo/lid-framework-models"
+# Pinned so this version of the code always downloads the 102 models it was
+# evaluated with, even if the repository is updated later.
+DEFAULT_MODELS_REVISION = "105138b3748ab5bd377a36ae9cbb90a05ed7e7ff"
 
 _LR_ARCHS: frozenset[str] = frozenset({
     "tfidf_lr_char_ngram_3_5",
@@ -105,7 +109,9 @@ class ModelRunner:
         chosen = experiments_dir if experiments_dir else env_dir
         self.experiments_dir = Path(chosen) if chosen else None
         self.models_repo = models_repo or os.environ.get("LID_MODELS_REPO", DEFAULT_MODELS_REPO)
-        self.revision = revision or os.environ.get("LID_MODELS_REVISION") or None
+        self.revision = (
+            revision or os.environ.get("LID_MODELS_REVISION") or DEFAULT_MODELS_REVISION
+        )
         self._datasets = sorted(store_datasets, key=len, reverse=True)
         self._cache: dict[str, Any] = {}
 

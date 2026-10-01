@@ -139,7 +139,7 @@ Environment variables:
 |---|---|
 | `LID_STORE_PATH` | Path to `mkb.pkl` (default: `./mkb.pkl`) |
 | `LID_MODELS_REPO` | Hugging Face repo for the trained models |
-| `LID_MODELS_REVISION` | Branch, tag or commit of that repo (default: `main`) |
+| `LID_MODELS_REVISION` | Branch, tag or commit of that repo (default: the commit holding the models evaluated in the thesis) |
 | `LID_EXPERIMENTS_DIR` | Local copy of the experiments folder; models found there are used instead of downloading |
 | `LID_CACHE_DIR` | Where lid.176 is cached (default: `~/.cache/lid_toolkit`) |
 

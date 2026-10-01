@@ -48,6 +48,9 @@ def main() -> None:
                     help="Path to LID_experiments/model_training")
     ap.add_argument("--store", type=Path, default=ROOT / "mkb.pkl")
     ap.add_argument("--repo", default=DEFAULT_MODELS_REPO)
+    ap.add_argument("--workers", type=int, default=2,
+                    help="Parallel upload workers; keep low on Wi-Fi, where many "
+                         "concurrent multi-GB uploads can stall (default: 2)")
     ap.add_argument("--dry-run", action="store_true", help="List what would be uploaded")
     args = ap.parse_args()
 
@@ -76,6 +79,7 @@ def main() -> None:
         repo_type="model",
         folder_path=str(args.model_training),
         allow_patterns=[f"{f}/*" for f in folders],
+        num_workers=args.workers,
     )
     head = api.list_repo_commits(args.repo)[0].commit_id
     print(f"Done. Pin this revision for the thesis release: LID_MODELS_REVISION={head}")
