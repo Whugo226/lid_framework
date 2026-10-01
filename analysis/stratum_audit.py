@@ -153,8 +153,8 @@ def main() -> None:
 
     lines.append(r"\begin{table}[H]")
     lines.append(r"    \mytable")
-    lines.append(r"    \caption[Segment-level composition of the core schema]"
-                 r"{Segment-level composition of the core schema, extracted from the "
+    lines.append(r"    \caption[Segment-level composition of the 2{,}726-feature core]"
+                 r"{Segment-level composition of the 2{,}726-feature core, extracted from the "
                  r"same fitted \texttt{FeatureStratifier}. \emph{Statistics} is the number of "
                  r"aggregate statistics per base measure at each level, and the counts are "
                  r"those of the fixed core, after the fitting step's validity filter.}")
