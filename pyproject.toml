@@ -85,7 +85,6 @@ test = [
 
 [project.urls]
 bugs = "https://github.com/Whugo226/lid_framework/issues"
-changelog = "https://github.com/Whugo226/lid_framework/blob/main/HISTORY.md"
 homepage = "https://github.com/Whugo226/lid_framework"
 
 [project.scripts]

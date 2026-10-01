@@ -258,3 +258,34 @@ fasttext_cache/
 submit_job.sh
 hpc_build_mkb.py
 justfile
+
+# --- Further release cleanup (2026-10-01): kept locally, not published ---
+# Superseded results
+validation_report.md
+language_coverage_mismatch_report.md
+analysis/validation_statistics.py
+# Test scratch files and old run outputs
+tests/temp_test.py
+tests/tempCodeRunnerFile.py
+tests/debug_runner.py
+tests/debug_output.txt
+tests/understanding_stanza.py
+tests/compare_measures.py
+tests/*.bak
+tests/profiler_results_*.xlsx
+tests/profiler_spacy_correlation_english_summary.xlsx
+tests/profiler_spacy_test_results_english_new*.xlsx
+# Old profiler notes
+project_context/profiler_current_measures*.txt
+project_context/profiler_expected_measures.txt
+project_context/excess_measures_list.py
+project_context/lingualyzer_ground*.xlsx
+# Template leftovers
+HISTORY.md
+MANIFEST.in
+.github/
+config.yaml
+check_mkb.py
+profiles/
+test_examples/*
+!test_examples/wili2018_test.txt

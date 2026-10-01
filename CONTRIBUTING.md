@@ -102,18 +102,6 @@ To run a subset of tests:
 pytest tests.test_lid_toolkit
 ```
 
-## Deploying
-
-A reminder for the maintainers on how to deploy. Make sure all your changes are committed (including an entry in HISTORY.md). Then run:
-
-```sh
-bump2version patch # possible: major / minor / patch
-git push
-git push --tags
-```
-
-You can set up a [GitHub Actions workflow](https://docs.github.com/en/actions/use-cases-and-examples/building-and-testing/building-and-testing-python#publishing-to-pypi) to automatically deploy your package to PyPI when you push a new tag.
-
 ## Code of Conduct
 
 Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
