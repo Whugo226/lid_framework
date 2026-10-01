@@ -256,7 +256,6 @@ test_examples/*.zip
 fasttext_cache/
 # Stellenbosch HPC job scripts
 submit_job.sh
-hpc_build_mkb.py
 justfile
 
 # --- Further release cleanup (2026-10-01): kept locally, not published ---
@@ -284,7 +283,6 @@ project_context/lingualyzer_ground*.xlsx
 HISTORY.md
 MANIFEST.in
 .github/
-config.yaml
 check_mkb.py
 profiles/
 test_examples/*

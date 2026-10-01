@@ -156,6 +156,7 @@ scikit-learn prints an `InconsistentVersionWarning` when they are loaded.
 | `src/lid_toolkit/recommender/` | Stratification and PCA, fingerprints, the knowledge-base store, retrieval and voting (Phases 2 to 4) |
 | `src/lid_toolkit/explainer/` | The Streamlit dashboard and the model runner |
 | `mkb.pkl` | The Meta-Knowledge Base used in the thesis |
+| `hpc_build_mkb.py`, `config.yaml` | Builds `mkb.pkl`: profiles the knowledge-benchmarking splits, then fits the per-stratum PCA and stores the fingerprints with the cross-benchmark records |
 | `analysis/` | Scripts that produced the thesis tables and figures, with their dated result files (`*.json`) |
 | `validate_recommendations*.py` | The held-out evaluation on the evaluation and validation splits |
 | `experiments/` | The scripts that split the corpora, trained the 102 models and ran the cross-benchmark (see its README) |
